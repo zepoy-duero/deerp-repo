@@ -1,0 +1,87 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Home";
+
+	var gDeptName = ViewBag.DeptName;
+	var gPersonnelName = ViewBag.PersonnelName;
+	var gUserName = ViewBag.UserName;
+	var gUserCode = ViewBag.UserId;
+}
+
+<div class="container">
+	<div class="page-inner">
+		<div class="page-header justify-content-between">
+			<h5 class="page-title fs-5 fw-bolder text-main">
+				Welcome to Employee Portal
+			</h5>
+		</div>
+		<div class="page-category">
+			<div class="row">
+				<div class="col">
+					@if (User.IsInRole("Super Admin"))
+					{
+						<div class="card card-profile">
+							<div class="card-header bg-main-gradient rounded-top-2">
+								<div class="profile-picture">
+									<div id="" class="avatar avatar-xxl">
+										<img class="avatar-img rounded-circle shadow-lg" src="https://placehold.co/100" alt="default profile" width="200">
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="user-profile text-center">
+									<div id="" class="name fw-bolder">Superadmin</div>
+									<div id="" class="job">Administrator</div>
+									<div id="" class="desc">Management Information System</div>
+									<div id="" class="desc">&nbsp;</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="row user-stats text-center">
+									<div class="col">
+										<img class="img-fluid" src="~/img/40-years-logo.jpg" width="150" loading="lazy" />
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="card card-profile">
+							<div class="card-header bg-main-gradient rounded-top-2">
+								<div class="profile-picture">
+									<div id="imgContainer" class="avatar avatar-xxl"></div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="user-profile text-center">
+									<div id="empName" class="name fw-bolder"></div>
+									<div id="empPosition" class="job"></div>
+									<div id="deptName" class="desc"></div>
+									<div id="emailAddress" class="desc"></div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="row user-stats text-center">
+									<div class="col">
+										<img class="img-fluid" src="~/img/40-years-logo.jpg" width="150" loading="lazy" />
+									</div>
+								</div>
+								<div class="row text-center mt-5">
+									<div class="col">
+										<span class="text-justify fs-6 fw-bold">UAE Tax Registration Number:</span>
+										<span id="vatNo" class="text-justify fs-6 fw-bold"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/js/home/index.js" asp-append-version="true"></script>
+}

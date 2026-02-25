@@ -1,0 +1,75 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["title"] = "Change Password";
+}
+
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+				Change Password
+			</h5>
+			<div class="page-category">
+				<div class="row">
+					<div class="col">
+						<form id="frmChangePassword" method="post">
+							@Html.AntiForgeryToken()
+							<div class="card">
+								<div class="card-header d-flex justify-content-between align-items-center">
+									<p class="control-label mb-0">Last password change: </p>
+									<p class="form-control-static fw-bold mb-0">&nbsp;</p>
+								</div>
+								<div class="card-body">
+									<div class="form-group row py-1">
+										<label for="inpCurrentPassword" class="col-3 form-label text-wrap text-end">
+											Current Password:
+											<span class="text-danger">*</span>
+										</label>
+										<div class="col-5">
+											<input type="password" id="inpCurrentPassword" name="CURRENT_PASSWORD" class="form-control rounded-1 required" placeholder="Enter your current password" autocomplete="off" />
+										</div>
+									</div>
+									<div class="form-group row py-1">
+										<label for="inpNewPassword" class="col-3 form-label text-wrap text-end">
+											New Password:
+											<span class="text-danger">*</span>
+										</label>
+										<div class="col-5">
+											<input type="password" id="inpNewPassword" name="NEW_PASSWORD" class="form-control rounded-1 required" placeholder="Enter your new password" autocomplete="off" />
+										</div>
+									</div>
+									<div class="form-group row py-1">
+										<label for="inpConfirmPassword" class="col-3 form-label text-wrap text-end">
+											Confirm New Password:
+											<span class="text-danger">*</span>
+										</label>
+										<div class="col-5">
+											<input type="password" id="inpConfirmPassword" name="CONFIRM_PASSWORD" class="form-control rounded-1 required" placeholder="Confirm your new password" autocomplete="off" />
+										</div>
+									</div>
+									<div class="form-group row py-1">
+										<label class="col-3">&nbsp;</label>
+										<div class="col-5 d-flex align-items-center gap-2">
+											<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onchange="showPassword(this)">
+											<label class="form-check-label mb-0" for="flexCheckDefault">
+												Show password
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="card-footer d-flex justify-content-end align-items-center">
+									<button type="button" class="btn btn-danger rounded-1 px-4" onclick="submitSaveChanges(this)">Update Password</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script src="~/js/account/change-password.js" asp-append-version="true"></script>
+}

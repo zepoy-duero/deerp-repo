@@ -1,0 +1,38 @@
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.deps.json
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Common.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Common.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfo.cs
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPOR.70E9BB3B.Up2Date
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\refint\DEEMPPORTAL.Infrastructure.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\ref\DEEMPPORTAL.Infrastructure.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.deps.json
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Common.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Common.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfo.cs
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPOR.70E9BB3B.Up2Date
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\refint\DEEMPPORTAL.Infrastructure.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\ref\DEEMPPORTAL.Infrastructure.dll

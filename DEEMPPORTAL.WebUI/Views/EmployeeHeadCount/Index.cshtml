@@ -1,0 +1,31 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Employee Headcount";
+}
+
+<!-- Main content here -->
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title page-title mb-3 fs-5 fw-bolder text-main">@ViewData["title"]</h5>
+		</div>
+		<div class="page-category">
+			<div class="card card-profile">
+				<div class="card-body">
+					<div class="chart-container d-flex justify-content-center mb-5" style="position: relative; height:500px; width:100%">
+						<canvas id="myChart"></canvas>
+					</div>
+					<div class="form-group text-center">
+						<div id="secTotalCountJobStatus" class="d-flex gap-2 justify-content-center"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of main content -->
+@section Scripts {
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+	<script src="~/js/dashboard/employee-headcount.js" asp-append-version="true"></script>
+}

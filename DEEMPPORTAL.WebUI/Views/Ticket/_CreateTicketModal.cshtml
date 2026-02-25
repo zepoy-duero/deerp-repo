@@ -1,0 +1,261 @@
+﻿<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal modal-lg fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--HEADER-->
+            <div class="modal-header small fw-bold bg-main-gradient text-white rounded-top">
+                <span class="modal-title fs-6 mx-4" id="createTicketModalLabel">New Ticket</span>
+                <button type="button" class="btn-close rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!--BODY-->
+            <div class="modal-body px-4">
+                <div class="card no-box-shadow">
+                    <div id="successAlert" class="alert alert-success align-content-between d-none">
+                        <span class="fw-bold">#0001</span>
+                        <div class="fw-semibold text-end">
+                            <i class="fas fa-check me-2"></i>
+                            You have successfully created a new ticket!
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Ticket Info -->
+                        <div class="container-fluid">
+                            <!-- Requested By -->
+                            <form class="form">
+                                <!--TICKET BASIC INFO-->
+                                <div class="row mb-3 mt--1">
+                                    <div class="col-md-6">
+                                        <div class="card card-stats">
+                                            <div class="card-body">
+                                                <small class="text-muted">Requested By:</small>
+                                                <h6 id="requestedBy" class="fw-bold"></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card card-stats">
+                                            <div class="card-body">
+                                                <small class="text-muted">Date:</small>
+                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--TICKET ADDRESSED TO-->
+                                <div class="input-group mb-3">
+                                    <label for="Type" class="input-group-addon text-danger mx-2">*</label>
+                                    <select id="Type" class="input-group-sm form-select" required>
+                                        <option class="text-muted" value="">--Department --</option>
+                                        <option>MIS</option>
+                                        <option>HR</option>
+                                        <option>Accounting</option>
+                                        <option>Others</option>
+                                    </select>
+                                </div>
+                                <!-- REQUEST TYPE -->
+                                <div class="input-group mb-3">
+                                    <label for="Type" class="input-group-addon text-danger mx-2">*</label>
+                                    <select id="Type" class="input-group-sm form-select" required>
+                                        <option class="text-muted" value="">--Request type --</option>
+                                        <option>Software Bug/Error</option>
+                                        <option>Change Request</option>
+                                        <option>Hardware/Networking</option>
+                                        <option>Others</option>
+                                    </select>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="input-group mb-3">
+                                    <label for="Description" class="input-text-addon text-danger mx-2">* </label>
+                                    <input id="Description" class="form-control" placeholder="Subject issue..." required />
+                                    <small class="text-muted">Subject format sample: 'ERP - HR Leave Application'</small>
+                                </div>
+
+                                <!-- Details -->
+                                <div class="input-group mb-3">
+                                    <label for="Details" class="input-text-addon text-danger mx-2">* </label>
+                                    <textarea id="Details" rows="5" class="form-control"
+                                              placeholder="Explain the issue in detail..." required></textarea>
+                                </div>
+                                <div class="input-group-sm">
+                                    <label for="fileInput" class="form-label">Upload attachment:</label>
+                                    <div class="container">
+                                        <div class="card shadow-sm">
+                                            <div class="card-body">
+                                                <!-- Drop Zone -->
+                                                <div id="dropZone" class="drop-zone">
+                                                    <p class="mb-1"><strong>Drag & Drop files here</strong></p>
+                                                    <p class="text-muted mb-2">or click to browse</p>
+                                                    <input type="file" id="fileInput" hidden multiple
+                                                           accept=".png,.pdf,.xls,.xlsx">
+                                                </div>
+                                                <!-- Preview List -->
+                                                <div id="previewContainer" class="mt-4"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FOOTER -->
+            <div class="modal-footer text-end">
+                <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+                <button id="submitTicket" type="button" class="btn btn-danger px-2">
+                    Submit Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+        .drop-zone {
+            border: 2px dashed #6c757d;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .drop-zone.dragover {
+                background-color: #e9ecef;
+            }
+
+        .file-preview-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+</style>
+<script src="~/js/tickets/ticket.js"></script>
+<script>
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const previewContainer = document.getElementById("previewContainer");
+
+    let selectedFiles = [];
+
+    // Click to open file dialog
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    // File input change
+    fileInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
+    });
+
+    // Drag events
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+        for (let file of files) {
+
+            if (!isValidFileType(file)) {
+                alert(`Invalid file type: ${file.name}`);
+                continue;
+            }
+
+            selectedFiles.push(file);
+            renderFilePreview(file);
+        }
+
+        fileInput.value = "";
+    }
+
+    function isValidFileType(file) {
+        const allowedTypes = [
+            "image/png",
+            "application/pdf",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ];
+
+        return allowedTypes.includes(file.type);
+    }
+
+    function renderFilePreview(file) {
+        const fileItem = document.createElement("div");
+        fileItem.className = "file-preview-item";
+
+        const fileInfo = document.createElement("div");
+        fileInfo.className = "file-info";
+
+        // File Icon or Thumbnail
+        let iconElement;
+
+        if (file.type === "image/png") {
+            iconElement = document.createElement("img");
+            iconElement.className = "file-icon";
+            iconElement.src = URL.createObjectURL(file);
+        } else {
+            iconElement = document.createElement("img");
+            iconElement.className = "file-icon";
+
+            if (file.type === "application/pdf") {
+                iconElement.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+            } else {
+                iconElement.src = "https://cdn-icons-png.flaticon.com/512/732/732220.png";
+            }
+        }
+
+        const fileName = document.createElement("div");
+        fileName.innerHTML = `
+            <div><strong>${file.name}</strong></div>
+            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+        `;
+
+        fileInfo.appendChild(iconElement);
+        fileInfo.appendChild(fileName);
+
+        // Remove Button
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "btn btn-sm btn-outline-danger";
+        removeBtn.innerText = "Remove";
+
+        removeBtn.addEventListener("click", () => {
+            selectedFiles = selectedFiles.filter(f => f !== file);
+            fileItem.remove();
+        });
+
+        fileItem.appendChild(fileInfo);
+        fileItem.appendChild(removeBtn);
+
+        previewContainer.appendChild(fileItem);
+    }
+</script>

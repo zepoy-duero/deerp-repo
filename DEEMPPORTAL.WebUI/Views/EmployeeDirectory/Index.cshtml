@@ -1,0 +1,68 @@
+﻿@{
+  Layout = "_Layout";
+  ViewData["title"] = "Employee Directory";
+}
+
+<div class="container">
+  <div class="page-inner">
+    <div class="flex-column">
+      <!-- Title -->
+
+      <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+        Employee Directory
+      </h5>
+      @* <span class="badge-info rounded-fill text-right" id="summary"></span> *@
+
+      <!-- Filters -->
+
+      <div class="row g-4 mb-4">
+        <div class="col">
+          <label for="select-organization" class="form-label fw-semibold">Choose Organization</label>
+          <select id="select-organization" class="form-select select-organization">
+          </select>
+        </div>
+        <div class="col">
+          <label for="select-location" class="form-label fw-semibold">Choose Location</label>
+          <select id="select-location" class="form-select select-location">
+          </select>
+        </div>
+        <div class="col">
+          <label for="select-department" class="form-label fw-semibold">Choose Department</label>
+          <select id="select-department" class="form-select select-department">
+          </select>
+        </div>
+        <div class="col">
+          <label for="search-input" class="form-label fw-semibold">Search . . .</label>
+          <input id="search-input" class="form-control" placeholder="Type to search">
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Employee Cards Container -->
+    <div class="row g-4" id="employeeContainer">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="spinner-grow top-50" style="width: 3rem; height: 3rem;" role="status"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+@section Scripts {
+
+  <script src="~/js/support/employee-directory.js" asp-append-version="true"></script>
+}
+<style>
+  .emp-name {
+    font-size: medium
+  }
+
+  .emp-position {
+    font-size: small;
+    font-style: italic
+  }
+
+  .emp-contacts {
+    font-size: small
+  }
+</style>

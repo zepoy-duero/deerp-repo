@@ -1,0 +1,86 @@
+﻿@{
+	Layout = "_NoMenuLayout";
+	ViewData["Title"] = "Forgot Password";
+}
+
+<!-- Main content here -->
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title page-title mb-3 fs-6 fw-bolder text-main">
+				<a href="/" class="nav-link">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+					Go back to login
+				</a>
+			</h5>
+		</div>
+		<div class="page-category">
+			<form id="frmForgotPassword">
+				@Html.AntiForgeryToken()
+				<div class="card card-profile">
+					<div class="card-header bg-main-gradient rounded-top-2">
+						<div class="row">
+							<div class="col-lg-12 my-5">
+								<div class="card border-0">
+									<div class="card-body text-center">
+										<img class="img-fluid" src="~/img/de-and-anniversary-logo.png" width="350" />
+										<h2 class="header-title mt-3 mb-0 fw-bold text-main">Forgot Password?</h2>
+									</div>
+									<div class="card-body py-3 pb-5" style="height:580px">
+										<div class="row justify-content-center">
+											<div class="alert alert-warning col-9 small">
+												<div class="fw-bold my-2 text-warning">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shield-exclamation"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15.04 19.745c-.942 .551 -1.964 .976 -3.04 1.255a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 .195 6.015" /><path d="M19 16v3" /><path d="M19 22v.01" /></svg>
+													<span class="fs-6 text-uppercase fw-bolder">Important notes</span>
+												</div>
+												<ul>
+													<li><span><strong>Your email must exist in the HR’s records.</strong> If not, please consult HR to update your email address.</span></li>
+													<li><span><strong>Check your spam/junk folder.</strong> The reset email may sometimes be filtered there.</span></li>
+													<li><span><strong>OTP code has an expiration time.</strong> Make sure to use it immediately (e.g., within 5 minutes).</span></li>
+													<li><span><strong>Do not share the reset link.</strong> It is unique and meant only for you.</span></li>
+													<li><span><strong>Ensure you have internet access.</strong> A stable connection is required to receive the email and complete the reset process.</span></li>
+													<li><span><strong>Contact IT support if issues persist.</strong> For example, if you do not receive the email or the reset link does not work.</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="form-group row py-1">
+											<label class="form-label col-3 offset-1 text-end mb-0">Email address</label>
+											<div class="col-5">
+												<input id="inpEmailAddress" name="EMAIL_ADDRESS" class="form-control rounded-2" placeholder="Enter your email address" />
+											</div>
+										</div>
+										<div class="form-group row py-1">
+											<div class="offset-4 col-5">
+												<button type="button" class="btn btn-light border px-4 rounded-2" onclick="sendOtpCode(this)">Send OTP</button>
+											</div>
+										</div>
+										<div id="otpVerification" class="d-none">
+											<div class="my-4" style="border:none; border-bottom: 1px dashed #ccc"></div>
+											<div class="form-group row py-1">
+												<label class="form-label col-3 offset-1 text-end">One-time Password (OTP)</label>
+												<div class="col-5">
+													<input id="inpOtpCode" name="OTP_CODE" class="form-control rounded-2" placeholder="Enter your OTP Code" />
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<div class="offset-4 col-5">
+													<button type="button" class="btn btn-danger bg-accent px-4 rounded-2" onclick="verifyOtpCode(this)">Verify OTP</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body" style="height:730px"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End of main content -->
+
+@section Scripts {
+	<script src="~/js/account/forgot-password.js"></script>
+}

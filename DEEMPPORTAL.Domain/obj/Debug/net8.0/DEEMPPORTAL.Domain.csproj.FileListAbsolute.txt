@@ -1,0 +1,24 @@
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.deps.json
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfoInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfo.cs
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\refint\DEEMPPORTAL.Domain.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\ref\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.deps.json
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfo.cs
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\refint\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\ref\DEEMPPORTAL.Domain.dll

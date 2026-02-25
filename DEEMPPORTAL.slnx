@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="DEEMPPORTAL.Application/DEEMPPORTAL.Application.csproj" Id="81099e73-dc99-415e-91fb-3f663fcacd92" />
+  <Project Path="DEEMPPORTAL.Common/DEEMPPORTAL.Common.csproj" Id="4e53bf26-be75-4e33-906a-1537194b99e7" />
+  <Project Path="DEEMPPORTAL.Domain/DEEMPPORTAL.Domain.csproj" Id="395d8a77-b0f6-4796-819c-cbe67ad77221" />
+  <Project Path="DEEMPPORTAL.Infrastructure/DEEMPPORTAL.Infrastructure.csproj" Id="ca0e57eb-e89c-4af0-96ab-64177d1b4f85" />
+  <Project Path="DEEMPPORTAL.WebUI/DEEMPPORTAL.WebUI.csproj" />
+</Solution>

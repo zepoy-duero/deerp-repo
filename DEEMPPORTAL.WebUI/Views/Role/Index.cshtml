@@ -1,0 +1,190 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Roles";
+}
+
+<!-- Modal here -->
+<div class="modal fade" id="modalSaveRoles" tabindex="-1" aria-labelledby="modalSaveRolesLabel">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form id="frmRole">
+				@Html.AntiForgeryToken()
+				<input type="hidden" id="inpRoleCode" class="form-control rounded-1" name="ROLE_CODE">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="modalSaveRolesLabel">&nbsp;</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group row align-items-center py-1">
+						<label class="col-sm-3 text-end">Role Name: <span class="text-danger">*</span></label>
+						<div class="col-sm-8">
+							<input type="text" id="inpRoleName" class="form-control rounded-1 required" placeholder="Enter the role name" name="ROLE_NAME">
+						</div>
+					</div>
+					<div class="form-group row align-items-center py-1">
+						<label class="col-sm-3 text-end">Status: <span class="text-danger">*</span></label>
+						<div class="col-sm-3">
+							<select id="selIsActive" class="form-select form-control rounded-1 required" name="IS_ACTIVE">
+								<option value="Y">Active</option>
+								<option value="N">Inactive</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" onclick="cancelModal(this)">Close</button>
+					<button type="button" class="btn btn-danger bg-accent" onclick="submitSaveRole(this)">Save changes</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalPermissions" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPermissionsLabel" aria-modal="true" role="dialog">
+	<div class="modal-dialog modal-xl modal-fullscreen-md-down modal-fullscreen-sm-down">
+		<div class="modal-content">
+			<form id="frmPermissions">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="ROLE_CODE" value="" />
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 fw-bolder text-main mb-0" id="modalPermissionsLabel">Manage Role Permissions</h1>
+					<button type="button" class="btn-close" aria-label="Close" onclick="cancelModal(this)"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-4 col-md-3 col-lg-3">
+							<div class="nav flex-column nav-pills me-2 small" id="tabListRoleSettings" role="tablist" aria-orientation="vertical">
+								<button class="nav-link text-start ps-4 border-0 rounded-1 active" id="v-role-menu-tab" data-bs-toggle="pill" data-bs-target="#v-role-menu" type="button" role="tab" aria-controls="v-role-menu" aria-selected="false" visited="true"><i class="fas fa-bars me-1"></i> Menu(s)</button>
+							</div>
+						</div>
+						<div class="col-sm-9">
+							<div class="tab-content" id="v-pills-tabContent">
+								<div class="tab-pane fade show active" id="v-consumer-information" role="tabpanel" aria-labelledby="v-consumer-information-tab" tabindex="0">
+									<div class="row">
+										<div class="col">
+											<table id="tblMenuItems" class="table table-sm mb-0">
+												<thead class="table-light fw-bold">
+													<tr>
+														<td class="px-4" style="width: 50px;">
+															<div class="form-check">
+																<input id="cbSelectAllRecords" type="checkbox" class="form-check-input border-2 border-muted" style="width:1rem !important;height:1rem !important" />
+															</div>
+														</td>
+														<td style="width: 70px;"></td>
+														<td style="width: 70px;" class="text-muted">Icon</td>
+														<td class="text-muted">Menu&nbsp;Name</td>
+														<td class="text-muted">Parent&nbsp;Menu</td>
+													</tr>
+												</thead>
+												<tbody></tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer d-flex justify-content-between">
+					<div>
+						<span id="loadingMessage" class="fw-bold text-danger"></span>
+					</div>
+					<div class="d-flex gap-2">
+						<button type="button" class="btn btn-light" onclick="cancelModal(this)">Cancel</button>
+						<div id="btnSubmitContainer"><button type="button" class="btn btn-danger bg-accent" onclick="submitRoleMenuItems(this)">Save Changes</button></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalRoleUsers" tabindex="-1" aria-labelledby="modalmodalRoleUsersLabel">
+	<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="modalRoleUsersLabel">&nbsp;</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="mb-3">
+					<small class="fw-bold text-uppercase text-accent">Press enter after typing a name.</small>
+					<input id="inpSearchRoleUser" class="form-control rounded-1" type="text" name="name" value="" placeholder="Search for employee name" />
+				</div>
+				<table class="table table-sm" id="tblRoleUsers">
+					<thead class="table-light fw-bold">
+						<tr>
+							<td class="text-muted">No.</td>
+							<td class="text-muted">Employee Name</td>
+							<td class="text-muted">Status</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" onclick="cancelModal(this)">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Main content here -->
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+				Roles
+			</h5>
+		</div>
+		<div class="page-category">
+			<div class="card rounded-1 shadow-none mb-2">
+				<div class="card-body p-3">
+					<div class="row justify-content-between">
+						<div class="col-sm-4">
+							<button class="btn btn-danger" onclick="showModalCreateRole(this)">
+								<i class="fas fa-plus"></i> New
+							</button>
+						</div>
+						<div class="col-sm-6">
+							<div class="input-group">
+								<input id="" type="text" class="form-control rounded-start-1"
+											 placeholder="Search for role name" aria-label="Cart Search">
+								<button id="" class="btn btn-danger bg-accent px-4 rounded-start-0" type="button">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card rounded-1 shadow-none">
+				<div class="card-body p-1">
+					<div class="row">
+						<div class="table-responsive">
+							<table id="tblRoles" class="table table-sm mb-0">
+								<thead class="table-light fw-bold">
+									<tr>
+										<td class="text-muted" style="width: 1%;">#</td>
+										<td class="text-center" style="width: 1%;"><input id="cbSelectAllRecords" type="checkbox" class="form-check-input p-2" style="border-width: 1.5px !important" /></td>
+										<td class="text-muted" style="width: 150px;">Permissions</td>
+										<td class="text-muted">Role Name</td>
+										<td class="text-muted">Total User(s)</td>
+										<td class="text-muted">Status</td>
+										<td class="text-muted">Actions</td>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+							<div id="roleMenus"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of main content -->
+@section Scripts {
+	<script src="~/js/manage/roles.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,104 @@
+﻿@{
+	Layout = "_NoMenuLayout";
+	ViewData["Title"] = "User Satisfaction";
+}
+
+<!-- Main content here -->
+<div class="container">
+	<div class="page-inner p-4">
+		<div class="flex-column">
+			<h5 class="page-title page-title mb-3 fs-6 fw-bolder text-main">
+				<a href="/" class="nav-link">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+					Go back to login
+				</a>
+			</h5>
+		</div>
+		<div class="page-category">
+			<form>
+				@Html.AntiForgeryToken()
+				<div class="card card-profile">
+					<div class="card-header bg-main-gradient rounded-top-2">
+						<div class="row">
+							<div class="col-lg-12 my-5">
+								<div class="card border-0">
+									<div class="card-body text-center p-5">
+										<img class="img-fluid" src="~/img/de-and-anniversary-logo.png" width="350" />
+										<h2 class="header-title mt-3 mb-0 fw-bold text-main">We’re always looking to improve.</h2>
+										<p class="text-muted">We appreciate you taking the time to share your thoughts</p>
+									</div>
+									<div class="card-body py-1 text-center">
+										<input id="inpRating" type="hidden" name="RATING_VALUE" value="" />
+										<div class="star-rating animated-stars">
+											<input type="radio" id="star5" name="rating" value="5">
+											<label for="star5" class="fas fa-star"></label>
+											<input type="radio" id="star4" name="rating" value="4">
+											<label for="star4" class="fas fa-star"></label>
+											<input type="radio" id="star3" name="rating" value="3">
+											<label for="star3" class="fas fa-star"></label>
+											<input type="radio" id="star2" name="rating" value="2">
+											<label for="star2" class="fas fa-star"></label>
+											<input type="radio" id="star1" name="rating" value="1">
+											<label for="star1" class="fas fa-star"></label>
+										</div>
+										<p class="my-3 text-muted">Click to rate</p>
+									</div>
+									<div class="card-body py-3 mb-5">
+										<div class="form-group row d-flex align-items-center py-2">
+											<label for="txtFeedback" class="col-2 form-label text-end">Feedback</label>
+											<div class="col-9">
+												<textarea id="txtFeedback" class="form-control rounded-2" rows="5" placeholder="Tell us about your feedback" name="FEEDBACK"></textarea>
+											</div>
+										</div>
+										<div class="form-group row d-flex align-items-center py-2">
+											<label for="txtComplaints" class="col-2 form-label text-end">Complaints</label>
+											<div class="col-9">
+												<textarea id="txtComplaints" class="form-control rounded-2" rows="5" placeholder="Tell us about your complaints" name="COMPLAINTS"></textarea>
+											</div>
+										</div>
+										<div class="form-group row d-flex align-items-center py-2">
+											<label for="txtSuggestions" class="col-2 form-label text-end">Suggestions</label>
+											<div class="col-9">
+												<textarea id="txtSuggestions" class="form-control rounded-2" rows="5" placeholder="Tell us about your suggestions" name="SUGGESTIONS"></textarea>
+											</div>
+										</div>
+										<div class="form-group row d-flex align-items-center py-2">
+											<div class="col-2"></div>
+											<div class="col-9">
+												<input id="inpCaptchaToken" type="hidden" name="CAPTCHA_TOKEN" value="" />
+												<div class="g-recaptcha" data-sitekey="6LfoV9krAAAAAGEwcvCt5UgmwTVWzrXc47UBSFif" data-callback="setEnableSubmit"></div>
+											</div>
+										</div>
+										<div class="form-group row d-flex align-items-center py-4">
+											<div class="col-2"></div>
+											<div class="col-9 d-grid">
+												<button id="btnSubmit" type="button" class="btn btn-lg btn-danger bg-accent" onclick="submitUserSatisfaction(this)" disabled="disabled">Submit</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body" style="height:1000px"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End of main content -->
+@section Scripts {
+	<script>
+		document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
+				star.addEventListener('click', function() {
+						this.style.transform = 'scale(1.2)';
+						setTimeout(() => {
+								this.style.transform = 'scale(1)';
+						}, 200);
+				});
+		});
+
+	</script>
+
+	<script src="~/js/support/user-satisfaction.js" asp-append-version="true"></script>
+}

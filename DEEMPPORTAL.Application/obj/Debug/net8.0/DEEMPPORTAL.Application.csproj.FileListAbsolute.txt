@@ -1,0 +1,34 @@
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.deps.json
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Common.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Common.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.AssemblyInfoInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.AssemblyInfo.cs
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPOR.DDDBC009.Up2Date
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\refint\DEEMPPORTAL.Application.dll
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\Admin\Documents\Personal\Dahbashi\DEEMPPORTAL\DEEMPPORTAL.Application\obj\Debug\net8.0\ref\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.deps.json
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Common.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Common.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.AssemblyInfo.cs
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPOR.DDDBC009.Up2Date
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\refint\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.pdb
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\ref\DEEMPPORTAL.Application.dll

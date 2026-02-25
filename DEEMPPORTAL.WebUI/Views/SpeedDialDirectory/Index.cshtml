@@ -1,0 +1,130 @@
+﻿@{
+  Layout = "_Layout";
+
+  ViewData["Title"] = "Speed Dial Directory";
+}
+<div class="container">
+  <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+    <div class="flex-column">
+      <!-- Title -->
+      <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+        Speed Dial Directory
+      </h5>
+      <div class="row g-4 mb-4">
+        <div class="col-md-3 col-lg-4 col-sm-1">
+          <select id="select-organization" class="form-select select-organization">
+          </select>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-1">
+          <select id="select-location" class="form-select select-location">
+          </select>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-1">
+          <input id="searchString" class="form-control" placeholder="Type to search">
+
+        </div>
+        <div class="col-md-3 col-lg-2 col-sm-1">
+          <icon id="exportToExcel" type="button" class="form-control btn btn-light ">
+            Export as
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-excel text-green"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M10 12l4 5" /><path d="M10 17l4 -5" /></svg>
+          </icon>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header small fw-bold bg-main-gradient text-white rounded-top-2 ">
+          <div class="d-flex justify-content-between align-items-center">
+
+            <div class="d-flex">
+              <div class="px-2">
+                <span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-phone"></i></span>
+                <span id="tblCaption" class="fw-normal mx-2"></span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="card-body p-1">
+          <div class="table-container">
+            <table id="speedDialTable" class="table table-sm table-striped table-hover mb-0">
+              <caption class="text-center">
+                <span id="tblCaption"></span>
+              </caption>
+              <thead class="bg-main-gradient text-white rounded-top-2">
+                <tr class="p-3">
+                  <th class="p-3" style="text-transform: none !important">Speed Dial Number</th>
+                  <th class="p-3" style="text-transform: none !important">Branch/User Name</th>
+                  <th class="p-3" style="text-transform: none !important">Speed Dial Telephone Number</th>
+
+                </tr>
+              </thead>
+              <tbody id="tblBody">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                </tr>
+              </tbody>
+              <tfoot id="tblfoot">
+                <tr>
+                  <td>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div class="overlay-spinner">
+              <div class="spinner-grow text-primary" style="width:4rem;height:4rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .table-container {
+    position: relative; /* Essential for positioning the overlay */
+  }
+
+  .overlay-spinner {
+    position: absolute; /* Positions the spinner relative to the container */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex; /* Use flexbox for easy centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
+    z-index: 10; /* Ensures it is above the table content */
+  }
+
+  /* Make tbody scrollable */
+  tbody {
+    display: block;
+    max-height: 55vh; /* Set desired height */
+    overflow-y: auto;
+  }
+
+    thead, tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed; /* Prevent column width shifting */
+    }
+
+</style>
+@section Scripts {
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.29.0/tableExport.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table-locale-all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+
+  <script src="~/js/support/speed-dial-directory.js" asp-append-version="true"></script>
+}
+

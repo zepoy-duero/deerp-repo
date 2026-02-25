@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] | Enterprise Resource Planning</title>
+	<link rel="icon" type="image/x-icon" href="~/favicon.ico">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+	@* <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.css" rel="stylesheet"> *@
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+	<style>
+		ul.nav.nav-collapse {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sidebar" data-background-color="blue">
+			<div class="sidebar-logo">
+				<!-- Logo Header -->
+				<div class="logo-header bg-main">
+					<a href="#" class="logo">
+						<img src="~/img/DE-LOGO.png"
+								 alt="navbar brand"
+								 class="navbar-brand"
+								 height="40" />
+					</a>
+					<div class="nav-toggle">
+						<button class="btn btn-toggle toggle-sidebar">
+							<i class="gg-menu-right"></i>
+						</button>
+						<button class="btn btn-toggle sidenav-toggler">
+							<i class="gg-menu-left"></i>
+						</button>
+					</div>
+					<button class="topbar-toggler more">
+						<i class="gg-more-vertical-alt"></i>
+					</button>
+				</div>
+				<!-- End Logo Header -->
+			</div>
+			<div class="sidebar-wrapper scrollbar scrollbar-inner">
+				@if (User.Identity != null && User.Identity.IsAuthenticated)
+				{
+					<div class="sidebar-content"></div>
+				}
+			</div>
+		</div>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="main-header">
+				<div class="main-header-logo">
+					<!-- Logo Header -->
+					<div class="logo-header" data-background-color="blue">
+						<a href="#" class="logo">
+							<img src="#"
+									 alt="navbar brand"
+									 class="navbar-brand"
+									 height="20" />
+						</a>
+						<div class="nav-toggle">
+							<button class="btn btn-toggle toggle-sidebar">
+								<i class="gg-menu-right"></i>
+							</button>
+							<button class="btn btn-toggle sidenav-toggler">
+								<i class="gg-menu-left"></i>
+							</button>
+						</div>
+						<button class="topbar-toggler more">
+							<i class="gg-more-vertical-alt"></i>
+						</button>
+					</div>
+					<!-- End Logo Header -->
+				</div>
+
+				<!-- Navbar Header -->
+				<nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom bg-main">
+					<div class="container-fluid">
+						@if (User.Identity != null && User.Identity.IsAuthenticated)
+						{
+							var un = User?.Identity?.Name?.ToUpper();
+							var pn = User?.Claims.FirstOrDefault(c => c.Type == "PERSONNEL_NAME")?.Value;
+							var fn = pn?.Split(" ")[0]; // gets only the first name
+
+							<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+								@if (un == "DEERPSA")
+								{
+									<li class="nav-item topbar-icon  dropdown hidden-caret mx-0">
+										<a class="nav-link dropdown-toggle btn-icon"
+											 data-bs-toggle="dropdown"
+											 href="#"
+											 aria-expanded="false">
+											<i class="fas fa-cog"></i>
+										</a>
+										<div class="dropdown-menu quick-actions quick-actions-danger">
+											<div class="quick-actions-header bg-accent">
+												<span class="title mb-1">Manage</span>
+											</div>
+											<div class="quick-actions-scroll scrollbar-outer">
+												<div class="quick-actions-items">
+													<div class="row m-0">
+														<a class="col-6 col-md-4 p-0" href="~/page?name=Menu">
+															<div class="quick-actions-item">
+																<div class="avatar-item bg-secondary2 rounded-circle">
+																	<i class="fas fa-bars"></i>
+																</div>
+																<span class="text-main text-small mt-2">Menus</span>
+															</div>
+														</a>
+														<a class="col-6 col-md-4 p-0" href="~/page?name=Role">
+															<div class="quick-actions-item">
+																<div class="avatar-item bg-secondary2 rounded-circle">
+																	<i class="fas fa-tag"></i>
+																</div>
+																<span class="text-main text-small mt-2">Roles</span>
+															</div>
+														</a>
+														<a class="col-6 col-md-4 p-0" href="~/page?name=User">
+															<div class="quick-actions-item">
+																<div class="avatar-item bg-secondary2 rounded-circle">
+																	<i class="fas fa-user"></i>
+																</div>
+																<span class="text-main text-small mt-2">Users</span>
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								}
+								<li class="nav-item topbar-user dropdown hidden-caret">
+									<a class="dropdown-toggle profile-pic"
+										 data-bs-toggle="dropdown"
+										 href="#"
+										 aria-expanded="false">
+										<div class="avatar-sm">
+											<img src="https://ui-avatars.com/api/?name=@pn" alt="Profile picture" class="avatar-img rounded" />
+										</div>
+										<span class="profile-username text-white">
+											<span class="op-7">Hi,</span>
+											<span class="fw-bold">@fn</span>
+										</span>
+									</a>
+									<ul class="dropdown-menu dropdown-user">
+										<div class="dropdown-user-scroll scrollbar-outer">
+										<li>
+											<div class="user-box">
+												<div class="avatar-lg">
+													<img src="https://ui-avatars.com/api/?name=@pn"
+															 alt="image profile"
+															 class="avatar-img rounded" />
+												</div>
+												<div class="u-text">
+													<h4>@fn</h4>
+												</div>
+											</div>
+										</li>
+										<li>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="/account/change-password">Change Password</a>
+											<div class="dropdown-divider"></div>
+											<a class="dropdown-item" href="/auth/logout">Logout</a>
+										</li>
+						</div>
+						</ul>
+						</li>
+						</ul>
+					}
+			</div>
+			</nav>
+			<!-- End Navbar -->
+		</div>
+		@if (User?.Identity != null && User.Identity.IsAuthenticated)
+		{
+			@RenderBody()
+		}
+		else
+		{
+			<h1>Session Expired. Please re-login.</h1>
+		}
+		
+		<footer class="footer py-1">
+			<div class="d-flex flex-wrap justify-content-between align-items-center">
+				<div class="container d-flex justify-content-center">
+					<p class="py-3 mb-0 small">© @DateTime.Now.Year Dahbashi Engineering. All rights reserved.</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.complete.min.js"></script>
+	<script src="https://kit.fontawesome.com/6b24698ce0.js" crossorigin="anonymous"></script>
+	<!-- jQuery Scrollbar -->
+	<script src="~/lib/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+	<script src="~/lib/chart.js/chart.min.js" asp-append-version="true"></script>
+	<script src="~/js/appstart.js" asp-append-version="true"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

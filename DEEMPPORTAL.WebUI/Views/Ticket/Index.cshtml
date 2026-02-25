@@ -1,0 +1,134 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Ticket";
+}
+<div class="container">
+    <div class="page-inner">
+        <div class="flex-column">
+            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                Tickets
+            </h5>
+            <div class="row d-none">
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round border-primary">
+                       
+                        <div class="card-body">
+                            <small class="text-muted">Total Tickets</small>
+                            <h3 class="fw-bold">80</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round border-top-1 border-primary">
+                        <div class="card-body">
+                            <small class="text-muted">Pending</small>
+                            <h3 class="fw-bold">26</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round border-top-1 border-primary">
+                        <div class="card-body">
+                            <small class="text-muted">Completed This Month</small>
+                            <h3 class="fw-bold">30</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round border-top-1 border-primary">
+                        <div class="card-body">
+                            <small class="text-muted">Releases This Month</small>
+                            <h3 class="fw-bold">24</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card card-transparent rounded-1 mb-2">
+                        <div class="card-body p-3">
+                            <div class="row justify-content-between">
+                                <div class="col-sm-4">
+                                    <button type="button" id="openCreateTicketModal" class="btn btn-danger rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal"><i class="fas fa-plus"></i> New Ticket</button>
+                                   @{
+                                   await Html.RenderPartialAsync("~/Views/Ticket/_CreateTicketModal.cshtml");
+                                   } 
+                                    @{
+                                   await Html.RenderPartialAsync("~/Views/Ticket/_EditTicketModal.cshtml");
+                                   } 
+                                
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input id="inpSearchParam" type="text" class="form-control rounded-start-1" placeholder="Search tickets" aria-label="">
+                                        <button id="" class="btn btn-danger bg-accent px-4 rounded-start-0" type="button" onclick="submitSearchMenu(this)">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header d-none fw-bold bg-main-gradient text-white rounded-top-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                
+                                <div class="d-flex">
+                                    <div class="px-2">
+                                        <span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-ticket"></i></span> <span class="fw-normal mx-2">My Tickets</span>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body d-none p-1">
+                            <div class="table-responsive">
+                                <table id="tblTickets" class="table table-sm table-bordered table-hover mb-0" style="max-height: 500px; overflow-y: auto">
+                                    <thead class="table-light fw-bold text-start">
+                                        <tr>
+                                            <td class="text-muted">Ticket ID</td>
+                                            <td class="text-muted">Requested By</td>
+                                            <td class="text-muted">Description</td>
+                                            <td class="text-muted">Date Submitted</td>
+                                            <td class="text-muted">Status</td>
+                                            <td class="text-muted">Action</td>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-header fw-bold bg-main-gradient text-white rounded-top-2">
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div class="d-flex">
+                                    <div class="px-2">
+                                        <span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-ticket"></i></span> <span class="fw-normal mx-2">My Tickets</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                       <div class="card-body p-1">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/_TicketList.cshtml");
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    
+    <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
+   
+}

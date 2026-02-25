@@ -1,0 +1,160 @@
+﻿@{
+  Layout = "_Layout";
+  ViewData["title"] = "Form";
+
+  var gDeptName = ViewBag.DeptName;
+  var gPersonnelName = ViewBag.PersonnelName;
+  var gUserName = ViewBag.UserName;
+  var gUserCode = ViewBag.UserId;
+}
+
+@if (gUserCode == 1)
+{
+  <!-- Modal -->
+  <div class="modal fade" id="modalLibraryInformation" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="frmLibraryInformation">
+          @Html.AntiForgeryToken()
+          <input id="inpLibraryInformationCode" type="hidden" name="LIBRARY_INFORMATION_CODE" />
+          <input id="inpLibraryTypeCode" type="hidden" value="CERTIFICATE" name="LIBRARY_TYPE_CODE" />
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bolder" id="modalSaveLeaveEntryModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" onclick="cancelModal(this)"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row align-items-center py-1">
+              <label for="selLeaveType" class="col-sm-3 text-end">Organization: <span class="text-danger">*</span></label>
+              <div class="col-sm-7">
+                <select id="selLibraryOrgCode" class="form-control form-select required selOrgCode" name="ORG_CODE">
+                  <option></option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row align-items-center py-1">
+              <label for="inpDescription" class="col-sm-3 text-end">Description: <span class="text-danger">*</span></label>
+              <div class="col-sm-7">
+                <input type="text" id="inpDescription" class="form-control required" name="DESCRIPTION" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary rounded-1" onclick="cancelModal(this)">Close</button>
+            <button type="button" class="btn btn-danger bg-accent rounded-1" onclick="submitSaveLibraryInformation(this)">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalLibraryAttachment" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="frmLibraryAttachment">
+          @Html.AntiForgeryToken()
+          <input id="inpLibraryInformationCode" type="hidden" value="" name="LIBRARY_INFORMATION_CODE" />
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bolder" id="modalSaveLeaveEntryModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" onclick="cancelModal(this)"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row align-items-center py-1">
+              <label for="inpFileAttachment" class="col-sm-3 text-end">Attachment: <span class="text-danger">*</span></label>
+              <div class="col-sm-7">
+                <input type="file" id="inpFileAttachment" class="form-control" name="FILE_ATTACHMENT" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary rounded-1" onclick="cancelModal(this)">Close</button>
+            <button type="button" class="btn btn-danger bg-accent rounded-1" onclick="submitSaveLibraryAttachment(this)">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="container">
+  <div class="page-inner">
+    <div class="flex-column">
+      <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+        Company Forms
+      </h5>
+      <div class="page-category">
+        <div class="row">
+          @if (gUserCode == 1)
+          {
+            <div class="col-sm-12">
+              <div class="card mb-3">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-2 align-items-center">
+                      <button class="btn btn-danger bg-accent rounded-1" onclick="showModalCreateNewFormInformation(this)">
+                        <i class="fas fa-plus"></i>
+                        New
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                <div class="col-5">
+                  <label for="selOrgCode" class="form-label small fw-bold">Choose Organization</label>
+                  <select id="selOrgCode" class="form-select selOrgCode"></select>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="table-responsive">
+                      <table id="tblLibraryInformation" class="table table-sm">
+                        <thead class="table-light fw-bold">
+                          <tr>
+                            <td class="text-muted">#</td>
+                            <td class="text-muted">Image name</td>
+                            <td class="text-muted">Action</td>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div id="sectionAttachment" class="border rounded-2 p-2 px-3 d-none">
+                      <div class="my-2">
+                        @if (gUserCode == 1)
+                        {
+                          <a href="javascript:void(0)" class="btn btn-danger rounded-1 text-white" onclick="showModalAddAttachment(this)">
+                            <i class="fas fa-plus"></i> Add files
+                          </a>
+                        }
+                      </div>
+                      <div>
+                        <table id="tblAttachments" class="table table-sm">
+                          <tbody></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+{
+  <script>var userId = `@gUserCode`</script>
+  <script src="~/js/library/form.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,192 @@
+﻿<div class="page-category">
+	<div class="row">
+		<div class="col-sm-6 col-md-3">
+			<div class="card card-stats card-round border-top-1 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col col-stats px-4">
+							<div class="numbers">
+								<p class="card-category text-main text-uppercase fw-bold"><i class="fas fa-map-pin pe-2"></i> Local</p>
+								<p class="text-small mb-0 text-muted">Last Resumption Date:</p>
+								<h4 id="localLastResumptionDate" class="card-title"></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<div class="card card-stats card-round border-top-1 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col col-stats px-4">
+							<div class="numbers">
+								<p class="card-category text-main text-uppercase fw-bold"><i class="fas fa-car-side pe-2"></i> Annual</p>
+								<p class="text-small mb-0 text-muted">Last Resumption Date:</p>
+								<h4 id="annualLastResumptionDate" class="card-title"></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<div class="card card-stats card-round border-top-1 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col col-stats px-4">
+							<div class="numbers">
+								<p class="card-category text-main text-uppercase fw-bold"><i class="fas fa-syringe pe-2"></i> Medical</p>
+								<p class="text-small mb-0 text-muted">Last Resumption Date:</p>
+								<h4 id="medicalLastResumptionDate" class="card-title"></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6 col-md-3">
+			<div class="card card-stats card-round border-top-1 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col col-stats px-4">
+							<div class="numbers">
+								<p class="card-category text-main text-uppercase fw-bold"><i class="fas fa-bell pe-2"></i> Emergency</p>
+								<p class="text-small mb-0 text-muted">Last Resumption Date:</p>
+								<h4 id="emergencyLastResumptionDate" class="card-title"></h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card mb-3">
+		<div class="card-body p-3">
+			<div class="row justify-content-between">
+				<div class="col-sm-4">
+					<button class="btn btn-danger rounded-1" onclick="showModalCreateNewLeave(this)"><i class="fas fa-plus"></i> Apply New Leave</button>
+					<button id="btnDeleteMultiple" class="btn btn-light text-danger shadow-none d-none" onclick="deleteMultipleMenuItems(this)"><i class="fas fa-trash"></i> &nbsp;Delete Selected</button>
+				</div>
+				<div class="col-sm-5">
+					<div class="input-group">
+						<input id="inpSearchParam" type="text" class="form-control rounded-start-1"
+									 placeholder="Search for employee name" aria-label="">
+						<button id="" class="btn btn-danger bg-accent px-4 rounded-start-0" type="button" onclick="submitSearch(this)">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="card rounded-1 shadow-none">
+				<div class="card-header fw-bold bg-main-gradient text-white rounded-top-2">
+					<div class="d-flex justify-content-between align-items-center">
+						<div>
+							<button type="button" class="btn btn-xs px-3 btn-primary btn-round border" filter-type="type" filter-value="" onclick="filterRecords(this)">All (<span id="totalLeaveApplication"></span>)</button>
+							<button type="button" class="btn btn-xs px-3 btn-primary btn-round border" filter-type="type" filter-value="local" onclick="filterRecords(this)">Local (<span id="totalLocalLeave"></span>)</button>
+							<button type="button" class="btn btn-xs px-3 btn-primary btn-round border" filter-type="type" filter-value="annual" onclick="filterRecords(this)">Annual (<span id="totalAnnualLeave"></span>)</button>
+							<button type="button" class="btn btn-xs px-3 btn-primary btn-round border" filter-type="type" filter-value="medical" onclick="filterRecords(this)">Medical (<span id="totalMedicalLeave"></span>)</button>
+							<button type="button" class="btn btn-xs px-3 btn-primary btn-round border" filter-type="type" filter-value="emergency" onclick="filterRecords(this)">Emergency (<span id="totalEmergencyLeave"></span>)</button>
+						</div>
+						<div class="d-flex">
+							<div class="px-2">
+								<span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-up"></i></span> <span class="fw-normal">Approved</span>
+							</div>
+							<div class="px-2">
+								<span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-down"></i></span> <span class="fw-normal">Rejected</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<button class="nav-link active" id="nav-home-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="pending" onclick="filterRecords(this)">
+								<span class="btn-label px-1">
+									<i class="fas fa-tasks"></i>
+								</span> Pending <span class="badge rounded-pill bg-danger" id="totalPending">0</span>
+							</button>
+							<button class="nav-link" id="nav-profile-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="for hr approval" onclick="filterRecords(this)">
+								<span class="btn-label px-1">
+									<i class="fas fa-user-edit"></i>
+								</span> For HR's Approval <span class="badge rounded-pill bg-danger" id="totalForHrApproval">0</span>
+							</button>
+							<button class="nav-link" id="nav-contact-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="approved" onclick="filterRecords(this)">
+								<span class="btn-label px-1">
+									<i class="fas fa-thumbs-up"></i>
+								</span> Approved by HR <span class="badge rounded-pill bg-danger" id="totalApproved">0</span>
+							</button>
+							<button class="nav-link" id="nav-contact-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="disapproved by manager" onclick="filterRecords(this)">
+								<span class="btn-label px-1"><i class="fas fa-thumbs-down"></i></span>
+								Rejected by Manager <span class="badge rounded-pill bg-danger" id="totalDisApprovedByManager">0</span>
+							</button>
+							<button class="nav-link" id="nav-contact-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="disapproved by hr" onclick="filterRecords(this)">
+								<span class="btn-label px-1"><i class="fas fa-thumbs-down"></i></span>
+								Rejected by HR <span class="badge rounded-pill bg-danger" id="totalDisApprovedByHr">0</span>
+							</button>
+							<button class="nav-link" id="nav-contact-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="trashed" onclick="filterRecords(this)">
+								<span class="btn-label px-1"><i class="fas fa-trash"></i></span>
+								Trash <span class="badge rounded-pill bg-danger" id="totalTrashed">0</span>
+							</button>
+						</div>
+					</nav>
+					<div class="tab-content" id="nav-tabContent">
+						<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+							<div class="table-responsive">
+								<table id="tblLeaveApplications" class="table table-sm table-hover mb-0">
+									<thead class="table-light fw-bold">
+										<tr>
+											<td class="text-muted">#</td>
+											<td class="text-muted text-nowrap">Leave Type</td>
+											<td class="text-muted text-nowrap">Employee Name</td>
+											<td class="text-muted">Status</td>
+											<td class="text-muted">Leave Details</td>
+											<td class="text-muted text-nowrap text-center">Manager</td>
+											<td class="text-muted text-nowrap text-center">HR</td>
+											<td class="text-muted text-nowrap text-center">Attachments</td>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					@* <div class="d-flex align-items-center justify-content-end gap-2">
+						<div></div>
+						<div id="pagination" class="d-flex gap-2 align-items-center fw-bold">
+							<label>Page no. </label>
+							<div style="width: 110px">
+								<select id="pageNo" class="form-select form-control rounded-1"
+												onchange="changePageNo(this.value)"></select>
+							</div>
+							<label>of <span id="pageTotal"></span></label>
+						</div>
+					</div> *@
+					<div class="d-flex align-items-center justify-content-end gap-2">
+						<div class="d-flex align-items-center d-none"></div>
+						<div id="pagination" class="d-flex gap-2 align-items-center fw-bold">
+							<button id="btnPrev" type="button" class="btn btn-light btn-sm border rounded-1">
+								<i class="fas fa-chevron-left"></i>
+							</button>
+							<button id="btnNext" type="button" class="btn btn-light btn-sm border rounded-1">
+								<i class="fas fa-chevron-right"></i>
+							</button>
+							<label>Page no. </label>
+							<div style="">
+								<select id="pageNo" class="form-select form-select-sm rounded-1"
+												onchange="changePageNo(this.value)"></select>
+							</div>
+							<label>of <span id="pageTotal"></span></label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

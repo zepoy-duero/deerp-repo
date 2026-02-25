@@ -1,0 +1,261 @@
+﻿@{
+	ViewData["title"] = "My Profile";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+	var gDeptName = ViewBag.DeptName;
+	var gPersonnelName = ViewBag.PersonnelName;
+	var gUserName = ViewBag.UserName;
+	var gUserCode = ViewBag.UserId;
+}
+
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+				My Profile
+			</h5>
+			<div class="page-category">
+				<div class="row">
+					<div class="col-4">
+						<div class="card">
+							<div class="card-body px-4">
+								<div class="fw-bolder small text-muted mb-2 text-uppercase">Navigation</div>
+								<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+									<button class="nav-link border-0 text-start active" id="v-pills-home-tab" data-bs-toggle="pill"
+													data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home"
+													aria-selected="true">
+										<div class="px-3 d-flex w-100 align-items-center justify-content-between">
+											<strong class="mb-1 d-flex align-items-center justify-content-between gap-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+														 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														 class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+													<path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" />
+													<path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+													<path d="M10 14h4" />
+													<path d="M12 12v4" />
+												</svg>
+												Medical Records
+											</strong>
+										</div>
+									</button>
+									<button class="nav-link border-0 text-start" id="v-pills-profile-tab" data-bs-toggle="pill"
+													data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
+													aria-selected="false">
+										<div class="px-3 d-flex w-100 align-items-center justify-content-between">
+											<strong class="mb-1 d-flex align-items-center justify-content-between gap-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+														 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														 class="icon icon-tabler icons-tabler-outline icon-tabler-address-book">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+													<path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z" />
+													<path d="M10 16h6" />
+													<path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+													<path d="M4 8h3" />
+													<path d="M4 12h3" />
+													<path d="M4 16h3" />
+												</svg>
+												Address
+											</strong>
+										</div>
+									</button>
+									<button class="nav-link border-0 text-start" id="v-pills-messages-tab" data-bs-toggle="pill"
+													data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages"
+													aria-selected="false">
+										<div class="px-3 d-flex w-100 align-items-center justify-content-between">
+											<strong class="mb-1 d-flex align-items-center justify-content-between gap-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+														 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														 class="icon icon-tabler icons-tabler-outline icon-tabler-phone-plus">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+													<path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+													<path d="M15 6h6m-3 -3v6" />
+												</svg>
+												Contacts
+											</strong>
+										</div>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-8">
+						<form id="frmEmployeeProfile" method="post">
+							@Html.AntiForgeryToken()
+							<input id="inpEmployeeProfileId" type="hidden" name="EMPLOYEE_PROFILE_ID" value="" />
+							<div class="card">
+								<div class="card-header d-flex justify-content-between align-items-center">
+									<div class="small">
+										<div>Last Updated: <span id="lblLastUpdate" class="fw-bold text-danger"></span></div>
+									</div>
+									<div>
+										<button type="button" class="btn btn-light rounded-1 border px-4" onclick="refreshData(this)"
+														title="Refresh Data">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+													 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+													 class="icon icon-tabler icons-tabler-outline icon-tabler-refresh">
+												<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+												<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+												<path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+											</svg>
+										</button>
+										<button type="button" class="btn btn-light rounded-1 border px-4"
+														onclick="submitClearEntries(this)">
+											Clear Entries
+										</button>
+										<button type="button" class="btn btn-danger rounded-1 px-4" onclick="submitSaveChanges(this)">
+											Update
+											Profile
+										</button>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="tab-content" id="v-pills-tabContent">
+										<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+												 aria-labelledby="v-pills-home-tab" tabindex="0">
+											<div class="form-group row align-items-center py-1">
+												<label for="selBloodGroup" class="form-label">
+													Blood Group: <span class="text-danger">*</span>
+												</label>
+												<div class="col-sm-5">
+													<select id="selBloodGroup" class="form-select rounded-1 required" name="BLOOD_GROUP">
+														<option value=""></option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<label for="listGroupRadios1" class="form-label">
+													Food Preference: <span class="text-danger">*</span>
+												</label>
+												<div class="">
+													<label class="list-group-item d-flex gap-2">
+														<input class="form-check-input flex-shrink-0" type="radio" name="FOOD_PREFERENCE"
+																	 id="chckFoodPreference1" value="Veg" checked="">
+														<span>
+															Vegetarian
+															<small class="d-block text-body-secondary text-wrap">
+																Food that does not contain meat,
+																fish, or eggs. Usually includes vegetables, fruits, grains, legumes, and dairy.
+															</small>
+														</span>
+													</label>
+													<label class="list-group-item d-flex gap-2">
+														<input class="form-check-input flex-shrink-0" type="radio" name="FOOD_PREFERENCE"
+																	 id="chckFoodPreference2" value="Non-veg">
+														<span>
+															Non-vegetarian
+															<small class="d-block text-body-secondary text-wrap">
+																Food that includes animal products
+																like meat, poultry, fish, or sometimes even eggs.
+															</small>
+														</span>
+													</label>
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<label for="txtDietaryRestriction" class="form-label">
+													Dietary Restriction(s): <span class="text-danger">*</span>
+												</label>
+												<div class="col-sm-12">
+													<textarea id="txtDietaryRestriction" class="form-control rounded-1 required" rows="5"
+																		name="DIETARY_RESTRICTION"></textarea>
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<label for="txtMedicalAllergies" class="form-label">
+													Medical Allergies: <span class="text-danger">*</span>
+												</label>
+												<div class="col-sm-12">
+													<textarea id="txtMedicalAllergies" class="form-control rounded-1 required" rows="5"
+																		name="MEDICAL_ALLERGIES"></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<h5 class="mb-0 fw-bold">Emergency Contact Details</h5>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<div class="col-5">
+													<label for="" class="form-label">Relationship: <span class="text-danger">*</span></label>
+													<div class="col-sm-12">
+														<select id="selEmergencyContactRelationship" class="form-select required rounded-1"
+																		name="EMERGENCY_CONTACT_RELATIONSHIP">
+														</select>
+													</div>
+												</div>
+												<div class="col-7">
+													<label for="" class="form-label">Name: <span class="text-danger">*</span></label>
+													<div class="col-sm-12">
+														<input id="inpEmergencyContactName" type="text" name="EMERGENCY_CONTACT_NAME" value=""
+																	 class="form-control rounded-1 required" placeholder="Enter the name" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col">
+													<label for="" class="form-label">Contact No.: <span class="text-danger">*</span></label>
+													<div class="col-sm-12">
+														<input id="inpEmergencyContactNumber" type="text" name="EMERGENCY_CONTACT_NUMBER" value=""
+																	 class="form-control rounded-1 required" placeholder="+971 XXX XXXX" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+												 aria-labelledby="v-pills-profile-tab" tabindex="0">
+											<div class="form-group row align-items-center py-1">
+												<label for="inpNumOfDays" class="form-label">
+													Local Residential Address: <span class="text-danger">*</span>
+												</label>
+												<div class="col-sm-12">
+													<textarea id="txtResidentialAddress" class="form-control rounded-1 required" rows="5"
+																		name="RESIDENTIAL_ADDRESS"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+												 aria-labelledby="v-pills-messages-tab" tabindex="0">
+											<div class="form-group row align-items-center py-1">
+												<label for="inpMobileNo" class="form-label">
+													Mobile No.: <span class="text-danger">*</span>
+												</label>
+												<div class="col-sm-12">
+													<input id="inpMobileNo" type="text" name="MOBILE_NO" value=""
+																 class="form-control rounded-1 required" placeholder="+971 XXX XXXX" />
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<label for="inpTelephoneNo" class="form-label">
+													Company Direct Telephone No.: <span class="text-danger"></span>
+												</label>
+												<div class="col-sm-12">
+													<input id="inpTelephoneNo" type="text" name="TELEPHONE_NO" value=""
+																 class="form-control rounded-1" placeholder="+971 XXX XXXX" />
+												</div>
+											</div>
+											<div class="form-group row align-items-center py-1">
+												<label for="inpExtensionNo" class="form-label">
+													Company Telephone Extension No.: <span class="text-danger"></span>
+												</label>
+												<div class="col-sm-12">
+													<input id="inpExtensionNo" type="text" name="EXTENSION_NO" value=""
+																 class="form-control rounded-1" placeholder="" />
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+								<div class="card-footer"></div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	<script src="~/js/my-profile/employee.js" asp-append-version="true"></script>
+}

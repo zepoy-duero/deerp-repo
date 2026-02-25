@@ -1,0 +1,164 @@
+﻿<!-- Edit Ticket Modal -->
+<div class="modal modal-xl fade" id="editTicketModal" tabindex="-1" aria-labelledby="editTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header small fw-bold bg-main-gradient text-white rounded-top">
+                <span class="modal-title fs-6 mx-4" id="editTicketModalLabel">Update Ticket</span>
+                <button type="button" class="btn-close rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="container-fluid">
+                    <div id="successAlert" class="alert alert-success align-content-between d-none">
+                        <span class="fw-bold">#0001</span>
+                        <div class="fw-semibold text-end">
+                            <i class="fas fa-check me-2"></i>
+                            You have successfully updated a ticket!
+                        </div>
+                    </div>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <form asp-action="Create" method="post">
+
+                                    <!-- ================= TICKET INFORMATION ================= -->
+                                    <h6 class="text-primary mb-3">Ticket Information</h6>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Ticket ID</label>
+                                            <input id="TicketId" class="form-control" readonly />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Created By</label>
+                                            <input id="CreatedBy" class="form-control" readonly />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Request Date</label>
+                                            <input id="RequestDate" type="datetime-local" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <!-- SEARCHABLE EMPLOYEE SELECT -->
+                                    <div class="col-md-6  position-relative">
+                                        <label class="form-label">Requested By (Employee Name)</label>
+
+                                        <!-- Hidden field to store selected EmployeeId -->
+                                        <input type="hidden" id="RequestedBy" id="RequestedBy" />
+
+                                        <!-- Search input -->
+                                        <input type="text"
+                                               id="employeeSearch"
+                                               class="form-control"
+                                               placeholder="Search employee..."
+                                               autocomplete="off" />
+
+                                        <!-- Dropdown results -->
+                                        <div id="employeedropdown"
+                                             class="list-group position-absolute w-100 shadow-sm list-group-horizontal-sm"
+                                             style="z-index:1055; max-height:250px; overflow-y:auto; display:none;">
+                                        </div>
+                                    </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Department</label>
+                                            <select id="DEPT_CODE" class="form-select">
+                                                <option value="">-- Select Department --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Request Type</label>
+                                            <select id="RequestType" class="form-select">
+                                                <option value="">-- Select Type --</option>
+                                                <option>Technical</option>
+                                                <option>System</option>
+                                                <option>Network</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Priority</label>
+                                            <select id="Priority" class="form-select">
+                                                <option>Low</option>
+                                                <option>Medium</option>
+                                                <option>High</option>
+                                                <option>Critical</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Status</label>
+                                            <select id="Status" class="form-select">
+                                                <option>Open</option>
+                                                <option>In Progress</option>
+                                                <option>Closed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea id="Description" rows="4" class="form-control"></textarea>
+                                    </div>
+
+                                    <!-- ================= ASSIGNEE ================= -->
+                                    <hr />
+                                    <h6 class="text-primary mb-3">Assignment</h6>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Assigned To</label>
+                                            <select id="AssignedTo" class="form-select">
+                                                <option value="">-- Select Employee --</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Module Name</label>
+                                            <input id="ModuleName" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <!-- ================= DURATION ================= -->
+                                    <hr />
+                                    <h6 class="text-primary mb-3">Duration</h6>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Start Date</label>
+                                            <input id="StartDate" type="date" class="form-control" />
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">End Date</label>
+                                            <input id="EndDate" type="date" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <!-- ================= BUTTONS ================= -->
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-check-circle"></i> Save Ticket
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary">
+                                            Reset
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/tickets/ticket.js"></script>
+}

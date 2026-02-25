@@ -1,0 +1,79 @@
+﻿@{
+	Layout = "_NoMenuLayout";
+	ViewData["Title"] = "Login";
+}
+
+<div id="modalOtpVerification" class="modal" tabindex="-1">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<form id="frmOtpVerification">
+				@Html.AntiForgeryToken()
+				<input id="inpUserCode" type="hidden" class="form-control rounded-1" name="UserCode" />
+				<div class="modal-header">
+					<h5 class="modal-title fw-bold text-main">Two-Step Verification</h5>
+					<button type="button" class="btn-close" onclick="cancelModal(this)"></button>
+				</div>
+				<div class="modal-body text-center">
+					<p>A 6-digit code was sent to your email <span id="lblEmailAddress" class="fw-bold"></span>. Check your inbox (including spam) and enter the OTP below to verify your account.</p>
+					<div class="row">
+						<div class="form-group">
+							<input type="text" class="form-control form-control-lg required rounded-1 text-center" name="OtpCode" maxlength="6">
+						</div>
+					</div>
+					<div class="my-2 text-center">
+						<small>Didn't receive the OTP? <a href="javascript:void(0)">Resend</a></small>
+					</div>
+				</div>
+				<div class="modal-footer bg-white justify-content-center pt-0">
+					<button type="button" class="btn btn-lg btn-danger bg-accent w-100 rounded-1" onclick="verifyOtp(this)">Verify</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="row g-0 flex-fill">
+	<div class="col-xl-8 col-lg-0 px-0 py-0">
+		<div class="bg-cover h-100 min-vh-100" style="background-image: url(/img/cover-photo-sd.jpg); background-size: cover; background-position: center"></div>
+	</div>
+	<div class="col-xl-4 col-lg-12 d-flex flex-column bg-body-tertiary">
+		<div class="container px-lg-5 px-xl-4">
+			<div class="card-body">
+				<div class="text-center px-5">
+					<div class="py-5">
+						<img class="img-fluid" src="~/img/de-and-anniversary-logo.png" width="400" />
+					</div>
+					<h4 class="fw-bold">Login to your account</h4>
+					<div class="my-4" style="border:none; border-bottom: 1px dashed #ccc"></div>
+				</div>
+				<div class="col-md-10 mx-auto col-lg-5 bg-body-tertiary px-lg-4 px-xl-1 my-2 w-100 d-flex justify-content-center">
+					<form id="frmLogin" class="p-4 p-md-4" style="width:500px !important">
+						@Html.AntiForgeryToken()
+						<div class="form-floating mb-3">
+							<input type="text" class="form-control required" id="inpUsername" name="Username" placeholder="Enter your Username">
+							<label for="inpUsername"><i class="bi bi-person"></i> Username</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input type="password" class="form-control required" id="inpPassword" name="Password" placeholder="Enter your Password">
+							<label for="inpPassword"><i class="bi bi-key"></i> Password</label>
+						</div>
+						<div class="my-5" style="border:none; border-bottom: 1px dashed #ccc"></div>
+						<button class="w-100 btn btn-lg btn-danger bg-accent mb-3" type="button" onclick="submitLogin(this)">Log in</button>
+						<div class="mb-0 form-check text-center px-0">
+							<label class="form-check-label" for=""><a href="/account/forgot-password" class="text-main nav-link">Forgot Password?</a></label>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="card-footer text-center">
+				<p class="mb-0 text-muted small">Developed by Dahbashi Engineering</p>
+				<p class="text-muted small">&copy; @DateTime.Now.Year All Rights Reserved</p>
+				<a id="linkUserSatisfaction" href="~/support/user-satisfaction" class="nav-link fw-bold mt-5 text-main">Suggestion / Complaint</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/js/auth/login.js" asp-append-version="true"></script>
+}

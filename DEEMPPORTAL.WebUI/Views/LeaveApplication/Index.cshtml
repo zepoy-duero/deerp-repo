@@ -1,0 +1,152 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["title"] = "Leave Application";
+
+	var gDeptName = ViewBag.DeptName;
+	var gPersonnelName = ViewBag.PersonnelName;
+	var gUserName = ViewBag.UserName;
+	var gUserCode = ViewBag.UserId;
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modalSaveLeaveEntry" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<form id="frmLeaveApplication">
+				@Html.AntiForgeryToken()
+				<input id="inpLeaveApplicationCode" type="hidden" value="" name="LEAVE_APPLICATION_CODE" />
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 fw-bolder" id="modalSaveLeaveEntryModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" onclick="cancelModal(this)"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group row align-items-center py-1 justify-content-center">
+						<div class="col-sm-9">
+							<span id="txtNotice" class="text-accent fw-bold"></span>
+						</div>
+					</div>
+					<div class="form-group row align-items-center py-1">
+						<label for="selLeaveType" class="col-sm-3 text-end">Leave Type: <span class="text-danger">*</span></label>
+						<div class="col-sm-5">
+							<select id="selLeaveType" class="form-control form-select rounded-1 required" name="LEAVE_TYPE">
+								<option></option>
+								<option value="local">Local</option>
+								<option value="medical">Medical</option>
+								<option value="annual">Annual</option>
+								<option value="emergency">Emergency</option>
+							</select>
+						</div>
+					</div>
+					<div id="leaveEntry"></div>
+					<div class="form-group row align-items-center py-1">
+						<label for="inpStatus" class="col-sm-3 text-end">Status: </label>
+						<div id="appStatus" class="col-sm-5"></div>
+					</div>
+					<div id="reasonForDisapprovalField" class="d-none">
+						<div class="form-group row align-items-center py-1">
+							<label for="inpStatus" class="col-sm-3 text-end">Reason for disapproval: </label>
+							<div class="col-sm-5">
+								<span id="lblReasonForDisapproval" class="fw-bold text-accent small"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary rounded-1" onclick="cancelModal(this)">Close</button>
+					<button id="btnSaveChanges" type="button" class="btn btn-danger bg-accent rounded-1" onclick="submitSaveLeave(this)">Submit Application</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="modalStatusUpdateConfirmation" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog" style="box-shadow: 0 50px 80px rgba(0, 0, 0, 0.2);">
+		<form>
+			@Html.AntiForgeryToken()
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title fw-bolder">&nbsp;</h5>
+					<button type="button" class="btn-close" onclick="closeModal(this)"></button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary rounded-1" onclick="closeModal(this)">Close</button>
+					<button type="button" class="btn btn-danger rounded-1" onclick="submitApplicationStatus(this)">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div id="modalAddRemarks" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog" style="box-shadow: 0 50px 80px rgba(0, 0, 0, 0.2);">
+		<form class="frmRemarks">
+			@Html.AntiForgeryToken()
+			<input id="inpLeaveApplicationCode" type="hidden" class="form-control" name="LEAVE_APPLICATION_CODE" />
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title fw-bolder"><i class="fas fa-user-edit"></i> Remarks</h5>
+					<button type="button" class="btn-close" onclick="closeModal(this)"></button>
+				</div>
+				<div class="modal-body pt-0">
+					<div class="form-group row align-items-center py-1 mb-2">
+						<div class="col">
+							<textarea id="txtRemarks" class="form-control rounded-1 required" rows="5" placeholder="Enter your remarks"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer px-4 pt-0">
+					<div class="d-flex w-100 justify-content-evenly gap-3">
+						<div class="col">
+							<button type="button" class="btn btn-danger rounded-1 w-100" onclick="submitRemarks(this)">Save Remarks</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="container">
+	<div class="page-inner">
+		<div class="flex-column">
+			<h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+				Leave Application
+			</h5>
+			@if (User.IsInRole("Super Admin")) // Super Admin Only
+			{
+				await Html.RenderPartialAsync("~/Views/LeaveApplication/_PartialSuperAdmin.cshtml");
+			}
+			else if (User.IsInRole("Manager")) // For Department Managers Only
+			{
+				await Html.RenderPartialAsync("~/Views/LeaveApplication/_PartialDepartmentManager.cshtml");
+			}
+			else if (User.IsInRole("Manager - HR") || User.IsInRole("Management"))  // Human Resource Only
+			{
+				await Html.RenderPartialAsync("~/Views/LeaveApplication/_PartialHumanResourceManager.cshtml");
+			}
+			else // Users
+			{
+				await Html.RenderPartialAsync("~/Views/LeaveApplication/_PartialNormalUser.cshtml");
+			}
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@if (User.IsInRole("Manager"))
+	{
+		<script src="~/js/hr/leave-application-manager.js" asp-append-version="true"></script>
+	}
+	else if (User.IsInRole("Manager - HR") || User.IsInRole("Management"))
+	{
+		<script src="~/js/lib/chart.js/chart.min.js"></script>
+		<script src="~/js/hr/leave-application-hr.js" asp-append-version="true"></script>
+	}
+	else
+	{
+		<script src="~/js/hr/leave-application.js" asp-append-version="true"></script>
+	}
+}

@@ -1,0 +1,223 @@
+﻿@{
+  Layout = "_Layout";
+  ViewData["title"] = "Employee Report (HR)";
+
+  var gDeptName = ViewBag.DeptName;
+  var gPersonnelName = ViewBag.PersonnelName;
+  var gUserName = ViewBag.UserName;
+  var gUserCode = ViewBag.UserId;
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modalEmployeeProfileDetails" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-main-gradient">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">&nbsp;</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="card-profile">
+          <div class="card-header bg-main-gradient">
+            <div class="profile-picture">
+              <div id="imgContainer" class="avatar avatar-xxl"></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="user-profile text-center mb-4">
+              <div id="employeeProfileName" class="name fw-bolder">&nbsp;</div>
+              <div id="employeeProfilePosition" class="job">&nbsp;</div>
+              <div id="employeeProfileDepartment" class="desc">&nbsp;</div>
+            </div>
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button bg-light fw-bolder text-main" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit px-1"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
+                    Medical Records
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                  <div class="accordion-body">
+                    <ul class="list-group shadow-none small">
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Blood Group</div>
+                        <div id="fieldBloodGroup" class="text-primary col text-end"></div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Food Preference</div>
+                        <div id="fieldFoodPreference" class="text-primary col text-end"></div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Dietary Restriction(s)</div>
+                        <div id="fieldDietaryRestriction" class="text-primary col text-end"></div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Medical Allergies</div>
+                        <div id="fieldMedicalAllergies" class="text-primary col text-end"></div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Emergency Contact</div>
+                        <div id="fieldEmergencyContact" class="text-primary col text-end"></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button bg-light fw-bolder text-main collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-address-book px-1"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z" /><path d="M10 16h6" /><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 8h3" /><path d="M4 12h3" /><path d="M4 16h3" /></svg>
+                    Address
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                  <div class="accordion-body">
+                    <ul class="list-group shadow-none small">
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Local Residential Address</div>
+                        <div id="fieldResidentialAddress" class="text-primary col text-end"></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button bg-light fw-bolder text-mainaccordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-phone-plus px-1"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /><path d="M15 6h6m-3 -3v6" /></svg>
+                    Contacts
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                  <div class="accordion-body">
+                    <ul class="list-group shadow-none small">
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-1">
+                        <div class="form-label col mb-0">Mobile No.</div>
+                        <div id="fieldMobileNumber" class="text-primary col text-end"></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-inner">
+    <div class="flex-column">
+      <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+        Employee Report (HR)
+      </h5>
+      <div class="page-category">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                <div class="col-5">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-2 align-items-center">
+                      <label class="form-label mb-0">Export as: </label>
+                      <button class="btn btn-outline-light rounded-1" onclick="exportAsExcel(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-excel text-green"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M10 12l4 5" /><path d="M10 17l4 -5" /></svg>
+                        Excel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="input-group">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-light" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 6l8 0" /><path d="M16 6l4 0" /><path d="M8 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 12l2 0" /><path d="M10 12l10 0" /><path d="M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 18l11 0" /><path d="M19 18l1 0" /></svg>
+                      </button>
+                      <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="filterStatus('')">All</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="filterStatus('Consultant')">Consultant</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="filterStatus('On Contract')">On Contract</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="filterStatus('On Payroll')">On Payroll</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="filterStatus('Share Holder')">Share Holder</a>
+                      </div>
+                    </div>
+                    <input id="inpSearchParam" type="text" class="form-control" placeholder="Search by name" aria-label="">
+                    <button id="" class="btn btn-danger bg-accent px-4 rounded-start-0" type="button" onclick="submitSearch(this)">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-1">
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="Y" onclick="filterRecords(this)">
+                      <span class="btn-label px-1">
+                        @* <i class="fas fa-tasks"></i> *@
+                      </span> Updated <span class="badge rounded-pill bg-danger" id="totalUpdated">0</span>
+                    </button>
+                    <button class="nav-link" id="nav-profile-tab" type="button" data-bs-toggle="tab" filter-type="type" filter-value="N" onclick="filterRecords(this)">
+                      <span class="btn-label px-1">
+                        @* <i class="fas fa-user-edit"></i> *@
+                      </span> Not Updated <span class="badge rounded-pill bg-danger" id="totalNotUpdated">0</span>
+                    </button>
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                    <div class="table-responsive">
+                      <table id="tblEmployeeProfile" class="table table-sm table-hover mb-0">
+                        <thead class="table-light fw-bold">
+                          <tr>
+                            <td class="text-muted" style="max-width:20px; width:18px;">#</td>
+                            <td class="text-muted">Employee Name</td>
+                            <td class="text-muted text-nowrap">Email</td>
+                            <td class="text-muted text-nowrap">Phone</td>
+                            <td class="text-muted text-nowrap">Department</td>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <div class="d-flex align-items-center d-none"></div>
+                  <div id="pagination" class="d-flex gap-2 align-items-center fw-bold">
+                    <button id="btnPrev" type="button" class="btn btn-light btn-sm border rounded-1">
+                      <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="btnNext" type="button" class="btn btn-light btn-sm border rounded-1">
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <label>Page no. </label>
+                    <div style="">
+                      <select id="pageNo" class="form-select form-select-sm rounded-1"
+                              onchange="changePageNo(this.value)"></select>
+                    </div>
+                    <label>of <span id="pageTotal"></span></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+{
+  <script src="~/js/report/employee-report.js" asp-append-version="true"></script>
+}
