@@ -1,7 +1,11 @@
-﻿const gBaseUrl = '/er/ticket';
-const homeUrl = '/erp/home';
+﻿const gBaseUrl = '/ticket';
+const homeUrl = '/home';
 
 $(async function () {
+    //$("#switchTbl").on("click",function () {
+    //    $("#ticketHeader1").toggleClass("d-none")
+    //    $("#ticketHeader2").toggleClass("d-none")
+    //});
     var employees = [
         {
             id: 1,
@@ -32,8 +36,6 @@ $(async function () {
             name: 'Avito'
         },
     ]
-   
-
     // Search as user types
     $("#employeeSearch").on("keyup", function () {
         console.log("enter")
@@ -70,20 +72,18 @@ $(async function () {
             $("#employeedropdown").hide();
         }
     });
-    const response = await fetch(`${homeUrl}/getUserDetails`);
+    //const response = await fetch(`${homeUrl}/getUserDetails`);
 
-    if (!response.ok) {
-        console.error('Failed to fetch user details');
-        return;
-    }
+    //if (!response.ok) {
+    //    console.error('Failed to fetch user details');
+    //    return;
+    //}
 
-    const data = await response.json();
-    console.log(data)
-    let currentDate = new Date()
-    $("#requestedBy").text(data.EMP_NAME)
-    $("#requestDate").text(currentDate.toISOString().slice(0, 10))
-
-  
+    //const data = await response.json();
+    //console.log(data)
+    //let currentDate = new Date()
+    //$("#requestedBy").text(data.EMP_NAME)
+    //$("#requestDate").text(currentDate.toISOString().slice(0, 10))
 
     for (i = 0; i < 4; i++) {
         $("#tblTickets tbody").append(`<tr class="align-items-start">
@@ -96,7 +96,7 @@ $(async function () {
                                             </td>
                                             <td class ="text-start">
                                         
-                                                <button type="button" class="btn btn-sm btn-danger rounded-2" data-bs-toggle="modal" data-bs-target="#editTicketModal">
+                                                <button type="button" class="btn btn-md btn-danger rounded-2" data-bs-toggle="modal" data-bs-target="#editTicketModal">
                                                     <i class="fas fa-pencil-alt"></i> Edit</button>
                                                 <button type="button" class="btn btn-sm btn-success btn-sm rounded-2">
                                                     <span class="fas fa-eye"></span> View
@@ -163,30 +163,33 @@ function showTicketList() {
               </figcaption>
             </figure>
         </li>
-        `
-        var listItem = `<li class="list-group-item d-flex justify-content-start align-items-start h-25">
-                                        <div class="row no-box-shadow">
-                                               <div class="col-auto>
-                                                   <div class="card">
+        `;
+        var listItem = `<li class="list-group-item d-flex align-items-center">
+                                               <div class="p-2 flex-fill text-start">                                     
                                                        <div class="card-subtitle">
-                                                            <div class="fw-bold">MIS#${i + 1}</div> 
-                                                       </div>
-                                                       <div class="card-text">
-                                                            <span class="badge ${i % 2 == 1 ?  `bg-primary` : `bg-success` } rounded-pill">In Progress</span>
-                                                       </div>
+                                                            <div class="fw-bold">MIS#${i + 1}
+                                                       </div> 
+                                                       <span class="small text-muted">
+                                                                Riyaz Ahmed
+                                                       </span>
                                                    </div>                                                
                                                 </div>
-                                                <div class="vr mx-2"></div>
-                                                <div class="col-auto">
+                                                <div class="vr mx-4"></div>
+                                                <div class="p-2 flex-fill">
                                                     <div class="fw-bold text-start">Speed Dial Directory - Table Column Alignment</div>              
-                                                    <span class="mark" text-muted">Created at Jan. 6,Created at Jan. 6, 2026 2026</span>       
+                                                    <span class="small text-muted">Created at Jan. 6, 2026 
+                                                    <div class="progress" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                                          <div class="progress-bar progress-bar-striped" style="width: 60%">progress</div>
+                                                        </div>
+                                                      <span class="d-none badge ${i % 2 == 1 ? `bg-primary` : `bg-success`} rounded-pill">In Progress</span>
+                                                   </span>       
                                                  </div>
-                                                 <div class="col-1 text-end">
-                                                   <i  data-bs-toggle="modal" data-bs-target="#editTicketModal" class="fa fa-edit"></i>
-                                                 </div>
-                                         
-                        </li>
-                                        <div class="hr"></div>`
+                                                 <div class="p-2 flex-fill text-end">
+                                                    <i class="fas fa-pencil-alt text-primary"></i>
+                                                 </div>            
+                          
+                         </li>
+                         <div class="hr"></div>`;
         $("#ticketList").append(listItem);
     }
 }   

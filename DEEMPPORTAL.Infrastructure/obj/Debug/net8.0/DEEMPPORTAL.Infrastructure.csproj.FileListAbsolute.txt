@@ -36,3 +36,4 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEE
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\refint\DEEMPPORTAL.Infrastructure.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\ref\DEEMPPORTAL.Infrastructure.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.sourcelink.json

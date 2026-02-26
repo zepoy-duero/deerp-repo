@@ -195,3 +195,4 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\obj\Debug\net8.0\staticwebass
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\obj\Debug\net8.0\DEEMPPOR.A6384A50.Up2Date
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\obj\Debug\net8.0\DEEMPPORTAL.WebUI.genruntimeconfig.cache
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\obj\Debug\net8.0\ref\DEEMPPORTAL.WebUI.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\obj\Debug\net8.0\DEEMPPORTAL.WebUI.sourcelink.json

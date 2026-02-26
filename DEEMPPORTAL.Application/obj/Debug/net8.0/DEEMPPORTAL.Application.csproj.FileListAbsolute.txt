@@ -32,3 +32,4 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPP
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\refint\DEEMPPORTAL.Application.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.pdb
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\ref\DEEMPPORTAL.Application.dll
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Application\obj\Debug\net8.0\DEEMPPORTAL.Application.sourcelink.json
