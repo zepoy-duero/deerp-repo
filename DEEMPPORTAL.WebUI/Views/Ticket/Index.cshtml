@@ -94,25 +94,25 @@
                         <div id="cardbdy" class="card-body">
 
                             <table id="tblTickets" class="table table-sm table-striped table-hover  no-box-shadow">
-                                <thead class="table-head fw-bold px-4">
+                                <thead class="table-head fw-bold">
                                         <tr class="">
-                                        <td class="text-muted text-center"></td>
-                                        <td class="text-muted text-center">Ticket ID</td>
-                                        <td class="text-muted text-center">Requested By</td>
-                                        <td class="text-muted text-center">Description</td>
-                                        <td class="text-muted text-center">Date Submitted</td>
-                                        <td class="text-muted text-center">Status</td>
+                                      
+                                            <td class="text-center">Ticket ID</td>
+                                            <td class="text-muted text-end">Requested By</td>
+                                        <td class="text-muted text-end">Description</td>
+                                        <td class="text-muted text-end">Date Submitted</td>
+                                        <td class="text-muted text-end">Status</td>
                                             
                                            
                                         </tr>
-                                    </thead>
-                                    <tbody class="card-body">
+                                </thead>
+                                <tbody>
                                         
   @*                                           @{
                                                 await Html.RenderPartialAsync("~/Views/Ticket/_TicketList.cshtml");
                                             } *@
                                        
-                                    </tbody>
+                                 </tbody>
                                 </table>
                          
                         </div>

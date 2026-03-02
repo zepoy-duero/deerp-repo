@@ -9,157 +9,157 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DEEMPPORTAL.WebUI
 build_property.RootNamespace = DEEMPPORTAL.WebUI
-build_property.ProjectDir = C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI\
+build_property.ProjectDir = D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.WebUI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\User\Desktop\New folder\DEEMPPORTAL.WebUI
+build_property.MSBuildProjectDirectory = D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.WebUI
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Certificate/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Certificate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2VydGlmaWNhdGVcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/ChangePassword/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/ChangePassword/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhbmdlUGFzc3dvcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/CreditApplication/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/CreditApplication/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3JlZGl0QXBwbGljYXRpb25cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/EmployeeDirectory/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/EmployeeDirectory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVEaXJlY3RvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/EmployeeHeadCount/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/EmployeeHeadCount/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVIZWFkQ291bnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/EmployeeReport/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/EmployeeReport/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVSZXBvcnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/ForgotPassword/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/ForgotPassword/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9yZ290UGFzc3dvcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Form/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Form/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9ybVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Home/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/HrSupport/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/HrSupport/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSHJTdXBwb3J0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/LeaveApplication/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/LeaveApplication/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVhdmVBcHBsaWNhdGlvblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialDepartmentManager.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialDepartmentManager.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVhdmVBcHBsaWNhdGlvblxfUGFydGlhbERlcGFydG1lbnRNYW5hZ2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialHumanResourceManager.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialHumanResourceManager.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVhdmVBcHBsaWNhdGlvblxfUGFydGlhbEh1bWFuUmVzb3VyY2VNYW5hZ2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialNormalUser.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialNormalUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVhdmVBcHBsaWNhdGlvblxfUGFydGlhbE5vcm1hbFVzZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialSuperAdmin.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/LeaveApplication/_PartialSuperAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGVhdmVBcHBsaWNhdGlvblxfUGFydGlhbFN1cGVyQWRtaW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Login/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Login/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Logo/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Logo/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9nb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Menu/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Menu/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/MyProfile/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/MyProfile/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlQcm9maWxlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/PartsOrigin/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/PartsOrigin/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFydHNPcmlnaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/ResetPassword/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/ResetPassword/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXRQYXNzd29yZFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Role/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Role/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUm9sZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Shared/Error.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Shared/_Layout.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Shared/_NoMenuLayout.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Shared/_NoMenuLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Ob01lbnVMYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/SingleRecordUpdate/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/SingleRecordUpdate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2luZ2xlUmVjb3JkVXBkYXRlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/SpeedDialDirectory/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/SpeedDialDirectory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BlZWREaWFsRGlyZWN0b3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Ticket/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Ticket/_CreateTicketModal.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_CreateTicketModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9DcmVhdGVUaWNrZXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Ticket/_EditTicketModal.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_EditTicketModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9FZGl0VGlja2V0TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/Ticket/_TicketList.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_TicketList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9UaWNrZXRMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/UserSatisfaction/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/UserSatisfaction/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclNhdGlzZmFjdGlvblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/User/Index.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/User/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/_ViewImports.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/New folder/DEEMPPORTAL.WebUI/Views/_ViewStart.cshtml]
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

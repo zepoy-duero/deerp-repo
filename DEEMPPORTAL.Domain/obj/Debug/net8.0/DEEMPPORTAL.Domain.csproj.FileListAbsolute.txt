@@ -23,3 +23,16 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\refint\DEEMPPORTAL.Domain.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.pdb
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Domain\obj\Debug\net8.0\ref\DEEMPPORTAL.Domain.dll
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.deps.json
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.dll
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\bin\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.AssemblyReference.cache
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfoInputs.cache
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.AssemblyInfo.cs
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.csproj.CoreCompileInputs.cache
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.sourcelink.json
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.dll
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\refint\DEEMPPORTAL.Domain.dll
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\DEEMPPORTAL.Domain.pdb
+D:\SOURCE CODE\DEEMPPORTAL\DEEMPPORTAL.Domain\obj\Debug\net8.0\ref\DEEMPPORTAL.Domain.dll

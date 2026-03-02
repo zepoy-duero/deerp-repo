@@ -87,17 +87,16 @@ $(async function () {
 
     for (i = 0; i < 4; i++) {
         $("#tblTickets tbody").append(`<tr class="">
-                                            <td class="text-center">
-                                        
-                                              
-                                                    <i class="fas fa-pencil-alt btn btn-sm" data-bs-toggle="modal" data-bs-target="#editTicketModal"></i>
-                                              
+                                           
+                                            <td class="text-start">
+                                             <i class="fas fa-pencil text-primary mx-2" data-bs-toggle="modal" data-bs-target="#editTicketModal"></i>
+                                             <span> MIS#${1 + i}</span>
+                                           
                                             </td>
-                                            <td class="text-center">MIS#${1 + i}</td>
-                                            <td class="text-center">Landrex Rebruera</td>
-                                            <td class="text-center">Add EMployee Directory</td>
-                                            <td class="text-center">02-05-2026</td>
-                                            <td class="text-center">
+                                            <td class="text-end">Landrex Rebruera</td>
+                                            <td class="text-end">Add EMployee Directory</td>
+                                            <td class="text-end">02-05-2026</td>
+                                            <td class="text-end">
                                                 <div class="badge bg-success ">Completed</div>
                                             </td>
                                             
