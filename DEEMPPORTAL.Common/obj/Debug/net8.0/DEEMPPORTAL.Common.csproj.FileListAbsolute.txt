@@ -18,8 +18,8 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.AssemblyInfoInputs.cache
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.AssemblyInfo.cs
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.sourcelink.json
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\refint\DEEMPPORTAL.Common.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.pdb
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\ref\DEEMPPORTAL.Common.dll
-C:\Users\User\Desktop\New folder\DEEMPPORTAL.Common\obj\Debug\net8.0\DEEMPPORTAL.Common.sourcelink.json

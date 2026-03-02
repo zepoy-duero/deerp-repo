@@ -1,0 +1,660 @@
+﻿@model DEEMPPORTAL.Domain.PartsOrigin.SingleRecordUpdateModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Update Part Number Origin";
+}
+
+<style>
+    .edit-ash {
+        background-color: #e8eff7;
+    }
+
+    .edit-card {
+        max-width: 1000px;
+        width: 105%;
+        border-radius: 10px;
+    }
+
+    .gridRow:hover {
+        background-color: #f1f3f5;
+    }
+
+    .selectCtgy {
+        width: 150px;
+    }
+
+    .selectPartNo {
+        width: 250px;
+    }
+
+    .singleCard {
+        padding-left: 300px;
+    }
+
+    .btn-delete-selected {
+        color: #dc3545 !important; /* red text */
+        text-decoration: none;
+        padding: 0; /* no button padding */
+        font-weight: 600;
+    }
+
+        .btn-delete-selected:hover {
+            text-decoration: underline; /* optional hover effect */
+            color: #b02a37 !important;
+        }
+
+        .btn-delete-selected:disabled {
+            color: #c0c0c0 !important; /* grey when disabled */
+            text-decoration: none;
+            cursor: not-allowed;
+        }
+
+    .select2-results__options {
+        max-height: 300px; /* around ~10 items */
+    }
+
+    .select2-container .select2-selection--single {
+        height: 38px !important;
+        border: 1px solid #ced4da;
+        border-radius: .375rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px !important;
+        padding-left: .75rem;
+        padding-right: 2rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 38px !important;
+    }
+</style>
+
+<div class="container mt-4 mx-auto">
+    <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+        <div class="flex-column">
+            <!-- Title -->
+            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                Products Origin / HS Code
+            </h5>
+    <div class="card shadow-sm">
+        <div class="card-header text-white text-center bg-main-gradient">
+            Update Single Part Number Origin/HS Code
+        </div>
+
+        <div class="card-body singleCard">
+            <form asp-action="Search" asp-controller="SingleRecordUpdate" method="post" id="frmSearch">
+                <input type="hidden" asp-for="OrgCode" id="OrgCode" />
+                <input type="hidden" asp-for="SelectedSupplierName" id="SelectedSupplierName" />
+                <input type="hidden" asp-for="SelectedCategoryName" id="SelectedCategoryName" />
+
+                <!-- OLD keys for SAVE -->
+                <input type="hidden" id="oldSupCode" />
+                <input type="hidden" id="oldInvoice" />
+                <input type="hidden" id="oldPartNo" />
+                <input type="hidden" id="oldOrigin" />
+                <input type="hidden" id="oldHsCode" />
+
+                <div class="row g-4 align-items-end">
+                    <div class="selectCtgy">
+                        <label class="form-label fw-semibold">Select Category</label>
+                        <select class="form-select" id="ddlCategory" asp-for="SelectedCategory" asp-items="Model.Categories"></select>
+                    </div>
+
+                    <div class="selectPartNo">
+                        <label class="form-label fw-semibold">Part No</label>
+                        <input class="form-control" id="txtPartNo" asp-for="PartNo" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Select Supplier</label>
+                        <select id="ddlSupplier" class="form-select" asp-for="SelectedSupplier" asp-items="Model.Suppliers"></select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end px-4">
+                        <button type="submit" id="btnSearch" class="btn btn-danger w-100">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4" style="padding-left: 140px;">
+                    @* <button type="submit" id="btnSearch" class="btn btn-danger px-5">  <i class="bi bi-search"></i> Search</button> *@             
+                    <button type="button" class="btn btn-danger px-4 ms-5 me-2" id="btnAdd"> <i class="bi-plus-lg"></i>  Add</button>
+                    <button id="btnClear" type="button" class="btn btn-danger px-4"><i class="bi-x-circle"></i>   Clear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model != null && Model.IsSearched)
+    {
+        if (Model.Rows != null && Model.Rows.Count > 0)
+        {
+            <div class="card shadow-sm mt-4" id="cardPanel">
+                <div class="card-body">
+
+                    <!-- Delete Selected Button -->
+                    <div class="d-flex align-items-center mb-2">
+                        <button type="button" id="btnDeleteSelected" class="btn btn-link btn-delete-selected" disabled>
+                            Delete
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:40px;" class="text-center">
+                                        <input type="checkbox" id="chkAll" />
+                                    </th>
+                                    <th>Category</th>
+                                    <th>Part No</th>
+                                    <th>Description</th>
+                                    <th>Supplier</th>
+                                    <th>Invoice No</th>
+                                    <th>Origin</th>
+                                    <th>HS Code</th>
+                                    <th>Updated Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.Rows)
+                                {
+                                    <tr class="gridRow" style="cursor:pointer;"
+                                        data-supname="@r.Supplier"
+                                        data-supcode="@r.SupplierCode"
+                                        data-invoice="@r.InvoiceNo"
+                                        data-category="@r.Category"
+                                        data-partno="@r.PartNo"
+                                        data-desc="@r.Description"
+                                        data-origin="@r.Origin"
+                                        data-hscode="@r.HSCode"
+                                        data-upddate="@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")">
+
+                                        <!-- Checkbox column -->
+                                        <td class="text-center" style="cursor:default;">
+                                            <input type="checkbox"
+                                                   class="rowChk"
+                                                   data-org="@Model.OrgCode"
+                                                   data-ctgy="@r.CtgyCode"
+                                                   data-sup="@r.SupplierCode"
+                                                   data-inv="@r.InvoiceNo"
+                                                   data-part="@r.PartNo" />
+                                        </td>
+
+                                        <td class="colCategory">@r.Category</td>
+                                        <td class="colPartNo">@r.PartNo</td>
+                                        <td class="colDesc">@r.Description</td>
+                                        <td class="colSupplier">@r.Supplier</td>
+                                        <td class="colInvoice">@r.InvoiceNo</td>
+                                        <td class="colOrigin">@r.OriginName</td>
+                                        <td class="colHsCode">@r.HSCode</td>
+                                        <td class="colUpdDate">@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mt-4 text-muted text-center">No data</div>
+        }
+    }
+</div>
+
+<!-- EDIT PANEL -->
+<div class="card shadow-sm mt-4 mx-auto edit-card" id="editPanel" style="display:none;">
+    <div class="card-header fw-bold">Edit Part Origin / HS Code</div>
+
+    <div class="card-body p-4">
+        <input type="hidden" id="eOrgCode" value="@Model?.OrgCode" />
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="ePartNo" /></div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
+                    <div class="col-8">
+                        <select class="form-select edit-ash" id="ddlEditSupplier">
+                            @foreach (var s in Model.Suppliers)
+                            {
+                                <option value="@s.Value">@s.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="eInvoice" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Description:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="eDescLeft" /></div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
+                    <div class="col-8">
+                        <select class="form-select edit-ash" id="eOrigin" asp-items="Model.Origins"></select>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="eHsCodeLeft" /></div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="button" class="btn btn-danger px-4" id="btnSave">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ADD PANEL -->
+<div class="card shadow-sm mt-4 mx-auto edit-card" id="addPanel" style="display:none;">
+    <div class="card-header fw-bold">Add Parts Origin / HS Code</div>
+
+    <div class="card-body p-4">
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="Add_PARTNO" /></div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
+                    <div class="col-8">
+                        <select class="form-select edit-ash" id="Add_SUP_CODE">
+                            @foreach (var s in Model.Suppliers)
+                            {
+                                <option value="@s.Value">@s.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="Add_INVOICENO" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Description:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="Add_DESCRIPTION" /></div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
+                    <div class="col-8">
+                        <select class="form-select edit-ash" id="Add_ORIGIN" asp-items="Model.Origins"></select>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
+                    <div class="col-8"><input class="form-control edit-ash" id="Add_HSCODE" /></div>
+                </div>
+
+                <div class="text-end mt-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-danger px-4" id="btnAddSave">Save</button>
+                    <button type="button" class="btn btn-secondary px-4" id="btnAddCancel">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+</div>    
+</div>
+</div>
+
+@section Scripts {
+    
+    <script>
+        let selectedRow = null;
+
+        function setSupplierName() {
+            $("#SelectedSupplierName").val($("#ddlSupplier option:selected").text());
+        }
+        function setCategoryName() {
+            $("#SelectedCategoryName").val($("#ddlCategory option:selected").text());
+        }
+        function isBlank(v) { return v === null || v === undefined || String(v).trim() === ""; }
+
+        function len(v) { return String(v ?? "").trim().length; }
+                function len(v) {
+          return String(v ?? "").trim().length;
+        }
+        function updateDeleteSelectedState() {
+            const anyChecked = $(".rowChk:checked").length > 0;
+            $("#btnDeleteSelected").prop("disabled", !anyChecked);
+        }
+
+        $(document).ready(function () {
+            console.log(" SingleRecordUpdate scripts loaded");
+
+            setSupplierName();
+            setCategoryName();
+
+            $("#ddlSupplier").on("change", setSupplierName);
+            // $("#ddlCategory").on("change", setCategoryName);
+            $("#ddlCategory").select2({
+            width: "100%",
+            placeholder: "Select Category",
+            allowClear: false,
+            dropdownAutoWidth: true
+        });
+
+            // Search validation
+            $("#btnSearch").on("click", function (e) {
+                const category = $("#ddlCategory").val();
+                const partNo = $("#txtPartNo").val();
+                const supplier = $("#ddlSupplier").val();
+
+                if (!category || !partNo || !supplier) {
+                    e.preventDefault();
+                    alert("Please select Category, enter Part No, and select Supplier.");
+                    return false;
+                }
+            });
+
+            // Clear
+            $("#btnClear").on("click", function () {
+                $("#editPanel").hide();
+                $("#cardPanel").hide();
+                $("#addPanel").hide();
+                $("#txtPartNo").val("");
+                $("#oldSupCode,#oldInvoice,#oldPartNo,#oldOrigin,#oldHsCode").val("");
+                selectedRow = null;
+
+                $("#chkAll").prop("checked", false);
+                $(".rowChk").prop("checked", false);
+                updateDeleteSelectedState();
+            });
+
+            //  Prevent edit open when clicking checkbox
+            $(document).on("click", ".rowChk, #chkAll", function (e) {
+                e.stopPropagation();
+            });
+
+            // Select all
+            $(document).on("change", "#chkAll", function () {
+                const isChecked = $(this).is(":checked");
+                $(".rowChk").prop("checked", isChecked);
+                updateDeleteSelectedState();
+            });
+
+            // Single checkbox
+            $(document).on("change", ".rowChk", function () {
+                updateDeleteSelectedState();
+                if (!$(this).is(":checked")) {
+                    $("#chkAll").prop("checked", false);
+                }
+            });
+
+            // Row click => show edit panel (only if not clicking checkbox)
+            $(document).on("click", ".gridRow", function () {
+                selectedRow = $(this);
+
+                $("#oldSupCode").val(selectedRow.data("supcode"));
+                $("#oldInvoice").val(selectedRow.data("invoice"));
+                $("#oldPartNo").val(selectedRow.data("partno"));
+                $("#oldOrigin").val(selectedRow.data("origin"));
+                $("#oldHsCode").val(selectedRow.data("hscode"));
+
+                $("#eInvoice").val(selectedRow.data("invoice"));
+                $("#ePartNo").val(selectedRow.data("partno"));
+                $("#eDescLeft").val(selectedRow.data("desc"));
+                $("#eOrigin").val((selectedRow.data("origin") || "").trim());
+                $("#eHsCodeLeft").val(selectedRow.data("hscode"));
+                $("#ddlEditSupplier").val(String(selectedRow.data("supcode")));
+
+                $("#addPanel").hide();
+                $("#editPanel").show();
+                $('html, body').animate({ scrollTop: $("#editPanel").offset().top - 20 }, 200);
+            });
+
+            // Save Edit (unchanged)
+            $("#btnSave").on("click", function () {
+                if (!selectedRow) { alert("Please select a row to edit."); return; }
+
+                const newSupCode = parseInt($("#ddlEditSupplier").val() || "0");
+                const newSupName = $("#ddlEditSupplier option:selected").text();
+                const desc = ($("#eDescLeft").val() || "").toString().trim().toUpperCase();
+
+                const data = {
+                    orgCode: parseInt($("#OrgCode").val() || "0"),
+                    ctgyCode: parseInt($("#ddlCategory").val() || "0"),
+
+                    oldSupplierCode: parseInt($("#oldSupCode").val() || "0"),
+                    oldInvoiceNo: $("#oldInvoice").val(),
+                    oldPartNo: $("#oldPartNo").val(),
+                    oldOrigin: $("#oldOrigin").val(),
+                    oldHsCode: $("#oldHsCode").val(),
+
+                    newSupplierCode: newSupCode,
+                    newInvoiceNo: $("#eInvoice").val(),
+                    newPartNo: $("#ePartNo").val(),
+
+                    description: desc,
+                    origin: $("#eOrigin").val(),
+                    hsCode: $("#eHsCodeLeft").val()
+                };
+
+                let msg = "";
+                if (isBlank(data.newPartNo)) msg = "Part No is missing.";
+                else if (isBlank(data.newInvoiceNo)) msg = "Invoice No is missing.";
+                else if (isBlank(data.description)) msg = "Description is missing.";
+                else if (isBlank(data.hsCode)) msg = "HS Code is missing.";
+                else if (isBlank(data.origin)) msg = "Origin is missing.";
+                else if (len(data.newInvoiceNo) > 200) msg = "Invoice No max 200 characters.";
+                else if (len(data.newPartNo) > 100) msg = "Part No max 100 characters.";
+                else if (len(data.description) > 100) msg = "Description max 100 characters.";
+                else if (len(data.origin) > 100) msg = "Origin max 100 characters.";
+                else if (len(data.hsCode) > 100) msg = "HS Code max 100 characters.";
+
+                if (msg !== "") { alert("❌ " + msg); return; }
+
+                $.ajax({
+                    url: "/SingleRecordUpdate/SaveEdit",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        if (res && res.ok) {
+                            alert("✅ " + (res.message || "Saved successfully"));
+
+                            selectedRow.find(".colSupplier").text(newSupName);
+                            selectedRow.find(".colInvoice").text(data.newInvoiceNo);
+                            selectedRow.find(".colPartNo").text(data.newPartNo);
+                            selectedRow.find(".colDesc").text(data.description);
+                            selectedRow.find(".colOrigin").text(data.origin);
+                            selectedRow.find(".colHsCode").text(data.hsCode);
+
+                            selectedRow.data("supcode", data.newSupplierCode);
+                            selectedRow.data("invoice", data.newInvoiceNo);
+                            selectedRow.data("partno", data.newPartNo);
+                            selectedRow.data("desc", data.description);
+                            selectedRow.data("origin", data.origin);
+                            selectedRow.data("hscode", data.hsCode);
+
+                            $("#oldSupCode").val(data.newSupplierCode);
+                            $("#oldInvoice").val(data.newInvoiceNo);
+                            $("#oldPartNo").val(data.newPartNo);
+                            $("#oldOrigin").val(data.newOrigin);
+                            $("#oldHsCode").val(data.newHsCode);
+
+                            $("#editPanel").hide();
+                            $("#cardPanel").hide();
+                            selectedRow = null;
+                        } else {
+                            alert("❌ Save failed: " + (res.message || "No matching record found"));
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("❌ Server error: " + (xhr.responseText || ""));
+                    }
+                });
+            });
+
+            // Show Add
+            $("#btnAdd").on("click", function () {
+                $("#editPanel").hide();
+                $("#addPanel").show();
+                $('html, body').animate({ scrollTop: $("#addPanel").offset().top - 20 }, 200);
+
+                $("#Add_PARTNO,#Add_INVOICENO,#Add_DESCRIPTION,#Add_HSCODE").val("");
+                $("#Add_ORIGIN").val("");
+                $("#Add_SUP_CODE").val($("#ddlSupplier").val());
+            });
+
+            $("#btnAddCancel").on("click", function () {
+                $("#addPanel").slideUp();
+            });
+
+            // Add Save
+            // $("#btnAddSave").on("click", function () {
+            //     const payload = {
+            //         ORG_CODE: $("#OrgCode").val(),
+            //         SUP_CODE: $("#Add_SUP_CODE").val(),
+            //         InvoiceNo: $("#Add_INVOICENO").val(),
+            //         PartNo: $("#Add_PARTNO").val(),
+            //         Description: $("#Add_DESCRIPTION").val(),
+            //         Origin: $("#Add_ORIGIN").val(),
+            //         HSCode: $("#Add_HSCODE").val()
+            //     };
+
+                    // Add Save (with same validations as Edit)
+         $("#btnAddSave").off("click").on("click", function () {
+
+          const desc = ($("#Add_DESCRIPTION").val() || "").toString().trim().toUpperCase();
+
+          const payload = {
+            ORG_CODE: parseInt($("#OrgCode").val() || "0"),
+            SUP_CODE: $("#Add_SUP_CODE").val(),
+            InvoiceNo: $("#Add_INVOICENO").val(),
+            PartNo: $("#Add_PARTNO").val(),
+            Description: desc,
+            Origin: $("#Add_ORIGIN").val(),
+            HSCode: $("#Add_HSCODE").val()
+          };
+
+          // trim
+          payload.SUP_CODE = String(payload.SUP_CODE ?? "").trim();
+          payload.InvoiceNo = String(payload.InvoiceNo ?? "").trim();
+          payload.PartNo = String(payload.PartNo ?? "").trim();
+          payload.Description = String(payload.Description ?? "").trim();
+          payload.Origin = String(payload.Origin ?? "").trim();
+          payload.HSCode = String(payload.HSCode ?? "").trim();
+
+          let msg = "";
+          if (isBlank(payload.PartNo)) msg = "Part No is missing.";
+          else if (isBlank(payload.InvoiceNo)) msg = "Invoice No is missing.";
+          // else if (isBlank(payload.Description)) msg = "Description is missing.";
+          else if (isBlank(payload.Origin)) msg = "Origin is missing.";
+          else if (isBlank(payload.HSCode)) msg = "HS Code is missing.";
+          else if (isBlank(payload.SUP_CODE)) msg = "Supplier is missing.";
+
+          // DB limits
+          else if (len(payload.InvoiceNo) > 200) msg = "Invoice No max 200 characters.";
+          else if (len(payload.PartNo) > 100) msg = "Part No max 100 characters.";
+          else if (len(payload.Description) > 100) msg = "Description max 100 characters.";
+          else if (len(payload.Origin) > 100) msg = "Origin max 100 characters.";
+          else if (len(payload.HSCode) > 100) msg = "HS Code max 100 characters.";
+          else if (len(payload.SUP_CODE) > 50) msg = "Supplier Code max 50 characters.";
+
+          if (msg) {
+            alert("❌ " + msg);
+            return;
+          }
+
+          $.ajax({
+            url: "/SingleRecordUpdate/AddPartsOrigin",
+            type: "POST",
+            data: payload,
+            success: function (res) {
+              if (res && res.success) {
+                alert("✅ Saved successfully!");
+                $("#addPanel").slideUp();
+                $("#btnSearch").click();
+              } else {
+                alert("❌ " + (res.message || "Failed to save."));
+              }
+            },
+            error: function (xhr) {
+              alert("❌ Error while saving: " + (xhr.responseText || ""));
+            }
+          });
+
+        });
+
+
+            // Bulk delete selected
+            $("#btnDeleteSelected").on("click", function () {
+                const checked = $(".rowChk:checked");
+                if (checked.length === 0) return;
+
+                if (!confirm(`Are you sure you want to delete ${checked.length} records?`)) return;
+
+                const items = [];
+                checked.each(function () {
+                    const chk = $(this);
+                    const row = chk.closest("tr");
+
+                    items.push({
+                        orgCode: parseInt(chk.data("org") || "0"),
+                        ctgyCode: parseInt($("#ddlCategory").val() || chk.data("ctgy") || "0"),
+                        supCode: String(chk.data("sup") || "").trim(),
+                        invoiceNo: String(chk.data("inv") || "").trim(),
+                        partNo: String(chk.data("part") || "").trim(),
+                        origin: String(row.data("origin") || "").trim(),
+                        hsCode: String(row.data("hscode") || "").trim()
+                    });
+                });
+
+                $.ajax({
+                    url: "/SingleRecordUpdate/DeleteRows",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify({ items: items }),
+                    success: function (res) {
+                        if (res && res.ok) {
+                            checked.each(function () {
+                                $(this).closest("tr").remove();
+                            });
+
+                            $("#chkAll").prop("checked", false);
+                            updateDeleteSelectedState();
+
+                            alert("✅ Deleted " + (res.deleted ?? 0) + " record(s).");
+                        } else {
+                            alert("❌ " + (res.message || "Delete failed"));
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("❌ Server error: " + (xhr.responseText || ""));
+                    }
+                });
+            });
+
+        });
+    </script>
+}

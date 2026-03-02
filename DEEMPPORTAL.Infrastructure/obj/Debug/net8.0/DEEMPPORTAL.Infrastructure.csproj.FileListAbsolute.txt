@@ -31,9 +31,9 @@ C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEE
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.AssemblyInfo.cs
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.sourcelink.json
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPOR.70E9BB3B.Up2Date
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\refint\DEEMPPORTAL.Infrastructure.dll
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.pdb
 C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\ref\DEEMPPORTAL.Infrastructure.dll
-C:\Users\User\Desktop\New folder\DEEMPPORTAL.Infrastructure\obj\Debug\net8.0\DEEMPPORTAL.Infrastructure.sourcelink.json

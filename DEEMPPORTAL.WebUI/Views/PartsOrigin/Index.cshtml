@@ -1,0 +1,367 @@
+﻿@model DEEMPPORTAL.Domain.PartsOrigin.PartsOrgViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Update Part Number Origin";
+}
+<style>
+    .form-label {
+        margin-bottom: 0px !important;
+    }
+    /* adjust 0px–6px */
+</style>
+<div class="container">
+    <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+        <div class="flex-column">
+            <!-- Title -->
+            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                Products Origin / HS Code
+            </h5>
+    <div class="card shadow-sm">
+        @* <div class="card-header text-white text-center fw-bold" style="background:#0a2d66;">
+            Update Part Number Origin/HS Code
+        </div> *@
+                <div class="card-header text-white  bg-main-gradient">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="text-center w-100">
+                    Update Multi-Part Number Origin/HS Code
+                </div>
+
+                @* <a asp-controller="SingleRecordUpdate"
+                   asp-action="Index"
+                   class="text-white fw-bold text-decoration-underline ms-3 flex-shrink-0">
+                    Update Single Parts Number
+                </a> *@
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-end">
+                <div class="row g-3">
+                    <!--LABEL ROW (all labels aligned in one row) -->
+                    <div class="col-md-4">
+                        <label class="form-label">Select Organization</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Select Supplier</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label mb-1">Upload File</label>
+                    </div>
+
+                    <!-- INPUT ROW (all inputs aligned in one row) -->
+                    <div class="col-md-4">
+                        <select id="ddlOrg" class="form-select"
+                                asp-for="SelectedOrganization"
+                                asp-items="Model.Organizations">
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <select id="ddlSupplier" class="form-select" @(Model.Suppliers.Count == 0 ? "disabled" : "")>
+                            @foreach (var s in Model.Suppliers)
+                            {
+                                <option value="@s.Value">@s.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input id="fileUpload"
+                               type="file"
+                               class="form-control"/>
+
+                        <small class="text-muted d-block mt-1">
+                            Your file format should be <b>.xlsx</b>
+                        </small> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                
+                <div class="col text-center">
+                    @* <a class="btn btn-danger" asp-controller="SingleRecordUpdate" asp-action="Index"> Single Update Parts </a> *@
+                    <button id="btnProcess" class="btn btn-danger px-4 me-2">Process</button>
+                    <button id="btnClear" type="button" class="btn btn-danger px-4 me-2">Clear</button>
+                    <a asp-controller="SingleRecordUpdate"
+                       asp-action="Index"
+                       class="btn px-4"
+                       style="border:2px solid #0a2d66; color:#0a2d66; font-weight:600; background:transparent;">
+                        Single Parts Update
+                    </a>
+
+                </div>
+            </div>
+            <div id="msgSuccess" class="alert alert-success fw-bold mt-3 d-none"></div>
+            <div id="msgError" class="alert alert-danger fw-bold mt-3 d-none"></div>
+            <div class="mt-4">
+                <div class="fw-bold">
+                    Total No of Records: <span id="lblTotal">0</span>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-2">
+                <div class="table-responsive parts-table-wrap mt-2">
+                <table class="table table-striped table-hover table-bordered align-middle parts-table">
+
+                    <thead style="background:#f6f6f6;">
+                        <tr>
+                            <th>Supplier</th>
+                            <th>Invoice No</th>
+                            <th>Part No</th>
+                            <th>Description</th>
+                            <th>Origin</th>
+                            <th>HS Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblBody">
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No data</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button id="btnUpdate" type="button" class="btn btn-danger">
+                    Update Origin / HS Code
+                </button>
+            </div>
+           
+            <div id="msg" class="text-danger fw-semibold"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+   
+    <script>
+        $(function () {
+            const defaultOrg = $("#ddlOrg").val();
+            let processedRows = []; // IMPORTANT
+
+            function clearGrid() {
+                $("#lblTotal").text("0");
+                $("#tblBody").html('<tr><td colspan="6" class="text-center text-muted">No data</td></tr>');
+                processedRows = []; //  clear stored rows too
+            }
+
+            function showError(text) {
+                $("#msgError").removeClass("d-none").text(text || "");
+                $("#msgSuccess").addClass("d-none").text("");
+            }
+
+            function showSuccess(text) {
+                $("#msgSuccess").removeClass("d-none").text(text || "");
+                $("#msgError").addClass("d-none").text("");
+            }
+
+            function clearFile() {
+                $("#fileUpload").val("");
+            }
+
+            // On org change -> load suppliers + clear file + clear grid
+            $("#ddlOrg").on("change", function () {
+                clearGrid();
+                $("#msgError").addClass("d-none").text("");
+                $("#msgSuccess").addClass("d-none").text("");
+                clearFile();
+
+                const orgCode = $(this).val();
+
+                // if (!orgCode) {
+                //     $("#ddlSupplier").prop("disabled", true).html('<option value="">-- Select --</option>');
+                //     return;
+                // }
+
+                $.get("@Url.Action("GetSuppliersByOrg", "parts-origin")", { orgCode: orgCode })
+                    .done(function (data) {
+                        let html = "";
+                        data.forEach(function (x) {
+                            html += `<option value="${x.value}">${x.text}</option>`;
+                        });
+
+                        $("#ddlSupplier").html(html).prop("disabled", false);
+
+                        if (data.length > 0) {
+                            $("#ddlSupplier").val(data[0].value);
+                        }
+
+                        clearFile();
+                    })
+                    .fail(function () {
+                        showError("Failed to load suppliers.");
+                    });
+            });
+
+            // Supplier change -> clear file + grid
+            $("#ddlSupplier").on("change", function () {
+                clearGrid();
+                $("#msgError").addClass("d-none").text("");
+                $("#msgSuccess").addClass("d-none").text("");
+                clearFile();
+            });
+
+                   // When choosing file -> clear grid + validate extension
+        $("#fileUpload").on("change", function () {
+
+            clearGrid();
+            $("#msgError").addClass("d-none").text("");
+            $("#msgSuccess").addClass("d-none").text("");
+
+            $("#fileError").addClass("d-none").text("");
+
+            const file = this.files && this.files[0];
+            if (!file) return;
+
+            const fileName = (file.name || "").toLowerCase();
+            const isXlsx = fileName.endsWith(".xlsx");
+
+            if (!isXlsx) {
+            $("#msgError")
+                .removeClass("d-none")
+                .text("File must be an Excel (.xlsx) file.");
+
+            
+            return;
+        }
+          clearGrid();
+        });
+
+            // Process click -> AJAX upload
+            $("#btnProcess").on("click", function (e) {
+                e.preventDefault();
+
+                $("#msgError").addClass("d-none").text("");
+                $("#msgSuccess").addClass("d-none").text("");
+
+                const orgCode = $("#ddlOrg").val();
+                const supCode = $("#ddlSupplier").val();
+                const supName = $("#ddlSupplier option:selected").text();
+                const file = $("#fileUpload")[0].files[0];
+
+                if (!orgCode) return showError("Please select Organization.");
+                if (!supCode) return showError("Please select Supplier.");
+                if (!file) return showError("Please choose a file.");
+
+                const fd = new FormData();
+                fd.append("orgCode", orgCode);
+                fd.append("supCode", supCode);
+                fd.append("supName", supName);
+                fd.append("uploadFile", file);
+
+                $("#btnProcess").prop("disabled", true).text("Processing...");
+
+                $.ajax({
+                    url: "@Url.Action("ProcessFile", "PartsOrg")",
+                    type: "POST",
+                    data: fd,
+                    processData: false,
+                    contentType: false
+                })
+                .done(function (res) {
+
+                    processedRows = res.data || []; //FIXED (correct name)
+
+                    $("#lblTotal").text(res.total || 0);
+
+                    if (!processedRows.length) {
+                        clearGrid();
+                        return;
+                    }
+
+                    let rowsHtml = "";
+                    processedRows.forEach(function (r) {
+                        rowsHtml += `
+                            <tr>
+                                <td>${r.supplier ?? ""}</td>
+                                <td>${r.invoiceNo ?? ""}</td>
+                                <td>${r.partNo ?? ""}</td>
+                                <td>${r.description ?? ""}</td>
+                                <td>${r.origin ?? ""}</td>
+                                <td>${r.hsCode ?? ""}</td>
+                            </tr>
+                        `;
+                    });
+
+                    $("#tblBody").html(rowsHtml);
+                })
+                .fail(function (xhr) {
+                    showError(xhr.responseText || "Error while processing file.");
+                    clearGrid();
+                })
+                .always(function () {
+                    $("#btnProcess").prop("disabled", false).text("Process");
+                });
+            });
+
+                  // UPDATE button
+        $("#btnUpdate").on("click", function () {
+
+            $("#msgError").addClass("d-none").text("");
+            $("#msgSuccess").addClass("d-none").text("");
+
+            const orgCode = parseInt($("#ddlOrg").val() || "0");
+            const supCode = $("#ddlSupplier").val();
+
+            if (!orgCode) return showError("Please select Organization.");
+            if (!supCode) return showError("Please select Supplier.");
+            if (!processedRows || processedRows.length === 0) return showError("No records to insert. Please click Process first.");
+
+            //block insert if ANY row has empty required fields
+            const hasInvalid = processedRows.some(r =>
+                !r.partNo || r.partNo.toString().trim() === "" ||
+                !r.origin || r.origin.toString().trim() === "" ||
+                !r.hsCode || r.hsCode.toString().trim() === ""
+            );
+
+            if (hasInvalid) {
+                return showError("No data to be inserted because Part No / Origin / HS Code has empty value.");
+            }
+
+            $("#btnUpdate").prop("disabled", true).text("Updating...");
+
+            $.ajax({
+                url: "@Url.Action("UpdateOriginHscode", "PartsOrg")",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ orgCode, supCode, rows: processedRows }) //send all rows
+            })
+            .done(function (res) {
+                showSuccess(`Successfully inserted ${res.inserted} records.`);
+            })
+            .fail(function (xhr) {
+                showError(xhr.responseText || "Insert failed.");
+            })
+            .always(function () {
+                $("#btnUpdate").prop("disabled", false).text("Update Origin / HS Code");
+            });
+        });
+
+
+            // trigger after handlers are attached
+            $("#ddlOrg").trigger("change");
+        });
+            $("#btnClear").on("click", function () {
+
+            // hide messages
+            $("#msgError").addClass("d-none").text("");
+            $("#msgSuccess").addClass("d-none").text("");
+
+            // clear file + grid + stored rows
+            $("#fileUpload").val("");
+            $("#lblTotal").text("0");
+            $("#tblBody").html('<tr><td colspan="6" class="text-center text-muted">No data</td></tr>');
+            processedRows = [];
+
+            // set org back to default and reload suppliers
+            $("#ddlOrg").val(defaultOrg).trigger("change");
+        });
+
+    </script>
+}

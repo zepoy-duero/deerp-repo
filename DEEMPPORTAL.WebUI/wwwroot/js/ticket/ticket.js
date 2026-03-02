@@ -86,23 +86,21 @@ $(async function () {
     //$("#requestDate").text(currentDate.toISOString().slice(0, 10))
 
     for (i = 0; i < 4; i++) {
-        $("#tblTickets tbody").append(`<tr class="align-items-start">
-                                            <td>MIS#${1 + i}</td>
-                                            <td>Landrex Rebruera</td>
-                                            <td>Add EMployee Directory</td>
-                                            <td>02-05-2026</td>
-                                            <td>
-                                                <div class="badge bg-success ">Completed</div>
-                                            </td>
-                                            <td class ="text-start">
+        $("#tblTickets tbody").append(`<tr class="">
+                                            <td class="text-center">
                                         
-                                                <button type="button" class="btn btn-md btn-danger rounded-2" data-bs-toggle="modal" data-bs-target="#editTicketModal">
-                                                    <i class="fas fa-pencil-alt"></i> Edit</button>
-                                                <button type="button" class="btn btn-sm btn-success btn-sm rounded-2">
-                                                    <span class="fas fa-eye"></span> View
-                                                </button>
+                                              
+                                                    <i class="fas fa-pencil-alt btn btn-sm" data-bs-toggle="modal" data-bs-target="#editTicketModal"></i>
                                               
                                             </td>
+                                            <td class="text-center">MIS#${1 + i}</td>
+                                            <td class="text-center">Landrex Rebruera</td>
+                                            <td class="text-center">Add EMployee Directory</td>
+                                            <td class="text-center">02-05-2026</td>
+                                            <td class="text-center">
+                                                <div class="badge bg-success ">Completed</div>
+                                            </td>
+                                            
                                         </tr>`)
                     
     }

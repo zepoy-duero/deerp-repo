@@ -18,6 +18,7 @@ using DEEMPPORTAL.Application.Shared;
 using DEEMPPORTAL.Application.Support;
 using DEEMPPORTAL.Application.Support.EmployeeDirectoryService;
 using DEEMPPORTAL.Application.Support.SpeedDialDirectoryService;
+using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Common;
 using Erp.Application.MyProfile;
 using Microsoft.Extensions.DependencyInjection;
@@ -93,6 +94,9 @@ public static class DependencyInjection
 
 		services.AddScoped<IEmployeeDirectoryRepository, EmployeeDirectoryRepository>();
 		services.AddScoped<IEmployeeDirectoryService, EmployeeDirectoryService>();
+
+		services.AddScoped<IPartsOriginRepository, PartsOriginRepository>();
+		services.AddScoped<IPartsOriginService, PartsOriginService>();
 
 		services.AddScoped<IUserSatisfactionRepository, UserSatisfactionRepository>();
 		services.AddScoped<IUserSatisfactionService, UserSatisfactionService>();

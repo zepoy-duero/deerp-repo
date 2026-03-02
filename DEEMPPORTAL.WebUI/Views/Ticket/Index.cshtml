@@ -8,8 +8,7 @@
             <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
                 Tickets
             </h5>
-           
-            <div class="row">
+            <div class="row gy-4">
                 <div class="col-sm-6 col-md-3">
                     <div class="card card-invoice card-round border-primary pt-3">
                        
@@ -77,62 +76,45 @@
                     <div class="card p-0">
         
                         <div id="ticketHeader2" class="card-header fw-bold bg-main-gradient text-white rounded-top-1">
-                            <ul class="nav nav-tabs card-header-tabs justify-content-end">
-                              
-                                    <li class="nav-item -2 flex-fill">
-                                        <a class="badge badge-danger btn rounded-2 p-2">
-                                            <i class="fa-solid fa-spinner fs-6"></i>
-                                            <span class="fw-bold fs-6 p-2 text-wrap">Pending</span>
-                                        </a>
-                                        <a class="badge btn-primary btn rounded-2 p-2">
-                                            <i class="fa-solid fa-bars-progress fs-6" style="color: rgb(255, 212, 59);"></i>
-                                            <span class="fw-bold fs-6 p-2 text-wrap">In Progress</span>
-                                        </a>
-                                    </li>
-                               
-                            </ul>
-                                    @* <div class="p-2 flex-sm-fill">
-                                        <span class="btn btn-sm btn-icon btn-round border border-2 text-white" style="font-size:1rem !important"><i class="fas fa-ticket"></i></span> <span class="fw-normal mx-2">My Tickets</span>
-                                    </div> *@
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div class="d-flex">
+                                    <div class="px-2">
+                                        <span class="btn btn-sm btn-icon btn-round border border-2 text-white"><i class="fas fa-ticket"></i></span>
+                                        <span id="tblCaption" class="fw-normal mx-2">My Tickets</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                                
                                     
                         </div>
-                        @* <div class="card-subtitle">
-                            <div class="d-flex">
-                                <div class="p-2 flex-fill">
-                                    <div class="badge badge-danger rounded-2 p-2">
-                                        <i class="fa-solid fa-spinner fs-6"></i>
-                                        <span class="fw-bold fs-6 p-2 text-wrap">Pending</span>
-                                    </div>
-                                    <div class="badge badge-primary rounded-2 p-2">
-                                        <i class="fa-solid fa-bars-progress fs-6" style="color: rgb(255, 212, 59);"></i>
-                                        <span class="fw-bold fs-6 p-2 text-wrap">In Progress</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> *@
-                        <div id="cardbdy" class="card-body p-1">
-                            <div class="table-responsive">
-                                <table id="tblTickets" class="table table-sm table-bordered table-hover mb-0">
-                                    <thead class="table-head-bg-secondary fw-bold text-start ">
-                                        <tr>
-                                            <td class="text-muted">Ticket ID</td>
-                                            <td class="text-muted">Requested By</td>
-                                            <td class="text-muted">Description</td>
-                                            <td class="text-muted">Date Submitted</td>
-                                            <td class="text-muted">Status</td>
-                                            <td class="text-muted">Action</td>
+                       
+                        <div id="cardbdy" class="card-body">
+
+                            <table id="tblTickets" class="table table-sm table-striped table-hover  no-box-shadow">
+                                <thead class="table-head fw-bold px-4">
+                                        <tr class="">
+                                        <td class="text-muted text-center"></td>
+                                        <td class="text-muted text-center">Ticket ID</td>
+                                        <td class="text-muted text-center">Requested By</td>
+                                        <td class="text-muted text-center">Description</td>
+                                        <td class="text-muted text-center">Date Submitted</td>
+                                        <td class="text-muted text-center">Status</td>
+                                            
                                            
                                         </tr>
                                     </thead>
-                                    <tbody class="card-body p-1">
+                                    <tbody class="card-body">
                                         
-                                            @{
+  @*                                           @{
                                                 await Html.RenderPartialAsync("~/Views/Ticket/_TicketList.cshtml");
-                                            }
+                                            } *@
                                        
                                     </tbody>
                                 </table>
-                            </div>
+                         
                         </div>
                         
                       
