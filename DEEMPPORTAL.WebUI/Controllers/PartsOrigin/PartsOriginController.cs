@@ -478,8 +478,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             return value.ToString()?.Trim() ?? "";
         }
 
-        [HttpPost]
-        public IActionResult UpdateOriginHscode(UpdateRequest req)
+        [HttpPost("UpdateOriginHscode")]
+        public IActionResult UpdateOriginHscode([FromBody] UpdateRequest req)
         {
             //if (!IsLoggedIn())
             //    return RedirectToAction("Login", "LoginAccount");

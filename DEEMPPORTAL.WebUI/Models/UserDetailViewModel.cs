@@ -1,5 +1,5 @@
-﻿namespace DEEMPPORTAL.WebUI.Models
-{
+﻿namespace DEEMPPORTAL.WebUI.Models;
+
 	public class UserDetailViewModel
 	{
 		public int? USER_CODE { get; set; }
@@ -14,4 +14,4 @@
 		public string IS_ACTIVE { get; set; } = string.Empty;
 		public string IS_2FA_ENABLED { get; set; } = string.Empty;
 	}
-}
+

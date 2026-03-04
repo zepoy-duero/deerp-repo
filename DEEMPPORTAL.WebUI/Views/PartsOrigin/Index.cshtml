@@ -7,6 +7,7 @@
     .form-label {
         margin-bottom: 0px !important;
     }
+    
     /* adjust 0px–6px */
 </style>
 <div class="container">
@@ -16,123 +17,116 @@
             <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
                 Products Origin / HS Code
             </h5>
-    <div class="card shadow-sm">
-        @* <div class="card-header text-white text-center fw-bold" style="background:#0a2d66;">
-            Update Part Number Origin/HS Code
-        </div> *@
+            <div class="card shadow-sm">
                 <div class="card-header text-white  bg-main-gradient rounded-top-1">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="text-center w-100">
-                    Update Multi-Part Number Origin/HS Code
-                </div>
-
-                @* <a asp-controller="SingleRecordUpdate"
-                   asp-action="Index"
-                   class="text-white fw-bold text-decoration-underline ms-3 flex-shrink-0">
-                    Update Single Parts Number
-                </a> *@
-            </div>
-        </div>
-
-        <div class="card-body">
-
-            <div class="row g-3 align-items-end">
-                <div class="row g-3">
-                    <!--LABEL ROW (all labels aligned in one row) -->
-                    <div class="col-md-4">
-                        <label class="form-label">Select Organization</label>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Select Supplier</label>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label mb-1">Upload File</label>
-                    </div>
-
-                    <!-- INPUT ROW (all inputs aligned in one row) -->
-                    <div class="col-md-4">
-                        <select id="ddlOrg" class="form-select"
-                                asp-for="SelectedOrganization"
-                                asp-items="Model.Organizations">
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <select id="ddlSupplier" class="form-select" @(Model.Suppliers.Count == 0 ? "disabled" : "")>
-                            @foreach (var s in Model.Suppliers)
-                            {
-                                <option value="@s.Value">@s.Text</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <input id="fileUpload"
-                               type="file"
-                               class="form-control"/>
-
-                        <small class="text-muted d-block mt-1">
-                            Your file format should be <b>.xlsx</b>
-                        </small> 
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="text-center w-100">
+                            Update Multi-Part Number Origin/HS Code
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="row g-2">
+                            <!--LABEL ROW (all labels aligned in one row) -->
+                            @* <div class="col-md-4">
+                            </div>
 
-            <div class="row mt-4">
+                            <div class="col-md-4">
+                               
+                            </div>
+
+                            <div class="col-md-4">
+                            </div> *@
+
+                            <!-- INPUT ROW (all inputs aligned in one row) -->
+                            <div class="col-md-4">
+                                <label for="ddOrg" class="form-label">Select Organization</label>
+
+                                <select id="ddlOrg" class="form-select"
+                                        asp-for="SelectedOrganization"
+                                        asp-items="Model.Organizations">
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="ddlSupplier" class="form-label">Select Supplier</label>
+                                <select id="ddlSupplier" class="form-select" @(Model.Suppliers.Count == 0 ? "disabled" : "")>
+                                    @foreach (var s in Model.Suppliers)
+                                    {
+                                        <option value="@s.Value">@s.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="fileUpload" class="form-label mb-1">Upload File</label>
+
+                                <input id="fileUpload"
+                                       type="file"
+                                       class="form-control"/>
+
+                                <small class="text-muted d-block">
+                                    Your file format should be <b>.xlsx</b>
+                                </small> 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
                 
-                <div class="col text-center">
-                    @* <a class="btn btn-danger" asp-controller="SingleRecordUpdate" asp-action="Index"> Single Update Parts </a> *@
-                    <button id="btnProcess" class="btn btn-danger px-4 me-2">Process</button>
-                    <button id="btnClear" type="button" class="btn btn-danger px-4 me-2">Clear</button>
-                    <a asp-controller="SingleRecordUpdate"
-                       asp-action="Index"
-                       class="btn px-4"
-                       style="border:2px solid #0a2d66; color:#0a2d66; font-weight:600; background:transparent;">
-                        Single Parts Update
-                    </a>
+                        <div class="col text-center">
+                            @* <a class="btn btn-danger" asp-controller="SingleRecordUpdate" asp-action="Index"> Single Update Parts </a> *@
+                            <button id="btnProcess" class="btn btn-danger px-4 me-2">Process</button>
+                            <button id="btnClear" type="button" class="btn btn-danger px-4 me-2">Clear</button>
+                            <a asp-controller="SingleRecordUpdate"
+                               asp-action="Index"
+                               class="btn px-4"
+                               style="border:2px solid #0a2d66; color:#0a2d66; font-weight:600; background:transparent;">
+                                Single Parts Update
+                            </a>
 
-                </div>
-            </div>
-            <div id="msgSuccess" class="alert alert-success fw-bold mt-3 d-none"></div>
-            <div id="msgError" class="alert alert-danger fw-bold mt-3 d-none"></div>
-            <div class="mt-4">
-                <div class="fw-bold">
-                    Total No of Records: <span id="lblTotal">0</span>
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    <div id="msgSuccess" class="alert alert-success fw-bold mt-3 d-none"></div>
+                    <div id="msgError" class="alert alert-danger fw-bold mt-3 d-none"></div>
+                    <div class="mt-4">
+                        <div class="fw-bold">
+                            Total No of Records: <span id="lblTotal">0</span>
+                        </div>
+                    </div>
 
-            <div class="table-responsive mt-2">
-                <div class="table-responsive parts-table-wrap mt-2">
-                <table class="table table-striped table-hover table-bordered align-middle parts-table">
+                    <div class="overflow-auto" style="max-height: 300px">
+               
+                        <table class="table table-sm table-striped table-hover align-middle">
 
-                    <thead style="background:#f6f6f6;">
-                        <tr>
-                            <th>Supplier</th>
-                            <th>Invoice No</th>
-                            <th>Part No</th>
-                            <th>Description</th>
-                            <th>Origin</th>
-                            <th>HS Code</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tblBody">
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">No data</td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-            </div>
-            <div class="text-center mt-3">
-                <button id="btnUpdate" type="button" class="btn btn-danger">
-                    Update Origin / HS Code
-                </button>
-            </div>
+                            <thead class="sticky-top bg-dard table-white">
+                                <tr class="text-muted">
+                                    <th>Supplier</th>
+                                    <th>Invoice No</th>
+                                    <th>Part No</th>
+                                    <th>Description</th>
+                                    <th>Origin</th>
+                                    <th>HS Code</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblBody">
+                                 <tr>
+                                    <td colspan="6" class="text-center text-muted">No data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+             
+                    </div>
+                    <div class="text-center mt-3">
+                        <button id="btnUpdate" type="button" class="btn btn-danger">
+                            Update Origin / HS Code
+                        </button>
+                    </div>
            
-            <div id="msg" class="text-danger fw-semibold"></div>
-            </div>
+                    <div id="msg" class="text-danger fw-semibold"></div>
+                    </div>
+                </div>
         </div>
         </div>
     </div>
@@ -141,8 +135,10 @@
 @section Scripts {
    
     <script>
+        let defaultOrg = $("#ddlOrg").val();
         $(function () {
-            const defaultOrg = $("#ddlOrg").val();
+            
+
             let processedRows = []; // IMPORTANT
 
             function clearGrid() {
@@ -258,7 +254,7 @@
                 $("#btnProcess").prop("disabled", true).text("Processing...");
 
                 $.ajax({
-                    url: "@Url.Action("ProcessFile", "PartsOrg")",
+                    url: "@Url.Action("process-file", "parts-origin")",
                     type: "POST",
                     data: fd,
                     processData: false,
@@ -276,15 +272,16 @@
                     }
 
                     let rowsHtml = "";
+
                     processedRows.forEach(function (r) {
                         rowsHtml += `
                             <tr>
-                                <td>${r.supplier ?? ""}</td>
-                                <td>${r.invoiceNo ?? ""}</td>
-                                <td>${r.partNo ?? ""}</td>
-                                <td>${r.description ?? ""}</td>
-                                <td>${r.origin ?? ""}</td>
-                                <td>${r.hsCode ?? ""}</td>
+                                <td>${r.Supplier ?? ""}</td>
+                                <td>${r.InvoiceNo ?? ""}</td>
+                                <td>${r.PartNo ?? ""}</td>
+                                <td>${r.Description ?? ""}</td>
+                                <td>${r.Origin ?? ""}</td>
+                                <td>${r.HSCode ?? ""}</td>
                             </tr>
                         `;
                     });
@@ -315,9 +312,9 @@
 
             //block insert if ANY row has empty required fields
             const hasInvalid = processedRows.some(r =>
-                !r.partNo || r.partNo.toString().trim() === "" ||
-                !r.origin || r.origin.toString().trim() === "" ||
-                !r.hsCode || r.hsCode.toString().trim() === ""
+                !r.PartNo || r.PartNo.toString().trim() === "" ||
+                !r.Origin || r.Origin.toString().trim() === "" ||
+                !r.HSCode || r.HSCode.toString().trim() === ""
             );
 
             if (hasInvalid) {
@@ -327,10 +324,10 @@
             $("#btnUpdate").prop("disabled", true).text("Updating...");
 
             $.ajax({
-                url: "@Url.Action("UpdateOriginHscode", "PartsOrg")",
+                url: "@Url.Action("UpdateOriginHscode", "parts-origin")",
                 type: "POST",
                 contentType: "application/json",
-                data: JSON.stringify({ orgCode, supCode, rows: processedRows }) //send all rows
+                data: JSON.stringify({ OrgCode: orgCode,SupCode: supCode, Rows: processedRows }) //send all rows
             })
             .done(function (res) {
                 showSuccess(`Successfully inserted ${res.inserted} records.`);
@@ -345,6 +342,7 @@
 
 
             // trigger after handlers are attached
+            
             $("#ddlOrg").trigger("change");
         });
             $("#btnClear").on("click", function () {

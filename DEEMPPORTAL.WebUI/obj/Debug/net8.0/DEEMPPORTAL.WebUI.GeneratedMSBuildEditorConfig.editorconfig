@@ -144,8 +144,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9FZGl0VGlja2V0TW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_TicketDashBoard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9UaWNrZXREYXNoQm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_TicketList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9UaWNrZXRMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/Ticket/_TicketTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XF9UaWNrZXRUYWJsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/SOURCE CODE/DEEMPPORTAL/DEEMPPORTAL.WebUI/Views/UserSatisfaction/Index.cshtml]

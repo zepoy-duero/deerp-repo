@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DEEMPPORTAL.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11e69a485d8d41a6064474ee86abfa6ed289ed6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21e11c0755cd30b6e93fc0cfcaafcd5c4447f5f9")]
 [assembly: System.Reflection.AssemblyProductAttribute("DEEMPPORTAL.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DEEMPPORTAL.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

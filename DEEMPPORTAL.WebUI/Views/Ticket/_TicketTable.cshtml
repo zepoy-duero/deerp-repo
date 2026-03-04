@@ -1,0 +1,50 @@
+﻿<div class="row d-sm-flex">
+    <div class="col-sm-12">
+        <div class="card p-0">
+
+            <div id="ticketHeader2" class="card-header fw-bold bg-main-gradient text-white rounded-top-1">
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div class="d-flex">
+                        <div class="px-2">
+                            <span class="btn btn-sm btn-icon btn-round border border-2 text-white"><i class="fas fa-ticket"></i></span>
+                            <span id="tblCaption" class="fw-normal mx-2">My Tickets</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div id="cardbdy" class="card-body">
+
+                <table id="tblTickets" class="table table-responsive table-sm table-striped table-hover align-middle  no-box-shadow w-100 px-5">
+                    <thead class="table-head table-light fw-bold">
+                        <tr>
+                           
+                            <th class="text-muted text-center">Ticket ID</th>
+                            <th class="text-muted ">Requested By</th>
+                            <th class="text-muted ">Description</th>
+                            <th class="text-muted ">Date Submitted</th>
+                            <th class="text-muted ">Status</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblBody" class="table table-body">
+                        
+                        @*                                           @{
+                                                await Html.RenderPartialAsync("~/Views/Ticket/_TicketList.cshtml");
+                                            } *@
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

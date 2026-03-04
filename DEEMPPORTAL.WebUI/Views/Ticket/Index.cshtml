@@ -8,41 +8,9 @@
             <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
                 Tickets
             </h5>
-            <div class="row gy-4">
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-invoice card-round border-primary pt-3">
-                       
-                        <div class="card-body">
-                            <small class="text-muted">Total Tickets</small>
-                            <h3 class="fw-bold">80</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-invoice card-round border-primary pt-3">
-                        <div class="card-body">
-                            <small class="text-muted">Pending</small>
-                            <h3 class="fw-bold">26</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-invoice card-round border-primary pt-3">
-                        <div class="card-body">
-                            <small class="text-muted">Completed This Month</small>
-                            <h3 class="fw-bold">30</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-invoice card-round border-primary pt-3">
-                        <div class="card-body">
-                            <small class="text-muted">Releases This Month</small>
-                            <h3 class="fw-bold">24</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @{
+                await Html.RenderPartialAsync("~/Views/Ticket/_TicketDashBoard.cshtml");
+            }
             <div class="row">
                 <div class="col">
                     <div class="card card-transparent rounded-1 mb-2">
@@ -71,56 +39,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row d-sm-flex">
-                <div class="col-sm-12">
-                    <div class="card p-0">
-        
-                        <div id="ticketHeader2" class="card-header fw-bold bg-main-gradient text-white rounded-top-1">
-                            <div class="d-flex justify-content-between align-items-center">
 
-                                <div class="d-flex">
-                                    <div class="px-2">
-                                        <span class="btn btn-sm btn-icon btn-round border border-2 text-white"><i class="fas fa-ticket"></i></span>
-                                        <span id="tblCaption" class="fw-normal mx-2">My Tickets</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                                
-                                    
-                        </div>
-                       
-                        <div id="cardbdy" class="card-body">
-
-                            <table id="tblTickets" class="table table-sm table-striped table-hover  no-box-shadow">
-                                <thead class="table-head fw-bold">
-                                        <tr class="">
-                                      
-                                            <td class="text-center">Ticket ID</td>
-                                            <td class="text-muted text-end">Requested By</td>
-                                        <td class="text-muted text-end">Description</td>
-                                        <td class="text-muted text-end">Date Submitted</td>
-                                        <td class="text-muted text-end">Status</td>
-                                            
-                                           
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                        
-  @*                                           @{
-                                                await Html.RenderPartialAsync("~/Views/Ticket/_TicketList.cshtml");
-                                            } *@
-                                       
-                                 </tbody>
-                                </table>
-                         
-                        </div>
-                        
-                      
-                    </div>
-                </div>
-            </div>
+            @{
+                await Html.RenderPartialAsync("~/Views/Ticket/_TIcketTable.cshtml");
+            }
         </div>
     </div>
 </div>

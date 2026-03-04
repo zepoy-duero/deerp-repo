@@ -60,17 +60,12 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
         }
 
 
-        [HttpPost]
+        [HttpPost("save-edit")]
         public IActionResult SaveEdit([FromBody] SingleRecordUpdateModel.SaveOriginRequest req)
         {
             if (req == null)
                 return Json(new { ok = false, message = "Request is null" });
-            // get login user from session
-            var user = HttpContext.Session.GetString("Username");
-            if (string.IsNullOrWhiteSpace(user))
-                return Json(new { ok = false, message = "Session expired. Please login again." });
-            req.UpdUser = user;
-
+           
             string Trim(string s) => (s ?? "").Trim();
             //if (string.IsNullOrWhiteSpace(req.NewPartNo))
             //    return Json(new { ok = false, message = "Part No is missing." });
@@ -112,7 +107,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             });
         }
 
-        [HttpPost]
+        [HttpPost("add-parts-origin")]
         public IActionResult AddPartsOrigin(SingleRecordUpdateModel.AddPartsOriginRequest req)
         {
             try
@@ -123,8 +118,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                 //    updUser = "WEB";
 
                 var updUser = HttpContext.Session.GetString("Username");
-                if (string.IsNullOrWhiteSpace(updUser))
-                    return Json(new { success = false, message = "Session expired. Please login again." });
+                //if (string.IsNullOrWhiteSpace(updUser))
+                //    return Json(new { success = false, message = "Session expired. Please login again." });
 
                 req.Description = (req.Description ?? "").Trim();
 
@@ -188,15 +183,15 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             public List<SingleRecordUpdateModel.DeleteRowRequest> Items { get; set; } = new();
         }
 
-        [HttpPost]
+        [HttpPost("delete-rows")]
         public IActionResult DeleteRows([FromBody] DeleteRowsRequest req)
         {
             var user = HttpContext.Session.GetString("Username");
-            if (string.IsNullOrWhiteSpace(user))
-                return Json(new { ok = false, message = "Session expired. Please login again." });
+            //if (string.IsNullOrWhiteSpace(user))
+            //    return Json(new { ok = false, message = "Session expired. Please login again." });
 
-            if (req?.Items == null || req.Items.Count == 0)
-                return Json(new { ok = false, message = "No rows selected." });
+            //if (req?.Items == null || req.Items.Count == 0)
+            //    return Json(new { ok = false, message = "No rows selected." });
 
             int deleted = 0;
 

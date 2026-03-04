@@ -72,42 +72,59 @@ $(async function () {
             $("#employeedropdown").hide();
         }
     });
-    //const response = await fetch(`${homeUrl}/getUserDetails`);
+    const response = await fetch(`${homeUrl}/getUserDetails`);
 
-    //if (!response.ok) {
-    //    console.error('Failed to fetch user details');
-    //    return;
-    //}
+    if (!response.ok) {
+        console.error('Failed to fetch user details');
+        return;
+    }
 
-    //const data = await response.json();
-    //console.log(data)
-    //let currentDate = new Date()
-    //$("#requestedBy").text(data.EMP_NAME)
-    //$("#requestDate").text(currentDate.toISOString().slice(0, 10))
+    const data = await response.json();
+    console.log(data)
+    let currentDate = new Date()
+    $("#requestedBy").text(data.EMP_NAME)
+    $("#requestDate").text(currentDate.toISOString().slice(0, 10))
 
-    for (i = 0; i < 4; i++) {
-        $("#tblTickets tbody").append(`<tr class="">
+    for (i = 1; i < 5; i++) {
+        $("#tblTickets tbody").append(`<tr data-user-id="${i}">
                                            
                                             <td class="text-start">
-                                             <i class="fas fa-pencil text-primary mx-2" data-bs-toggle="modal" data-bs-target="#editTicketModal"></i>
-                                             <span> MIS#${1 + i}</span>
+                                           
+                                             <span> MIS#${1}</span>
                                            
                                             </td>
-                                            <td class="text-end">Landrex Rebruera</td>
-                                            <td class="text-end">Add EMployee Directory</td>
-                                            <td class="text-end">02-05-2026</td>
-                                            <td class="text-end">
-                                                <div class="badge bg-success ">Completed</div>
+                                            <td class="text-start">Landrex Rebruera</td>
+                                            <td class="text-start">Add EMployee Directory</td>
+                                            <td class="text-start">02-05-2026</td>
+                                            <td class="text-start">
+                                                <span class="badge badge-sm rounded-pill bg-success text-white">Completed</span>
                                             </td>
                                             
                                         </tr>`)
                     
     }
     showTicketList();
+
     $("#submitTicket").on("click", function () {
-        $("#successAlert").removeClass('d-none')
+        console.log('fired')
+        $("#successAlert").removeClass('d-none');
+     
+        setTimeout(function () {
+            $("#successAlert").addClass('d-none');
+        }, 3000);
+    })
+    $("#tblBody").on("click", function (event) {
+        const clickedRow = event.target.closest('tr');
+
+        // Ensure a row was found and it's within the tbody
+        if (clickedRow && this.contains(clickedRow)) {
+            // Access data from the row, for example, using data attributes
+            const userId = clickedRow.getAttribute('data-user-id');
+            $("#editTicketModal").modal("toggle");
+        }
     })
 })
+
 function renderDropdown(list) {
     $("#employeedropdown").empty();
 

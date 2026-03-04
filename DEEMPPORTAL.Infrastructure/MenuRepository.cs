@@ -5,6 +5,8 @@ using DEEMPPORTAL.Domain.Manage.Menu;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
+
+
 namespace DEEMPPORTAL.Infrastructure;
 
 public class MenuRepository(ConnectionPool cp, CurrentUser cu) : IMenuRepository

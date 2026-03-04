@@ -1,4 +1,5 @@
 ﻿using DEEMPPORTAL.Domain.Manage.Menu;
+using DEEMPPORTAL.Domain.Manage.User;
 using DEEMPPORTAL.WebUI.Models;
 
 namespace DEEMPPORTAL.WebUI.Profile;
@@ -9,5 +10,6 @@ public class AppProfile : AutoMapper.Profile
 	{
 		CreateMap<MenuDetailViewModel, MenuDetailRequest>();
 		CreateMap<MenuDetailRequest, MenuDetailViewModel>();
-	}
+        CreateMap<UserDetailViewModel, UserDetailRequest>();
+    }
 }

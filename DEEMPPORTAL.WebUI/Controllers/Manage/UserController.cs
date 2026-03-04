@@ -88,7 +88,7 @@ public class UserController(
       return BadRequest(ModelState);
     }
 
-    var mapModel = _mapper.Map <UserDetailRequest>(model);
+    var mapModel = _mapper.Map<UserDetailRequest>(model);
     var rowsAffected = await _userService.UpdSertUserAsync(mapModel);
     return Ok(rowsAffected);
   }

@@ -134,7 +134,7 @@ namespace DEEMPPORTAL.Infrastructure
                 cmd.Parameters.AddWithValue("@DESCRIPTION", (object?)r.Description ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@ORIGIN", (object?)r.Origin ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@HSCODE", (object?)r.HSCode ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@UPDUSER", updUser ?? "");
+                cmd.Parameters.Add("@UPDUSER",SqlDbType.Int).Value = _cu.UserId;
 
                 cmd.ExecuteNonQuery();
             }
@@ -203,9 +203,9 @@ namespace DEEMPPORTAL.Infrastructure
                 cmd.Parameters.AddWithValue("@NEW_ORIGIN", req.Origin ?? "");
                 cmd.Parameters.AddWithValue("@NEW_HSCODE", req.HSCode ?? "");
 
-                cmd.Parameters.AddWithValue("@UPDUSER", req.UpdUser ?? "");
+                cmd.Parameters.Add("@UPDUSER", SqlDbType.Int).Value = _cu.UserId;
 
-                con.Open();
+            con.Open();
             return Convert.ToInt32(cmd.ExecuteScalar()); // 1 or 0
 
         }
@@ -281,8 +281,7 @@ namespace DEEMPPORTAL.Infrastructure
 
             cmd.Parameters.Add("@ORIGIN", SqlDbType.VarChar, 100).Value = (origin ?? "").Trim();
             cmd.Parameters.Add("@HSCODE", SqlDbType.VarChar, 100).Value = (hsCode ?? "").Trim();
-
-            cmd.Parameters.Add("@UPDUSER", SqlDbType.VarChar, 50).Value = (updUser ?? "").Trim();
+            cmd.Parameters.Add("@UPDUSER", SqlDbType.Int).Value = _cu.UserId;
 
             var outParam = cmd.Parameters.Add("@AffectedRows", SqlDbType.Int);
             outParam.Direction = ParameterDirection.Output;
