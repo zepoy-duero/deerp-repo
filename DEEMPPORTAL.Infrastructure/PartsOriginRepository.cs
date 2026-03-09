@@ -1,7 +1,6 @@
 ﻿using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Common;
 using DEEMPPORTAL.Domain.PartsOrigin;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using System.Data;

@@ -1,5 +1,4 @@
-﻿using DEEMPPORTAL.Infrastructure;
-using ExcelDataReader;
+﻿using ExcelDataReader;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +52,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             return View(model);
         }
 
-        [HttpGet("GetSuppliersByOrg")]
+        [HttpGet("get-supplier-by-org")]
         public IActionResult GetSuppliersByOrg(int orgCode)
         {
             var suppliers =  _partsRepo.GetSuppliersByOrg(orgCode);
@@ -478,7 +477,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             return value.ToString()?.Trim() ?? "";
         }
 
-        [HttpPost("UpdateOriginHscode")]
+        [HttpPost("update-origin-hscode")]
         public IActionResult UpdateOriginHscode([FromBody] UpdateRequest req)
         {
             //if (!IsLoggedIn())

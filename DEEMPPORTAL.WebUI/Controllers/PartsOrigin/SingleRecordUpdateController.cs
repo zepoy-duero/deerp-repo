@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using DEEMPPORTAL.Application.PartsOrigin;
+﻿using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Domain.PartsOrigin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

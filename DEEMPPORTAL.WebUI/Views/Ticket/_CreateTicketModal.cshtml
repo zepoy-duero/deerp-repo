@@ -54,44 +54,54 @@
                                 </div>
                                 <div class="row mx--1">
                                     <!--TICKET ADDRESSED TO-->
-                                    <div class="input-group mb-3 w-50">
-                                        @* <label for="Type" class="input-group- text-danger mx-1">
-                                            <i class="fas fa-asterisk text-danger text-small"></i>
-                                        </label> *@
-                                        <select id="Type" class="input-group-sm form-select" required>
-                                            <option class="text-muted" value="">--Department --</option>
-                                            <option>MIS</option>
-                                            <option>HR</option>
-                                            <option>Accounting</option>
-                                            <option>Others</option>
-                                        </select>
+                                    <div class="mb-3 w-50">
+                                       
+                                        <div class="input-group mb-3">
+                                            <select id="Type" class="input-group form-select" required>
+                                                <option class="text-muted" value="">--Department --</option>
+                                                <option>MIS</option>
+                                                <option>HR</option>
+                                                <option>Accounting</option>
+                                                <option>Others</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group mb-3">
+
+                                            <select id="Type" class="input-group form-select" required>
+                                                <option class="text-muted" value="">--Request type --</option>
+                                                <option>Software Bug/Error</option>
+                                                <option>Change Request</option>
+                                                <option>Hardware/Networking</option>
+                                                <option>Others</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <input id="Description" class="input-group form-control" placeholder="Subject issue..." required />
+                                        </div>
+                                      
                                     </div>
                                     <!-- REQUEST TYPE -->
-                                    <div class="input-group mb-3 w-50">
-                                        @* <label for="Type" class="input-group-addon text-danger mx-1">
-                                            <i class="fas fa-asterisk text-danger text-small"></i>
-                                        </label> *@
-                                        <select id="Type" class="input-group-sm form-select" required>
-                                            <option class="text-muted" value="">--Request type --</option>
-                                            <option>Software Bug/Error</option>
-                                            <option>Change Request</option>
-                                            <option>Hardware/Networking</option>
-                                            <option>Others</option>
-                                        </select>
+                                    <div class="mb-3 w-50">
+                                        
+                                        <div class="input-group mb-3">
+                                         
+                                            <textarea id="Details" rows="5" class="form-control"
+                                                      placeholder="Explain the issue in detail..." required></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                
 
-                                <!-- Description -->
+                                @* <!-- Description -->
                                 <div class="input-group mb-3">
-                                    @* <label for="Description" class="input-group-addon text-danger mx-2">* </label> *@
+                                
                                     <input id="Description" class="input-group-sm form-control" placeholder="Subject issue..." required />
                                    
                                 </div>
 
                                 <!-- Details -->
                                 <div class="input-group mb-3">
-                                    @* <label for="Details" class="input-text-addon text-danger mx-2">* </label> *@
+                                
                                     <textarea id="Details" rows="5" class="form-control"
                                               placeholder="Explain the issue in detail..." required></textarea>
                                 </div>
@@ -112,7 +122,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> *@
                             </form>
                         </div>
                     </div>

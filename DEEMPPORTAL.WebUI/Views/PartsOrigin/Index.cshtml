@@ -175,7 +175,7 @@
                 //     return;
                 // }
 
-                $.get("@Url.Action("GetSuppliersByOrg", "parts-origin")", { orgCode: orgCode })
+                $.get(`parts-origin/get-supplier-by-org`, { orgCode: orgCode })
                     .done(function (data) {
                         let html = "";
                         data.forEach(function (x) {
@@ -254,7 +254,7 @@
                 $("#btnProcess").prop("disabled", true).text("Processing...");
 
                 $.ajax({
-                    url: "@Url.Action("process-file", "parts-origin")",
+                    url: "parts-origin/process-file",
                     type: "POST",
                     data: fd,
                     processData: false,
@@ -324,7 +324,7 @@
             $("#btnUpdate").prop("disabled", true).text("Updating...");
 
             $.ajax({
-                url: "@Url.Action("UpdateOriginHscode", "parts-origin")",
+                url: "parts-origin/update-hscode",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({ OrgCode: orgCode,SupCode: supCode, Rows: processedRows }) //send all rows

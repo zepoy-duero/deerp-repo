@@ -108,11 +108,11 @@ function showModalCreateMenuItems() {
 async function showModalEditMenuItems(mainMenuCode, subMenuCode, subLevelMenuCode) {
 	$(gModalMenuItems).modal("show")
 	$(gModalMenuItems).find("select").prop("selectedIndex", 0)
-	
+
 	gIsUpdate = true
-	
+
 	// display the main menu
-	if(mainMenuCode !== null && subMenuCode === null && subLevelMenuCode === null) {
+	if (mainMenuCode !== null && subMenuCode === null && subLevelMenuCode === null) {
 		$(gModalMenuItems).find(".modal-title").text("Update Main Menu Item")
 		$(gModalMenuItems).find("#frmMenuItemEntries").empty().html(gMainMenuEntries)
 		$(gModalMenuItems).find("#selMenuType").prop("selectedIndex", 0).addClass("readonly-event")
@@ -121,28 +121,28 @@ async function showModalEditMenuItems(mainMenuCode, subMenuCode, subLevelMenuCod
 	}
 
 	// display the sub menu
-	if(mainMenuCode !== null && subMenuCode !== null && subLevelMenuCode === null) {
+	if (mainMenuCode !== null && subMenuCode !== null && subLevelMenuCode === null) {
 		$(gModalMenuItems).find(".modal-title").text("Update Sub Menu Item")
 		$(gModalMenuItems).find("#frmMenuItemEntries").empty().html(gSubMenuEntries)
 		$(gModalMenuItems).find("#selMenuType").prop("selectedIndex", 1)
 		$(gModalMenuItems).find("#selMenuType, #selMainMenuCode").addClass("readonly-event")
 		gSelMenuTypeVal = gMenuType.SUB_MENU
-		
+
 		await Promise.all([loadMainMenuItems()])
 	}
 
 	// display the sub level menu
-	if(mainMenuCode !== null && subMenuCode !== null && subLevelMenuCode !== null) {
+	if (mainMenuCode !== null && subMenuCode !== null && subLevelMenuCode !== null) {
 		$(gModalMenuItems).find(".modal-title").text("Update Sub Level Menu Item")
 		$(gModalMenuItems).find("#frmMenuItemEntries").empty().html(gSubLevelMenuEntries)
 		$(gModalMenuItems).find("#selMenuType").prop("selectedIndex", 2)
 		gSelMenuTypeVal = gMenuType.SUB_LEVEL_MENU
-		
+
 		await Promise.all([loadMainMenuItems(), loadSubMenuItems(mainMenuCode)])
 	}
-	
+
 	disableForm("frmMenuItems", true)
-	
+
 	try {
 		const data = await getMenuItemDetails(mainMenuCode, subMenuCode, subLevelMenuCode)
 		$(gModalMenuItems).find("#inpMainMenuCode, #selMainMenuCode").val(data.MAIN_MENU_CODE)
@@ -152,7 +152,7 @@ async function showModalEditMenuItems(mainMenuCode, subMenuCode, subLevelMenuCod
 		$(gModalMenuItems).find("#inpIconName").val(data.ICON_NAME)
 		$(gModalMenuItems).find("#inpSeqNo").val(data.SEQ_NO)
 		$(gModalMenuItems).find("#selIsActive").val(data.IS_ACTIVE)
-	} catch(error) {
+	} catch (error) {
 		console.log(error)
 		alert("Failed to fetch the details. Please try again.")
 	} finally {
@@ -163,13 +163,12 @@ async function showModalEditMenuItems(mainMenuCode, subMenuCode, subLevelMenuCod
 async function displayMainMenuItems() {
 	const data = await $.get(`${gBaseUrl}/getAllMainMenu`, { searchParam: gSearchParam });
 	const totalCount = data.length;
-	console.log(data)
 	let tdDetails = ""
 	if (totalCount > 0) {
 		for (let i = 0; i < totalCount; i++) {
 			tdDetails += `
 				<tr>
-					<td>${ i + 1 }</td>
+					<td>${i + 1}</td>
 					<td>
 						<input type="checkbox" class="form-check-input check-custom" data-mm-code="${data[i].MAIN_MENU_CODE}" data-sm-code="" data-slm-code="" / >
 					</td>
@@ -215,14 +214,14 @@ async function toggleSubMenuItems(element) {
 	const currRow = $(element).closest("tr")
 	const mainMenuId = $(element).data("main-menu-id")
 	const isRowExists = $(currRow).next().hasClass(`main-menu-${mainMenuId}`)
-	
+
 	if (isRowExists) {
 		$(`.main-menu-${mainMenuId}`).remove()
 		return
 	}
-	
+
 	loadingToggleButton(element, true)
-	
+
 	try {
 		const data = await getSubMenuItems(mainMenuId)
 		const totalCount = data.length;
@@ -264,8 +263,8 @@ async function toggleSubMenuItems(element) {
 		}
 
 		$(currRow).after(tdDetails)
-		
-	} catch(error) {
+
+	} catch (error) {
 		console.log(error)
 		alert("Failed to load the menu items.")
 	} finally {
@@ -283,7 +282,7 @@ async function toggleSubLevelMenuItems(element) {
 		$(`.main-menu-${mainMenuId}.sub-menu-${subMenuId}`).remove()
 		return
 	}
-	
+
 	loadingToggleButton(element, true)
 
 	try {
@@ -321,8 +320,8 @@ async function toggleSubLevelMenuItems(element) {
 		}
 
 		$(currRow).after(tdDetails)
-		
-	} catch(error) {
+
+	} catch (error) {
 		console.log(error)
 	} finally {
 		loadingToggleButton(element, false)
@@ -336,7 +335,7 @@ async function getMainMenuItems(searchParam) {
 }
 
 async function getSubMenuItems(mainMenuCode) {
-	return await $.get(`${gBaseUrl}/getAllSubMenu`, { 
+	return await $.get(`${gBaseUrl}/getAllSubMenu`, {
 		mainMenuCode
 	});
 }
@@ -384,8 +383,8 @@ async function selOnChangeMenuType(element) {
 
 async function selOnChangeMainMenu(element) {
 	const value = $(element).val()
-	if(value !== null && value !== undefined) {
-		await loadSubMenuItems(value)	
+	if (value !== null && value !== undefined) {
+		await loadSubMenuItems(value)
 	}
 }
 
@@ -440,7 +439,7 @@ function submitMenuItems(element) {
 		})
 		.fail(function (error) {
 			console.log(error)
-			toastr["danger"]("Something went wrong. Please contact your administrator.", "System Error")
+			toastr["danger"]("Something went wrong. Please contact your administrator. System Error")
 		})
 		.always(function () {
 			disableForm("frmMenuItems", false)
@@ -452,8 +451,8 @@ function submitMenuItems(element) {
 
 async function deleteMenuItem(mainMenuCode, subMenuCode, subLevelMenuCode) {
 	const isContinueAndDelete = confirm("Are you sure you want to delete?")
-	if(!isContinueAndDelete) return;
-	
+	if (!isContinueAndDelete) return;
+
 	gMenuItemCodes = [] // empty the array first
 	gMenuItemCodes.push({
 		MAIN_MENU_CODE: mainMenuCode,
@@ -463,12 +462,12 @@ async function deleteMenuItem(mainMenuCode, subMenuCode, subLevelMenuCode) {
 
 	$.ajax({
 		type: "POST",
-		url: "/erp/manage/menus/deleteMenu",
+		url: "/manage/menus/deleteMenu",
 		contentType: "application/json",
 		data: JSON.stringify(gMenuItemCodes),
 	})
 		.done(async function (rowsAffected) {
-			if(rowsAffected > 0) {
+			if (rowsAffected > 0) {
 				toastr["success"]("The record has been successfully deleted.", "Delete Successful")
 				await displayMainMenuItems()
 			} else {
@@ -482,24 +481,24 @@ async function deleteMenuItem(mainMenuCode, subMenuCode, subLevelMenuCode) {
 
 async function deleteMultipleMenuItems() {
 	const isValid = validateSelectedItems()
-	
+
 	if (!isValid) {
 		alert("Please select at least one (1) item.")
 		return false;
 	}
 
 	const isContinueAndDelete = confirm("Are you sure you want to delete?")
-	
-	if(!isContinueAndDelete) return;
-	
+
+	if (!isContinueAndDelete) return;
+
 	$.ajax({
 		type: "POST",
-		url: "/erp/menus/deleteMenu",
+		url: "/menus/deleteMenu",
 		contentType: "application/json",
 		data: JSON.stringify(gMenuItemCodes),
 	})
 		.done(async function (rowsAffected) {
-			if(rowsAffected > 0) {
+			if (rowsAffected > 0) {
 				toastr["success"]("The record has been successfully deleted.", "Delete Successful")
 				await displayMainMenuItems()
 			} else {
@@ -513,7 +512,7 @@ async function deleteMultipleMenuItems() {
 
 async function loadMainMenuItems() {
 	let options = "";
-	const data = await $.get("/erp/manage/menus/getAllMainMenuOptions")
+	const data = await $.get("/manage/menus/getAllMainMenuOptions")
 	const totalCount = data.length
 
 	if (totalCount > 0) {
@@ -527,7 +526,7 @@ async function loadMainMenuItems() {
 
 async function loadSubMenuItems(mainMenuCode) {
 	let options = "";
-	const data = await $.get("/erp/manage/menus/getAllSubMenuOptions", { mainMenuCode })
+	const data = await $.get("/manage/menus/getAllSubMenuOptions", { mainMenuCode })
 	const totalCount = data.length
 	if (totalCount > 0) {
 		for (let i = 0; i < totalCount; i++) {
@@ -564,18 +563,18 @@ function clearEntries(modal) {
 }
 
 function validateSelectedItems() {
-	$(gMenuItemTable).find("tbody input[type='checkbox']:checked").map(function() {
+	$(gMenuItemTable).find("tbody input[type='checkbox']:checked").map(function () {
 		const mainMenuCode = Number($(this).data("mm-code"))
 		const subMenuCode = Number($(this).data("sm-code"))
 		const subLevelMenuCode = Number($(this).data("slm-code"))
-		
+
 		gMenuItemCodes.push({
 			MAIN_MENU_CODE: mainMenuCode,
 			SUB_MENU_CODE: subMenuCode,
-			SUB_LEVEL_MENU_CODE: subLevelMenuCode 
+			SUB_LEVEL_MENU_CODE: subLevelMenuCode
 		})
 	})
-	
+
 	return gMenuItemCodes.length !== 0
 }
 

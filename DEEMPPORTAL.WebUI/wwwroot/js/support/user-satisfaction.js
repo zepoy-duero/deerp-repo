@@ -30,7 +30,7 @@ async function submitUserSatisfaction(element) {
 
 	$(form).find(":input").prop("disabled", true)
 
-	const response = await fetch(`/erp/support/user-satisfaction/sendUserSatisfaction`, {
+	const response = await fetch(`/support/user-satisfaction/sendUserSatisfaction`, {
 		method: "POST",
 		body: fd
 	})

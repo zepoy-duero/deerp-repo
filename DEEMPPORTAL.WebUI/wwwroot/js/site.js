@@ -6,7 +6,23 @@ const baseUrl = `/${area}/${controller}/`
 let gIti = null
 
 // Global
-$(function() { })
+$(function () {
+
+	$(document).on('click', 'table tbody tr', function (event) {
+		$(this).addClass('highlight').siblings().removeClass('highlight');
+	});
+	// Global ajax error
+	// Throws an error after a certain time if the session is expired.
+	$(document).ajaxError(function (event, request, settings) {
+		// $("#modalLoadingScreen").css("display", "")
+		// $("#shopMain").css("overflow", "").css("padding-right", "")
+
+		// redirect to the login page if the user session is expired.
+		if (request.status === 401) {
+			window.location.href = "/auth/logout";
+		}
+	})
+})
 
 // Toastr
 
@@ -103,9 +119,7 @@ const Message = {
 
 // Author: Landrex Rebuera
 // Description: Highlights the table row when clicked
-$(document).on('click', 'table tbody tr', function(event) {
-	$(this).addClass('highlight').siblings().removeClass('highlight');
-});
+
 
 function convertSerializedArrayToJSON(serializedArray) {
 	const jsonObj = {}
@@ -245,17 +259,7 @@ function convertToISODateString(strDate) {
 	return date.toISOString().split('T')[0]
 }
 
-// Global ajax error
-// Throws an error after a certain time if the session is expired.
-$(document).ajaxError(function(event, request, settings) {
-	// $("#modalLoadingScreen").css("display", "")
-	// $("#shopMain").css("overflow", "").css("padding-right", "")
 
-	// redirect to the login page if the user session is expired.
-	if (request.status === 401) {
-		window.location.href = "/auth/logout";
-	} 
-})
 
 function initDraggable() {
 	// Make all modal draggable

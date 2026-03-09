@@ -1,4 +1,4 @@
-﻿const gBaseUrl = '/erp/general'
+﻿const gBaseUrl = '/general'
 
 let gChartLabel = []
 let gChartData = []
