@@ -65,8 +65,8 @@ public class ForgotPasswordService(IForgotPasswordRepository forgotPasswordRepos
                     <p>Dear User,</p>
                     <p>If you want to reset your password, kindly click on the link below (or copy and paste the URL into your browser).</p>
                     <p>
-                      <a href='https://dahbashionline.com/account/reset-password?token={resetToken}'>
-                        https://dahbashionline.com/account/reset-password?token={resetToken}
+                      <a href='https://employee.dahbashi.com/account/reset-password?token={resetToken}'>
+                        https://employee.dahbashi.com/account/reset-password?token={resetToken}
                       </a>
                     </p>
                     <p>Note: Please DO NOT share your reset link.</p>

@@ -4,6 +4,7 @@ using DEEMPPORTAL.Domain.Manage.Role;
 using DEEMPPORTAL.Domain.MyProfile;
 using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Library;
+using DEEMPPORTAL.Domain.Manage.RoleMenu;
 
 namespace DEEMPPORTAL.WebUI.Models.Profile;
 
@@ -13,7 +14,8 @@ public class AppProfile : AutoMapper.Profile
 	{
         CreateMap<EmployeeProfileViewModel, MyProfileRequest>();
         CreateMap<MenuDetailViewModel, MenuDetailRequest>();
-		CreateMap<RoleViewModel, RoleDetailRequest>();
+        CreateMap<RoleViewModel, RoleDetailRequest>();
+        CreateMap<RoleMenuViewModel, RoleMenuRequest>();
         CreateMap<UserDetailViewModel, UserDetailRequest>();
         CreateMap<LeaveApplicationDetailViewModel, LeaveApplicationRequest>();
         CreateMap<LeaveApplicationStatusViewModel, LeaveStatusRequest>();

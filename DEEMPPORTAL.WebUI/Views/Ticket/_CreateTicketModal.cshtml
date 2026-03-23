@@ -5,7 +5,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <!--HEADER-->
-            <div class="modal-header small fw-bold bg-main-gradient text-white rounded-top">
+            <div class="modal-header small fw-bold bg-main text-white rounded-top">
                 <span class="modal-title fs-6 mx-4" id="createTicketModalLabel">New Ticket</span>
                 <button type="button" class="btn-close rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -33,30 +33,26 @@
                             <!-- Requested By -->
                             <form class="form">
                                 <!--TICKET BASIC INFO-->
-                                <div class="row mt--1">
-                                    <div class="col-md-6">
-                                        <div class="card card-invoice">
-                                            <div class="card-body">
-                                                <small class="text-muted">Requested By:</small>
-                                                <h6 id="requestedBy" class="fw-bold"></h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card card-invoice">
-                                            <div class="card-body">
-                                                <small class="text-muted">Date:</small>
-                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row mx--1">
-                                    <!--TICKET ADDRESSED TO-->
-                                    <div class="mb-3 w-50">
+                                <div class="row mb-3">
+                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
                                        
-                                        <div class="input-group mb-3">
+                                                <small class="text-muted pe-2">Requested By: </small>
+                                                <h6 id="requestedBy" class="fw-bold"></h6>
+
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
+                                       
+                                                <small class="text-muted pe-2">Date: </small>
+                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>
+                                          
+                                    </div>
+                                    @* <hr class="mt-1" /> *@
+                                </div>
+                               
+                                <div class="row">
+                                    <!--TICKET ADDRESSED TO-->
+                                 
+                                        <div class="input-group mb-3 w-50">
                                             <select id="Type" class="input-group form-select" required>
                                                 <option class="text-muted" value="">--Department --</option>
                                                 <option>MIS</option>
@@ -65,7 +61,7 @@
                                                 <option>Others</option>
                                             </select>
                                         </div>
-                                        <div class="input-group mb-3">
+                                        <div class="input-group mb-3 w-50">
 
                                             <select id="Type" class="input-group form-select" required>
                                                 <option class="text-muted" value="">--Request type --</option>
@@ -75,40 +71,25 @@
                                                 <option>Others</option>
                                             </select>
                                         </div>
-                                        <div class="input-group">
-                                            <input id="Description" class="input-group form-control" placeholder="Subject issue..." required />
-                                        </div>
-                                      
-                                    </div>
                                     <!-- REQUEST TYPE -->
-                                    <div class="mb-3 w-50">
-                                        
-                                        <div class="input-group mb-3">
-                                         
-                                            <textarea id="Details" rows="5" class="form-control"
-                                                      placeholder="Explain the issue in detail..." required></textarea>
-                                        </div>
+                                    
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input id="Description" class="input-group form-control" placeholder="Subject issue..." required />
+                                </div>
+                                <div class="mb-3">
+
+                                    <div class="input-group mb-3">
+
+                                        <textarea id="Details" rows="5" class="form-control"
+                                                  placeholder="Explain the issue in detail..." required></textarea>
                                     </div>
                                 </div>
-                               
 
-                                @* <!-- Description -->
-                                <div class="input-group mb-3">
-                                
-                                    <input id="Description" class="input-group-sm form-control" placeholder="Subject issue..." required />
-                                   
-                                </div>
-
-                                <!-- Details -->
-                                <div class="input-group mb-3">
-                                
-                                    <textarea id="Details" rows="5" class="form-control"
-                                              placeholder="Explain the issue in detail..." required></textarea>
-                                </div>
                                 <div class="input-group-sm">
                                     <label for="fileInput" class="form-label">Upload attachment:</label>
                                     <div class="container-fluid">
-                                        <div class="card shadow-sm">
+                                        <div class="card shadow-sm pb-0">
                                             <div class="card-body">
                                                 <!-- Drop Zone -->
                                                 <div id="dropZone" class="drop-zone">
@@ -122,7 +103,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> *@
+                                </div>
                             </form>
                         </div>
                     </div>

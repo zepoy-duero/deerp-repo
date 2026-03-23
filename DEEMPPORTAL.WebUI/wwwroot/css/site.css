@@ -249,7 +249,7 @@ input[readonly], input.readonly-event {
   cursor: not-allowed;
 }
 
-keyframes blink {
+@keyframes blink {
   0% {
     opacity: 1;
   }

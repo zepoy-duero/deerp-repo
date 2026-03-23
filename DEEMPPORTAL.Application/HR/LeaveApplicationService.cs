@@ -148,7 +148,7 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
             sender = "info@dahbashi.com";
             recipient = userEmail;
             cc = string.Empty;
-            bcc = "landrex@dahbashi.com";
+            bcc = "";
             subject = $"LEAVE APPLICATION ({request.LEAVE_TYPE}) - {request.EMPLOYEE_NAME} [PENDING]";
             body = $@"<html>
                   <body style='font-family: Calibri; font-size:17px'>
@@ -167,7 +167,7 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
             sender = userEmail;
             recipient = departmentManagerEmail;
             cc = string.Empty;
-            bcc = string.Empty;
+            bcc = "";
             subject = $"LEAVE APPLICATION ({request.LEAVE_TYPE}) - {request.EMPLOYEE_NAME} [PENDING]";
             body = $@"<html>
                   <body style='font-family: Calibri; font-size:17px'>
@@ -189,7 +189,7 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
             sender = departmentManagerEmail;
             recipient = userEmail;
             cc = string.Empty;
-            bcc = "landrex@dahbashi.com";
+            bcc = string.Empty;
             subject = $"LEAVE APPLICATION ({request.LEAVE_TYPE}) - {request.EMPLOYEE_NAME} - Manager Approved - Waiting for HR APPROVAL";
             body = $@"
                 <html>
@@ -288,7 +288,7 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
             sender = "info@dahbashi.com";
             recipient = hrEmail;
             cc = string.Empty;
-            bcc = isManager ? "landrex@dahbashi.com, saleem@dahbashi.com" : "landrex@dahbashi.com";
+            bcc = isManager ? "saleem@dahbashi.com" : string.Empty;
             subject = $"{request.EMPLOYEE_NAME.Split(" ")[0]}: ({request.LEAVE_TYPE}) LEAVE APPLICATION - Approved by Human Resource (HR) : {request.EMPLOYEE_NAME}";
             body = $@"
                 <html>
@@ -327,15 +327,15 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
                 sender = hrEmail;
                 recipient = userEmail;
                 cc = departmentManagerEmail;
-                bcc = "landrex@dahbashi.com";
+                bcc = string.Empty;
             }
             else
             {
                 subject = $"LEAVE APPLICATION ({request.LEAVE_TYPE}) - {request.EMPLOYEE_NAME} - Disapproved by Manager";
                 sender = departmentManagerEmail;
                 recipient = userEmail;
-                cc = string.Empty;
-                bcc = "landrex@dahbashi.com";
+                cc = hrEmail;
+                bcc = string.Empty;
             }
 
             body = $@"
@@ -372,14 +372,14 @@ public class LeaveApplicationService(ILeaveApplicationRepository leaveApplicatio
                 subject = $"LEAVE APPLICATION ({request.LEAVE_TYPE}) - {request.EMPLOYEE_NAME} - Disapproved by Manager";
                 sender = "info@dahbashi.com";
                 recipient = departmentManagerEmail;
-                cc = string.Empty;
+                cc = hrEmail;
                 bcc = string.Empty;
             }
 
             body = $@"<html>
                         <body style='font-family: Calibri; font-size:17px'>
                             <p>Dear Manager,</p>
-  			        <p>You have successfully rejected the leave aplication.</p>
+  			        <p>You have successfully rejected the leave application.</p>
                             <p>This is an automated email. Please don't reply.</p>
 
                             <p>From Dahbashi Engineering</p>

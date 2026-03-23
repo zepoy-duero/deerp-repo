@@ -1,7 +1,9 @@
 ﻿const gBaseUrl = '/ticket';
 const homeUrl = '/home';
 
+
 $(async function () {
+    
 
     var menulist = [{ "MAIN_MENU_CODE": 19, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-home", "MENU_NAME": "Home", "PARENT_MENU": "", "MENU_URL": "home", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 32, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-user", "MENU_NAME": "My Profile", "PARENT_MENU": "", "MENU_URL": "my-profile", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 20, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-chart-line", "MENU_NAME": "Dashboard", "PARENT_MENU": "", "MENU_URL": "dashboard", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 21, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-id-card", "MENU_NAME": "HR", "PARENT_MENU": "", "MENU_URL": "hr", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 22, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-coins", "MENU_NAME": "Finance", "PARENT_MENU": "", "MENU_URL": "finance", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 31, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-folder-open", "MENU_NAME": "Reports", "PARENT_MENU": "", "MENU_URL": "reports", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 24, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-toolbox", "MENU_NAME": "Miscellaneous", "PARENT_MENU": "", "MENU_URL": "miscellaneous", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 33, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-paperclip", "MENU_NAME": "Library", "PARENT_MENU": "", "MENU_URL": "library", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 26, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-question-circle", "MENU_NAME": "Support", "PARENT_MENU": "", "MENU_URL": "support", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 35, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-ticket", "MENU_NAME": "Ticket", "PARENT_MENU": "", "MENU_URL": "ticket", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 36, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-cart-arrow-down", "MENU_NAME": "Products", "PARENT_MENU": "", "MENU_URL": "products", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }]
     //$("#switchTbl").on("click",function () {
@@ -90,10 +92,11 @@ $(async function () {
     for (i = 1; i < 5; i++) {
         $("#tblTickets tbody").append(`<tr data-user-id="${i}">
                                            
-                                            <td class="text-start">
-                                           
+                                           <td class="text-start">
+                                           <span>
+                                             <i class="fas fa-pen-to-square fs-5 text-primary btn"></i>
+                                           </span>
                                              <span> MIS#${1}</span>
-                                           
                                             </td>
                                             <td class="text-start">Landrex Rebruera</td>
                                             <td class="text-start">Add EMployee Directory</td>
@@ -105,7 +108,7 @@ $(async function () {
                                         </tr>`)
                     
     }
-    showTicketList();
+    //showTicketList();
 
     $("#submitTicket").on("click", function () {
         console.log('fired')

@@ -14,9 +14,24 @@
     <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
         <div class="flex-column">
             <!-- Title -->
-            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+            @* <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
                 Products Origin / HS Code
-            </h5>
+            </h5> *@
+            <div class="page-title d-flex justify-content-between align-items-center mb-3">
+
+                <h5 class="fw-bold mb-0">
+                    Products - Part Origin / HS Code
+                </h5>
+
+                <a class="small text-decoration-underline"
+                   asp-controller="SingleRecordUpdate"
+                   asp-action="Index">
+
+                    Switch to single part update
+                    <i class="fas fa-code-compare"></i>
+                </a>
+
+            </div>
             <div class="card shadow-sm">
                 <div class="card-header text-white  bg-main-gradient rounded-top-1">
                     <div class="d-flex align-items-center justify-content-between">
@@ -66,7 +81,7 @@
                                        type="file"
                                        class="form-control"/>
 
-                                <small class="text-muted d-block">
+                                <small class="text-small text-muted">
                                     Your file format should be <b>.xlsx</b>
                                 </small> 
                             </div>
@@ -75,17 +90,11 @@
 
                     <div class="row mt-4">
                 
-                        <div class="col text-center">
+                        <div class="d-flex justify-content-center align-items-center">
                             @* <a class="btn btn-danger" asp-controller="SingleRecordUpdate" asp-action="Index"> Single Update Parts </a> *@
-                            <button id="btnProcess" class="btn btn-danger px-4 me-2">Process</button>
-                            <button id="btnClear" type="button" class="btn btn-danger px-4 me-2">Clear</button>
-                            <a asp-controller="SingleRecordUpdate"
-                               asp-action="Index"
-                               class="btn px-4"
-                               style="border:2px solid #0a2d66; color:#0a2d66; font-weight:600; background:transparent;">
-                                Single Parts Update
-                            </a>
-
+                            <button id="btnProcess" class="btn rounded-2 btn-danger px-4 me-2">Process</button>
+                            <button id="btnClear" type="button" class="btn rounded-2 btn-outline-secondary px-4 me-2">Clear</button>
+                           
                         </div>
                     </div>
                     <div id="msgSuccess" class="alert alert-success fw-bold mt-3 d-none"></div>
@@ -119,7 +128,7 @@
              
                     </div>
                     <div class="text-center mt-3">
-                        <button id="btnUpdate" type="button" class="btn btn-danger">
+                        <button id="btnUpdate" type="button" class="btn btn-danger rounded-2">
                             Update Origin / HS Code
                         </button>
                     </div>

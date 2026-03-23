@@ -446,68 +446,68 @@ function setInputEvents() {
 
 
 function submitSaveLeave(element) {
-  const form = element.closest('form');
-  const token = $(form).find("input[name='__RequestVerificationToken']").val()
-  const data = $(form).serializeArray();
-  const isValid = validateForm(form)
-  const fd = new FormData()
-  let confirmMessage = "";
+      const form = element.closest('form');
+      const token = $(form).find("input[name='__RequestVerificationToken']").val()
+      const data = $(form).serializeArray();
+      const isValid = validateForm(form)
+      const fd = new FormData()
+      let confirmMessage = "";
 
-  const attachment = $(form).find("#inpFileAttachment")[0]
+      const attachment = $(form).find("#inpFileAttachment")[0]
 
-  fd.append("ATTACHMENT", attachment && attachment?.files ? attachment?.files[0] : null)
-  fd.append("ACCUMULATED_DAYS", gAccumulatedDays)
+      fd.append("ATTACHMENT", attachment && attachment?.files ? attachment?.files[0] : null)
+      fd.append("ACCUMULATED_DAYS", gAccumulatedDays)
 
-  $.each(data, function (_, field) {
-    fd.append(field.name, field.value)
-  })
-
-  if (!isValid) {
-    toastr["error"]("Please enter all the required fields.", "Required")
-    return
-  }
-
-  if (!gIsValidNumOfDays) {
-    toastr["error"]("You have entered an invalid number of days. Please try again.", "Invalid Entry")
-    $(element).find("#inpNumOfDays").addClass("is-invalid")
-    return
-  }
-
-  confirmMessage = gNumOfLeaveNoticeMessage + " Are you sure you want to continue?"
-  const isConfirm = confirm(confirmMessage)
-
-  if (isConfirm) {
-    disableForm("frmLeaveApplication", true)
-
-    $.ajax({
-      type: "POST",
-      headers: { "RequestVerificationToken": token },
-      url: `${gBaseUrl}/updSertLeaveApplication`,
-      data: fd,
-      processData: false,
-      contentType: false
-    })
-      .done(function (rowsAffected) {
-        if (rowsAffected > 0) {
-          if (!gIsUpdate) {
-            toastr["success"]("A new record has been created.", "Created Successfully")
-          } else {
-            toastr["success"]("The record has been updated.", "Updated Successfully")
-          }
-        }
+      $.each(data, function (_, field) {
+        fd.append(field.name, field.value)
       })
-      .fail(function (error) {
-        console.log(error)
-        toastr["error"]("Something went wrong. Please contact your administrator.", "System Error")
-      })
-      .always(function () {
-        disableForm("frmLeaveApplication", false)
-        cancelModal(element)
-        displayLeaveApplications(function () {
-          displayPagination()
+
+      if (!isValid) {
+        toastr["error"]("Please enter all the required fields.", "Required")
+        return
+      }
+
+      if (!gIsValidNumOfDays) {
+        toastr["error"]("You have entered an invalid number of days. Please try again.", "Invalid Entry")
+        $(element).find("#inpNumOfDays").addClass("is-invalid")
+        return
+      }
+
+      confirmMessage = gNumOfLeaveNoticeMessage + " Are you sure you want to continue?"
+      const isConfirm = confirm(confirmMessage)
+
+      if (isConfirm) {
+        disableForm("frmLeaveApplication", true)
+
+        $.ajax({
+          type: "POST",
+          headers: { "RequestVerificationToken": token },
+          url: `${gBaseUrl}/updSertLeaveApplication`,
+          data: fd,
+          processData: false,
+          contentType: false
         })
-      })
-  }
+          .done(function (rowsAffected) {
+            if (rowsAffected > 0) {
+              if (!gIsUpdate) {
+                toastr["success"]("A new record has been created.", "Created Successfully")
+              } else {
+                toastr["success"]("The record has been updated.", "Updated Successfully")
+              }
+            }
+          })
+          .fail(function (error) {
+            console.log(error)
+            toastr["error"]("Something went wrong. Please contact your administrator.", "System Error")
+          })
+          .always(function () {
+            disableForm("frmLeaveApplication", false)
+            cancelModal(element)
+            displayLeaveApplications(function () {
+              displayPagination()
+            })
+          })
+      }
 }
 
 function validateUserCanSubmit() {

@@ -439,7 +439,7 @@ function submitMenuItems(element) {
 		})
 		.fail(function (error) {
 			console.log(error)
-			toastr["danger"]("Something went wrong. Please contact your administrator. System Error")
+			toastr["danger"]("Something went wrong. Please contact your administrator.", "System Error")
 		})
 		.always(function () {
 			disableForm("frmMenuItems", false)

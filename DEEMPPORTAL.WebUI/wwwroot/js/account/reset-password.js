@@ -47,7 +47,7 @@ async function submitResetPassword(element) {
   toastr.success(result.message, "Success")
 
   setTimeout(() => {
-    window.location.href = `/auth/login/erp`
+    window.location.href = `/auth/login`
   }, 2000)
 }
 

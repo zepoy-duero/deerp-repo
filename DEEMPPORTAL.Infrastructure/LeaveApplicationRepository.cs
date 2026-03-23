@@ -260,7 +260,7 @@ namespace DEEMPPORTAL.Infrastructure
             return results!;
         }
 
-        public async Task<int> UpdateLeaveApplicationStatusAsync(int leaveApplicationCode, string applicationStatus, string reasons)
+        public async Task<int> UpdateLeaveApplicationStatusAsync(int leaveApplicationCode, string? applicationStatus, string? reasons)
         {
             await using var conn = new SqlConnection(_cp.ConnectionName);
 

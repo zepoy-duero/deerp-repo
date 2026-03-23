@@ -45,9 +45,6 @@ function searchEmployees() {
             .toggle(name.includes(value));
     });
 }
-
-
-
 // ---------------- HELPERS ----------------
 function showSpinner() {
     $("#employeeContainer").empty().append(spinnerComponent());

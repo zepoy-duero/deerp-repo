@@ -1,12 +1,12 @@
 ﻿using DEEMPPORTAL.Application.Account;
 using DEEMPPORTAL.Domain.Account;
 using DEEMPPORTAL.WebUI.Models;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace DEEMPPORTAL.WebUI.Controllers.Account;
 
-[Authorize]
+//[Authorize]
 [Route("account/reset-password")]
 public class ResetPasswordController(IResetPasswordService resetPasswordService) : Controller
 {

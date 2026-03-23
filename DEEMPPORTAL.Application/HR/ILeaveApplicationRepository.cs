@@ -34,8 +34,8 @@ public interface ILeaveApplicationRepository
 
     Task<int> UpdateLeaveApplicationStatusAsync(
       int leaveApplicationCode,
-      string applicationStatus,
-      string reasons);
+      string? applicationStatus,
+      string? reasons);
 
     Task<int> DeleteLeaveApplicationTemporarilyAsync(int leaveApplicationCode);
 }
