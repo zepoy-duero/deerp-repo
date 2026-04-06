@@ -286,9 +286,9 @@ namespace DEEMPPORTAL.Infrastructure
             outParam.Direction = ParameterDirection.Output;
 
             con.Open();
-            return cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
-            //return outParam.Value == DBNull.Value ? 0 : Convert.ToInt32(outParam.Value);
+            return outParam.Value == DBNull.Value ? 0 : Convert.ToInt32(outParam.Value);
         }
 
         public string? GetDescriptionByPartNo(string partNo)

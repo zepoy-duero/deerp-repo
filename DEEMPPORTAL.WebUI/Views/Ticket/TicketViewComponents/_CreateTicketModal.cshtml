@@ -2,7 +2,7 @@
 
 <!-- Modal -->
 <div class="modal modal-lg fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <!--HEADER-->
             <div class="modal-header small fw-bold bg-main text-white rounded-top">
@@ -10,7 +10,7 @@
                 <button type="button" class="btn-close rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!--BODY-->
-            <div class="modal-body px-4">
+            <div class="modal-body px-4" style="overflow-y: scroll !important;">
                 <div class="card no-box-shadow">
                    
                     <div id="successAlert" class="alert alert-success d-none">
@@ -35,16 +35,12 @@
                                 <!--TICKET BASIC INFO-->
                                 <div class="row mb-3">
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                       
                                                 <small class="text-muted pe-2">Requested By: </small>
                                                 <h6 id="requestedBy" class="fw-bold"></h6>
-
                                     </div>
-                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                       
+                                    <div class="col-md-6 d-flex justify-content-start align-items-start">                
                                                 <small class="text-muted pe-2">Date: </small>
-                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>
-                                          
+                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>       
                                     </div>
                                     @* <hr class="mt-1" /> *@
                                 </div>
@@ -171,6 +167,7 @@
     // File input change
     fileInput.addEventListener("change", (e) => {
         handleFiles(e.target.files);
+        
     });
 
     // Drag events

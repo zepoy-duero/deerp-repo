@@ -2,63 +2,77 @@
     Layout = "_Layout";
     ViewData["Title"] = "Ticket";
 }
+@{
+    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
+}
+@{
+    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
+}
 <div class="container">
-    <div class="page-inner">
-        <div class="flex-column">
-            
-            <div class="row justify-content-between mb-2">
-                <div class="col">
-                    <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
-                        Tickets
-                    </h5>
+        <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+         <div class="flex-column">
+            <!-- Title -->
+            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+               Tickets
+            </h5>    
+            <div class="row mb-3">
+                <div class="col-5">
+                    <div class="input-group">
+                        <input id="inpSearchParam" type="text" class="form-control rounded-start-1" placeholder="Search tickets" aria-label="">
+                        <button id="" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
-                @* <div class="col text-end">
-                   
-                        @{
-                            await Html.RenderPartialAsync("~/Views/Ticket/_TicketDashBoard.cshtml");
-                        }
-                        
-                  
+                
+                <div class="col-4  d-flex flex-row">
+                    <div class="input-group extra-small">
+                        <label for="dateFrom" class="input-group-text">
+                           From
+                        </label>
+                        <input id="dateFrom" type="date" placeholder="From" class="form-control rounded-start-1" aria-label="">
+                        @* <button id="filterByDate" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
+                            <i class="fas fa-calendar"></i>
+                        </button> *@
+                    </div>
+                    <div class="input-group">
+                        <label for="dateTo" class="input-group-text">
+                            To
+                        </label>
+                        <input id="dateTo" type="date" placeholder="To" class="form-control rounded-start-1" aria-label="">
+                        @* <button id="filterByDate" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
+                            <i class="fas fa-calendar"></i>
+                        </button> *@
+                    </div>
+                </div>
+                @* <div class="col">
+                    <div class="input-group">
+                        <label for="dateTo" class="input-group-text">
+                            To
+                        </label>
+                        <input id="dateTo" type="date" placeholder="To" class="form-control rounded-start-1" aria-label="">
+                      
+                    </div>
                 </div> *@
-
-            </div>
-           
-            <div class="row mb-2">
-                <div class="col">
-                    @* <div class="card card-transparent rounded-1 mb-2">
-                        <div class="card-body"> *@
-                            <div class="row justify-content-between mb-2">
-                                <div class="col-sm-4">
-                                    <button type="button" id="openCreateTicketModal" class="btn btn-danger m-0 rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal"><i class="fas fa-plus"></i> New Ticket</button>
-                                    @{
-                                        await Html.RenderPartialAsync("~/Views/Ticket/_CreateTicketModal.cshtml");
-                                    }
-                                    @{
-                                        await Html.RenderPartialAsync("~/Views/Ticket/_EditTicketModal.cshtml");
-                                    }
-
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="input-group">
-                                        <input id="inpSearchParam" type="text" class="form-control rounded-start-1" placeholder="Search tickets" aria-label="">
-                                        <button id="" class="btn btn-danger bg-accent px-4 rounded-start-0" type="button" onclick="submitSearchMenu(this)">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                    @*     </div>
-                    </div> *@
+                <div class="col justify-content-right">
+                    <button type="button" id="openCreateTicketModal" class="btn btn-danger m-0 rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal"><i class="fas fa-plus"></i> New Ticket</button>
                 </div>
             </div>
-           
-            @{
-                await Html.RenderPartialAsync("~/Views/Ticket/_TicketTable.cshtml");
-            }
-          
+            <div class="row">
+                <div class="col">
+                    @{
+
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
+                    }
+                </div>
+            </div>
+         </div>
+        
+
         </div>
-    </div>
-</div>
+ </div>
+
+
 @section Scripts {
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
 }

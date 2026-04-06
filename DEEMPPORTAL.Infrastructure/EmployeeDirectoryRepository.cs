@@ -30,17 +30,18 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
             DEPT_CODE = deptCode
         };
 
-        var multi = await conn.QueryMultipleAsync(
+
+        var data = await conn.QueryAsync<EmployeeDirectoryResponse>(
             storedProcedure,
             parameters,
             commandType: CommandType.StoredProcedure);
 
-        var data = await multi.ReadAsync<EmployeeDirectoryResponse>();
+        //var data = await multi.ReadAsync<EmployeeDirectoryResponse>();
         //var totalCount = await multi.ReadFirstAsync<int>();
 
         await conn.CloseAsync();
 
-        return (data);
+        return data;
     }
 
     public async Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync()

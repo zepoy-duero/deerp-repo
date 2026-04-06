@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DEEMPPORTAL.WebUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61e8811d14d7f6fd484a800b449ad78871286dd3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+28dbad092205d7b03b95461f104609020eca8570")]
 [assembly: System.Reflection.AssemblyProductAttribute("DEEMPPORTAL.WebUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DEEMPPORTAL.WebUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

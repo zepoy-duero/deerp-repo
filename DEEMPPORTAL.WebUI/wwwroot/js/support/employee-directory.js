@@ -9,6 +9,9 @@ $(async function () {
     await loadLocations();
     await loadDepartments();
     await getAllEmployeeDirectory();
+    $('#select-organization').selectpicker('val', 1);
+    $('#select-location').selectpicker('val', 1);
+    $('#select-department').selectpicker('val', 19);
 
     // Event bindings
     $("#select-organization").on("change", async () => {

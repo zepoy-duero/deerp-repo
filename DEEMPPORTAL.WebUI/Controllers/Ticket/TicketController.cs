@@ -8,15 +8,18 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 [Route("ticket")]
 public class TicketController : Controller
     {
-    [Route("")]
-        public IActionResult Index()
-        {
+    [HttpGet("")]
+    public IActionResult Index()
+    {
+        if (User?.Identity?.IsAuthenticated == false)
+            return RedirectToAction("Index", "Login", new { area = "Auth" });
+        else
             return View();
-        }
-        //[Route("/getTicket")]
-        //public Task<IActionResult> GetTicket(int TicketId)
-        //{
-           
-        //}
     }
+    //[Route("/getTicket")]
+    //public Task<IActionResult> GetTicket(int TicketId)
+    //{
+
+    //}
+}
 

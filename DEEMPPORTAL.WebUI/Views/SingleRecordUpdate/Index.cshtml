@@ -493,7 +493,7 @@
                 if (msg !== "") { alert("❌ " + msg); return; }
 
                 $.ajax({
-                    url: "/SingleRecordUpdate/SaveEdit",
+                    url: "/single-record-update/save-edit",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(data),
@@ -650,7 +650,7 @@
                 });
 
                 $.ajax({
-                    url: "/SingleRecordUpdate/DeleteRows",
+                    url: "/single-record-update/delete-rows",
                     type: "POST",
                     contentType: "application/json",
                     dataType: "json",

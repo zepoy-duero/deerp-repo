@@ -1,0 +1,54 @@
+﻿<section id="userRequest" class="card mb-2 p-4">
+    <h5 class="section-title text-main">User Request</h5>
+
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <i class="fas fa-building me-2"></i>
+                  
+                </span>
+                <div class="form-floating">
+                    <input id="department" type="text" class="form-control" placeholder="MIS Department" aria-label="Department" aria-describedby="basic-addon1">
+                    <label for="department"></label>
+                </div>
+               
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fas fa-calendar me-2"></i>
+                   
+                </span>
+                <input type="text" class="form-control" placeholder="March 25, 2026" aria-label="Date Requested" aria-describedby="basic-addon2">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="fas fa-bug me-2"></i>
+                   
+                </span>
+                <input type="text" class="form-control" placeholder="Software Bug" aria-label="Request Type" aria-describedby="basic-addon2">
+
+            </div>
+        </div>
+      
+        <div class="col-8">
+            <div class="card no-box-shadow">
+                 <div class="card-body">
+                      <div class="flex-column">
+                           <label for="attachmentPreview">Attachments</label>
+                           <div id="attachmentPreview"></div>
+                      </div>
+                         <div class="container">
+                                <h5 class="fs-6">Ticket Description</h5>
+                                <p class="text-small">This is a test ticket description. I am typing just to make the paragraph longer.</p>
+                                <p class="extra-small"><small class="text-muted">Last updated 3 mins ago</small></p>
+                         </div>
+                      </div>
+            </div>
+        </div>
+    </div>
+
+    @* <div class="mt-3 text-end">
+        <button class="btn btn-primary" id="btnSaveEmployee">Submit Ticket</button>
+    </div> *@
+</section>

@@ -1,4 +1,5 @@
 ﻿using DEEMPPORTAL.Application.PartsOrigin;
+using DEEMPPORTAL.Common;
 using DEEMPPORTAL.Domain.PartsOrigin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,10 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
 {
     [Authorize]
     [Route("single-record-update")]
-    public class SingleRecordUpdateController(IPartsOriginService repo) : Controller
+    public class SingleRecordUpdateController(CurrentUser cu,IPartsOriginService repo) : Controller
     {
         private readonly IPartsOriginService _repo = repo;
-
+        private readonly CurrentUser _cu = cu;
         [HttpGet("")]
         public IActionResult Index(int orgCode = 1)
         {
@@ -116,7 +117,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                 //if (string.IsNullOrWhiteSpace(updUser))
                 //    updUser = "WEB";
 
-                var updUser = HttpContext.Session.GetString("Username");
+                var updUser = _cu.UserName;
                 //if (string.IsNullOrWhiteSpace(updUser))
                 //    return Json(new { success = false, message = "Session expired. Please login again." });
 
@@ -185,12 +186,12 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
         [HttpPost("delete-rows")]
         public IActionResult DeleteRows([FromBody] DeleteRowsRequest req)
         {
-            var user = HttpContext.Session.GetString("Username");
+            var user = _cu.UserName;
             //if (string.IsNullOrWhiteSpace(user))
             //    return Json(new { ok = false, message = "Session expired. Please login again." });
 
-            //if (req?.Items == null || req.Items.Count == 0)
-            //    return Json(new { ok = false, message = "No rows selected." });
+            if (req?.Items == null || req.Items.Count == 0)
+                return Json(new { ok = false, message = "No rows selected." });
 
             int deleted = 0;
 

@@ -3,13 +3,7 @@ const homeUrl = '/home';
 
 
 $(async function () {
-    
-
-    var menulist = [{ "MAIN_MENU_CODE": 19, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-home", "MENU_NAME": "Home", "PARENT_MENU": "", "MENU_URL": "home", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 32, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-user", "MENU_NAME": "My Profile", "PARENT_MENU": "", "MENU_URL": "my-profile", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 20, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-chart-line", "MENU_NAME": "Dashboard", "PARENT_MENU": "", "MENU_URL": "dashboard", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 21, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-id-card", "MENU_NAME": "HR", "PARENT_MENU": "", "MENU_URL": "hr", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 22, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-coins", "MENU_NAME": "Finance", "PARENT_MENU": "", "MENU_URL": "finance", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 31, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-folder-open", "MENU_NAME": "Reports", "PARENT_MENU": "", "MENU_URL": "reports", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 24, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-toolbox", "MENU_NAME": "Miscellaneous", "PARENT_MENU": "", "MENU_URL": "miscellaneous", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 33, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-paperclip", "MENU_NAME": "Library", "PARENT_MENU": "", "MENU_URL": "library", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 26, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-question-circle", "MENU_NAME": "Support", "PARENT_MENU": "", "MENU_URL": "support", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }, { "MAIN_MENU_CODE": 35, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-ticket", "MENU_NAME": "Ticket", "PARENT_MENU": "", "MENU_URL": "ticket", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "N" }, { "MAIN_MENU_CODE": 36, "MENU_SUB_CODE": 0, "MENU_SUB_LEVEL_CODE": 0, "ICON_NAME": "fas fa-cart-arrow-down", "MENU_NAME": "Products", "PARENT_MENU": "", "MENU_URL": "products", "SEQ_NO": 0, "IS_ACTIVE": "N", "HAS_SUB_MENU": "Y" }]
-    //$("#switchTbl").on("click",function () {
-    //    $("#ticketHeader1").toggleClass("d-none")
-    //    $("#ticketHeader2").toggleClass("d-none")
-    //});
+    renderAttachments();
     var employees = [
         {
             id: 1,
@@ -40,6 +34,10 @@ $(async function () {
             name: 'Avito'
         },
     ]
+    $('#isMajorChange').on('change', function () {
+        $('#managementApproval').toggleClass('d-none', !this.checked);
+    });
+
     // Search as user types
     $("#employeeSearch").on("keyup", function () {
         console.log("enter")
@@ -108,8 +106,10 @@ $(async function () {
                                         </tr>`)
                     
     }
-    //showTicketList();
-
+    
+    $("#viewTicketDetailsBtn").on("click", () => {
+        $("#editTicketModal").modal("toggle");
+    })
     $("#submitTicket").on("click", function () {
         console.log('fired')
         $("#successAlert").removeClass('d-none');
@@ -126,10 +126,102 @@ $(async function () {
             // Access data from the row, for example, using data attributes
             const userId = clickedRow.getAttribute('data-user-id');
             $("#editTicketModal").modal("toggle");
+          
         }
     })
-})
+    // PREVIEW FILE
+    $("#btnPreview").on("click", function () {
 
+        let fileName = $(this).closest(".attachment-item").find(".file-name").text();
+        let fileUrl = "/img/" + fileName;
+
+        $("#previewImage, #previewPdf, #previewOther").addClass("d-none");
+
+        if (fileName.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            $("#previewImage").attr("src", fileUrl).removeClass("d-none");
+        }
+        else if (fileName.match(/\.(pdf)$/i)) {
+            $("#previewPdf").attr("src", fileUrl).removeClass("d-none");
+        }
+        else {
+            $("#previewOther").removeClass("d-none");
+        }
+
+        $("#attachmentPreviewContainer").toggleClass("d-none");
+    });
+
+
+    // DELETE FILE
+    $(".btnDelete").on("click", function () {
+
+        if (!confirm("Delete this file?")) return;
+
+        let item = $(this).closest(".attachment-item");
+        let fileName = item.find(".file-name").text();
+
+        $.post('/Attachment/Delete', { fileName: fileName }, function () {
+            item.remove();
+        });
+
+    });
+
+
+    // RENAME FILE
+    $(".btnRename").on("click",  function () {
+
+        let item = $(this).closest(".attachment-item");
+
+        let newName = item.find(".file-input").val();
+
+        $.post('/Attachment/Rename', {
+            oldName: item.find(".file-name").text(),
+            newName: newName
+        }, function () {
+
+            item.find(".file-name").text(newName);
+
+            alert("Renamed successfully!");
+        });
+
+    });
+
+
+    // UPLOAD FILES
+   
+})
+function showAttachments() {
+
+        const blob = new Blob(["Sample content"], { type: "text/plain" });
+        let files = blob;
+        let formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+        }
+
+        $.ajax({
+            url: '/Attachment/Upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+
+                // Append new files to UI
+                res.forEach(file => {
+                    $("#attachmentsPreviewContainer").append(`
+                    <div class="col-md-6 attachment-item">
+                        <div class="border rounded p-2 d-flex justify-content-between">
+                            <span class="file-name">${file}</span>
+                            <button class="btn btn-sm btn-outline-primary btnPreview">Preview</button>
+                        </div>
+                    </div>
+                `);
+                });
+
+            }
+        });
+}
 function renderDropdown(list) {
     $("#employeedropdown").empty();
 
@@ -154,64 +246,7 @@ function renderDropdown(list) {
     if (i % 2 == 1) return '<span class="badge bg-success rounded-pill">Completed</span>'
     else return '<span class="badge bg-primary rounded-pill">In Progress</span>'
 }
-function showTicketList() {
-    $("#ticketList").empty();
-    for (i = 0; i <= 5; i++) {
-        var item = `
-        <li class="list-tem">
-            <figure>
-              <blockquote class="blockquote">
-              <div class="col"><p>MIS#${i + 1}</p></div>
-              <div class="col">
-                <p>Speed Dial Directory - Table Column Alignment</p>
-              </div>
-              <div class="col text-end">
-                <i  data-bs-toggle="modal" data-bs-target="#editTicketModal" class="fa fa-edit"></i>
-              </div>  
-              <blockquote>
-              <figcaption class="blockquote-footer">
-                <cite title="Source Title">
-                 <div class="col">
-                    ${getStatus(i)}
-                 </div>
-                <div class="col"><p>
-                    <cite title="Source Title">Created at Jan. 6, 2026</cite></p>
-                </div>
-                <div class="col"></div>
-                </cite>
-              </figcaption>
-            </figure>
-        </li>
-        `;
-        var listItem = `<li class="list-group-item d-flex align-items-center">
-                                               <div class="p-2 flex-fill text-start">                                     
-                                                       <div class="card-subtitle">
-                                                            <div class="fw-bold">MIS#${i + 1}
-                                                       </div> 
-                                                       <span class="small text-muted">
-                                                                Riyaz Ahmed
-                                                       </span>
-                                                   </div>                                                
-                                                </div>
-                                                <div class="vr mx-4"></div>
-                                                <div class="p-2 flex-fill">
-                                                    <div class="fw-bold text-start">Speed Dial Directory - Table Column Alignment</div>              
-                                                    <span class="small text-muted">Created at Jan. 6, 2026 
-                                                    <div class="progress" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                                                          <div class="progress-bar progress-bar-striped" style="width: 60%">progress</div>
-                                                        </div>
-                                                      <span class="d-none badge ${i % 2 == 1 ? `bg-primary` : `bg-success`} rounded-pill">In Progress</span>
-                                                   </span>       
-                                                 </div>
-                                                 <div class="p-2 flex-fill text-end">
-                                                    <i class="fas fa-pencil-alt text-primary"></i>
-                                                 </div>            
-                          
-                         </li>
-                         <div class="hr"></div>`;
-        $("#ticketList").append(listItem);
-    }
-}   
+
 async function selectUsers() {
     let params = {
         org_code:1,
