@@ -12,6 +12,6 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     Task<IEnumerable<SelectOptionResponse>> GetFilteredOrganizationListAsync();
     Task<IEnumerable<SelectOptionResponse>> GetFilteredLocationListAsync(int orgCode);
     Task<IEnumerable<SelectOptionResponse>> GetFilteredDepartmentListAsync(int orgCode, int locCode);
-
-  }
+    Task<byte[]?> GetProfilePicAsync(int EMP_CODE);
+    }
 }

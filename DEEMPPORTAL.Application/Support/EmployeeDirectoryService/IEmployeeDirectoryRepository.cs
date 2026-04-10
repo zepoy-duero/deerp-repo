@@ -14,5 +14,5 @@ public interface IEmployeeDirectoryRepository
   Task<IEnumerable<SelectOptionResponse>> GetFilteredOrganizationListAsync();
   Task<IEnumerable<SelectOptionResponse>> GetFilteredLocationListAsync(int orgCode);
   Task<IEnumerable<SelectOptionResponse>> GetFilteredDepartmentListAsync(int orgCode, int locCode);
-
+  Task<byte[]?> GetProfilePicAsync(int EMP_CODE);
 }

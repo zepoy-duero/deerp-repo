@@ -131,4 +131,21 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
 
         return results!;
     }
+    public async Task<byte[]?> GetProfilePicAsync(int EMP_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+        const string storedProcedure = "CLOUD_v1_ERP_EMP_PHOTO_sel";
+        var parameters = new
+        {
+            EMP_CODE
+
+        };
+        var EMP_PHOTO = await conn.QueryFirstOrDefaultAsync<byte[]?>(
+                 storedProcedure,
+                 parameters,
+                 commandType: CommandType.StoredProcedure);
+
+        return EMP_PHOTO;
+    }
 }

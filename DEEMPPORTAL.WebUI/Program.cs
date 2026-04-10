@@ -56,8 +56,15 @@ builder.Services
 				{
 					context.Token = context.Request.Cookies["JwtToken"];
 					return Task.CompletedTask;
-				}
-			};
+				},
+                OnChallenge = context =>
+                {
+                    context.HandleResponse();
+
+                    context.Response.Redirect("/auth/logout");
+                    return Task.CompletedTask;
+                }
+            };
 		});
 
 builder.Services.AddCors(options =>

@@ -1,4 +1,178 @@
-﻿<div class="row d-sm-flex">
+﻿        <style>
+    
+        </style>
+        <div class="row g-0">
+            <div class="col">
+            <div class="card">
+            <div id="" class="row d-flex align-items-center buttons-toolbar p-3">
+                <!-- Left side: New Ticket -->
+                <div class="col-auto">
+                    <button type="button" id="openCreateTicketModal" class="btn btn-danger rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                        <i class="fas fa-plus"></i> New Ticket
+                    </button>
+                </div>
+
+                <!-- Right side: Filters + Search -->
+                <div id="" class="col-auto ms-auto d-flex gap-2">
+                    <div class="input-group ">
+                        <input name="search" id="inpSearchParam" type="text" class="form-control" placeholder="Type to search . . ." aria-label="Search">
+                        @* <button id="btnSearch" class="btn btn-danger bg-accent me-0" type="button">
+                            <i class="fas fa-search"></i>
+                        </button> *@
+                        <span class="input-group-text small ">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span
+                          <button id="btnSearch" class="btn bg-accent me-0" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        </span>
+                       
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <label for="dateFrom" class="input-group-text small">From</label>
+                        <input id="dateFrom" type="date" class="form-control" aria-label="From">
+                        <label for="dateTo" class="input-group-text small">To</label>
+                        <input id="dateTo" type="date" class="form-control" aria-label="To">
+                        <span class="input-group-text btn small">
+                            <i class="fas fa-filter"></i>
+                        </span>
+                    </div>
+                    @* <div class="input-group  w-75">
+                        <label for="dateTo" class="input-group-text small">To</label>
+                        <input id="dateTo" type="date" class="form-control" aria-label="To">
+                         <span class="input-group-text small">
+                            <i class="fas fa-filter"></i>
+                         </span>
+                           <button id="btnFilter" class="btn btn-danger bg-accent me-0" type="button">
+                               
+                            </button> 
+                    
+                    </div> *@
+
+                </div>
+            </div>
+            <div id="ticketHeader2" class="card-header titles px-2 fw-bold bg-main text-white  mb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div class="d-flex">
+                            <div class="small px-2">
+                                <span class="btn btn-sm btn-icon btn-round border border-2 text-white"><i class="fas fa-ticket"></i></span>
+                                <span id="tblCaption" class="fw-normal">My Tickets</span>
+                            </div>
+
+                        </div>
+                        <div class="d-flex">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketDashBoard.cshtml");
+                            }
+
+                        </div>
+
+                    </div>
+
+
+             </div>
+
+             <div class="card-body pt-0">
+                    <table id="table"
+                        data-toggle="table"
+                       
+                       data-searchable="true"
+                           data-total-field="count"
+                       data-toolbar="#toolbar"
+                           data-height="400"
+                           data-refresh="true"
+                           data-show-column="true"
+                       data-resizable="true"
+                          
+                           data-url="files/tickets.json" class="table table-condensed table-striped table-bordered table-sm">
+                        <thead>
+                            <tr>
+
+                                <th class="extra-small p-2" 
+                                    data-field="ticketId"
+                                    data-sortable="true"
+                                    data-filter-control="input">
+                                    <i class="fas fa-ticket text-main"></i>
+                                    ID
+                                </th>
+                            <th class="extra-small" 
+                                data-halign="left"
+                                data-align="left" 
+                                data-field="requestedBy" 
+                                data-sortable="true"
+                                data-searchable="true">
+                               
+                                <i class="fas fa-user text-main"></i>
+                                    Requested By
+                                  
+                                </th>
+                                <th class="text-nowrap extra-small" 
+                                 data-halign="left"
+                                data-align="left"
+                                data-field="description" 
+                                data-sortable="true">
+                                    <i class="fas fa-circle-info text-main"></i>
+                                    Description
+                                </th>
+                                <th class="p-0 m-0"
+                                   data-width="100"
+                                     data-halign="left"
+                                    data-align="left"
+                                    data-field="dateSubmitted" 
+                                    data-sortable="true">
+                                    <i class="fas fa-calendar-plus text-main"></i>
+                                    Date
+                                </th>
+                           
+                                <th class="extra-small p-0" 
+                                     data-halign="left"
+                                    data-align="left"
+                                    data-field="status" 
+                                    data-sortable="true"
+                                data-formatter="statusFormatter">
+                                  
+                                    <i class="fas fa-bars-progress text-main"></i>
+                                    Status
+                                </th>
+                                <th class="extra-small" 
+                                     data-halign="left"
+                                    data-align="left"
+                                    data-field="" 
+                                    data-sortable="true">
+                                    <i class="fas fa-first-order text-main"></i>
+                                    Priority
+                                </th>
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+   
+
+<script>
+     window.statusFormatter = (value, row) => {
+        console.log(value)
+      return  `<div class='btn ${statusColor(value)} btn-rounded btn-sm w-100 text-nowrap'>${value}</div>`
+    }
+    function statusColor(status){
+        switch(status){
+            case 'Pending': return 'btn-dark';
+                break;
+            case 'In Progress': return 'btn-danger';
+                break;
+            case 'Testing': return 'btn-primary';
+                break;
+            case 'Maintenance': return 'btn-warning';
+                break;
+            case 'Complete': return 'btn-success';
+                break;
+        }
+    }
+  </script>
+@* <div class="row d-sm-flex">
     <div class="col-sm-12">
         <div class="card text-small">
 
@@ -61,4 +235,4 @@
 
         </div>
     </div>
-</div>
+</div> *@

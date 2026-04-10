@@ -33,5 +33,9 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     {
       return await _employeeDirectoryRepository.GetFilteredDepartmentListAsync(orgCode, locCode);
     }
-  }
+    public async Task<byte[]?> GetProfilePicAsync(int EMP_CODE)
+     {
+            return await _employeeDirectoryRepository.GetProfilePicAsync(EMP_CODE);
+    }
+   }
 }

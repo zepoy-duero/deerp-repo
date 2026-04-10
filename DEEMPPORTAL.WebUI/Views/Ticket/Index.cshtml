@@ -2,6 +2,8 @@
     Layout = "_Layout";
     ViewData["Title"] = "Ticket";
 }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.css">
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
 }
@@ -10,69 +12,28 @@
 }
 <div class="container">
         <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
-         <div class="flex-column">
+         <div class="flex-column align-items-center">
             <!-- Title -->
-            <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+            <h5 class="page-title  mb-3 fs-5 fw-bolder text-main">
                Tickets
-            </h5>    
-            <div class="row mb-3">
-                <div class="col-5">
-                    <div class="input-group">
-                        <input id="inpSearchParam" type="text" class="form-control rounded-start-1" placeholder="Search tickets" aria-label="">
-                        <button id="" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="col-4  d-flex flex-row">
-                    <div class="input-group extra-small">
-                        <label for="dateFrom" class="input-group-text">
-                           From
-                        </label>
-                        <input id="dateFrom" type="date" placeholder="From" class="form-control rounded-start-1" aria-label="">
-                        @* <button id="filterByDate" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
-                            <i class="fas fa-calendar"></i>
-                        </button> *@
-                    </div>
-                    <div class="input-group">
-                        <label for="dateTo" class="input-group-text">
-                            To
-                        </label>
-                        <input id="dateTo" type="date" placeholder="To" class="form-control rounded-start-1" aria-label="">
-                        @* <button id="filterByDate" class="btn btn-danger bg-accent rounded-start-0" type="button" onclick="submitSearchMenu(this)">
-                            <i class="fas fa-calendar"></i>
-                        </button> *@
-                    </div>
-                </div>
-                @* <div class="col">
-                    <div class="input-group">
-                        <label for="dateTo" class="input-group-text">
-                            To
-                        </label>
-                        <input id="dateTo" type="date" placeholder="To" class="form-control rounded-start-1" aria-label="">
-                      
-                    </div>
-                </div> *@
-                <div class="col justify-content-right">
-                    <button type="button" id="openCreateTicketModal" class="btn btn-danger m-0 rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal"><i class="fas fa-plus"></i> New Ticket</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
+            </h5>
+           
+
                     @{
 
                         await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
                     }
-                </div>
-            </div>
          </div>
-        
 
         </div>
  </div>
 
 
 @section Scripts {
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
 }

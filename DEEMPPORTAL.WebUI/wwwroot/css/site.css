@@ -36,7 +36,9 @@ table tbody tr td select, table tbody tr td input[type='text'] {
   padding: 0 !important;
   height: 100%;
 }
-
+.bg-org {
+    background-color: #ffbb00 !important;
+}
 .bg-main {
   background-color: #002e5a !important;
   border-color: #0f447e;

@@ -1,26 +1,26 @@
 ﻿let gOtpModal = $("#modalOTPVerification")
 const gFormLogin = $("#frmLogin")
 
-$(function() {
+$(async function() {
+	$(document).on("submit", function (e) {
+		e.preventDefault();
+		return;
+	})
 
+	$(gOtpModal).on("keyup", "input.form-control", function (e) {
+		if (e.key === "Enter") {
+			console.log("enter enter")
+		}
+	})
+
+	$(gFormLogin).on("keyup", "input.form-control", function (e) {
+		if (e.key === "Enter") {
+			submitLogin(gFormLogin[0])
+		}
+	})
 })
 
-$(document).on("submit", function(e) {
-	e.preventDefault();
-	return;
-})
 
-$(gOtpModal).on("keyup", "input.form-control", function(e) {
-	if (e.key === "Enter") {
-		console.log("enter enter")
-	}
-})
-
-$(gFormLogin).on("keyup", "input.form-control", function(e) {
-	if (e.key === "Enter") {
-		submitLogin(gFormLogin[0])
-	}
-})
 
 async function submitLogin(element) {
 	const form = element.closest("form");

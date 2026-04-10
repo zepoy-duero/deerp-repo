@@ -4,18 +4,20 @@ let organizations = [];
 let locations = [];
 let departments = [];
 var emps = [];
+var isPageReload = true;
 $(async function () {
-    await loadOrganizations();
-    await loadLocations();
-    await loadDepartments();
-    await getAllEmployeeDirectory();
-    $('#select-organization').selectpicker('val', 1);
-    $('#select-location').selectpicker('val', 1);
-    $('#select-department').selectpicker('val', 19);
 
+        await loadOrganizations();
+        await loadLocations();
+        await loadDepartments();
+        await getAllEmployeeDirectory();
+   
+    
+    isPageReload = false;
     // Event bindings
-    $("#select-organization").on("change", async () => {
+    $("#select-organization").on("change", async (e) => {
         showSpinner();
+        console.log(e.event)
         await loadLocations();
         await getAllEmployeeDirectory()
     });
@@ -31,17 +33,14 @@ $(async function () {
 
     $("#search-input").on("keyup",searchEmployees);
 });
-
 // ---------------- SEARCH ----------------
 function searchEmployees() {
     const value = $(this).val().toLowerCase().trim();
-
     $("#employeeContainer .card").each(function () {
         const name = $(this)
             .find(".emp-name")
             .text()
             .toLowerCase();
-
         // Hide/show the column wrapper
         $(this)
             .closest('[class^="col-"]')
@@ -52,49 +51,112 @@ function searchEmployees() {
 function showSpinner() {
     $("#employeeContainer").empty().append(spinnerComponent());
 }
-
 function spinnerComponent() {
     return `
         <div class="d-flex justify-content-center align-items-center">
             <div class="spinner-grow" style="width:3rem;height:3rem;"></div>
         </div>`;
 }
-
 // ---------------- LOAD DROPDOWNS ----------------
 async function loadOrganizations() {
     organizations = await $.get(`${gBaseUrl}/getAllOrganizationList`);
     createSelectOptions("select-organization", organizations);
-    
 }
-
 async function loadLocations() {
     const filteredLoc = await $.get(`${gBaseUrl}/getFilteredLocationList`, {
         orgCode: $("#select-organization").val()
     });
     createSelectOptions("select-location", filteredLoc);
 }
-
 async function loadDepartments() {
+    filterItems = {
+        orgCode: $("#select-organization").val(),
+        locCode: $("#select-location").val()
+    }
+    console.log(filterItems)
     const filteredDept = await $.get(`${gBaseUrl}/getFilteredDepartmentList`, {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val()
     });
-    
-    createSelectOptions("select-department", filteredDept);
-    
+    createSelectOptions("select-department", filteredDept); 
 }
-
 function createSelectOptions(selector, data) {
-    let html = (selector === "select-organization")
-        ? ""
-        : `<option value="0">All</option>`;
 
-    for (const item of data) {
-        html += `<option value="${item.VALUE}">${item.TEXT}</option>`;
-    }
+    let html = `<option value="null">All</option>`;
+    //let html = (selector === "select-organization")
+    //    ? ""
+    //    : `<option value="0">All</option>`;
 
-    $("#" + selector).html(html);
+    switch (selector) {
+                case "select-organization":
+                    for (const item of data) {
+                        if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+                    }
+                    $("#" + selector).html(html);
+                    break;
+                case "select-location":
+
+                    for (const item of data) {
+                        if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+                    }
+                    $("#" + selector).html(html);
+                    break;
+                case "select-department":
+                    for (const item of data) {
+                        if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+                    }
+                    $("#" + selector).html(html);
+                    break;
+            }
+    //for (const item of data) {
+     
+    //    if (selector === "select-department" && item.VALUE == "19") {
+    //        html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`;
+    //    }
+    //    html += `<option value="${item.VALUE}">${item.TEXT}</option>`;
+    //}
+    //console.log(html)
+    //$("#" + selector).html(html);
 }
+//function createSelectOptions(selector, data) {
+//    let html = ""
+//    if (isPageReload == true) {
+//        switch (selector) {
+//            case "select-organization":
+//                html += `<option value="0">All</option>`
+//                for (const item of data) {
+//                    if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+//                }
+//                $("#" + selector).html(html);
+//                break;
+//            case "select-location":
+               
+//                for (const item of data) {
+//                    if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+//                }
+//                $("#" + selector).html(html);
+//                break;
+//            case "select-department":        
+//                for (const item of data) {
+//                    if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+//                }
+//                $("#" + selector).html(html);
+//                break;
+//        }
+//    } else {
+//        if (selector === "select-organization") html += `<option value="0">All</option>`
+//        for (const item in data) {
+//            html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+//        }
+//        $("#" + selector).html(html);
+//    }
+//}
 
 // ---------------- EMPLOYEE LIST ----------------
 async function getAllEmployeeDirectory() {
@@ -106,10 +168,16 @@ async function getAllEmployeeDirectory() {
     console.log(filterParams)
     const employeeList = await $.get(
         `${gBaseUrl}/getAllEmployeeDirectory`,
-        filterParams
+        
+            //orgCode: $("#select-organization").val(),
+            //locCode: $("#select-location").val(),
+            //deptCode: $("#select-department").val()
+            filterParams
+        
     );
 
     render("employeeContainer", employeeList);
+    
     //$("#summary").empty().append(employeeList.length)
 }
 
@@ -130,7 +198,10 @@ function render(containerId, employees) {
 function checkIfNull(val) {
     return val ?? "None";
 }
-
+async function getProfilePic(EMP_CODE) {
+    let empPhoto = await $.get(`${gBaseUrl}/getProfilePic?`, { EMP_CODE: EMP_CODE });
+    console.log(empPhoto)
+}
 
 /* ===============================
    Card Template
@@ -146,15 +217,11 @@ function createCard(emp) {
                              class="position-relative rounded-circle"
                              style="width:110px;height:110px;object-fit:cover;border: 3px solid ${emp.IS_ACTIVE ? '#198754' : '#6861ce'};" />
 
-                        <span class="position-absolute bottom-40 start-60
-                            badge rounded-circle
-                            ${emp.IS_ACTIVE ? 'bg-success' : 'bg-secondary'}"
-                            style="width:18px;height:18px;">
-                        </span>
+                       
                     </div>
 
                     <div class="text-truncate">
-                    <h6 class="mb-0 fw-bolder small emp-name">${emp.EMP_NAME}</h6>
+                    <span class="mb-0 fs-6 fw-bolder small emp-name">${emp.EMP_NAME}</span><br />
                     <small class="text-truncate emp-position">${emp.EMP_POSITION}</small>
                     </div>
                     

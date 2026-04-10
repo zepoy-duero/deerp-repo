@@ -2,8 +2,11 @@
 const homeUrl = '/home';
 
 
+
 $(async function () {
-    renderAttachments();
+   
+   
+    renderAttachments()
     var employees = [
         {
             id: 1,
@@ -34,6 +37,9 @@ $(async function () {
             name: 'Avito'
         },
     ]
+    $('#table').on('click-row.bs.table', function (e, row, $element, field) {
+        $("#editTicketModal").modal("toggle");
+    });
     $('#isMajorChange').on('change', function () {
         $('#managementApproval').toggleClass('d-none', !this.checked);
     });
@@ -189,39 +195,42 @@ $(async function () {
     // UPLOAD FILES
    
 })
-function showAttachments() {
-
-        const blob = new Blob(["Sample content"], { type: "text/plain" });
-        let files = blob;
-        let formData = new FormData();
-
-        for (let i = 0; i < files.length; i++) {
-            formData.append("files", files[i]);
-        }
-
-        $.ajax({
-            url: '/Attachment/Upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (res) {
-
-                // Append new files to UI
-                res.forEach(file => {
-                    $("#attachmentsPreviewContainer").append(`
-                    <div class="col-md-6 attachment-item">
-                        <div class="border rounded p-2 d-flex justify-content-between">
-                            <span class="file-name">${file}</span>
-                            <button class="btn btn-sm btn-outline-primary btnPreview">Preview</button>
-                        </div>
-                    </div>
-                `);
-                });
-
-            }
-        });
+function toggleSearchBar() {
+    $("#inpSearchParam").toggleClass("d-none");
 }
+//    function showAttachments() {
+
+//        const blob = new Blob(["Sample content"], { type: "text/plain" });
+//        let files = blob;
+//        let formData = new FormData();
+
+//        for (let i = 0; i < files.length; i++) {
+//            formData.append("files", files[i]);
+//        }
+
+//        $.ajax({
+//            url: '/Attachment/Upload',
+//            type: 'POST',
+//            data: formData,
+//            processData: false,
+//            contentType: false,
+//            success: function (res) {
+
+//                // Append new files to UI
+//                res.forEach(file => {
+//                    $("#attachmentsPreviewContainer").append(`
+//                    <div class="col-md-6 attachment-item">
+//                        <div class="border rounded p-2 d-flex justify-content-between">
+//                            <span class="file-name">${file}</span>
+//                            <button class="btn btn-sm btn-outline-primary btnPreview">Preview</button>
+//                        </div>
+//                    </div>
+//                `);
+//                });
+
+//            }
+//        });
+//}
 function renderDropdown(list) {
     $("#employeedropdown").empty();
 
@@ -258,3 +267,6 @@ async function selectUsers() {
     let data = await $.get(`/manage/users/getUsers`, params)
     console.log(data)
 }
+function mounted() {
+    $('#table').bootstrapTable()
+}  

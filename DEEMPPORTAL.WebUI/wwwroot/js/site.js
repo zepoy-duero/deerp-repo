@@ -14,10 +14,11 @@ $(function () {
 	// Global ajax error
 	// Throws an error after a certain time if the session is expired.
 	$(document).ajaxError(function (event, request, settings) {
-		// $("#modalLoadingScreen").css("display", "")
+		 //$("#modalLoadingScreen").css("display", "")
 		// $("#shopMain").css("overflow", "").css("padding-right", "")
 
 		// redirect to the login page if the user session is expired.
+		console.log(request.status)
 		if (request.status === 401) {
 			window.location.href = "/auth/logout";
 		}

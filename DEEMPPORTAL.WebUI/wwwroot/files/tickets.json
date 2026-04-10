@@ -1,0 +1,82 @@
+[
+  {
+    "ticketId": "MIS#1001",
+    "requestedBy": "Alice Johnson",
+    "description": "Printer in HR room is jammed.",
+    "dateSubmitted": "2026-04-07",
+    "status": "In Progress",
+    "priority": "Medium"
+  },
+  {
+    "ticketId": "MIS#1002",
+    "requestedBy": "Bob Smith",
+    "description": "VPN connectivity issues.",
+    "dateSubmitted": "2026-04-07",
+    "status": "Testing",
+    "priority": "High"
+  },
+  {
+    "ticketId": "MIS#1003",
+    "requestedBy": "Charlie Davis",
+    "description": "New monitor setup request.",
+    "dateSubmitted": "2026-04-06",
+    "status": "Complete",
+    "priority": "Low"
+  },
+  {
+    "ticketId": "MIS#1004",
+    "requestedBy": "Diana Evans",
+    "description": "Cannot access shared drive.",
+    "dateSubmitted": "2026-04-06",
+    "status": "Pending",
+    "priority": "High"
+  },
+  {
+    "ticketId": "MIS#1005",
+    "requestedBy": "Ethan Foster",
+    "description": "Password reset required.",
+    "dateSubmitted": "2026-04-05",
+    "status": "Complete",
+    "priority": "Medium"
+  },
+  {
+    "ticketId": "MIS#1006",
+    "requestedBy": "Fiona Green",
+    "description": "Software update failing.",
+    "dateSubmitted": "2026-04-05",
+    "status": "Maintenance",
+    "priority": "Medium"
+  },
+  {
+    "ticketId": "MIS#1007",
+    "requestedBy": "George Harris",
+    "description": "Laptop keyboard malfunctioning.",
+    "dateSubmitted": "2026-04-04",
+    "status": "In Progress",
+    "priority": "Medium"
+  },
+  {
+    "ticketId": "MIS#1008",
+    "requestedBy": "Hannah Ivey",
+    "description": "Email archive request.",
+    "dateSubmitted": "2026-04-04",
+    "status": "Complete",
+    "priority": "Low"
+  },
+  {
+    "ticketId": "MIS#1009",
+    "requestedBy": "Ian Jones",
+    "description": "Mouse not responding.",
+    "dateSubmitted": "2026-04-03",
+    "status": "Complete",
+    "priority": "Low"
+  },
+  {
+    "ticketId": "MIS#1010",
+    "requestedBy": "Julia King",
+    "description": "External speaker crackling.",
+    "dateSubmitted": "2026-04-03",
+    "status": "Pending",
+    "priority": "Low"
+  }
+]

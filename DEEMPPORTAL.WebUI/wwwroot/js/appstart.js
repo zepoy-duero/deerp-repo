@@ -323,7 +323,7 @@ async function getAllMenuItems() {
         if (item.HAS_SUB_MENU === 'N') {
           return `
 						<li class="nav-item">
-							<a class="sidenav-menu" href="/page?name=${item.MENU_NAME}" has-submenu="${item.HAS_SUB_MENU}">
+								<a class="sidenav-menu" href="/page?name=${item.MENU_NAME}" has-submenu="${item.HAS_SUB_MENU}">
 								<i class="${item.ICON_NAME}"></i>
 								<p>${item.MENU_NAME}</p>
 							</a>

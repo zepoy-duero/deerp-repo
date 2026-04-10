@@ -78,4 +78,15 @@ public class EmployeeDirectoryController(
 
     return Ok(options);
   }
+    [Authorize]
+    [HttpGet("getProfilePic")]
+    public async Task<IActionResult> GetProfilePic(int EMP_CODE)
+    {
+        var profilePic = await _employeeDirectoryService.GetProfilePicAsync(EMP_CODE);
+        if (profilePic == null)
+        {
+            return NotFound();
+        }
+        return File(profilePic, "image/jpeg");
+    }
 }

@@ -1,9 +1,9 @@
 ﻿<style>
-    .modal-body {
+    /* .modal-body {
         padding: 0;
         height: calc(100vh - 56px);
         overflow: hidden;
-    }
+    } */
 
     .modal-content {
         height: 100vh;
@@ -30,24 +30,13 @@
         }
 
         .nav-link.active {
-            background-color: #0d6efd;
+            background-color: #002e5a;
             color: #fff !important;
         }
 
-    /* Content */
-    .content-scroll {
-        height: 100%;
-        overflow-y: auto;
-        padding: 10px;
-        background: #f4f6f9;
-    }
-
     /* Section Cards */
     .section-card {
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
+        height: 400px;
     }
 
     .section-title {
@@ -64,7 +53,7 @@
     .attachment-box {
         border: 2px dashed #ced4da;
         border-radius: 10px;
-        padding: 20px;
+        padding: 5px;
         text-align: center;
         background: #fff;
         transition: 0.2s;
@@ -84,25 +73,24 @@
     }
 </style>
 
-<div class="modal fade" id="editTicketModal" tabindex="-1">
+<div class="modal fade" id="editTicketModal" tabindex="0">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
 
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
-                <h6 class="modal-title">Update Ticket - MIS#001</h6>
+                <h6 class="modal-title">Update Ticket - MIS#001 This is a sample subject</h6>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- BODY -->
-            <div class="modal-body">
-                <div class="row g-0">
+            <div class="modal-body  position-relative" data-bs-spy="scroll">
+                <div class="row">
 
                     <!-- SIDEBAR -->
-                    <div class="col-md-3 col-lg-2 modalNavSidebar">
-                        <div class="container position-relative">
-                            <nav id="ticketNav" class="nav nav-main flex-column position-fixed">
-                                <a class="nav-link active text-start" href="#ticketUserRequest">
+                    <div class="col-md-3 col-lg-2 ">
+                            <nav id="ticketNav" class="nav nav-main flex-column position-fixed ">
+                            <a class="nav-link active text-start" href="#ticketUserRequest">
                                     <i class="fas fa-hand-point-up me-3"></i>
                                     User Request
                                 </a>
@@ -110,35 +98,45 @@
                                     <i class="fas fa-thumbs-up me-3"></i>
                                     Approvals
                                 </a>
-                                <a class="nav-link text-start" href="#ticketAssignedTo">
+                            <a class="nav-link text-start" href="#ticketAssignedTo">
                                     <i class="fas fa-user me-3"></i>
                                     Assigned To
                                 </a>
-                                <a class="nav-link text-start" href="#ticketStatus">
+                                @* <a class="nav-link text-start" href="#ticketStatus">
                                     <i class="fas fa-circle me-3"></i>
                                     Status
-                                </a>
+                                </a> *@
                                 <a class="nav-link text-start" href="#ticketReview">
                                     <i class="fas fa-pushed me-3"></i>
-                                    Action Taken
+                                    Review
                                 </a>
                             </nav>
-                        </div>
                     </div>
 
                     <!-- CONTENT -->
                     <div class="col-md-9 col-lg-10">
                         <div data-bs-spy="scroll"
                              data-bs-target="#ticketNav"
-                             class="content-scroll"
-                             tabindex="0">
-
+                             data-bs-offset="0"
+                             tabindex="0"
+                              >
                             <!-- USER REQUEST -->
                             <div id="ticketUserRequest" class="card section-card">
                                 <div class="card-body">
-                                    <div class="section-title text-main">User Request</div>
+                                    <div class="section-title text-main">User Request - MIS#001</div>
 
                                     <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Ticket Subject</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text " id="basic-addon1">
+                                                    <i class="fas fa-ticket"></i>
+                                                </span>
+                                                <input id="ticketSubject" type="text" class="form-control" placeholder="Subject issue . . ">
+
+
+                                            </div>
+                                        </div>
                                         <div class="col-md-3">
                                             <label class="form-label">Requested By</label>
                                             <div class="input-group">
@@ -167,22 +165,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
-                                            <label class="form-label">Ticket Subject</label>
-                                            <div class="input-group">
-                                            <span class="input-group-text " id="basic-addon1">
-                                                <i class="fas fa-ticket"></i>
-                                            </span>
-                                                <input id="ticketSubject" type="text" class="form-control" placeholder="Subject issue . . ">
-                                               
-                                             
-                                            </div>
-                                        </div>
+                                       
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <textarea class="form-control" style="height: 100px" placeholder="Detailed description"></textarea>
+                                                <textarea class="form-control" style="height: 200px"  placeholder="Detailed description"></textarea>
                                                 <label>Description</label>
-                                            </div>
+                                            </div> 
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Attachments</label>
@@ -190,32 +178,24 @@
                                                 <div class="text-muted">Upload files</div>
                                                 <input type="file" class="form-control mt-2" multiple>
                                             </div>
-                                            <div id="attachmentsPreviewContainer" class="mt-4"></div>
+                                            <div id="attachmentsPreviewContainer" class="" style="max-height: 200px; overflow-y:scroll"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- APPROVAL -->
-                            <div id="ticketApproval" class="card section-card">
+                            <div id="ticketApproval" class="card section-card" style="height: 300px !important;">
                                 <div class="card-body">
                                     <div class="section-title text-main">Approval</div>
 
                                     <div class="row g-3">
-                                        <div class="col-md-4">
-                                            
+                                        <div class="col-md-4">                                            
                                                 <label class="form-label">Department Manager</label>
-                                                
-                                       
-
                                             <div class="input-group">
-
                                                 <span class="text-center input-group-text">
-
                                                     <i class="fas fa-user" id="basic-addon1"></i>
-
-                                                </span>
-                                           
+                                                </span>                                           
                                                 <select id="managerApproval" class="form-select">
                                                     <option>Pending</option>
                                                 </select>
@@ -264,7 +244,7 @@
                                 <div class="card-body">
                                     <div class="section-title text-main">Assignment</div>
 
-                                    <div class="row g-3">
+                                    <div class="row g-1">
                                         
                                         <div class="col-md-3">
                                             <div class="input-group">
@@ -298,42 +278,40 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="input-group">
                                                     <label class="input-group-text">Assigned To</label>
                                                     <select class="form-select"></select>
                                                 </div>
                                             </div>
-                                        <div class="col-md-3">
+                                             <div class="col-md-4">
                                             
                                             <div class="d-flex gap-2">
                                                 <div class="input-group">
                                                     <label for="duration" class="input-group-text">Duration</label>
-                                                        <select id="duration" class="form-select">
-                                                            <option>Minutes</option>
-                                                            <option>Hours</option>
-                                                            <option>Days</option>
-                                                        </select>
-                                                        
                                                         <input type="number" value="0" id="basic-addon1" class="form-control input-group-text">
-                                                        @* <label>To</label> *@
+                                                    <select id="duration" class="form-select w-50">
+                                                        <option>Minutes</option>
+                                                        <option>Hours</option>
+                                                        <option>Days</option>
+                                                    </select>
                                                    
                                                 </div>
                                            
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="input-group">
-                                            <label class="input-group-text">Start</label>
-                                            <input type="date" class="form-control">
-                                         </div>
+                                                <label class="input-group-text">Start</label>
+                                                <input type="date" class="form-control">
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                                 <div class="input-group">
-                                            <label class="input-group-text">End</label>
-                                            <input type="date" class="form-control">
-                                        </div>
+                                                    <label class="input-group-text">End</label>
+                                                    <input type="date" class="form-control">
+                                                </div>
                                         </div>
                                     </div>
                                 </div>
@@ -345,11 +323,27 @@
                                     <div class="section-title text-main">Review</div>
 
                                     <div class="row g-3">
-                                        <div class="col-md-3"><input class="form-control"><label>Reviewed By</label></div>
-                                        <div class="col-md-3"><input type="date" class="form-control"><label>Date</label></div>
+                                        <div class="col-md-3">
+                                            <label>Reviewed By</label>
+                                            <input class="form-control">
+                                           
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Date</label>
+                                            <input type="date" class="form-control">
+                                           
+                                        </div>
                                         @* <div class="col-md-3"><div class="form-floating"><input class="form-control"><label>Remarks</label></div></div> *@
-                                        <div class="col-md-3"><input class="form-control"><label>Version</label></div>
-                                        <div class="col-md-3"><input type="email" class="form-control"><label>Email</label></div>
+                                        <div class="col-md-3">
+                                            <label>Version</label>
+                                            <input class="form-control">
+                                           
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control">
+                                          
+                                        </div>
                                     </div>
                                     <div class="row mt-2">
                                         <div class="col">
@@ -375,14 +369,20 @@
                             </div>
 
                         </div>
+                        <div class="modal-footer position-sticky mb-0 border-0">
+                            <button class="btn btn-danger float-start mb-0">
+                                <i class="fas fa-cloud-arrow-up me-2"></i>
+                                Update Ticket</button>
+                        </div>
+                       
                     </div>
 
                 </div>
 
                 <!-- FOOTER -->
-                <div class="modal-footer">
-                    <button class="btn btn-primary">Update Ticket</button>
-                </div>
+                @* <div class="modal-footer">
+                    <button class="btn btn-danger">Update Ticket</button>
+                </div> *@
 
             </div>
         </div>
@@ -396,7 +396,7 @@
         fileItem.className = "file-preview-item";
 
         const fileInfo = document.createElement("div");
-        fileInfo.className = "file-info";
+        fileInfo.className = "file-info text-small";
 
         // File Icon or Thumbnail
         let iconElement;
@@ -417,9 +417,10 @@
         }
 
         const fileName = document.createElement("div");
+
         fileName.innerHTML = `
-            <div><strong>${file.name}</strong></div>
-            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+            <div><strong class="text-small">${file.name}</strong></div>
+            <small class="text-muted text-small">${(file.size / 1024).toFixed(2)} KB</small>
         `;
 
         fileInfo.appendChild(iconElement);
@@ -438,6 +439,6 @@
         fileItem.appendChild(fileInfo);
         fileItem.appendChild(removeBtn);
 
-        previewContainer.appendChild(fileItem);
+        attachmentsPreviewContainer.appendChild(fileItem);
     }
 </script>
