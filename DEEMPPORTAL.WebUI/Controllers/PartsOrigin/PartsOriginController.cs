@@ -1,12 +1,18 @@
-﻿using ExcelDataReader;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
+﻿using DEEMPPORTAL.Application.PartsOrigin;
 //using System.Globalization;
 using DEEMPPORTAL.Domain.PartsOrigin;
+using DEEMPPORTAL.Infrastructure;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.EMMA;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
+using System.Diagnostics;
 using System.Globalization;
-using DEEMPPORTAL.Application.PartsOrigin;
+using DataTable = System.Data.DataTable;
+using DataSet = System.Data.DataSet;
 
 
 namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
@@ -14,11 +20,12 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
 {
     [Authorize]
     [Route("parts-origin")]
-    public class PartsOriginController(IPartsOriginService partsRepo) : Controller
+    //public class PartsOriginController(IPartsOriginService partsRepo) : Controller
+        public class PartsOriginController(IPartsOriginService partsRepo, PartsOriginRepository repo) : Controller
     {
        
         private readonly IPartsOriginService _partsRepo = partsRepo;
-
+        private readonly PartsOriginRepository _repo = repo;
         //private bool IsLoggedIn() =>
         //   HttpContext.Session.GetString("IsLoggedIn") == "true";
 
@@ -104,7 +111,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                 rows = ReadInterpartExcel(uploadFile, supName);
 
             else // BLUMAQ
-                rows = ReadBlumaqExcel(uploadFile, supName);
+                rows = ReadBlumaqExcel(uploadFile, supName, orgCode);
 
             return Json(new { total = rows.Count, data = rows });
         }
@@ -216,7 +223,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
 
                 string partNo = CellToText(row, COL_ITEMNO);
                 string desc = CellToText(row, COL_DESC);
-                string hs = CellToText(row, COL_HSCODE);
+                string hs = CellToText(row, COL_HSCODE).Replace(".", "");
                 string coo = CellToText(row, COL_COO).ToUpperInvariant();
 
                 // Skip footer / junk lines
@@ -283,6 +290,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             const int COL_STOCKCODE = 0;    // A
             const int COL_DESC = 3;         // D
             const int COL_TARIFF = 6;       // G
+            const int COL_WEIGHT = 7;       // H
             const int COL_COO = 8;          // I
 
             int startRow = FindRowContaining(table, "Stock code");
@@ -294,9 +302,11 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
 
                 string stockCode = CellToText(row, COL_STOCKCODE);
                 string desc = CellToText(row, COL_DESC);
-                string hs = CellToText(row, COL_TARIFF);
+                string hs = CellToText(row, COL_TARIFF).Replace(".", "");
+                string weight = CellToText(row, COL_WEIGHT);
                 string coo = CellToText(row, COL_COO).ToUpperInvariant();
 
+                //Console.WriteLine("INTERPART weight: " + weight);
                 string rowText = (stockCode + " " + desc + " " + hs + " " + coo).ToUpperInvariant();
 
                 if (rowText.Contains("EXPORT DECLARATION") || rowText.Contains("TOTAL NET WEIGHT") || rowText.StartsWith("TOTAL"))
@@ -307,6 +317,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                 // Stop/skip if we reached empty lines
                 if (string.IsNullOrWhiteSpace(stockCode) &&
                     string.IsNullOrWhiteSpace(desc) &&
+                    string.IsNullOrWhiteSpace(weight) &&
                     string.IsNullOrWhiteSpace(hs) &&
                     string.IsNullOrWhiteSpace(coo))
                 {
@@ -330,6 +341,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                     InvoiceNo = invoiceNo,
                     PartNo = stockCode.ToUpperInvariant(),
                     Description = desc.ToUpperInvariant(),
+                    Weight = weight.ToUpperInvariant(),
                     Origin = string.IsNullOrWhiteSpace(cooFull) ? coo : cooFull.ToUpperInvariant(),
                     HSCode = hs
                 });
@@ -338,7 +350,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             return results;
         }
         // ---------------- BLUMAQ ----------------
-        private List<PartsOrgViewModel.PartRow> ReadBlumaqExcel(IFormFile file, string supplierName)
+        //private List<PartsOrgViewModel.PartRow> ReadBlumaqExcel(IFormFile file, string supplierName)
+        private List<PartsOrgViewModel.PartRow> ReadBlumaqExcel(IFormFile file, string supplierName, int orgCode)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
@@ -367,25 +380,65 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             const int COL_INVOICENO = 1; // B
             const int COL_PARTNO = 2; // C
             const int COL_DESC = 3; // D
+            const int COL_WEIGHT = 7; // H
             const int COL_ORIGIN = 9; // J
             const int COL_HSCODE = 10; // K
 
             int invalidStreak = 0;
             const int MAX_INVALID_STREAK = 8;
-
+          
             for (int r = headerRow + 1; r < table.Rows.Count; r++)
             {
                 var row = table.Rows[r];
 
                 string invoiceNo = CellToText(row, COL_INVOICENO);
                 string partNo = CellToText(row, COL_PARTNO);
+                partNo = (partNo ?? "").Trim().ToUpperInvariant();
+                if (!string.IsNullOrWhiteSpace(partNo))
+                {
+                    Console.WriteLine("First resolve: " + partNo);
+
+                    bool shouldResolve = true;
+
+                    if (partNo.StartsWith("VO", StringComparison.OrdinalIgnoreCase))
+                    {
+                        partNo = partNo.Substring(2).Trim();   // VO20459855 -> 20459855
+                        shouldResolve = false;
+                    }
+                    else if (partNo.StartsWith("CU", StringComparison.OrdinalIgnoreCase))
+                    {
+                        partNo = partNo.Substring(2).Trim();   // CU12345 -> 12345
+                        shouldResolve = false;
+                    }
+                    else if (partNo.StartsWith("PK", StringComparison.OrdinalIgnoreCase))
+                    {
+                        partNo = partNo.Substring(2).Trim();   // PK12345 -> 12345
+                        shouldResolve = false;
+                    }
+                    else if (partNo.StartsWith("JC", StringComparison.OrdinalIgnoreCase))
+                    {
+                        partNo = partNo.Substring(2).Trim();   // JC90414800 -> 90414800
+                        shouldResolve = true;                  // then resolve in SP
+                    }
+
+                    Console.WriteLine("Before resolve: " + partNo);
+
+                    if (shouldResolve)
+                    {
+                        var resolved = _repo.ResolveBlumaqPartNo(orgCode, partNo);
+                        partNo = resolved.ResolvedPartNo;
+                    }
+                }
+
                 string desc = CellToText(row, COL_DESC);
+                string weight = CellToText(row, COL_WEIGHT);
                 string origin = CellToText(row, COL_ORIGIN).ToUpperInvariant();
-                string hs = CellToText(row, COL_HSCODE);
+                string hs = CellToText(row, COL_HSCODE).Replace(".", "");
 
                 bool allEmpty = string.IsNullOrWhiteSpace(invoiceNo)
                              && string.IsNullOrWhiteSpace(partNo)
                              && string.IsNullOrWhiteSpace(desc)
+                             && string.IsNullOrWhiteSpace(weight)
                              && string.IsNullOrWhiteSpace(origin)
                              && string.IsNullOrWhiteSpace(hs);
 
@@ -401,6 +454,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
                     InvoiceNo = invoiceNo.Trim(),
                     PartNo = partNo.Trim().ToUpperInvariant(),
                     Description = (desc ?? "").Trim().ToUpperInvariant(),
+                    Weight = (weight ?? "").Trim(),
                     Origin = (origin ?? "").Trim(),
                     HSCode = (hs ?? "").Trim()
                 });

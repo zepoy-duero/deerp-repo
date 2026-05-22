@@ -89,264 +89,294 @@
                 </a>
 
             </div>
-    <div class="card shadow-sm">
-        <div class="card-header text-white text-center bg-main-gradient">
-            Update Single Part Number Origin/HS Code
-        </div>
+            <div class="card shadow-sm">
+                <div class="card-header text-white text-center bg-main-gradient">
+                    Update Single Part Number Origin/HS Code
+                </div>
 
-        <div class="card-body singleCard">
-            <form asp-action="Search" asp-controller="SingleRecordUpdate" method="post" id="frmSearch">
-                <input type="hidden" asp-for="OrgCode" id="OrgCode" />
-                <input type="hidden" asp-for="SelectedSupplierName" id="SelectedSupplierName" />
-                <input type="hidden" asp-for="SelectedCategoryName" id="SelectedCategoryName" />
+                <div class="card-body singleCard">
+                    <form asp-action="Search" asp-controller="SingleRecordUpdate" method="post" id="frmSearch">
+                        <input type="hidden" asp-for="OrgCode" id="OrgCode" />
+                        <input type="hidden" asp-for="SelectedSupplierName" id="SelectedSupplierName" />
+                        <input type="hidden" asp-for="SelectedCategoryName" id="SelectedCategoryName" />
 
-                <!-- OLD keys for SAVE -->
-                <input type="hidden" id="oldSupCode" />
-                <input type="hidden" id="oldInvoice" />
-                <input type="hidden" id="oldPartNo" />
-                <input type="hidden" id="oldOrigin" />
-                <input type="hidden" id="oldHsCode" />
+                        <!-- OLD keys for SAVE -->
+                        <input type="hidden" id="oldCtgyCode" />
+                        <input type="hidden" id="oldSupCode" />
+                        <input type="hidden" id="oldInvoice" />
+                        <input type="hidden" id="eOldWeight" />
+                        <input type="hidden" id="oldPartNo" />
+                        <input type="hidden" id="oldOrigin" />
+                        <input type="hidden" id="oldHsCode" />
 
-                <div class="row row-cols-auto g-4 align-items-end">
-                    <div class="col">
+                        <div class="row row-cols-auto g-4 align-items-end">
+                            <div class="col">
                                 <div class="selectCtgy">
                                     <label class="form-label fw-semibold">Select Category</label>
                                     <select class="form-select" id="ddlCategory" asp-for="SelectedCategory" asp-items="Model.Categories"></select>
                                 </div>
-                    </div>
-                    <div class="col">
+                            </div>
+                            <div class="col">
                                 <div class="selectPartNo">
                                     <label class="form-label fw-semibold">Part No</label>
                                     <input class="form-control" id="txtPartNo" asp-for="PartNo" />
                                 </div>
-                    </div>
+                            </div>
 
-                   
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Select Supplier</label>
-                                    <select id="ddlSupplier" class="form-select" asp-for="SelectedSupplier" asp-items="Model.Suppliers"></select>
-                                </div>
-                   
-                    
-                                <div class="col-md-2 d-flex align-items-end px-4">
-                                    <button type="submit" id="btnSearch" class="btn btn-danger w-100">
-                                        <i class="bi bi-search"></i> Search
-                                    </button>
-                                </div>
-                      
 
-                </div>
-                <div class="mt-4" style="padding-left: 140px;">
-                    @* <button type="submit" id="btnSearch" class="btn btn-danger px-5">  <i class="bi bi-search"></i> Search</button> *@             
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Select Supplier</label>
+                                <select id="ddlSupplier" class="form-select" asp-for="SelectedSupplier" asp-items="Model.Suppliers"></select>
+                            </div>
+
+
+                            <div class="col-md-2 d-flex align-items-end px-4">
+                                <button type="submit" id="btnSearch" class="btn btn-danger w-100">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+
+
+                        </div>
+                        <div class="mt-4" style="padding-left: 140px;">
+                            @* <button type="submit" id="btnSearch" class="btn btn-danger px-5">  <i class="bi bi-search"></i> Search</button> *@             
                     <button type="button" class="btn btn-danger px-4 ms-5 me-2" id="btnAdd"> <i class="bi-plus-lg"></i>  Add</button>
-                    <button id="btnClear" type="button" class="btn btn-danger px-4"><i class="bi-x-circle"></i>   Clear</button>
+                            <button id="btnClear" type="button" class="btn btn-danger px-4"><i class="bi-x-circle"></i>   Clear</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+
+            @if (Model != null && Model.IsSearched)
+            {
+                if (Model.Rows != null && Model.Rows.Count > 0)
+                {
+                    <div class="card shadow-sm mt-4" id="cardPanel">
+                        <div class="card-body">
+
+                            <!-- Delete Selected Button -->
+                            <div class="d-flex align-items-center mb-2">
+                                <button type="button" id="btnDeleteSelected" class="btn btn-link btn-delete-selected" disabled>
+                                    Delete
+                                </button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width:40px;" class="text-center">
+                                                <input type="checkbox" id="chkAll" />
+                                            </th>
+                                            <th>Category</th>
+                                            <th>Part No</th>
+                                            <th>Description</th>
+                                            <th>Weight</th>
+                                            <th>Supplier</th>
+                                            <th>Invoice No</th>
+                                            <th>Origin</th>
+                                            <th>HS Code</th>
+                                            <th>Updated Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var r in Model.Rows)
+                                        {
+                                            <tr class="gridRow" style="cursor:pointer;"
+                                                data-ctgycode="@r.CtgyCode"
+                                                data-supname="@r.Supplier"
+                                                data-supcode="@r.SupplierCode"
+                                                data-invoice="@r.InvoiceNo"
+                                                data-category="@r.Category"
+                                                data-partno="@r.PartNo"
+                                                data-desc="@r.Description"
+                                                data-weight="@r.Weight"
+                                                data-origin="@r.Origin"
+                                                data-hscode="@r.HSCode"
+                                                data-upddate="@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")">
+
+                                                <!-- Checkbox column -->
+                                                <td class="text-center" style="cursor:default;">
+                                                    <input type="checkbox"
+                                                           class="rowChk"
+                                                           data-org="@Model.OrgCode"
+                                                           data-ctgy="@r.CtgyCode"
+                                                           data-sup="@r.SupplierCode"
+                                                           data-inv="@r.InvoiceNo"
+                                                           data-part="@r.PartNo" />
+                                                </td>
+
+                                                <td class="colCategory">@r.Category</td>
+                                                <td class="colPartNo">@r.PartNo</td>
+                                                <td class="colDesc">@r.Description</td>
+                                                <td class="colWeight">@r.Weight</td>
+                                                <td class="colSupplier">@r.Supplier</td>
+                                                <td class="colInvoice">@r.InvoiceNo</td>
+                                                <td class="colOrigin">@r.OriginName</td>
+                                                <td class="colHsCode">@r.HSCode</td>
+                                                <td class="colUpdDate">@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="mt-4 text-muted text-center">No data</div>
+                }
+            }
+        </div>
+
+        <!-- EDIT PANEL -->
+        <div class="card shadow-sm mt-4 mx-auto edit-card" id="editPanel" style="display:none;">
+            <div class="card-header fw-bold">Edit Part Origin / HS Code</div>
+
+            <div class="card-body p-4">
+                <input type="hidden" id="eOrgCode" value="@Model?.OrgCode" />
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Category:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="Edit_CATEGORY" asp-items="Model.Categories"></select>
+                            </div>
+                          
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="ddlEditSupplier">
+                                    @foreach (var s in Model.Suppliers)
+                                    {
+                                        <option value="@s.Value">@s.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="eInvoice" /></div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Weight:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="eWeight" /></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="ePartNo" /></div>
+                        </div>
+                        
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="eOrigin" asp-items="Model.Origins"></select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="eHsCodeLeft" /></div>
+                        </div><div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Description:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="eDescLeft" /></div>
+                        </div>
+                   
+
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-danger px-4" id="btnSave">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD PANEL -->
+        <div class="card shadow-sm mt-4 mx-auto edit-card" id="addPanel" style="display:none;">
+            <div class="card-header fw-bold">Add Parts Origin / HS Code</div>
+
+            <div class="card-body p-4">
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Category:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="Add_CATEGORY" asp-items="Model.Categories"></select>
+                            </div>
+                        </div>
+                       
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="Add_SUP_CODE">
+                                    @foreach (var s in Model.Suppliers)
+                                    {
+                                        <option value="@s.Value">@s.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="Add_INVOICENO" /></div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Weight:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="Add_WEIGHT" /></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="Add_PARTNO" /></div>
+                        </div>
+
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
+                            <div class="col-8">
+                                <select class="form-select edit-ash" id="Add_ORIGIN" asp-items="Model.Origins"></select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="Add_HSCODE" /></div>
+                        </div>
+
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-4"><label class="form-label mb-0">Description:</label></div>
+                            <div class="col-8"><input class="form-control edit-ash" id="Add_DESCRIPTION" /></div>
+                        </div>
+
+                        <div class="text-end mt-4 d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-danger px-4" id="btnAddSave">Save</button>
+                            <button type="button" class="btn btn-secondary px-4" id="btnAddCancel">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
-
-    @if (Model != null && Model.IsSearched)
-    {
-        if (Model.Rows != null && Model.Rows.Count > 0)
-        {
-            <div class="card shadow-sm mt-4" id="cardPanel">
-                <div class="card-body">
-
-                    <!-- Delete Selected Button -->
-                    <div class="d-flex align-items-center mb-2">
-                        <button type="button" id="btnDeleteSelected" class="btn btn-link btn-delete-selected" disabled>
-                            Delete
-                        </button>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-sm mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:40px;" class="text-center">
-                                        <input type="checkbox" id="chkAll" />
-                                    </th>
-                                    <th>Category</th>
-                                    <th>Part No</th>
-                                    <th>Description</th>
-                                    <th>Supplier</th>
-                                    <th>Invoice No</th>
-                                    <th>Origin</th>
-                                    <th>HS Code</th>
-                                    <th>Updated Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var r in Model.Rows)
-                                {
-                                    <tr class="gridRow" style="cursor:pointer;"
-                                        data-supname="@r.Supplier"
-                                        data-supcode="@r.SupplierCode"
-                                        data-invoice="@r.InvoiceNo"
-                                        data-category="@r.Category"
-                                        data-partno="@r.PartNo"
-                                        data-desc="@r.Description"
-                                        data-origin="@r.Origin"
-                                        data-hscode="@r.HSCode"
-                                        data-upddate="@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")">
-
-                                        <!-- Checkbox column -->
-                                        <td class="text-center" style="cursor:default;">
-                                            <input type="checkbox"
-                                                   class="rowChk"
-                                                   data-org="@Model.OrgCode"
-                                                   data-ctgy="@r.CtgyCode"
-                                                   data-sup="@r.SupplierCode"
-                                                   data-inv="@r.InvoiceNo"
-                                                   data-part="@r.PartNo" />
-                                        </td>
-
-                                        <td class="colCategory">@r.Category</td>
-                                        <td class="colPartNo">@r.PartNo</td>
-                                        <td class="colDesc">@r.Description</td>
-                                        <td class="colSupplier">@r.Supplier</td>
-                                        <td class="colInvoice">@r.InvoiceNo</td>
-                                        <td class="colOrigin">@r.OriginName</td>
-                                        <td class="colHsCode">@r.HSCode</td>
-                                        <td class="colUpdDate">@(r.UpdateDate?.ToString("dd-MM-yyyy") ?? "")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="mt-4 text-muted text-center">No data</div>
-        }
-    }
-</div>
-
-<!-- EDIT PANEL -->
-<div class="card shadow-sm mt-4 mx-auto edit-card" id="editPanel" style="display:none;">
-    <div class="card-header fw-bold">Edit Part Origin / HS Code</div>
-
-    <div class="card-body p-4">
-        <input type="hidden" id="eOrgCode" value="@Model?.OrgCode" />
-
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="ePartNo" /></div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
-                    <div class="col-8">
-                        <select class="form-select edit-ash" id="ddlEditSupplier">
-                            @foreach (var s in Model.Suppliers)
-                            {
-                                <option value="@s.Value">@s.Text</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="eInvoice" /></div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Description:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="eDescLeft" /></div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
-                    <div class="col-8">
-                        <select class="form-select edit-ash" id="eOrigin" asp-items="Model.Origins"></select>
-                    </div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="eHsCodeLeft" /></div>
-                </div>
-
-                <div class="text-end mt-4">
-                    <button type="button" class="btn btn-danger px-4" id="btnSave">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ADD PANEL -->
-<div class="card shadow-sm mt-4 mx-auto edit-card" id="addPanel" style="display:none;">
-    <div class="card-header fw-bold">Add Parts Origin / HS Code</div>
-
-    <div class="card-body p-4">
-        <div class="row g-4">
-
-            <div class="col-md-6">
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Part No:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="Add_PARTNO" /></div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Supplier:</label></div>
-                    <div class="col-8">
-                        <select class="form-select edit-ash" id="Add_SUP_CODE">
-                            @foreach (var s in Model.Suppliers)
-                            {
-                                <option value="@s.Value">@s.Text</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Invoice No:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="Add_INVOICENO" /></div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Description:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="Add_DESCRIPTION" /></div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">Origin:</label></div>
-                    <div class="col-8">
-                        <select class="form-select edit-ash" id="Add_ORIGIN" asp-items="Model.Origins"></select>
-                    </div>
-                </div>
-
-                <div class="row mb-3 align-items-center">
-                    <div class="col-4"><label class="form-label mb-0">HS Code:</label></div>
-                    <div class="col-8"><input class="form-control edit-ash" id="Add_HSCODE" /></div>
-                </div>
-
-                <div class="text-end mt-4 d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-danger px-4" id="btnAddSave">Save</button>
-                    <button type="button" class="btn btn-secondary px-4" id="btnAddCancel">Cancel</button>
-                </div>
-            </div>
-
-        </div>
-        </div>
-
-</div>    
-</div>
 </div>
 
 @section Scripts {
-    
+
     <script>
         let selectedRow = null;
 
@@ -401,7 +431,8 @@
                 $("#cardPanel").hide();
                 $("#addPanel").hide();
                 $("#txtPartNo").val("");
-                $("#oldSupCode,#oldInvoice,#oldPartNo,#oldOrigin,#oldHsCode").val("");
+                // $("#oldSupCode,#oldInvoice,#oldPartNo,#oldOrigin,#oldHsCode").val("");
+                $("#oldCtgyCode,#oldSupCode,#oldInvoice,#oldPartNo,#eOldWeight,#oldOrigin,#oldHsCode").val("");
                 selectedRow = null;
 
                 $("#chkAll").prop("checked", false);
@@ -432,14 +463,17 @@
             // Row click => show edit panel (only if not clicking checkbox)
             $(document).on("click", ".gridRow", function () {
                 selectedRow = $(this);
-
+                $("#oldCtgyCode").val(selectedRow.data("ctgycode"));
+                $("#Edit_CATEGORY").val(String(selectedRow.data("ctgycode")));
                 $("#oldSupCode").val(selectedRow.data("supcode"));
                 $("#oldInvoice").val(selectedRow.data("invoice"));
                 $("#oldPartNo").val(selectedRow.data("partno"));
+                $("#eOldWeight").val(selectedRow.data("weight"));
                 $("#oldOrigin").val(selectedRow.data("origin"));
                 $("#oldHsCode").val(selectedRow.data("hscode"));
 
                 $("#eInvoice").val(selectedRow.data("invoice"));
+                $("#eWeight").val(selectedRow.data("weight"));
                 $("#ePartNo").val(selectedRow.data("partno"));
                 $("#eDescLeft").val(selectedRow.data("desc"));
                 $("#eOrigin").val((selectedRow.data("origin") || "").trim());
@@ -461,25 +495,29 @@
 
                 const data = {
                     orgCode: parseInt($("#OrgCode").val() || "0"),
-                    ctgyCode: parseInt($("#ddlCategory").val() || "0"),
+                    // ctgyCode: parseInt($("#ddlCategory").val() || "0"),
+                    ctgyCode: parseInt($("#oldCtgyCode").val() || "0"),
+                    newCtgyCode: parseInt($("#Edit_CATEGORY").val() || "0"),
 
                     oldSupplierCode: parseInt($("#oldSupCode").val() || "0"),
                     oldInvoiceNo: $("#oldInvoice").val(),
                     oldPartNo: $("#oldPartNo").val(),
+                    oldWeight: $("#eOldWeight").val(),
                     oldOrigin: $("#oldOrigin").val(),
                     oldHsCode: $("#oldHsCode").val(),
 
                     newSupplierCode: newSupCode,
                     newInvoiceNo: $("#eInvoice").val(),
+                    weight: $("#eWeight").val(),
                     newPartNo: $("#ePartNo").val(),
 
                     description: desc,
                     origin: $("#eOrigin").val(),
                     hsCode: $("#eHsCodeLeft").val()
                 };
-
                 let msg = "";
                 if (isBlank(data.newPartNo)) msg = "Part No is missing.";
+                else if (!data.newCtgyCode) msg = "Please select Category.";
                 else if (isBlank(data.newInvoiceNo)) msg = "Invoice No is missing.";
                 else if (isBlank(data.description)) msg = "Description is missing.";
                 else if (isBlank(data.hsCode)) msg = "HS Code is missing.";
@@ -491,7 +529,6 @@
                 else if (len(data.hsCode) > 100) msg = "HS Code max 100 characters.";
 
                 if (msg !== "") { alert("❌ " + msg); return; }
-
                 $.ajax({
                     url: "/single-record-update/save-edit",
                     type: "POST",
@@ -503,6 +540,7 @@
 
                             selectedRow.find(".colSupplier").text(newSupName);
                             selectedRow.find(".colInvoice").text(data.newInvoiceNo);
+                            selectedRow.find(".colWeight").text(data.weight);
                             selectedRow.find(".colPartNo").text(data.newPartNo);
                             selectedRow.find(".colDesc").text(data.description);
                             selectedRow.find(".colOrigin").text(data.origin);
@@ -510,14 +548,17 @@
 
                             selectedRow.data("supcode", data.newSupplierCode);
                             selectedRow.data("invoice", data.newInvoiceNo);
+                            selectedRow.data("weight", data.weight);
                             selectedRow.data("partno", data.newPartNo);
                             selectedRow.data("desc", data.description);
                             selectedRow.data("origin", data.origin);
                             selectedRow.data("hscode", data.hsCode);
 
+                            $("#oldCtgyCode").val(data.ctgyCode);
                             $("#oldSupCode").val(data.newSupplierCode);
                             $("#oldInvoice").val(data.newInvoiceNo);
                             $("#oldPartNo").val(data.newPartNo);
+                            $("#eOldWeight").val(data.weight);
                             $("#oldOrigin").val(data.newOrigin);
                             $("#oldHsCode").val(data.newHsCode);
 
@@ -538,9 +579,15 @@
             $("#btnAdd").on("click", function () {
                 $("#editPanel").hide();
                 $("#addPanel").show();
+
+                var ctgyCode = $("#ddlCategory").val();
+                if (ctgyCode === "ALL" || ctgyCode === "" || ctgyCode == null) {
+                    ctgyCode = "";
+                }
+                $("#Add_CATEGORY").val(ctgyCode);
                 $('html, body').animate({ scrollTop: $("#addPanel").offset().top - 20 }, 200);
 
-                $("#Add_PARTNO,#Add_INVOICENO,#Add_DESCRIPTION,#Add_HSCODE").val("");
+                $("#Add_PARTNO,#Add_INVOICENO,#Add_WEIGHT,#Add_DESCRIPTION,#Add_HSCODE").val("");
                 $("#Add_ORIGIN").val("");
                 $("#Add_SUP_CODE").val($("#ddlSupplier").val());
             });
@@ -568,8 +615,10 @@
 
           const payload = {
             ORG_CODE: parseInt($("#OrgCode").val() || "0"),
+            CTGY_CODE: parseInt($("#Add_CATEGORY").val() || "0"),
             SUP_CODE: $("#Add_SUP_CODE").val(),
             InvoiceNo: $("#Add_INVOICENO").val(),
+            Weight: $("#Add_WEIGHT").val(),
             PartNo: $("#Add_PARTNO").val(),
             Description: desc,
             Origin: $("#Add_ORIGIN").val(),
@@ -579,6 +628,7 @@
           // trim
           payload.SUP_CODE = String(payload.SUP_CODE ?? "").trim();
           payload.InvoiceNo = String(payload.InvoiceNo ?? "").trim();
+          payload.Weight = String(payload.Weight ?? "").trim();
           payload.PartNo = String(payload.PartNo ?? "").trim();
           payload.Description = String(payload.Description ?? "").trim();
           payload.Origin = String(payload.Origin ?? "").trim();
@@ -586,6 +636,7 @@
 
           let msg = "";
           if (isBlank(payload.PartNo)) msg = "Part No is missing.";
+          else if (!payload.CTGY_CODE) msg = "Please select Category.";
           else if (isBlank(payload.InvoiceNo)) msg = "Invoice No is missing.";
           // else if (isBlank(payload.Description)) msg = "Description is missing.";
           else if (isBlank(payload.Origin)) msg = "Origin is missing.";
@@ -604,7 +655,6 @@
             alert("❌ " + msg);
             return;
           }
-
           $.ajax({
             url: "/single-record-update/add-parts-origin",
             type: "POST",
@@ -638,15 +688,17 @@
                     const chk = $(this);
                     const row = chk.closest("tr");
 
-                    items.push({
-                        orgCode: parseInt(chk.data("org") || "0"),
-                        ctgyCode: parseInt($("#ddlCategory").val() || chk.data("ctgy") || "0"),
-                        supCode: String(chk.data("sup") || "").trim(),
-                        invoiceNo: String(chk.data("inv") || "").trim(),
-                        partNo: String(chk.data("part") || "").trim(),
-                        origin: String(row.data("origin") || "").trim(),
-                        hsCode: String(row.data("hscode") || "").trim()
-                    });
+                              items.push({
+            orgCode: parseInt(chk.data("org") || "0"),
+            ctgyCode: parseInt(chk.data("ctgy") || row.data("ctgycode") || "0"),
+            supCode: String(chk.data("sup") || row.data("supcode") || "").trim(),
+            invoiceNo: String(chk.data("inv") || row.data("invoice") || "").trim(),
+            weight: String(row.data("weight") || "").trim(),
+            partNo: String(chk.data("part") || row.data("partno") || "").trim(),
+            origin: String(row.data("origin") || "").trim(),
+            hsCode: String(row.data("hscode") || "").trim()
+        });
+
                 });
 
                 $.ajax({

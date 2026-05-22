@@ -33,6 +33,7 @@ namespace DEEMPPORTAL.Domain.PartsOrigin
             public string Category { get; set; } = "";
             public string PartNo { get; set; } = "";
             public string Description { get; set; } = "";
+            public string Weight { get; set; } = "";
             public string Origin { get; set; } = "";      // ISO/code stored in DB
             public string OriginName { get; set; } = "";
             public string SelectedOrigin { get; set; } = "";
@@ -45,9 +46,11 @@ namespace DEEMPPORTAL.Domain.PartsOrigin
         {
             public int OrgCode { get; set; }
             public int CtgyCode { get; set; }
+            public int NewCtgyCode { get; set; }
             // OLD key (row finder)
             public int OldSupplierCode { get; set; }
             public string OldInvoiceNo { get; set; } = "";
+            public string? OldWeight { get; set; }
             public string OldPartNo { get; set; } = "";
             public string OldOrigin { get; set; } = "";
             public string OldHSCode { get; set; } = "";
@@ -56,6 +59,7 @@ namespace DEEMPPORTAL.Domain.PartsOrigin
             public string NewInvoiceNo { get; set; } = "";
             public string NewPartNo { get; set; } = "";
             public string Description { get; set; } = "";
+            public string Weight { get; set; } = "";
             public string Origin { get; set; } = "";
             public string HSCode { get; set; } = "";
             public string UpdUser { get; set; } = "";
@@ -65,10 +69,11 @@ namespace DEEMPPORTAL.Domain.PartsOrigin
         {
             public int ORG_CODE { get; set; }
             public string SUP_CODE { get; set; }
-
+            public int CTGY_CODE { get; set; }
             public string InvoiceNo { get; set; }
             public string PartNo { get; set; }
             public string Description { get; set; }
+            public string Weight { get; set; }
             public string Origin { get; set; }
             public string HSCode { get; set; }
 

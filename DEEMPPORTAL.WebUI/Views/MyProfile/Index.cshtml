@@ -7,7 +7,22 @@
 	var gUserName = ViewBag.UserName;
 	var gUserCode = ViewBag.UserId;
 }
+<style>
+	#selBloodGroup:invalid{
+		color: red;
+	}
 
+	.white-tooltip {
+		/* Set background to white */
+		--bs-tooltip-bg: #fff;
+		/* Set text to dark so it's visible */
+		--bs-tooltip-color: red;
+		/* Optional: add a border or shadow since white might blend with background */
+		border: 1px solid #dee2e6;
+		border-radius: 0.4rem;
+		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	}
+</style>
 <div class="container">
 	<div class="page-inner">
 		<div class="flex-column">
@@ -80,7 +95,7 @@
 						</div>
 					</div>
 					<div class="col-8">
-						<form id="frmEmployeeProfile" method="post">
+						<form class="" id="frmEmployeeProfile" method="post">
 							@Html.AntiForgeryToken()
 							<input id="inpEmployeeProfileId" type="hidden" name="EMPLOYEE_PROFILE_ID" value="" />
 							<div class="card">
@@ -103,7 +118,7 @@
 														onclick="submitClearEntries(this)">
 											Clear Entries
 										</button>
-										<button type="button" class="btn btn-danger rounded-1 px-4" onclick="submitSaveChanges(this)">
+										<button id="submitProfileInfoBtn" type="button" class="btn btn-danger rounded-1 px-4" onclick="submitSaveChanges(this)">
 											Update
 											Profile
 										</button>
@@ -118,7 +133,7 @@
 													Blood Group: <span class="text-danger">*</span>
 												</label>
 												<div class="col-sm-5">
-													<select id="selBloodGroup" class="form-select rounded-1 required" name="BLOOD_GROUP">
+													<select id="selBloodGroup" class="form-select rounded-1  required" name="BLOOD_GROUP">
 														<option value=""></option>
 													</select>
 												</div>

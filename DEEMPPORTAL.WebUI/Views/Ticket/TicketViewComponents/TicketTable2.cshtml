@@ -1,0 +1,282 @@
+﻿<style>
+    #statusBadge {
+        opacity: 50%;
+    }
+    /* Fix bootstrap-table active page background and border */
+    .bootstrap-table .pagination .page-item.active .page-link {
+        background-color: #0d6efd !important; /* Change to your preferred primary color */
+        border-color: #0d6efd !important;
+        color: #ffffff !important;
+    }
+
+    /* Remove unwanted dark purple focus outlines or shadows */
+    .bootstrap-table .pagination .page-link:focus {
+        background-color: transparent;
+        box-shadow: none !important;
+        color: white
+    }
+
+</style>
+<div class="container-fluid">
+    @*<div class="row d-flex">
+        <div class="d-inline-flex py-2">
+            <button type="button" id="openCreateTicketModal" class="btn btn-danger text-white rounded-1" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                <i class="bi bi-plus"></i> New Ticket
+            </button>
+        </div>
+    </div>  *@
+
+    @*<div id="ticketHeader2" class="card-header p-3 mx-0 fw-bold bg-main text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+                <div class="small px-2">
+                    <span class="btn btn-sm btn-icon btn-round border border-2 text-white"><i class="fas fa-ticket"></i></span>
+                    <span id="tblCaption" class="fw-normal">My Tickets</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-baseline">
+                 @{
+                    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketDashBoard.cshtml");
+                } 
+            </div>
+        </div>
+    </div> *@
+   
+
+        <div id="toolbar" class="d-flex justify-content-evenly align-items-center">
+
+                <input id="customSearch" 
+                    placeholder="Search . . ." 
+                    class="form-control " style="width: 300px !important;" />
+           
+            
+                <button id=""
+                        class="btn btn-outline-secondary btn-sm border-1 rounded-1 ms-5 disabled">
+                    <i class="bi bi-filter text-dark"></i>
+                </button>
+
+        <!-- Custom dropdown -->
+       
+        <div class="dropdown rounded-1">
+            <button name="filterRequestedByName" class="form-select rounded-1 text-nowrap  text-start" type="button" id="filterRequestedByName" data-bs-toggle="dropdown">
+               Jeffvil Duero
+            </button>
+            <div class="dropdown-menu p-2" style="max-height: 200px !important; overflow-y: scroll;">
+                <!-- Search input -->
+                <input type="text" id="requestedByNameSearchInput" class="form-control mb-2" placeholder="Search...">
+                <!-- Options -->
+                <ul class="list-unstyled mb-0" id="requestedByNameList">
+                </ul>
+            </div>
+        </div>
+        @* <select id="filterRequestedByName"  class="form-select mx-1 bootstrap-table-filter-control-RequestedByName">
+            <option class="active me-1">Requested By</option>
+        </select> *@
+                <select id="filterType" class="form-select mx-1 bootstrap-table-filter-control-TaskTypeName">
+                    <option class="active me-1">Type</option>
+                </select>
+            <select id="filterPriority" class="form-select  me-1 bootstrap-table-filter-control-TicketPriority">
+                    <option class="active">Priority</option>
+                </select>
+            <select id="filterStatus" class="form-select  me-1 bootstrap-table-filter-control-StatusName">
+                    <option class="active">Status</option>
+                </select>
+                <input class="form-select" placeholder="Date Range" name="datefilter" value="Date range" />
+                <div class="btn-group ms-1">
+                    <div class="btn-group">
+
+                        <button id="btnResetFilter"
+                                class="btn btn-outline-secondary btn-sm rounded-2"
+                                title="Reset Filters">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                </div>
+           
+            
+       
+
+
+        </div> 
+
+
+
+    <table id="table"
+           data-toggle="table"
+       data-search-selector="#customSearch"
+           data-resizable="true"
+           data-search="true"
+           data-auto-refresh="true"
+           data-search-align="left"
+           data-toolbar="#toolbar"
+           data-toolbar-align="left"
+           data-show-button-text="true"
+           data-buttons-class="mx-2"
+           data-show-columns="true"
+           data-show-columns-toggle-all="true"
+            data-buttons-align="right"
+           data-filter-control="true"
+           data-show-fullscreen="true"
+           data-buttons="buttons"
+           data-height="650"
+           data-classes="table table-bordered table-sm pg-primary">
+            <thead class="table-light">
+                <tr >
+                    <th data-checkbox="true"
+                    data-halign="center">
+                    </th>
+
+                    <th data-field="TicketId"
+                        data-halign="center"
+                        data-sortable="true"
+                        data-formatter="IdFormatter"
+                        data-width="50"
+                        data-width-unit="px"
+                        class="text-nowrap"
+                    >
+                        Ticket ID
+                    </th>
+                    <th data-field="RequestedByName"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-filter-control-container="#filterRequestedByName"
+                    data-filter-control-placeholder="Requested by"
+                    class="text-nowrap p-0 m-0">
+                        Requested By
+                    </th>
+
+                    <th data-field="TicketSubject"
+                    data-halign="center"
+                    data-sortable="true"
+                    class="text-nowrap p-0 m-0">
+                        Subject
+                    </th>
+
+                    <th data-field="AssignedToName"
+                    data-halign="center"
+                    data-sortable="true"
+                    
+                    class="text-nowrap p-0 m-0">
+                        Assigned To
+                    </th>
+                <th data-field="DeptName"
+                    data-halign="center"
+                    data-sortable="true"
+                    class="text-nowrap">
+                    Department
+                </th>
+                    <th data-field="RequestedDate"
+                    data-halign="center"
+                    data-sortable="true"
+                    class="text-nowrap p-0 m-0">
+                        Date
+                    </th>
+                <th data-field="TaskTypeName"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-filter-control-container="#filterType"
+                    class="text-nowrap p-0 m-0">
+                    Request Type
+                </th>
+                <th data-field="StatusName"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-formatter="statusFormatter"
+                    data-filter-control-container="#filterStatus"
+                    class="text-nowrap p-0 m-0">
+                        Status
+                    </th>
+
+                    <th data-field="TicketPriority"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-filter-control-container="#filterPriority"
+                    class="text-nowrap p-0 m-0">
+                        Priority
+                    </th>
+                </tr>
+            </thead>
+        </table>
+</div>
+<script> 
+    // window.buttons=() =>
+       //  ({
+      
+       // btnUsersAdd: {
+       //   text: 'Highlight Users',
+       //   icon: 'bi-person',
+       //   event () {
+       //     alert('Do some stuff to e.g. search all users which has logged in the last week')
+       //   },
+       //   attributes: {
+       //     title: 'Search all users which has logged in the last week'
+       //   }
+       // },
+       
+       // btnDom: {
+       //   html: () => {
+       //     const button = document.createElement('button')
+
+       //     button.className = 'btn btn-secondary'
+       //     button.name = 'btnDom'
+       //     button.innerHTML = '<i class="bi bi-code-slash"></i>'
+       //     button.addEventListener('click', () => {
+       //       alert('DOM Button clicked!')
+       //     })
+       //     return button
+       //   }
+       // },
+     //      btnAdd: {
+     //        text: 'New Ticket',
+     //        icon: 'bi-plus-lg',
+            
+     //        event () {
+     //          $("#createTicketModal").modal('show');
+     //        },
+     //        attributes: {
+     //          title: 'Add a new row to the table',
+     //          class: 'btn-danger rounded-2'
+     //        }
+     //      },
+          
+     // })
+
+    window.statusFormatter = (value, row) => {
+        return `<div class='btn ${statusColor(value)} btn-rounded  btn-sm w-100 text-nowrap'>${value}</div>`
+    }
+    window.IdFormatter = (value,row) =>{
+                return `<div class='text-main fw-bold text-decoration-underline text-nowrap'>${value}</div>`
+        }
+    // window.checkBoxFormatter = (value, row) => {
+    //     return `<input class="form-check-input" type="checkbox" value="${value}" id="flexCheckDefault">`
+    // }
+    // window.detailFormatter = (index, row) => {
+    //     const html = []
+
+    //     for (const [key, value] of Object.entries(row)) {
+    //         html.push(`<p><b>${key}:</b> ${value}</p>`)
+    //     }
+    //     return html.join('')
+    // }
+    function statusColor(status) {
+        switch (status) {
+            case 'Not Scheduled': return 'btn-dark';
+                break;
+           case null: return 'd-none';
+                break;
+            case 'In Progress': return 'btn-danger';
+                break;
+            case 'Testing': return 'btn-primary';
+                break;
+            case 'Maintenance': return 'btn-warning dark';
+                break;
+            case 'Complete': return 'bg-darkgreen text-white';
+                break;
+        }
+    }
+
+</script>
+
+
+
+

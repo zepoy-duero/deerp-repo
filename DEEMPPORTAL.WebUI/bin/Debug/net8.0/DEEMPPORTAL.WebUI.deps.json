@@ -1696,6 +1696,7 @@
       },
       "DEEMPPORTAL.Domain/1.0.0": {
         "dependencies": {
+          "DEEMPPORTAL.Common": "1.0.0",
           "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.AspNetCore.Mvc.TagHelpers": "2.3.9"
         },

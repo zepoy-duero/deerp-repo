@@ -36,6 +36,16 @@ table tbody tr td select, table tbody tr td input[type='text'] {
   padding: 0 !important;
   height: 100%;
 }
+.btn-darkgreen {
+    color: #006600;
+    background-color: #006600;
+    border-color: #006600
+}
+.bg-darkgreen {
+    color: #006600;
+    background-color: #006600;
+    border-color: #006600
+}
 .bg-org {
     background-color: #ffbb00 !important;
 }
@@ -43,6 +53,11 @@ table tbody tr td select, table tbody tr td input[type='text'] {
   background-color: #002e5a !important;
   border-color: #0f447e;
   color: #fff !important;
+}
+.btn-main {
+    background-color: #002e5a !important;
+    border-color: #0f447e;
+    color: #fff !important;
 }
 
 .bg-main-gradient {

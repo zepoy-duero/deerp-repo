@@ -45,7 +45,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
             foreach (var r in model.Rows)
             {
                 // Category display name from dropdown (not hardcoded)
-                r.Category = model.Categories.FirstOrDefault(x => x.Value == (model.SelectedCategory?.ToString() ?? ""))?.Text ?? "";
+                //r.Category = model.Categories.FirstOrDefault(x => x.Value == (model.SelectedCategory?.ToString() ?? ""))?.Text ?? "";
+                r.Category = model.Categories.FirstOrDefault(x => x.Value == r.CtgyCode.ToString())?.Text ?? r.CtgyCode.ToString();
 
                 // convert SupplierCode -> Supplier display name
                 r.Supplier = model.Suppliers.FirstOrDefault(x => x.Value == r.SupplierCode)?.Text ?? r.SupplierCode;
@@ -141,9 +142,11 @@ namespace DEEMPPORTAL.WebUI.Controllers.PartsOrigin
         {
             new PartsOrgViewModel.PartRow
             {
+                CTGY_CODE = req.CTGY_CODE,
                 InvoiceNo = req.InvoiceNo,
                 PartNo = req.PartNo,
                 Description = req.Description,
+                Weight = req.Weight,
                 Origin = req.Origin,
                 HSCode = req.HSCode
             }

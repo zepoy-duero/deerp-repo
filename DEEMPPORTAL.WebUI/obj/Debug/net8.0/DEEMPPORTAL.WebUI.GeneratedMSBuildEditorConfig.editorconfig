@@ -144,10 +144,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketDetailsComponents/ActionTaken.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXEFjdGlvblRha2VuLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketDetailsComponents/Approvals.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXEFwcHJvdmFscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -156,12 +152,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXEFzc2lnbm1lbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketDetailsComponents/Status.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXFN0YXR1cy5jc2h0bWw=
+[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketDetailsComponents/Review.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXFJldmlldy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXFVzZXJSZXF1ZXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/TicketTable2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXFRpY2tldFRhYmxlMi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/TicketTable3.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXFRpY2tldFRhYmxlMy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml]

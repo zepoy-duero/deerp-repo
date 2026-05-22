@@ -336,8 +336,9 @@ async function displayLeaveApplications(callback) {
                     <td>${btnDelete}</td>
                     <td>
                         <a class="text-main text-uppercase" href="javascript:void(0)" onclick="showModalEditLeaveApplication(${LEAVE_APPLICATION_CODE}, '${LEAVE_TYPE}')">
-                            <span class="fw-bolder text-nowrap">
+                            <span class="fw-bolder text-nowrap text-decoration-underline">
                                 ${LEAVE_TYPE}
+                                <i class="fas fa-magnifying-glass-arrow-right text-main"></i>
                             </span>
                         </a>
                         <div class="text-normal">

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\DEEMPPORTAL.Infrastructure\DEEMPPORTAL.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files\uploads\" />
+  </ItemGroup>
+
 </Project>

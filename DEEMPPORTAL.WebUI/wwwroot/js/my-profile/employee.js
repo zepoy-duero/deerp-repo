@@ -3,11 +3,38 @@ const gFormEntry = "#frmEmployeeProfile"
 const gNavId = "#v-pills-tab"
 
 let gActivePanel = $(gNavId).find(".nav-link.active").attr("data-bs-target")
-
+const validationConfig = {
+    "#selBloodGroup": "Please select a valid blood group.",
+    "#txtDietaryRestriction": "Specify any dietary restrictions.",
+    "#txtMedicalAllergies": "Allergies are required.",
+    "#inpEmergencyContactName": "Enter emergency contact name.",
+    "#selEmergencyContactRelationship": "Select contact relationship.",
+    "#inpEmergencyContactNumber": "Enter emergency contact number.",
+    "#txtResidentialAddress": "Residential address is required.",
+    "#inpMobileNo": "Mobile number is required.",
+    //"#inpTelephoneNo": "Telephone number is required.",
+    //"#inpExtensionNo": "Extension is required."
+};
+const selectors = [
+    "#selBloodGroup",
+    "#txtDietaryRestriction",
+    "#txtMedicalAllergies",
+    "#inpEmergencyContactName",
+    "#selEmergencyContactRelationship",
+    "#inpEmergencyContactNumber",
+    "#txtResidentialAddress",
+    "#inpMobileNo",
+    //"#inpTelephoneNo",
+    //"#inpExtensionNo"
+];
 $(async function () {
-  loadRelationship()
-  loadBloodGroup()
-  await displayEmployeeProfileDetails()
+    console.log(gActivePanel);
+    loadRelationship()
+    loadBloodGroup()
+    await displayEmployeeProfileDetails()
+    //$("#frmEmployeeProfile").on("change", function () {
+    //    console.log(gActivePanel);
+    //});
 })
 
 $(gNavId).on("click", ".nav-link", function () {
@@ -15,9 +42,17 @@ $(gNavId).on("click", ".nav-link", function () {
 })
 
 function refreshData() {
+    selectors.forEach(selector => {
+        $(selector).removeClass("is-invalid is-valid");
+        const tooltipInstance = bootstrap.Tooltip.getInstance(selector);
+        if (tooltipInstance) {
+            tooltipInstance.dispose();
+        }
+    })
   displayEmployeeProfileDetails()
 }
 
+   
 async function displayEmployeeProfileDetails() {
   disableForm("frmEmployeeProfile", true)
   const response = await fetch(`${gBaseUrl}/getMyProfileDetails`)
@@ -60,41 +95,95 @@ async function displayEmployeeProfileDetails() {
   $(gFormEntry).find("#lblLastUpdate").text(convertToLocaleDateString(lastUpdatedDate))
 }
 
-async function submitSaveChanges(element) {
-  const form = element.closest("form");
-  const token = $(form).find("input[name='__RequestVerificationToken']").val()
-  const isValid = validateForm(gActivePanel)
-  const fd = new FormData(form)
 
-  if (!isValid) {
-    toastr.error("Please enter all the required fields.", "Required")
-    return
-  }
+function validateTab(activeTab) {
+    let validated = true;
+    let fieldsToValidate = [];
 
-  disableForm("frmEmployeeProfile", true)
-
-  try {
-    const response = await fetch(`${gBaseUrl}/updSertMyProfile`, {
-      method: "POST",
-      headers: {
-        "RequestVerificationToken": token
-      },
-      body: fd
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // 1. Determine which fields to check based on the active tab
+    if (activeTab === "#v-pills-home") {
+        fieldsToValidate = ["#selBloodGroup",
+            "#txtDietaryRestriction",
+            "#txtMedicalAllergies",
+            "#inpEmergencyContactName",
+            "#selEmergencyContactRelationship",
+            "#inpEmergencyContactNumber"];
+    } else if (activeTab === "#v-pills-profile") {
+        fieldsToValidate = ["#txtResidentialAddress"];
+    } else if (activeTab === "#v-pills-messages") {
+        //fieldsToValidate = ["#inpMobileNo", "#inpTelephoneNo", "#inpExtensionNo"];
+        fieldsToValidate = ["#inpMobileNo"];
     }
 
-    toastr.success("You have successfully updated your profile.", "Employee Profile");
-    displayEmployeeProfileDetails();
+    // 2. Loop through the specific fields for this tab
+    fieldsToValidate.forEach(selector => {
+        const $el = $(selector);
 
-  } catch (error) {
-    console.error("Update failed:", error);
-    toastr.error("Something went wrong. Please contact your administrator.", "System Error");
-  } finally {
-    disableForm("frmResidentialAddress", false);
-  }
+        // Remove old validation state/tooltips
+        $el.removeClass("is-invalid");
+        const oldTooltip = bootstrap.Tooltip.getInstance($el[0]);
+        if (oldTooltip) oldTooltip.dispose();
+
+        if ($el.val().trim() === "") {
+            validated = false;
+            $el.addClass("is-invalid");
+
+            // 3. Create the white tooltip with custom message
+            new bootstrap.Tooltip($el[0], {
+                title: validationConfig[selector],
+                placement: "right",
+                trigger: "manual",
+                customClass: "white-tooltip"
+            }).show();
+        } else {
+            $el.addClass("is-valid");
+        }
+    });
+
+    return validated;
+}
+async function submitSaveChanges(element) {
+  //element.preventDefault();  
+  const form = element.closest("form");
+  const token = $(form).find("input[name='__RequestVerificationToken']").val()
+  //const isValid = validateForm(gActivePanel)
+  const isValid = validateTab(gActivePanel)
+  const fd = new FormData(form)
+  console.log(gActivePanel)
+  //if (!isValid) {
+  //  toastr.error("Please enter all the required fields.", "Required")
+  //  return
+  //}
+
+    if (isValid) {
+        disableForm("frmEmployeeProfile", true)
+        try {
+            const response = await fetch(`${gBaseUrl}/updSertMyProfile`, {
+                method: "POST",
+                headers: {
+                    "RequestVerificationToken": token
+                },
+                body: fd
+            });
+            console.log(response)
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            toastr.success("You have successfully updated your profile.", "Employee Profile");
+            displayEmployeeProfileDetails();
+
+        } catch (error) {
+            console.error("Update failed:", error);
+            toastr.error("Something went wrong. Please contact your administrator.", "System Error");
+        } finally {
+            disableForm("frmResidentialAddress", false);
+        }
+    } else {
+        toastr.error("Please enter all the required fields.", "Required");
+        return;
+    }
+  
 }
 
 function submitClearEntries() {

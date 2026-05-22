@@ -7,7 +7,7 @@
     .form-label {
         margin-bottom: 0px !important;
     }
-    
+
     /* adjust 0px–6px */
 </style>
 <div class="container">
@@ -79,22 +79,31 @@
 
                                 <input id="fileUpload"
                                        type="file"
-                                       class="form-control"/>
+                                       class="form-control" />
 
                                 <small class="text-small text-muted">
                                     Your file format should be <b>.xlsx</b>
-                                </small> 
+                                </small>
                             </div>
                         </div>
                     </div>
 
                     <div class="row mt-4">
-                
+
                         <div class="d-flex justify-content-center align-items-center">
                             @* <a class="btn btn-danger" asp-controller="SingleRecordUpdate" asp-action="Index"> Single Update Parts </a> *@
                             <button id="btnProcess" class="btn rounded-2 btn-danger px-4 me-2">Process</button>
                             <button id="btnClear" type="button" class="btn rounded-2 btn-outline-secondary px-4 me-2">Clear</button>
+                      
                            
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <!-- Progress Bar -->
+                            <div id="processInfo" style="display:none; margin-top:10px; font-size:13px; color:#555;">
+                                Records: <b id="processCount">Processing...</b>
+                                &nbsp; | &nbsp;
+                                Time: <b id="processTime">00:00</b>
+                            </div>
                         </div>
                     </div>
                     <div id="msgSuccess" class="alert alert-success fw-bold mt-3 d-none"></div>
@@ -106,7 +115,7 @@
                     </div>
 
                     <div class="overflow-auto" style="max-height: 300px">
-               
+
                         <table class="table table-sm table-striped table-hover align-middle">
 
                             <thead class="sticky-top bg-dard table-white">
@@ -115,45 +124,83 @@
                                     <th>Invoice No</th>
                                     <th>Part No</th>
                                     <th>Description</th>
+                                    <th>Weight</th>
                                     <th>Origin</th>
                                     <th>HS Code</th>
                                 </tr>
                             </thead>
                             <tbody id="tblBody">
-                                 <tr>
-                                    <td colspan="6" class="text-center text-muted">No data</td>
+                                <tr>
+                                    <td colspan="12" class="text-center text-muted">No data</td>
                                 </tr>
                             </tbody>
                         </table>
-             
+
                     </div>
                     <div class="text-center mt-3">
-                        <button id="btnUpdate" type="button" class="btn btn-danger rounded-2">
+                        <button id="btnUpdate" type="button" class="btn btn-danger rounded-2" disabled>
                             Update Origin / HS Code
                         </button>
                     </div>
-           
+
                     <div id="msg" class="text-danger fw-semibold"></div>
-                    </div>
                 </div>
-        </div>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-   
+
     <script>
         let defaultOrg = $("#ddlOrg").val();
         $(function () {
-            
+
 
             let processedRows = []; // IMPORTANT
 
+        let processTimer;
+        let processStart;
+
+        function startProcessInfo() {
+            clearInterval(processTimer);
+
+            processStart = new Date();
+
+            $("#processInfo").show();
+            $("#processCount").text("Processing...");
+            $("#processTime").text("00:00");
+
+            processTimer = setInterval(function () {
+                const seconds = Math.floor((new Date() - processStart) / 1000);
+                const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+                const ss = String(seconds % 60).padStart(2, "0");
+
+                $("#processTime").text(mm + ":" + ss);
+            }, 1000);
+        }
+
+        function stopProcessInfo(countText) {
+            clearInterval(processTimer);
+            $("#processCount").text(countText);
+        }
+
+        function clearProcessInfo() {
+            clearInterval(processTimer);
+            $("#processInfo").hide();
+            $("#processCount").text("Processing...");
+            $("#processTime").text("00:00");
+        }
+
+            function setUpdateButtonState() {
+            const hasData = processedRows && processedRows.length > 0;
+            $("#btnUpdate").prop("disabled", !hasData);
+        }
             function clearGrid() {
                 $("#lblTotal").text("0");
-                $("#tblBody").html('<tr><td colspan="6" class="text-center text-muted">No data</td></tr>');
+                $("#tblBody").html('<tr><td colspan="12" class="text-center text-muted">No data</td></tr>');
                 processedRows = []; //  clear stored rows too
+                setUpdateButtonState();
             }
 
             function showError(text) {
@@ -225,14 +272,14 @@
             if (!file) return;
 
             const fileName = (file.name || "").toLowerCase();
-            const isXlsx = fileName.endsWith(".xlsx");
+            const isXlsx = fileName.endsWith(".xlsx") || fileName.endsWith(".xls");
 
             if (!isXlsx) {
             $("#msgError")
                 .removeClass("d-none")
                 .text("File must be an Excel (.xlsx) file.");
 
-            
+
             return;
         }
           clearGrid();
@@ -261,6 +308,7 @@
                 fd.append("uploadFile", file);
 
                 $("#btnProcess").prop("disabled", true).text("Processing...");
+                startProcessInfo();
 
                 $.ajax({
                     url: "parts-origin/process-file",
@@ -274,7 +322,8 @@
                     processedRows = res.data || []; //FIXED (correct name)
 
                     $("#lblTotal").text(res.total || 0);
-
+                    setUpdateButtonState();
+                    stopProcessInfo(res.total || processedRows.length || 0);
                     if (!processedRows.length) {
                         clearGrid();
                         return;
@@ -289,6 +338,7 @@
                                 <td>${r.InvoiceNo ?? ""}</td>
                                 <td>${r.PartNo ?? ""}</td>
                                 <td>${r.Description ?? ""}</td>
+                                <td>${r.Weight ?? ""}</td>
                                 <td>${r.Origin ?? ""}</td>
                                 <td>${r.HSCode ?? ""}</td>
                             </tr>
@@ -296,8 +346,10 @@
                     });
 
                     $("#tblBody").html(rowsHtml);
+                    setUpdateButtonState();
                 })
                 .fail(function (xhr) {
+                    stopProcessInfo("Failed");
                     showError(xhr.responseText || "Error while processing file.");
                     clearGrid();
                 })
@@ -345,17 +397,25 @@
                 showError(xhr.responseText || "Insert failed.");
             })
             .always(function () {
-                $("#btnUpdate").prop("disabled", false).text("Update Origin / HS Code");
+                $("#btnUpdate").text("Update Origin / HS Code");
+                setUpdateButtonState();
             });
         });
 
 
             // trigger after handlers are attached
-            
+
             $("#ddlOrg").trigger("change");
         });
             $("#btnClear").on("click", function () {
 
+                // clear process info
+               if (typeof processTimer !== "undefined") {
+                   clearInterval(processTimer);
+               }
+               $("#processInfo").hide();
+               $("#processCount").text("Processing...");
+               $("#processTime").text("00:00");
             // hide messages
             $("#msgError").addClass("d-none").text("");
             $("#msgSuccess").addClass("d-none").text("");
@@ -365,7 +425,9 @@
             $("#lblTotal").text("0");
             $("#tblBody").html('<tr><td colspan="6" class="text-center text-muted">No data</td></tr>');
             processedRows = [];
-
+             if (typeof setUpdateButtonState === "function") {
+            setUpdateButtonState();
+            }
             // set org back to default and reload suppliers
             $("#ddlOrg").val(defaultOrg).trigger("change");
         });

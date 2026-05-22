@@ -10,6 +10,6 @@ public class MyProfileRequest
     public string EMERGENCY_CONTACT { get; set; }
     public string RESIDENTIAL_ADDRESS { get; set; }
     public string MOBILE_NO { get; set; }
-    public string TELEPHONE_NO { get; set; }
-    public string EXTENSION_NO { get; set; }
+    public string? TELEPHONE_NO { get; set; }
+    public string? EXTENSION_NO { get; set; }
 }

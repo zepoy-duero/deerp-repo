@@ -1,8 +1,7 @@
-﻿<!-- Button trigger modal -->
-
+﻿﻿<!-- Button trigger modal -->
 <!-- Modal -->
-<div class="modal modal-lg fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <!--HEADER-->
             <div class="modal-header small fw-bold bg-main text-white rounded-top">
@@ -10,96 +9,139 @@
                 <button type="button" class="btn-close btn-close-white rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!--BODY-->
-            <div class="modal-body px-4" style="overflow-y: scroll !important;">
+            <div class="modal-body">
                 <div class="card no-box-shadow">
-                   
+
                     <div id="successAlert" class="alert alert-success d-none">
-                            <div class="row">
-                                <div class="col">
+                        <div class="row">
+                            <div class="col">
                                 <i class="fas fa-check"></i>
                                 <span class="text-end">
                                     You have successfully created a new ticket!
                                 </span>
-                                    </div>
-                                <div class="col-2 text-end fw-bold">
-                                        
+                            </div>
+                            <div id="newTicketId" class="col-2 text-end fw-bold">
                                 MIS#0001
-                                </div>
-                            </div> 
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <!-- Ticket Info -->
                         <div class="container-fluid">
                             <!-- Requested By -->
-                            <form class="form">
+                            <form id="createTicketForm" class="form needs-validation">
                                 <!--TICKET BASIC INFO-->
                                 <div class="row mb-3">
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                                <small class="text-muted pe-2">Requested By: </small>
-                                                <h6 id="requestedBy" class="fw-bold"></h6>
+                                        <small class="text-muted pe-2">
+                                           
+                                            Requested By: 
+                                            </small>
+                                        <h6 name="RequestedByName" id="requestedBy" class="fw-bold"></h6>
                                     </div>
-                                    <div class="col-md-6 d-flex justify-content-start align-items-start">                
-                                                <small class="text-muted pe-2">Date: </small>
-                                                <h6 id="requestedDate" class="fw-bold">@DateTime.Now.ToString("MMMM dd, yyyy")</h6>       
+                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
+                                        <small class="text-muted pe-2">
+                                        
+                                            Date: </small>
+                                        <h6 name="RequestedDate" id="requestedDate" class="fw-bold">May 14, 2026</h6>
                                     </div>
-                                    @* <hr class="mt-1" /> *@
                                 </div>
-                               
-                                <div class="row">
+
+                                <div class="row mb-3">
                                     <!--TICKET ADDRESSED TO-->
-                                 
-                                        <div class="input-group mb-3 w-50">
-                                            <select id="Type" class="input-group form-select" required>
-                                                <option class="text-muted" value="">--Department --</option>
-                                                <option>MIS</option>
-                                                <option>HR</option>
-                                                <option>Accounting</option>
-                                                <option>Others</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-3 w-50">
 
-                                            <select id="Type" class="input-group form-select" required>
-                                                <option class="text-muted" value="">--Request type --</option>
-                                                <option>Software Bug/Error</option>
-                                                <option>Change Request</option>
-                                                <option>Hardware/Networking</option>
-                                                <option>Others</option>
-                                            </select>
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                       
+                                            Department
+                                            </label>
+                                        <!-- Hidden real select (for form submission) -->
+                                        <select  id="TicketDepartment" class="form-select d-none">
+                                        </select>
+                                        <!-- Custom dropdown -->
+                                        <div class="dropdown rounded-1">
+                                            <button name ="TicketDepartment" class="form-select rounded-1  text-start text-muted" type="button" id="departmentDropdownSelect" data-bs-toggle="dropdown">
+                                                Management Information System
+                                            </button>
+                                            <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
+                                                 <!-- Search input -->
+                                                <input type="text" id="departmentSearchInput" class="form-control mb-2" placeholder="Search..."> 
+                                                <!-- Options -->
+                                                <ul class="list-unstyled mb-0" id="departmentList">
+                                                </ul>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            Request Type</label>
+                                        <select name="TaskTypeCode" id="TaskTypeCode" class="form-select">
+                                        </select>
+                                    </div>
+
                                     <!-- REQUEST TYPE -->
-                                    
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input id="Description" class="input-group form-control" placeholder="Subject issue..." required />
-                                </div>
-                                <div class="mb-3">
 
-                                    <div class="input-group mb-3">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label">
+                                        
+                                            Ticket Subject</label>
+                                        <div class="input-group">
+                                            @* <span class="input-group-text " id="basic-addon1">
+                                                <i class="fas fa-book"></i>
+                                            </span> *@
+                                            <input name="TicketSubject" id="TicketSubject"
+                                                   type="text" 
+                                                class="form-control" 
+                                                placeholder="Subject issue . . " 
+                                                required>
 
-                                        <textarea id="Details" rows="5" class="form-control"
-                                                  placeholder="Explain the issue in detail..." required></textarea>
+
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="input-group-sm">
-                                    <label for="fileInput" class="form-label">Upload attachment:</label>
-                                    <div class="container-fluid">
-                                        <div class="card shadow-sm pb-0">
-                                            <div class="card-body">
-                                                <!-- Drop Zone -->
-                                                <div id="dropZone" class="drop-zone">
-                                                    <p class="mb-1"><strong>Drag & Drop files here</strong></p>
-                                                    <p class="text-muted mb-2">or click to browse</p>
-                                                    <input type="file" id="fileInput" hidden multiple
-                                                           accept=".png,.pdf,.xls,.xlsx">
+                                <div class="row ">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                 
+                                                Detailed description
+                                                </label>
+                                            @* <textarea name="TicketDescription" id="TicketDescription" rowspan="5"
+                                                 placeholder="Explain the issue in detail..." required></textarea> *@
+                                                <div name="TicketDescription" id="TicketDescription" rowspan="5"
+                                                          placeholder="Explain the issue in detail..." required></div>
+                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="input-group-sm mx-0">
+
+                                            <label for="fileInput" class="form-label">
+                                                <i class="bi bi-images"></i>
+                                                Upload attachment:</label>
+                                            <div class="card shadow-sm pb-0">
+                                                <div class="card-body">
+                                                    <!-- Drop Zone -->
+                                                    <div id="dropZone" class="drop-zone">
+                                                        <i class="bi bi-cloud-upload"></i>
+                                                        <p class="mb-1"><strong>DRAG & DROP or PASTE Screenshots here</strong></p>
+                                                        <p class="text-muted mb-2">or click to browse</p>
+                                                        <input type="file" id="TicketAttachments" hidden multiple
+                                                               accept=".png,.pdf,.xls,.xlsx">
+                                                    </div>
+                                                    <!-- Preview List -->
+                                                    <div id="previewContainer" class="mt-2"></div>
                                                 </div>
-                                                <!-- Preview List -->
-                                                <div id="previewContainer" class="mt-4"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                               
                             </form>
                         </div>
                     </div>
@@ -110,7 +152,7 @@
                 <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
                     Cancel
                 </a>
-                <button id="submitTicket" type="button" class="btn btn-danger px-2">
+                <button id="submitTicket" type="submit" class="btn btn-danger px-2">
                     Submit Ticket
                 </button>
             </div>
@@ -118,43 +160,43 @@
     </div>
 </div>
 <style>
-        .drop-zone {
-            border: 2px dashed #6c757d;
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+    .drop-zone {
+        border: 2px dashed #6c757d;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .drop-zone.dragover {
+            background-color: #e9ecef;
         }
 
-            .drop-zone.dragover {
-                background-color: #e9ecef;
-            }
+    .file-preview-item {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-        .file-preview-item {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .file-icon {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-        }
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
 </style>
 @* <script src="~/js/ticket/ticket.js"></script> *@
-<script>
+@* <script>
     const dropZone = document.getElementById("dropZone");
     const fileInput = document.getElementById("fileInput");
     const previewContainer = document.getElementById("previewContainer");
@@ -167,7 +209,7 @@
     // File input change
     fileInput.addEventListener("change", (e) => {
         handleFiles(e.target.files);
-        
+
     });
 
     // Drag events
@@ -261,4 +303,4 @@
 
         previewContainer.appendChild(fileItem);
     }
-</script>
+</script> *@

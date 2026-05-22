@@ -23,12 +23,19 @@ namespace DEEMPPORTAL.Domain.PartsOrigin
         // Row model inside same file (no separate file needed)
         public class PartRow
         {
+            public int CTGY_CODE { get; set; }
             public string Supplier { get; set; } = "";
             public string InvoiceNo { get; set; } = "";
             public string PartNo { get; set; } = "";
             public string Description { get; set; } = "";
+            public string Weight { get; set; } = "";
             public string Origin { get; set; } = "";
             public string HSCode { get; set; } = "";
+        }
+        public class PartNoResolveResult
+        {
+            public string ResolvedPartNo { get; set; } = "";
+            public string MatchSource { get; set; } = "";
         }
     }
 }

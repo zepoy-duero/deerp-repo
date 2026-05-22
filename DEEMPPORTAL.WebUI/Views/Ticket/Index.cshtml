@@ -1,39 +1,63 @@
-﻿@{
-    Layout = "_Layout";
-    ViewData["Title"] = "Ticket";
+﻿﻿@{
+Layout = "_Layout";
+ViewData["Title"] = "Ticket";
 }
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/bootstrap-table.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.css">
+
+
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
-}
-@{
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
 }
+
 <div class="container">
-        <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
-         <div class="flex-column align-items-center">
-            <!-- Title -->
-            <h5 class="page-title  mb-3 fs-5 fw-bolder text-main">
-               Tickets
-            </h5>
-           
+    <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+        <div class="flex-column align-items-center">
+            <div class="row d-flex justify-content-between align-items-center">
+                <!-- Title -->
+                <div class="col">
+                    <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                        Tickets
+                    </h5>
+                </div>
+                
 
-                    @{
+            </div>
+            <div class="row d-flex justify-content-between align-items-center">
+                
+                <div class="col">
+                    <div id="openCreateTicketModal" class="btn btn-sm ms-3 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                        <i class="bi bi-plus"></i> New Ticket
+                    </div>
+                </div>
+                <div class="col text-end ms-auto">
+                    <div id="TicketsTotal" class="container">
+                        <div id="" class="btn rounded-pill bg-main text-white">
 
-                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
-                    }
-         </div>
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
 
+                            <span class="blink align-middle ms-2">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @{
+
+                await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/TicketTable2.cshtml");
+            }
         </div>
- </div>
+
+    </div>
+</div>
 
 
 @section Scripts {
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/bootstrap-table.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.1/dist/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+    <!--BOOTSTRAP TABLE PLUGIN DEPENDECIES-->
+
+   
+
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
 }

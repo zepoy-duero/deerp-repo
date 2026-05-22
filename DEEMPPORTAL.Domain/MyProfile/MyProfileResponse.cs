@@ -10,8 +10,8 @@ public class MyProfileResponse
     public string EMERGENCY_CONTACT { get; set; }
     public string RESIDENTIAL_ADDRESS { get; set; }
     public string MOBILE_NO { get; set; }
-    public string TELEPHONE_NO { get; set; }
-    public string EXTENSION_NO { get; set; }
+    public string? TELEPHONE_NO { get; set; }
+    public string? EXTENSION_NO { get; set; }
     public int CREATED_BY { get; set; }
     public DateTime CREATED_DATE { get; set; }
     public int UPDATED_BY { get; set; }

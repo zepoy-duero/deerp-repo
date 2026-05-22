@@ -19,6 +19,7 @@ $(async function () {
         showSpinner();
         console.log(e.event)
         await loadLocations();
+        await loadDepartments();
         await getAllEmployeeDirectory()
     });
     $("#select-location").on("change", async () => {
@@ -82,7 +83,7 @@ async function loadDepartments() {
 }
 function createSelectOptions(selector, data) {
 
-    let html = `<option value="null">All</option>`;
+    let html = `<option value="0">All</option>`;
     //let html = (selector === "select-organization")
     //    ? ""
     //    : `<option value="0">All</option>`;
@@ -166,6 +167,7 @@ async function getAllEmployeeDirectory() {
         deptCode: $("#select-department").val()
     };
     console.log(filterParams)
+    showTotalRecordsSpinner()
     const employeeList = await $.get(
         `${gBaseUrl}/getAllEmployeeDirectory`,
         
@@ -173,14 +175,30 @@ async function getAllEmployeeDirectory() {
             //locCode: $("#select-location").val(),
             //deptCode: $("#select-department").val()
             filterParams
-        
     );
-
+    showTotalRecords(employeeList.length);
     render("employeeContainer", employeeList);
     
     //$("#summary").empty().append(employeeList.length)
 }
-
+function showTotalRecordsSpinner() {
+    $("#EmployeeDirectoryTotal").empty().append(
+        `<div id="" class="btn rounded-pill bg-main text-white">
+              <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+              </div>
+                    <span class="blink align-middle ms-2">Loading...</span>
+              </div>`
+    )
+}
+function showTotalRecords(totalRecords) {
+    $("#EmployeeDirectoryTotal").empty().append(
+        `<div class="btn rounded-pill bg-main text-white">
+                <div class="badge fs-6 bg-danger rounded-circle text-white ms-0">${totalRecords}</div>
+         <span class="align-middle ms-1">Records</span>
+        </div>`
+    )
+}
 function render(containerId, employees) {
     const container = document.getElementById(containerId);
     emps = employees

@@ -1,3 +1,4 @@
+using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -90,6 +91,8 @@ builder.Services.AddMemoryCache();
 // Implement Infrastructure Dependency Injection
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddInfrastructure();
+builder.Services.AddScoped<IPartsOriginService, PartsOriginService>();
+builder.Services.AddScoped<PartsOriginRepository>();
 
 var app = builder.Build();
 

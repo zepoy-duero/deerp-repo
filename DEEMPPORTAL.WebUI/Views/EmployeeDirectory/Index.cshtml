@@ -2,19 +2,42 @@
   Layout = "_Layout";
   ViewData["title"] = "Employee Directory";
 }
+<style>
+    @@keyframes blinker {
+        50% {opacity: 0;}
+    }
 
+    .blink {
+        align-content:center;
+        align-items: center;
+        animation: blinker 1s linear infinite;
+    }
+</style>
 <div class="container">
   <div class="page-inner">
-    <div class="flex-column">
+      <div class="flex-column">
+        <div class="row d-flex justify-content-between align-items-center">
       <!-- Title -->
+             <div class="col">
+                <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                    Employee Directory
+                </h5>
+            </div>
+             <div class="col text-end ms-auto">
+                <div id="EmployeeDirectoryTotal" class="container">
+                    <div id="" class="btn rounded-pill bg-main text-white">
+                            
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                                </div>
 
-      <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
-        Employee Directory
-      </h5>
-      @* <span class="badge-info rounded-fill text-right" id="summary"></span> *@
-
+                            <span class="blink align-middle ms-2">Loading...</span>
+                    </div>
+                </div>
+             </div>
+               
+        </div>
       <!-- Filters -->
-
       <div class="row g-4 mb-4">
         <div class="col">
           <label for="select-organization" class="form-label fw-semibold">Choose Organization</label>
@@ -37,7 +60,7 @@
 
         </div>
       </div>
-    </div>
+  </div>
 
     <!-- Employee Cards Container -->
     <div class="row g-2" id="employeeContainer">
@@ -46,7 +69,7 @@
       </div>
 
     </div>
-  </div>
+    </div>
 </div>
 @section Scripts {
 

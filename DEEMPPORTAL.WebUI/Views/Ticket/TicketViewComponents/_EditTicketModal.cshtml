@@ -4,9 +4,17 @@
         height: calc(100vh - 56px);
         overflow: hidden;
     } */
-
+    /* .fas {
+        color: #002e5a !important;
+    } */
+    
+    .input-group{
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
     .modal-content {
         height: 100vh;
+       
     }
 
     /* Sidebar */
@@ -14,7 +22,9 @@
         position: relative;
         height: 100vh;
         background: #f8f9fa;
-        
+        border-right-style: inset;
+        border-right-width: 1px;
+        border-right-color: black;
         padding: 15px 10px;
     }
 
@@ -36,19 +46,26 @@
 
     /* Section Cards */
     .section-card {
-        height: 400px;
+        min-height: 500px;
     }
 
     .section-title {
         font-weight: 600;
         font-size: 16px;
         margin-bottom: 15px;
+        color: #002e5a;
+        background-color: lightblue
+ 
     }
 
     textarea.form-control {
         height: 120px;
     }
-
+    .active{
+        background-color: #002e5a;
+        border-color: #002e5a;
+        color: white;
+    }
     /* Attachments */
     .attachment-box {
         border: 2px dashed #ced4da;
@@ -64,333 +81,221 @@
             background: #f8fbff;
         }
 
-    /* Footer */
-    .modal-footer {
-        position: sticky;
-        bottom: 0;
-        background: #fff;
-        border-top: 1px solid #dee2e6;
+    .list-group-item.active {
+        background-color: #002e5a;
+        border-color: #002e5a;
+        color: white;
+
+    }
+    @*DATE CALENDAR*@
+   
+    .calendar-card {
+        width: 52px; /* 260 / 5 */
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .calendar-header {
+        background: linear-gradient(180deg, #5f8df7, #3d63d2);
+        color: white;
+        text-align: center;
+        padding: 6px 2px;
+        font-weight: 600;
+        font-size: 10px;
+        position: relative;
+    }
+
+        /* Rings scaled down */
+        .calendar-header::before {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: 4px;
+            width: 4px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            box-shadow: 10px 0 #e0e0e0, 20px 0 #e0e0e0, 30px 0 #e0e0e0;
+        }
+
+    .calendar-body {
+        background: #f1f1f1;
+        text-align: center;
+        padding: 6px 2px;
+    }
+
+    .calendar-day {
+        font-size: 22px; /* 110 / 5 */
+        font-weight: 800;
+        color: #1f2a5a;
+        line-height: 1;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 </style>
 
-<div class="modal fade" id="editTicketModal" tabindex="0">
-    <div class="modal-dialog modal-fullscreen">
+<div class="modal fade bg-grey" id="emailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-main text-white">
+                <h6 class="modal-title">Sending an email notification</h6>
+                <button id="closeEmailModal()" type="button" class="btn-close btn-close-white" data-bs-target="#emaiModal" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 bg-grey">
+                <div class="container-fluid">
+                    <div class="row g-3">
+                        <div class="col-md-1">
+                            <span class="mb-3">From: </span><br />
+                            <span class="mb-3">To: </span><br />
+                            <span class="mb-5">CC: </span><br />
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong class="text-decoration-underline mb-3">jeffvil@dahbashi.com</strong><br />
+                            <strong class="text-decoration-underline mb-3">salem@dahbashi.com</strong><br />
+                            <span class="text-decoration-underline mb-5">
+                                <small id="staticCC" class="text-muted" onclick="selectCC()">Optional</small>
+                                <select id="addCC" class="form-select form-select-sm d-none">
+                                    <option></option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+              
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-1">
+                            <span>Subject:</span>
+                        </div>
+                        <div class="col-md-5">
+                            <strong class="text-decoration-underline">
+                                Approval Request - MIS#001
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Message</label>
+                        <textarea class="form-control text-left" rows="4">Please review and approve this request. Click the link below to confirm approval</textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Confirmation Link (IMPORTANT FIELD) -->
+                        <div class="col-md-12">
+                            <label class="form-label">Approval Confirmation Link</label>
+                            <div class="input-group">
+                                <input type="text" id="approvalLink" class="form-control"
+                                       value="https://employee.dahbashi.com/approve?ticketId=123">
+                                <button class="btn btn-outline-secondary" type="button" onclick="copyLink()">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+            
+
+                <div class="modal-footer mb-0">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Send Email</button>
+                </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editTicketModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
 
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
                 <h6 class="modal-title">Update Ticket - MIS#001 This is a sample subject</h6>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-target="#editTicketModal" data-bs-dismiss="modal"></button>
             </div>
 
             <!-- BODY -->
             <div class="modal-body  position-relative" data-bs-spy="scroll">
-                <div class="row">
-
-                    <!-- SIDEBAR -->
-                    <div class="col-md-3 col-lg-2 ">
-                            <nav id="ticketNav" class="nav nav-main flex-column position-fixed ">
-                            <a class="nav-link active text-start" href="#ticketUserRequest">
-                                    <i class="fas fa-hand-point-up me-3"></i>
-                                    User Request
-                                </a>
-                                <a class="nav-link text-start" href="#ticketApproval">
-                                    <i class="fas fa-thumbs-up me-3"></i>
-                                    Approvals
-                                </a>
-                            <a class="nav-link text-start" href="#ticketAssignedTo">
-                                    <i class="fas fa-user me-3"></i>
-                                    Assigned To
-                                </a>
-                                @* <a class="nav-link text-start" href="#ticketStatus">
-                                    <i class="fas fa-circle me-3"></i>
-                                    Status
-                                </a> *@
-                                <a class="nav-link text-start" href="#ticketReview">
-                                    <i class="fas fa-pushed me-3"></i>
-                                    Review
-                                </a>
-                            </nav>
-                    </div>
-
-                    <!-- CONTENT -->
-                    <div class="col-md-9 col-lg-10">
-                        <div data-bs-spy="scroll"
-                             data-bs-target="#ticketNav"
-                             data-bs-offset="0"
-                             tabindex="0"
-                              >
-                            <!-- USER REQUEST -->
-                            <div id="ticketUserRequest" class="card section-card">
-                                <div class="card-body">
-                                    <div class="section-title text-main">User Request - MIS#001</div>
-
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Ticket Subject</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text " id="basic-addon1">
-                                                    <i class="fas fa-ticket"></i>
-                                                </span>
-                                                <input id="ticketSubject" type="text" class="form-control" placeholder="Subject issue . . ">
-
-
-                                            </div>
+                <div class="container-fluid">
+                    <div class="row g-0">
+                        <!-- SIDEBAR -->
+                        <div class="col-2 ps-0">
+                            <div class="card position-sticky top-0 w-100">
+                                        <div class="card-header bg-accent text-white fs-6">
+                                            <i class="fa fa-ticket me-2"></i>
+                                            Ticket Details
                                         </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Requested By</label>
-                                            <div class="input-group">
-                                                
-                                                <span class="text-center input-group-text">
-                                                    
-                                                    <i class="fas fa-user" id="basic-addon1"></i>
-
-                                                </span>
-                                                <span class="form-control">Manu Sharma</span>
-                                                <select id="requestedBy" class="form-select d-none">
-                                                    <option>Manu Sharma</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                          <label class="form-label">Requested Date</label>
-                                            <div class="input-group">
-                                                <span class="text-center input-group-text">
-                                                    <i class="fas fa-calendar" id="basic-addon1"></i>
-                                                </span>
-                                                <span class="form-control">Mar 31, 2026</span>
-                                                <input type="date" class="form-control d-none" >
-                                               
-                                            </div>
-                                        </div>
-
+                             
+                                <div id="ticketNav" class="list-group list-group-flush justify-content-center">
+                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
+                                        <i class="fas fa-hand-point-up me-2"></i>
+                                        User Request
+                                    </a>
+                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
+                                        <i class="fas fa-user me-2"></i>
+                                        <span> Assigned To</span>
                                        
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <textarea class="form-control" style="height: 200px"  placeholder="Detailed description"></textarea>
-                                                <label>Description</label>
-                                            </div> 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Attachments</label>
-                                            <div class="attachment-box d-none">
-                                                <div class="text-muted">Upload files</div>
-                                                <input type="file" class="form-control mt-2" multiple>
-                                            </div>
-                                            <div id="attachmentsPreviewContainer" class="" style="max-height: 200px; overflow-y:scroll"></div>
-                                        </div>
-                                    </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
+                                        <i class="fas fa-thumbs-up me-2"></i>
+                                        Approvals
+                                    </a>
+                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
+
+                                        <i class="fas fa-star-half-stroke me-2"></i>
+                                        Review
+                                    </a>
                                 </div>
-                            </div>
-
-                            <!-- APPROVAL -->
-                            <div id="ticketApproval" class="card section-card" style="height: 300px !important;">
-                                <div class="card-body">
-                                    <div class="section-title text-main">Approval</div>
-
-                                    <div class="row g-3">
-                                        <div class="col-md-4">                                            
-                                                <label class="form-label">Department Manager</label>
-                                            <div class="input-group">
-                                                <span class="text-center input-group-text">
-                                                    <i class="fas fa-user" id="basic-addon1"></i>
-                                                </span>                                           
-                                                <select id="managerApproval" class="form-select">
-                                                    <option>Pending</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-check align-items-center">
-                                                <input class="form-check-input" type="checkbox" id="isMajorChange">
-                                                <label class="form-check-label">Management Approval Required?</label>
-                                            </div>      
-                                        </div>
-                                        <div class="col-md-2">
-                                            
-                                        </div>
-                                        <div class="col-md-3 d-none" id="managementApproval">
-
-                                            <label class="form-label">Management</label>
-
-
-
-                                            <div class="input-group">
-
-                                                <span class="text-center input-group-text">
-
-                                                    <i class="fas fa-user" id="basic-addon1"></i>
-
-                                                </span>
-
-                                                <select id="managementApproval" class="form-select">
-                                                    <option>Saleem Ahmed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                      
-                                        <div class="col-md-3">
-
-                                            <label for="managementEmails"class="form-label"> ✔ Approval Emails</label>
-                                        
-                                           
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- ASSIGNMENT -->
-                            <div id="ticketAssignedTo" class="card section-card">
-                                <div class="card-body">
-                                    <div class="section-title text-main">Assignment</div>
-
-                                    <div class="row g-1">
-                                        
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <label class="input-group-text">Module</label>
-                                                <select class="form-select">
-                                                    <option selected>ERP</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                 
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <label class="input-group-text">Type</label>
-                                                    <select class="form-select">
-                                                        <option selected>Minor Change</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <label class="input-group-text">Priority</label>
-                                                    <select class="form-select"></select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <label class="input-group-text">Status</label>
-                                                    <select class="form-select"></select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <label class="input-group-text">Assigned To</label>
-                                                    <select class="form-select"></select>
-                                                </div>
-                                            </div>
-                                             <div class="col-md-4">
-                                            
-                                            <div class="d-flex gap-2">
-                                                <div class="input-group">
-                                                    <label for="duration" class="input-group-text">Duration</label>
-                                                        <input type="number" value="0" id="basic-addon1" class="form-control input-group-text">
-                                                    <select id="duration" class="form-select w-50">
-                                                        <option>Minutes</option>
-                                                        <option>Hours</option>
-                                                        <option>Days</option>
-                                                    </select>
-                                                   
-                                                </div>
-                                           
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <div class="input-group">
-                                                <label class="input-group-text">Start</label>
-                                                <input type="date" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                                <div class="input-group">
-                                                    <label class="input-group-text">End</label>
-                                                    <input type="date" class="form-control">
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- REVIEW -->
-                            <div id="ticketReview" class="card section-card">
-                                <div class="card-body">
-                                    <div class="section-title text-main">Review</div>
-
-                                    <div class="row g-3">
-                                        <div class="col-md-3">
-                                            <label>Reviewed By</label>
-                                            <input class="form-control">
-                                           
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Date</label>
-                                            <input type="date" class="form-control">
-                                           
-                                        </div>
-                                        @* <div class="col-md-3"><div class="form-floating"><input class="form-control"><label>Remarks</label></div></div> *@
-                                        <div class="col-md-3">
-                                            <label>Version</label>
-                                            <input class="form-control">
-                                           
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Email</label>
-                                            <input type="email" class="form-control">
-                                          
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <div class="input-group">
-                                                <div class="form-floating">
-                                                    <textarea id="emailCorrespondence" class="form-control"></textarea>
-                                                    <label id="emailCorrespondence">Email Correspondence</label>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="input-group">
-                                                <div class="form-floating">
-                                                    <textarea id="remarks" class="form-control"></textarea>
-                                                    <label id="remarks">Remarks</label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                             </div>
 
                         </div>
-                        <div class="modal-footer position-sticky mb-0 border-0">
-                            <button class="btn btn-danger float-start mb-0">
-                                <i class="fas fa-cloud-arrow-up me-2"></i>
-                                Update Ticket</button>
+
+                        <!-- CONTENT -->
+                        <div class="col-10 ps-0">
+                            <div class="container-fluid">
+                                <div data-bs-spy="scroll"
+                                     data-bs-target="#ticketNav"
+                                     data-bs-offset="50"
+                                     tabindex="0"
+                                >
+                                    @{
+
+                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml");
+                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Assignment.cshtml");
+                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Approvals.cshtml");
+                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Review.cshtml");
+                                    }
+                                   
+                                </div>
+                           
+
                         </div>
-                       
+
+                    </div>
                     </div>
 
                 </div>
-
-                <!-- FOOTER -->
-                @* <div class="modal-footer">
-                    <button class="btn btn-danger">Update Ticket</button>
-                </div> *@
-
+          
             </div>
+            <!-- FOOTER -->
+            <div class="modal-footer position-sticky mb-0 border-0">
+                                <button class="btn btn-danger float-start mb-0">
+                                    <i class="fas fa-cloud-arrow-up me-2"></i>
+                                    Update Ticket
+                                </button>
+                            </div> 
         </div>
     </div>
 </div>
-<script>
+ <script>
      function renderAttachments() {
-         // const file = new Blob(["Hello, world!"], { type: 'text/plain' });
+     
          const file = "https://share.google/XW7d4D1rZnPBoW1vJ"
         const fileItem = document.createElement("div");
         fileItem.className = "file-preview-item";
@@ -398,7 +303,7 @@
         const fileInfo = document.createElement("div");
         fileInfo.className = "file-info text-small";
 
-        // File Icon or Thumbnail
+
         let iconElement;
 
         if (file.type === "image/png") {
@@ -426,7 +331,7 @@
         fileInfo.appendChild(iconElement);
         fileInfo.appendChild(fileName);
 
-        // Remove Button
+
         const removeBtn = document.createElement("button");
         removeBtn.className = "btn btn-sm btn-outline-danger";
         removeBtn.innerText = "Remove";
@@ -441,4 +346,4 @@
 
         attachmentsPreviewContainer.appendChild(fileItem);
     }
-</script>
+</script> 

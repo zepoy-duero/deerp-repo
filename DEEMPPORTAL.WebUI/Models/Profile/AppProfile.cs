@@ -5,6 +5,7 @@ using DEEMPPORTAL.Domain.MyProfile;
 using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Library;
 using DEEMPPORTAL.Domain.Manage.RoleMenu;
+using DEEMPPORTAL.Domain.Ticket;
 
 namespace DEEMPPORTAL.WebUI.Models.Profile;
 
@@ -22,6 +23,6 @@ public class AppProfile : AutoMapper.Profile
         CreateMap<LibraryAttachmentViewModel, LibraryAttachmentRequest>();
         CreateMap<LibraryInformationDetailViewModel, LibraryInformationRequest>();
         CreateMap<MenuViewModel, MenuRequest>();
-        
+        CreateMap<TicketModel, CreateTicketParams>();
     }
 }

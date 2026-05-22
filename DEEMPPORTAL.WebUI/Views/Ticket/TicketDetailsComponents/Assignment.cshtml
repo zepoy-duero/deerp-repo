@@ -1,39 +1,111 @@
-﻿<section id="assignedTo" class="card p-4">
-    <h5 class="section-title">Assigned To</h5>
+﻿<div id="ticketAssignedTo" class="card  section-card">
+    <div class="card-header section-title border-2">
+        Assignment
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label>Resource Name</label>
-            <input type="text" id="resourceName" class="form-control">
-        </div>
+    </div>
+    <div class="card-body">
 
-        <div class="col-md-6">
-            <label>Priority</label>
-            <select id="priority" class="form-select">
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-            </select>
-        </div>
+        <div class="container-fluid">
+            <!-- Row 1 -->
+            <div class="row g-0 pe-0 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">Assigned To</label>
 
-        <div class="col-12">
-            <label>Task Description</label>
-            <textarea id="mgrTaskDescription" class="form-control"></textarea>
-        </div>
+                    <!-- Hidden real select (for form submission) -->
+                    <select id="selectAssignee" class="form-select d-none">
+                    </select>
 
-        <div class="col-md-4">
-            <label>Start Date</label>
-            <input type="date" id="startDate" class="form-control">
-        </div>
+                    <!-- Custom dropdown -->
+                    <div class="dropdown rounded-1">
+                        <button class="form-select text-start text-muted" type="button" id="assigneeDropdownSelect" data-bs-toggle="dropdown">
+                            Jeffvil Duero
+                        </button>
 
-        <div class="col-md-4">
-            <label>Finish Date</label>
-            <input type="date" id="finishDate" class="form-control">
-        </div>
+                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
 
-        <div class="col-md-4">
-            <label>Duration</label>
-            <input type="text" id="duration" class="form-control">
+                            <!-- Search input -->
+                            <input type="text" id="assigneeSearchInput" class="form-control mb-2" placeholder="Search...">
+
+                            <!-- Options -->
+                            <ul class="list-unstyled mb-0" id="assigneeList">
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 px-0">
+                    <label class="form-label">Priority</label>
+                    <select id="selectPriority" class="form-select"></select>
+                </div>
+                @* <div class="col-md-6 ">
+                                                        <label class="form-label">Module</label>
+                                                        <select id="selectModule" class="form-select">
+                                               
+                                                        </select>
+                                                    </div> *@
+                <div class="col-md-6">
+                    <label class="form-label">Module</label>
+
+                    <!-- Hidden real select (for form submission) -->
+                    <select id="selectModule" class="form-select d-none">
+                    </select>
+
+                    <!-- Custom dropdown -->
+                    <div class="dropdown rounded-1">
+                        <button class="form-select text-start text-muted" type="button" id="moduleDropdownSelect" data-bs-toggle="dropdown">
+                            Employee Portal
+                        </button>
+
+                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
+
+                            <!-- Search input -->
+                            <input type="text" id="moduleSearchInput" class="form-control mb-2" placeholder="Search...">
+
+                            <!-- Options -->
+                            <ul class="list-unstyled mb-0" id="moduleList">
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row g-0 mb-2 pe-0">
+
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select id="selectType" class="form-select">
+                    </select>
+                </div>
+
+                <div class="col-md-3 px-0">
+                    <label class="form-label">Duration</label>
+                    <div class="d-flex gap-2">
+                        <input type="number" value="0" class="form-control w-25">
+                        <select id="selectDurationUnit" class="form-select w-75">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 pe-0">
+                    <label class="form-label">Start</label>
+                    <input type="date" class="form-control">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">End</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select id="selectStatus" class="form-select"></select>
+                </div>
+            </div>
         </div>
     </div>
-</section>
+</div>

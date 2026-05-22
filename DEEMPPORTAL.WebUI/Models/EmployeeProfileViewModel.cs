@@ -12,8 +12,8 @@
 		public string EMERGENCY_CONTACT_NUMBER { get; set; }
 		public string RESIDENTIAL_ADDRESS { get; set; }
 		public string MOBILE_NO { get; set; }
-		public string TELEPHONE_NO { get; set; }
-		public string EXTENSION_NO { get; set; }
+		public string? TELEPHONE_NO { get; set; }
+		public string? EXTENSION_NO { get; set; }
 		public string EMERGENCY_CONTACT =>
 			$"{EMERGENCY_CONTACT_NAME} | {EMERGENCY_CONTACT_RELATIONSHIP} | {EMERGENCY_CONTACT_NUMBER}";
 	}

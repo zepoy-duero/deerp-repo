@@ -1,20 +1,56 @@
-﻿<div class="container justify-content-end align-items-end">
-    <button class="btn btn-rounded btn-group-sm btn-dark text-white">
-            Pending
-            <span class="label-align-right fw-extrabold">25</span>    
-        </button>
-    <button class="btn btn-rounded btn-group-sm bg-danger text-white ">
-            In Progress
-        <span class="label-align-right fw-extrabold">25</span>
-    </button>
-    <button class="btn btn-rounded btn-group-sm bg-secondary text-white">
-            For Approval
-        <span class="label-align-right fw-extrabold">25</span>
-    </button>
-    <button class="btn btn-rounded btn-group-sm bg-success text-white">
-            Completed
-        <span class="label-align-right fw-extrabold">25</span>
-    </button>
-   
+﻿
+<style>
+    .nav-tabs .nav-link.active {
+        color: white !important; /* Your desired text color */
+        background-color: #177dff !important; /* Your desired background color */
+        border-color: white !important; /* Optional: matching border color */
+    }
+</style>
+@* <ul class="nav nav-pills justify-content-end p-0" role="tablist">
+            <li class="nav-item rounded-pill" role="presentation">
 
-</div>
+                <button class="nav-link active" id="pills-pending-tab" data-bs-toggle="pill" data-bs-target="#pills-pending" type="button" role="tab" aria-controls="pills-pending" aria-selected="true">Pending</button>
+            </li>
+            <li class="nav-item " role="presentation">
+        <button class="nav-link text-danger" id="pills-inprogress-tab" data-bs-toggle="pill" data-bs-target="#pills-inprogress" type="button" role="tab" aria-controls="pills-inprogress" aria-selected="true">In Progress</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-primary" id="pills-testing-tab" data-bs-toggle="pill" data-bs-target="#pills-testing" type="button" role="tab" aria-controls="pills-testing" aria-selected="true">Testing</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-warning" id="pills-maintenance-tab" data-bs-toggle="pill" data-bs-target="#pills-maintenance" type="button" role="tab" aria-controls="pills-maintenance" aria-selected="true">Maintenance</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-success" id="pills-complete-tab" data-bs-toggle="pill" data-bs-target="#pills-complete" type="button" role="tab" aria-controls="pills-complete" aria-selected="true">Complete</button>
+            </li>
+    </ul> *@
+<span class="btn rounded-pill bg-dark text-white me-2 p-2">
+    Pending 
+     <strong id="totalPending" class="bg-white rounded-circle p-2 text-dark" >
+         10
+        </strong>
+    </span>
+<span class="btn rounded-pill bg-danger text-white p-2">In Progress
+    <strong class="bg-white rounded-circle p-2 text-dark">45</strong>
+</span>
+<span class="btn rounded-pill bg-primary text-white mx-2 p-2"> Testing
+    <strong class="bg-white rounded-circle p-2 text-dark">10</strong>
+
+</span>
+<span class="btn rounded-pill bg-warning p-2">Maintenance
+    <strong class="bg-white rounded-circle p-2 ">32</strong>
+</span>
+<span class="btn rounded-pill bg-success text-white ms-2 p-2">Completed
+    <strong class="bg-white rounded-circle p-2 text-dark">221</strong>
+</span>
+<script type="text/javascript">
+    function sumFormatter(val){
+        const formatter = new Intl.NumberFormat('en', {
+               notation: 'compact',
+               compactDisplay: 'short'
+               });
+        return formatter.format(val)
+    }
+    
+</script>
+

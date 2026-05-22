@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.3.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DEEMPPORTAL.Common\DEEMPPORTAL.Common.csproj" />
+  </ItemGroup>
+
 </Project>

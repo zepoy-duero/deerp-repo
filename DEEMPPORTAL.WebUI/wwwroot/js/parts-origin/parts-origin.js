@@ -151,7 +151,7 @@ $(async function () {
         // clear file + grid + stored rows
         $("#fileUpload").val("");
         $("#lblTotal").text("0");
-        $("#tblBody").html('<tr><td colspan="6" class="text-center text-muted">No data</td></tr>');
+        $("#tblBody").html('<tr><td colspan="12" class="text-center text-muted">No data</td></tr>');
         processedRows = [];
 
         // set org back to default and reload suppliers

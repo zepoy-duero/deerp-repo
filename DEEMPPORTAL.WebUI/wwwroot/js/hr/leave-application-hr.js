@@ -368,8 +368,9 @@ async function displayLeaveApplications() {
 										<td>${btnActions}</td>
 										<td>
 												<a class="text-main text-uppercase text-nowrap" href="javascript:void(0)" onclick="showModalEditLeaveApplication(${LEAVE_APPLICATION_CODE}, ${USER_CODE}, '${LEAVE_TYPE}')">
-														<span class="fw-bold">
+														<span class="fw-bold text-decoration-underline">
                                 ${LEAVE_TYPE}
+                                 <i class="fas fa-magnifying-glass-arrow-right text-main"></i>
 														</span>
 												</a>
 												<div class="text-normal"><small class="text-muted extra-small">Date filed:</small></div>
