@@ -325,9 +325,9 @@ async function displayLeaveApplications() {
 
         const setManagerStatus = (statusFlag) => {
           if (statusFlag === 'Y') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-up"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-up"></i></span>`
           } else if (statusFlag === 'N') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-down"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-down"></i></span>`
           } else {
             return ""
           }
@@ -370,7 +370,7 @@ async function displayLeaveApplications() {
 												<a class="text-main text-uppercase text-nowrap" href="javascript:void(0)" onclick="showModalEditLeaveApplication(${LEAVE_APPLICATION_CODE}, ${USER_CODE}, '${LEAVE_TYPE}')">
 														<span class="fw-bold text-decoration-underline">
                                 ${LEAVE_TYPE}
-                                 <i class="fas fa-magnifying-glass-arrow-right text-main"></i>
+                                 <i class="bi bi-magnifying-glass-arrow-right text-main"></i>
 														</span>
 												</a>
 												<div class="text-normal"><small class="text-muted extra-small">Date filed:</small></div>
@@ -404,7 +404,7 @@ async function displayLeaveApplications() {
 										</td>
 										<td class="text-nowrap">${setManagerStatus(IS_APPROVED_BY_MANAGER)}</td>
 										<td class="text-nowrap">${setManagerStatus(IS_APPROVED_BY_HR)}</td>
-										<td>${HAS_ATTACHMENT === `Y` ? `<button class="btn btn-icon btn-round btn-sm btn-primary" onclick="displayPDF(${LEAVE_APPLICATION_CODE})"><i class="fas fa-paperclip"></i></button>` : ``}</td>
+										<td>${HAS_ATTACHMENT === `Y` ? `<button class="btn btn-icon btn-round btn-sm btn-primary" onclick="displayPDF(${LEAVE_APPLICATION_CODE})"><i class="bi bi-paperclip"></i></button>` : ``}</td>
 								</tr>`
       }
     } else {
@@ -614,8 +614,8 @@ async function showModalEditLeaveApplication(leaveApplicationCode, userCode, lea
   if (isApprovedByManager === 'Y' && isApprovedByHr === '' && leaveStatus !== "Trashed") {
     $(gModal).find(".modal-footer").empty().append(`
 						<div class="w-100 text-center gap-2">
-								<button type="button" class="btn btn-primary px-5" title="Approved" onclick="confirmApproval(${leaveApplicationCode}, '${employeeName}')"><i class="fas fa-thumbs-up"></i> Approve</button>
-								<button type="button" class="btn btn-danger px-5" title="Disapproved or Reject" onclick="confirmDisApproval(${leaveApplicationCode}, '${employeeName}')"><i class="fas fa-thumbs-down"></i> Reject</button>
+								<button type="button" class="btn btn-primary px-5" title="Approved" onclick="confirmApproval(${leaveApplicationCode}, '${employeeName}')"><i class="bi bi-hand-thumbs-up"></i> Approve</button>
+								<button type="button" class="btn btn-danger px-5" title="Disapproved or Reject" onclick="confirmDisApproval(${leaveApplicationCode}, '${employeeName}')"><i class="bi bi-hand-thumbs-down"></i> Reject</button>
 						</div>
 				`)
   } else {

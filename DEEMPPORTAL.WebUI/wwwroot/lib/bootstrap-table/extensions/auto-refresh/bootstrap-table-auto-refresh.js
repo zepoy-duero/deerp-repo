@@ -2267,7 +2267,7 @@
     autoRefreshFunction: null
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'autoRefresh', {
-    glyphicon: 'glyphicon-time icon-time',
+    glyphicon: 'bi bi-time icon-time',
     fa: 'fa-clock',
     bi: 'bi-clock',
     icon: 'icon-clock',

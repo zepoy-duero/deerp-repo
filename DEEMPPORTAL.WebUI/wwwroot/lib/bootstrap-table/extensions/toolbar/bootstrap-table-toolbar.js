@@ -3456,7 +3456,7 @@
     }
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'advancedSearchIcon', {
-    glyphicon: 'glyphicon-chevron-down',
+    glyphicon: 'bi bi-chevron-down',
     fa: 'fa-chevron-down',
     bi: 'bi-chevron-down',
     'material-icons': 'expand_more'

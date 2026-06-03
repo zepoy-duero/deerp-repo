@@ -2345,7 +2345,7 @@
         this.constants.html.toolbarDropdownSeparator = '<li class="dropdown-divider"></li>';
         this.constants.html.pageDropdown = ['<div class="dropdown-menu"><div class="dropdown-content">', '</div></div>'];
         this.constants.html.pageDropdownItem = '<a class="dropdown-item %s" href="#">%s</a>';
-        this.constants.html.dropdownCaret = '<span class="icon is-small"><i class="fas fa-angle-down" aria-hidden="true"></i></span>';
+        this.constants.html.dropdownCaret = '<span class="icon is-small"><i class="bi bi-angle-down" aria-hidden="true"></i></span>';
         this.constants.html.pagination = ['<ul class="pagination%s">', '</ul>'];
         this.constants.html.paginationItem = '<li><a class="page-item pagination-link%s" aria-label="%s" href="#">%s</a></li>';
         this.constants.html.searchInput = '<p class="control"><input class="%s input-%s" type="search" placeholder="%s"></p>';

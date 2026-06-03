@@ -4,12 +4,11 @@ using DEEMPPORTAL.Application.Shared;
 
 using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Domain;
-using DEEMPPORTAL.Domain.MyProfile;
 using DEEMPPORTAL.Domain.Ticket;
 using DEEMPPORTAL.WebUI.Models;
-using Erp.Application.MyProfile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 
@@ -17,11 +16,12 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 [Authorize]
 [Route("MyTickets")]
 public class TicketController(ISelectOptionsService selectOptionsService,
+      IFetchOnlyOneService fetchOnlyOneService,
       ITicketService ticketService, IMapper mapper) : Controller
 {
   private readonly ITicketService _ticketService = ticketService;
     private readonly ISelectOptionsService _selectOptionsService = selectOptionsService;
-
+    private readonly IFetchOnlyOneService _fetchOnlyOneService = fetchOnlyOneService;
     private readonly IMapper _mapper = mapper;
     [HttpGet("")]
     public IActionResult Index()
@@ -94,10 +94,13 @@ public class TicketController(ISelectOptionsService selectOptionsService,
 
             var mapped = _mapper.Map<CreateTicketParams>(model);
             var isSaved = await _ticketService.CreateTicketAsync(mapped);
+            //var managerEmailId = await _fetchOnlyOneService.GetManagerEmailByDeptCode(mapped.DeptCode);
+            //var userEmailId = await _fetchOnlyOneService.GetUserEmailByUserCode(mapped.RequestedByCode);
 
             return Ok(isSaved);
         }
     }
+
     [HttpPost]
     public async Task<IActionResult> Upload(IFormFile file)
     {

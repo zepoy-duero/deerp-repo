@@ -83,7 +83,7 @@ async function displayRecords(callback) {
                     <td id="org-code" style="display:none">${data[i].ORG_CODE}</td>
                     <td>${i + 1}</td>
                     <td>
-                        <button type="button" class="btn btn-danger rounded-1" onclick="showModalUpdateUserAccount(${data[i].USER_CODE})"><span class="fas fa-pencil-alt"></span> Edit</button>
+                        <button type="button" class="btn btn-danger rounded-1" onclick="showModalUpdateUserAccount(${data[i].USER_CODE})"><span class="bi bi-pencil-alt"></span> Edit</button>
                     </td>
                     <td>
                         <div class="text-uppercase fw-bolder fs-6">
@@ -100,7 +100,7 @@ async function displayRecords(callback) {
                         <div class="d-flex gap-2">
                             <div class="dropdown">
                               <button class="btn btn-sm btn-light rounded-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
+                                <i class="bi bi-ellipsis-v"></i>
                               </button>
                               <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="javascript:void(0)" onclick="resetPassword(${data[i].USER_CODE})">Reset Password</a></li>

@@ -3090,21 +3090,21 @@
   var isSingleSort = false;
   var Utils = $.fn.bootstrapTable.utils;
   Utils.assignIcons($.fn.bootstrapTable.icons, 'plus', {
-    glyphicon: 'glyphicon-plus',
+    glyphicon: 'bi bi-plus',
     fa: 'fa-plus',
     bi: 'bi-plus',
     icon: 'icon-plus',
     'material-icons': 'plus'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'minus', {
-    glyphicon: 'glyphicon-minus',
+    glyphicon: 'bi bi-minus',
     fa: 'fa-minus',
     bi: 'bi-dash',
     icon: 'icon-minus',
     'material-icons': 'minus'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'sort', {
-    glyphicon: 'glyphicon-sort',
+    glyphicon: 'bi bi-sort',
     fa: 'fa-sort',
     bi: 'bi-arrow-down-up',
     icon: 'icon-sort-amount-asc',

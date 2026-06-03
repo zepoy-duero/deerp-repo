@@ -15,20 +15,11 @@ ViewData["Title"] = "Ticket";
             <div class="row d-flex justify-content-between align-items-center">
                 <!-- Title -->
                 <div class="col">
-                    <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                    <h5 class="page-title fs-5 fw-bolder text-main">
                         Tickets
                     </h5>
                 </div>
-                
 
-            </div>
-            <div class="row d-flex justify-content-between align-items-center">
-                
-                <div class="col">
-                    <div id="openCreateTicketModal" class="btn btn-sm ms-3 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
-                        <i class="bi bi-plus"></i> New Ticket
-                    </div>
-                </div>
                 <div class="col text-end ms-auto">
                     <div id="TicketsTotal" class="container">
                         <div id="" class="btn rounded-pill bg-main text-white">
@@ -41,13 +32,24 @@ ViewData["Title"] = "Ticket";
                         </div>
                     </div>
                 </div>
+            </div>
+       
+            <div class="row d-flex justify-content-between align-items-center">
+                
+                <div class="col">
+                    <div id="openCreateTicketModal" class="btn btn-sm ms-3 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                        <i class="bi bi-plus"></i> New Ticket
+                    </div>
+                    @{
+
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/TicketTable2.cshtml");
+                    }
+                </div>
+               
 
             </div>
 
-            @{
-
-                await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/TicketTable2.cshtml");
-            }
+           
         </div>
 
     </div>

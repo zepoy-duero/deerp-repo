@@ -3771,7 +3771,7 @@
     printFormatter: undefined
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'print', {
-    glyphicon: 'glyphicon-print icon-share',
+    glyphicon: 'bi bi-print icon-share',
     fa: 'fa-print',
     bi: 'bi-printer',
     icon: 'icon-printer',

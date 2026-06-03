@@ -2486,7 +2486,7 @@
   });
   Object.assign($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales);
   Utils.assignIcons($.fn.bootstrapTable.icons, 'copy', {
-    glyphicon: 'glyphicon-copy icon-pencil',
+    glyphicon: 'bi bi-copy icon-pencil',
     fa: 'fa-copy',
     bi: 'bi-clipboard',
     icon: 'icon-copy',

@@ -246,9 +246,9 @@ async function displayLeaveApplications(callback) {
 
         const setManagerStatus = (statusFlag) => {
           if (statusFlag === 'Y') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-up"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-up"></i></span>`
           } else if (statusFlag === 'N') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-down"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-down"></i></span>`
           } else {
             return ""
           }
@@ -299,7 +299,7 @@ async function displayLeaveApplications(callback) {
                     </td>
                     <td class="text-nowrap">${setManagerStatus(IS_APPROVED_BY_MANAGER)}</td>
                     <td class="text-nowrap">${setManagerStatus(IS_APPROVED_BY_HR)}</td>
-                    <td>${HAS_ATTACHMENT === `Y` ? `<button class="btn btn-icon btn-round btn-sm btn-primary" onclick="displayPDF(${LEAVE_APPLICATION_CODE})"><i class="fas fa-paperclip"></i></button>` : ``}</td>
+                    <td>${HAS_ATTACHMENT === `Y` ? `<button class="btn btn-icon btn-round btn-sm btn-primary" onclick="displayPDF(${LEAVE_APPLICATION_CODE})"><i class="bi bi-paperclip"></i></button>` : ``}</td>
                 </tr>`
       }
     } else {

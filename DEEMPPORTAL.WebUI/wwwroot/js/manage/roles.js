@@ -41,8 +41,8 @@ async function displayRecords() {
                         <input type="checkbox" class="form-check-input p-2 border-2" style="" value="${data[i].ROLE_CODE}" />
                     </td>
                     <td>
-                        <a href="javascript:void(0)" class="btn btn-secondary rounded-1 border text-primary" onclick="showModalPermission(${data[i].ROLE_CODE}, '${data[i].ROLE_NAME}')">
-                            <i class="fas fa-eye"></i> View
+                        <a href="javascript:void(0)"  class="btn btn-sm text-white rounded-1 " onclick="showModalPermission(${data[i].ROLE_CODE}, '${data[i].ROLE_NAME}')">
+                            <i class="bi bi-eye"></i> View
                         </a>
                     </td>
                     <td>${data[i].ROLE_NAME}</td>
@@ -52,11 +52,11 @@ async function displayRecords() {
                     </td>
                     <td>
                         ${data[i].TOTAL_USERS > 0 ? `` : `
-                            <button type="button" class="btn btn-secondary rounded-1" onclick="showModalEditRole(${data[i].ROLE_CODE})">
-                                <i class="fas fa-pencil-alt"></i> Edit
+                            <button type="button" class="btn btn-sm btn-main rounded-1" onclick="showModalEditRole(${data[i].ROLE_CODE})">
+                                <i class="bi bi-pencil-alt"></i> Edit
                             </button>
-                            <button class="btn btn-secondary text-danger rounded-1" onclick="deleteRole(${data[i].ROLE_CODE})">
-                                <i class="fas fa-trash"></i> Trash
+                            <button class="btn btn-sm btn-danger rounded-1" onclick="deleteRole(${data[i].ROLE_CODE})">
+                                <i class="bi bi-trash"></i> Trash
                             </button>
                         `}
                     </td>
@@ -191,8 +191,8 @@ async function displayMainMenuItems() {
         				</td>
         				<td>
         					${data[i].HAS_SUB_MENU === 'Y' ? `
-        						<a href="javascript:void(0)" class="btn btn-xs btn-secondary border" data-main-menu-id="${data[i].MAIN_MENU_CODE}" onclick="toggleSubMenuItems(${data[i].MAIN_MENU_CODE})">
-        							<i class="fas fa-angle-down"></i>
+        						<a href="javascript:void(0)" class="btn btn-xs border" data-main-menu-id="${data[i].MAIN_MENU_CODE}" onclick="toggleSubMenuItems(${data[i].MAIN_MENU_CODE})">
+        							<i class="bi bi-chevron-down"></i>
         						</a>
         					` : ``}
         				</td>
@@ -242,7 +242,7 @@ async function displaySubMenuItems(mainMenuCode) {
     				<td>
     					${data[i].HAS_SUB_MENU === 'Y' ? `
     						<a href="javascript:void(0)" class="btn btn-xs btn-secondary" data-main-menu-id="${mainMenuCode}" data-sub-menu-id="${data[i].MENU_SUB_CODE}" onclick="toggleSubLevelMenuItems(${data[i].MAIN_MENU_CODE},${data[i].MENU_SUB_CODE})">
-    							<i class="fas fa-angle-down"></i>
+    							<i class="bi bi-angle-down"></i>
     						</a>
     					` : ``}
     				</td>

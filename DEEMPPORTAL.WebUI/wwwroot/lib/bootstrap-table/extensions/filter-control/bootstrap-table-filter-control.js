@@ -6420,13 +6420,13 @@
     'created-controls.bs.table': 'onCreatedControls'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'filterControlSwitchHide', {
-    glyphicon: 'glyphicon-zoom-out icon-zoom-out',
+    glyphicon: 'bi bi-zoom-out icon-zoom-out',
     fa: 'fa-search-minus',
     bi: 'bi-zoom-out',
     'material-icons': 'zoom_out'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'filterControlSwitchShow', {
-    glyphicon: 'glyphicon-zoom-in icon-zoom-in',
+    glyphicon: 'bi bi-zoom-in icon-zoom-in',
     fa: 'fa-search-plus',
     bi: 'bi-zoom-in',
     'material-icons': 'zoom_in'

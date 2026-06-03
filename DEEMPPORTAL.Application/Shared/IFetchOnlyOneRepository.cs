@@ -13,4 +13,5 @@ public interface IFetchOnlyOneRepository
     Task<string> GetUserSatisfactionEmailRecipient();
     Task<int> GetUserSatisfactionLatestId();
     Task<bool> IsUserManager(int userCode);
+    //Task<string> GetManagerEmailByDeptCode(int deptCode);
 }

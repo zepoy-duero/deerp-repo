@@ -12,4 +12,5 @@ public interface IFetchOnlyOneService
     Task<string> GetManagerEmailByUserCode();
     Task<int> GetUserSatisfactionLatestId();
     Task<bool> IsUserManager(int userCode);
+    //Task<string> GetManagerEmailByDeptCode(int deptCode);
 }

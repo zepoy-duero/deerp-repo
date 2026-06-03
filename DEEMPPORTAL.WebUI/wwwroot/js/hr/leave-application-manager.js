@@ -304,9 +304,9 @@ async function displayLeaveApplications(callback) {
 
         const setManagerStatus = (statusFlag) => {
           if (statusFlag === 'Y') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-up"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-primary-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-up"></i></span>`
           } else if (statusFlag === 'N') {
-            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="fas fa-thumbs-down"></i></span>`
+            return `<span class="btn btn-sm btn-icon btn-round bg-danger-gradient text-white" style="font-size:1rem !important"><i class="bi bi-hand-thumbs-down"></i></span>`
           } else {
             return ""
           }
@@ -316,7 +316,7 @@ async function displayLeaveApplications(callback) {
         let counter = i + 1
 
         if (APPLICATION_STATUS === "Pending") {
-          //btnDelete = `<button class="btn btn-sm btn-danger" onclick="deleteLeaveApplication(${LEAVE_APPLICATION_CODE})"><i class="fas fa-trash"></i></button>`
+          //btnDelete = `<button class="btn btn-sm btn-danger" onclick="deleteLeaveApplication(${LEAVE_APPLICATION_CODE})"><i class="bi bi-trash"></i></button>`
           btnDelete = `
             <button class="btn btn-link btn-sm btn-danger" onclick="confirmTrash(${LEAVE_APPLICATION_CODE}, '${EMPLOYEE_NAME}')" title="Trash Application">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
@@ -338,7 +338,7 @@ async function displayLeaveApplications(callback) {
                         <a class="text-main text-uppercase" href="javascript:void(0)" onclick="showModalEditLeaveApplication(${LEAVE_APPLICATION_CODE}, '${LEAVE_TYPE}')">
                             <span class="fw-bolder text-nowrap text-decoration-underline">
                                 ${LEAVE_TYPE}
-                                <i class="fas fa-magnifying-glass-arrow-right text-main"></i>
+                                <i class="bi bi-magnifying-glass-arrow-right text-main"></i>
                             </span>
                         </a>
                         <div class="text-normal">
@@ -501,8 +501,8 @@ async function showModalEditLeaveApplication(leaveApplicationCode, leaveType) {
     $(gModal).find("#txtRemarks, #inpStartDateOfLeave").prop("readonly", false) // enable only selected inputs
     $(gModal).find(".modal-footer").empty().append(`
             <div class="hstack gap-2">
-                <div class=""><button type="button" class="btn btn-primary px-5 rounded-1" title="Approved" onclick="confirmApproval(${leaveApplicationCode}, '${employeeName}')"><i class="fas fa-thumbs-up"></i> Approve</button></div>
-                <div class="ms-auto"><button type="button" class="btn btn-danger px-5 rounded-1" title="Disapproved or Reject" onclick="confirmDisApproval(${leaveApplicationCode}, '${employeeName}')"><i class="fas fa-thumbs-down"></i> Reject</button></div>
+                <div class=""><button type="button" class="btn btn-primary px-5 rounded-1" title="Approved" onclick="confirmApproval(${leaveApplicationCode}, '${employeeName}')"><i class="bi bi-hand-thumbs-up"></i> Approve</button></div>
+                <div class="ms-auto"><button type="button" class="btn btn-danger px-5 rounded-1" title="Disapproved or Reject" onclick="confirmDisApproval(${leaveApplicationCode}, '${employeeName}')"><i class="bi bi-hand-thumbs-down"></i> Reject</button></div>
                 <div class="vr"></div>
                 <div class=""><button type="button" class="btn btn-secondary rounded-1 px-4" onclick="submitSaveLeave(this)">Update Application</button></div>
             </div>

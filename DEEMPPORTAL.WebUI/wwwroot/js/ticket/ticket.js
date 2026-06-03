@@ -61,68 +61,66 @@ const inputSelectors = [
     "#TIcketSubject",
     "#TicketDescription",
 ];
-
+const ticketsTable = $("#ticketsTable");
 
 $(async function () {
-    //await getTicketData();
-    await initTicket();
-    await getAllTicket();
-    await getAssigneeOptions(1, 1, 9);
-    await getPriorityOptions(1, 1, 9);
-    await getDurationUnitOptions();
-    await getStatusOptions(1, 1, 9);
+  
 
-    await getDepartments();
-    await getUserOptions();
-    await getTypeOptions(1, 1, 9);
-    await getModuleOptions(1, 1, 9);
-    
+    await getAllTicket();
+    //await getAssigneeOptions(1, 1, 9);
+    //await getPriorityOptions(1, 1, 9);
+    //await getDurationUnitOptions();
+    //await getStatusOptions(1, 1, 9);
+    //await getDepartments();
+    //await getUserOptions();
+    //await getTypeOptions(1, 1, 9);
+    //await getModuleOptions(1, 1, 9);
+
     $('#TicketDescription').summernote({
-        height: 200,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['fontsize', ['fontsize']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
+            height: 200,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
           
-            ['insert', ['link']],
-            ['view', ['fullscreen']],
-        ],
+                ['insert', ['link']],
+                ['view', ['fullscreen']],
+            ],
     });
-    $('#filterRequestedByName').on('change', function () {
-        $("#table").bootstrapTable('filterBy', {
-            RequestedByName: $('#filterType').val() ? $('#filterType').val() : '',
-            TaskTypeCode: $('#filterType').val(),
-            StatusCode: $('#filterStatus').val(),
-            PriorityCode: $('#filterPriority').val()
-        })
-    })
-    $('#filterType').on('change',function () {
-        $("#table").bootstrapTable('filterBy', {
-            RequestedByName: $('#filterType').val(),
-            TaskTypeCode: $('#filterType').val(),
-            StatusCode: $('#filterStatus').val(),
-             PriorityCode: $('#filterPriority').val()
-        })
-    })
-    $('#filterStatus').on('change', function () {
-        $("#table").bootstrapTable('filterBy', {
-            RequestedByName: $('#filterType').val(),
-            TaskTypeCode: $('#filterType').val(),
-            StatusCode: $('#filterStatus').val(),
-            PriorityCode: $('#filterPriority').val()
-        })
-    })
-    $('#filterPriority').on('change', function () {
-        $("#table").bootstrapTable('filterBy', {
-            RequestedByName: $('#filterType').val(),
-            TaskTypeCode: $('#filterType').val(),
-            StatusCode: $('#filterStatus').val(),
-            PriorityCode: $('#filterPriority').val()
-        })
-    })
+    //----------EVENT LISTENERS----------------------------
+
+    //------ROW CLICKED--------------
+    ticketsTable.on("click-row.bs.table", function (e, row, $element, field) {
+        $("#editTicketModal").modal("toggle");
+        $("#editTicketSubject").val(row.TicketSubject);
+        $("#editTicketDescription").val(row.TicketDescription);
+        $("#editUserDropdownSelect").html(row.RequestedByName);
+        $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
+        //$("#editUserDropdownSelect").val(row.RequestedByName);
+        $("#editRequestedDate").val(row.RequestedDate);
+        console.log(row.TicketSubject)
+        $('#editTicketDescription').summernote({
+            height: 200,
+            lang: 'en-US',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen']],
+
+            ],
+
+        });
+    });
+    //--------------------------------
     //DATE RANGE PICKER
     $('input[name="datefilter"]').daterangepicker({
         autoUpdateInput: false,
@@ -138,10 +136,9 @@ $(async function () {
     $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
- 
     // APPLY FILTER
     $("#btnFilter").on("click", function () {
-        //let searchText = $('#customSearch').val().toLowerCase();
+        let searchText = $('#customSearch').val().toLowerCase();
         let fromDate = $("#dateFrom").val();
         let toDate = $("#dateTo").val();
 
@@ -162,30 +159,21 @@ $(async function () {
             return matchText && matchDate;
         });
 
-        $("#table").bootstrapTable("load", filtered);
+        ticketsTable.bootstrapTable("load", filtered);
     });
 
     // RESET FILTER
     $("#btnResetFilter").on("click", function () {
-        $("#customSearch").val("");
-        $("#dateFrom").val("");
-        $("#dateTo").val("");
-
-        $("#table").bootstrapTable("load", originalData);
+        ticketsTable.bootstrapTable("clearFilterControl");
     });
-
-    // 🔥 LIVE SEARCH (optional)
-    $("#customSearch").on("keyup", function () {
-        $("#btnFilter").click();
-    });
-
+   
     // COLUMN TOGGLE
     $(".toggle-column").on("change", function () {
         let field = $(this).data("field");
 
         $(this).is(":checked")
-            ? $("#table").bootstrapTable("showColumn", field)
-            : $("#table").bootstrapTable("hideColumn", field);
+            ? ticketsTable.bootstrapTable("showColumn", field)
+            : ticketsTable.bootstrapTable("hideColumn", field);
     });
 
     // Select item
@@ -255,7 +243,6 @@ $(async function () {
         }
     });
     $("#openCreateTicketModal").on("click", async function () {
-
         await getDepartments();
         await getUserOptions();
         await getTypeOptions(1, 1, 9);
@@ -308,33 +295,7 @@ $(async function () {
         }
     });
 
-    $("#table").on("click-row.bs.table", function (e, row, $element, field) {
-        $("#editTicketModal").modal("toggle");
-        $("#editTicketSubject").val(row.TicketSubject);
-        $("#editTicketDescription").val(row.TicketDescription);
-        $("#editUserDropdownSelect").html(row.RequestedByName);
-        $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned' );
-        //$("#editUserDropdownSelect").val(row.RequestedByName);
-        $("#editRequestedDate").val(row.RequestedDate);
-        console.log(row.TicketSubject)
-        $('#editTicketDescription').summernote({
-            height: 200,
-            lang: 'en-US',
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen']],
-                
-            ],
-            
-        });
-    });
+   
     $("#isMajorChange").on("change", function () {
         $("#managementApproval").toggleClass("d-none", !this.checked);
     });
@@ -357,47 +318,25 @@ $(async function () {
         $("#employeedropdown").show();
     });
 
-    // Click selection
-    $("#employeedropdown").on("click", ".list-group-item-action", function (e) {
-        e.preventDefault();
-
-        let id = $(this).data("id");
-        let name = $(this).data("name");
-
-        $("#hiddenInput").val(id); // store EmployeeId
-        $("#employeeSearch").val(name); // show Employee Name
-        $("#employeedropdown").hide();
-    });
-
-    // Hide dropdown if clicking outside
-    $(document).on("click", function (e) {
-        if (!$(e.target).closest("#employeeSearch, #employeedropdown").length) {
-            $("#employeedropdown").hide();
-        }
-    });
     
 
     $("#viewTicketDetailsBtn").on("click", () => {
         $("#editTicketModal").modal("toggle");
     });
 
-  $("#submitTicket").on("click", async function (event) {
+    $("#submitTicket").on("click", async function (event) {
+            $("#submitTicket").empty().addClass('disabled').append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...`)
       event.preventDefault()
-      uploadTicketAttachments()
-      return;
+      //uploadTicketAttachments()  test to upload files on local drive
+      
       var markupStr = $('#TicketDescription').summernote('code');
-
       console.log(markupStr)
-    
-   
       console.log($("#createTicketForm"));
       //return;
-      var forms = document.querySelectorAll('.needs-validation');
+      var forms = document.querySelectorAll('.needs-validation'); //select all elements that has '.needs-validation'
  
-      NewTicket.TicketNo = 1;
-      
       NewTicket.TicketSubject = $("#TicketSubject").val();
-      //NewTicket.TicketDescription = $("#TicketDescription").val();
       NewTicket.TicketDescription = markupStr;
       NewTicket.TaskTypeCode = $("#TicketRequestType").val();
       console.log(NewTicket)
@@ -409,13 +348,14 @@ $(async function () {
                   alert("Validation Failed")
                   //event.stopPropagation()
               }
-            
               else {
-            
+                    
                   let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
                   console.log(response)
                   $("#newTicketId").empty().append(response[0].TicketId)
-                  $("#table").bootstrapTable('insertRow', {
+
+                  ticketsTable.bootstrapTable("clearFilterControl");
+                  ticketsTable.bootstrapTable('insertRow', {
                       index: 0,
                       row: response[0],
                   })
@@ -424,7 +364,8 @@ $(async function () {
 
                     setTimeout(function () {
                       $("#successAlert").addClass("d-none");
-                  }, 3000);
+                    }, 3000);
+                  $("#submitTicket").empty().append('Submit Ticket').removeClass('disabled'); 
               }
 
                  
@@ -484,7 +425,8 @@ $(async function () {
       },
     );
   });
-});
+    });
+   
 function closeEmailModal() {
   $("#editTicketModal").modal("toggle");
   $("#emailModal").modal("toggle");
@@ -531,16 +473,7 @@ function getStatus(i) {
   else return '<span class="badge bg-primary rounded-pill">In Progress</span>';
 }
 
-//async function selectUsers() {
-//  let params = {
-//    org_code: 1,
-//    gsearchParam: encodeURIComponent(""),
-//    gPagNo: 1,
-//  };
 
-//  let data = await $.get(`/manage/users/getUsers`, params);
-//  console.log(data);
-//}
 
 //OPTIONS FOR COMBOS
 async function getDepartments() {
@@ -551,7 +484,7 @@ async function getDepartments() {
   let options = `<a class="dropdown-item text-muted" value="0"> -- Choose department -- </a>`;
   departmentOptions.forEach(function (i) {
     if (i.ORG_CODE == 1 && i.LOC_CODE == 1)
-      options += `<a onclick="departmentSelected(event)" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
+        options += `<a onclick="departmentSelected(event)" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
   });
   $("#departmentList").empty().append(options);
 }
@@ -618,7 +551,6 @@ function handleFiles(files) {
  
   TicketAttachments.value = '';
 }
-
 function isValidFileType(file) {
   const allowedTypes = [
     "image/png",
@@ -646,27 +578,40 @@ async function getAssigneeOptions(org_code, loc_code, dept_code) {
   let options = "";
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
-            options += `<li class="dropdown-item text-nowrap" data-value="${i.VALUE}">${i.TEXT}</li>`;
+            options += `<a onclick="" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
         }
   });
 
     $("#assigneeList").empty().append(options);
-    $("#filterAssignedTo").append(options);
+
    
 }
-async function getUserOptions(searchString) {
+async function getTicketRequestedByOptions(){
+    let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
+    let options = "";
+    
+    usersOptions.forEach(function (i) {
+        if (i.TEXT != '') {
+            options += `<a onclick="" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
+        }
+    });
+
+    $("#filterRequestedByName").empty().append(options);
+}
+async function getUserOptions() {
   let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
     let options = "";
     console.log(usersOptions);
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
-            options += `<li class="dropdown-item text-nowrap" data-value="${i.VALUE}">${i.TEXT}</li>`;
+            options += `<li onclick="requestedBySelected(event)" class="dropdown-item" data-value="${i.VALUE}">${i.TEXT}</li>`;
         }
  
   });
 
     $("#userList").empty().append(options);
     $("#requestedByNameList").append(options)
+    //$("#filterRequestedByName").append(options)
 }
 
 async function getPriorityOptions(OrgCode, LocCode, DeptCode) {
@@ -729,7 +674,7 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
     LocCode,
     DeptCode,
   });
-    let options = "<option value='0' class='active'>Request Type </option>";
+    let options = "<option value='null' class='active'>Request Type </option>";
   console.log(typeOptions);
   typeOptions.forEach(function (i) {
     options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
@@ -740,134 +685,35 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
 }
 
 async function getAllTicket() {
-    console.log(bootstrap.Tooltip.VERSION);
-    const DeptCode = 9;
+    ticketsTable.bootstrapTable('showLoading');
 
-  let data = await $.get(`${gBaseUrl}/get-tickets`, { DeptCode: DeptCode });
+    const filterParams = {
+        RequestedByName: $('#filterRequestedByName').val(),
+        TaskTypeCode: $('#filterType').val(),
+        StatusCode: $('#filterStatus').val(),
+        PriorityCode: $('#filterPriority').val()
+    }
+    const DeptCode = null;
+    console.log(filterParams)
+    let data = await $.get(`${gBaseUrl}/get-tickets`, { DeptCode: DeptCode });
     console.log(data);
-    $("#ticketTblBody").empty();
-    data.forEach(function (d,i) {
-        $("#ticketTblBody").append(`
-        <tr class="p-0 m-0" data-index="${i}">
-           
-            <td class="text-nowrap text-small">${d.DeptName + d.TicketId}</td>
-            <td class="text-nowrap text-small">${d.RequestedByName}</td>
-            <td class="text-nowrap text-small">${d.TicketSubject}</td>
-             <td class="text-nowrap text-small">${d.AssignedToName}</td>
-            <td class="text-nowrap">${i.DeptName}</td>
-            <td class="text-nowrap text-small">${d.RequestedDate}</td>
-            <td class="text-nowrap text-small">${d.TaskTypeName}</td>
-            <td class="text-nowrap text-small">${d.StatusName}</td>
-             <td class="text-nowrap text-small">${d.PriorityName}</td>
-            </tr>
-        `)
-    })
+   
     showTotalTicketsRecords(data.length);
     window.originalData = data;
- 
     
-  // CHECK IF ALREADY INITIALIZED
-  if ($("#table").data("bootstrap.table")) {
-    // JUST LOAD NEW DATA
-    $("#table").bootstrapTable("load", data);
-  } else {
-    // INITIALIZE ONLY ONCEfilter
-    $("#table").bootstrapTable({
-        buttonsOrder: ['btnAdd', 'columns', 'fullscreen'],
-        data: data,
-        refreshOptions: {
-            buttonsOrder: ['btnAdd', 'columns', 'fullscreen']
-        }
-    });
-  }
-
-   
+    ticketsTable.bootstrapTable("load", data)
+        .bootstrapTable('hideLoading');
 }
-//function requestedBySelected(event) {
-//    EditTicket.DeptCode = event.target.dataset.value;
 
-//    $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
-//}
-function departmentSelected(event) {
-    //console.log(event.target.innerHTML);
-    //console.log(event.target.dataset.value);
-
-    NewTicket.DeptCode = event.target.dataset.value;
-    
-    $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
-}
-async function validateFormData() {
-    inputSelectors.forEach(selector => {
-        const $el = $(selector);
-
-        // Remove old validation state/tooltips
-        $el.removeClass("is-invalid");
-        const oldTooltip = bootstrap.Tooltip.getInstance($el[0]);
-        if (oldTooltip) oldTooltip.dispose();
-
-        if ($el.val().trim() === "") {
-            validated = false;
-            $el.addClass("is-invalid");
-
-            // 3. Create the white tooltip with custom message
-            new bootstrap.Tooltip($el[0], {
-                title: validationConfig[selector],
-                placement: "right",
-                trigger: "manual",
-                customClass: "white-tooltip"
-            }).show();
-        } else {
-            $el.addClass("is-valid");
-        }
-    });
-
-    return validated;
-}
-async function initTicket() {
-    const response = await fetch(`${homeUrl}/getUserDetails`);
-
-    if (!response.ok) {
-        console.error("Failed to fetch user details");
-        return;
-    }
-
-    userData = await response.json();
-    console.log(userData);
-    let currentDate = new Date();
-    NewTicket.RequestedByName = userData.EMP_NAME,
-        $("#requestedBy").text(userData.EMP_NAME);
-    $("#requestDate").text(currentDate.toISOString().slice(0, 10));
-
-    for (i = 1; i < 5; i++) {
-        $("#tblTickets tbody")
-            .append(`<tr data-bs-toggle="modal" data-bs-target="editTicketModal">
-                                           
-                                           <td class="text-start">
-                                           <span>
-                                             <i class="fas fa-pen-to-square fs-5 text-primary btn"></i>
-                                           </span>
-                                             <span> MIS#${1}</span>
-                                            </td>
-                                            <td class="text-start">Landrex Rebruera</td>
-                                            <td class="text-start">Add EMployee Directory</td>
-                                            <td class="text-start">02-05-2026</td>
-                                            <td class="text-start">
-                                                <span id="statusBadge" class="badge badge-sm rounded-pill bg-darkgreen  text-white">Completed</span>
-                                            </td>
-                                            
-                                        </tr>`);
-    }
-}
 function showTotalTicketsRecords(totalRecords) {
     $("#TicketsTotal").empty().append(
-        `<div class="btn rounded-pill bg-main text-white">
-                <div class="badge fs-6 bg-danger rounded-circle text-white ms-0">${totalRecords}</div>
-         <span class="align-middle ms-1">Records</span>
+        `<div class="btn rounded-pill bg-main text-white text-center">
+                <div class="badge fs-6 bg-danger rounded-pill text-white ms-0">${totalRecords}</div>
+                <span class="text-center ms-1">Records</span>
         </div>`
     )
 }
 function uploadTicketAttachments() {
-    
     var fileAttach = $('#TicketAttachments').val();
     console.log(fileAttach);
     return;
@@ -897,4 +743,45 @@ function uploadTicketAttachments() {
             }
         });
 
+}
+
+//---------CREATE NEW TICKET------------
+function requestedBySelected(event) {
+    console.log(event.target.dataset.value);
+    console.log(event.target.innerHTML);
+    $("#filterRequestedByName").empty().append(filterRequestedByName)
+}
+function departmentSelected(event) {
+
+    NewTicket.DeptCode = DeptCode;
+    NewTicket.OrgCode = OrgCode;
+    NewTicket.LocCode = LocCode;
+    $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
+}
+async function validateFormData() {
+    inputSelectors.forEach(selector => {
+        const $el = $(selector);
+
+        // Remove old validation state/tooltips
+        $el.removeClass("is-invalid");
+        const oldTooltip = bootstrap.Tooltip.getInstance($el[0]);
+        if (oldTooltip) oldTooltip.dispose();
+
+        if ($el.val().trim() === "") {
+            validated = false;
+            $el.addClass("is-invalid");
+
+            // 3. Create the white tooltip with custom message
+            new bootstrap.Tooltip($el[0], {
+                title: validationConfig[selector],
+                placement: "right",
+                trigger: "manual",
+                customClass: "white-tooltip"
+            }).show();
+        } else {
+            $el.addClass("is-valid");
+        }
+    });
+
+    return validated;
 }

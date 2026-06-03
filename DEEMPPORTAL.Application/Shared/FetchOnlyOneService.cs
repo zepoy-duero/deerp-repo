@@ -53,4 +53,8 @@ public class FetchOnlyOneService(IFetchOnlyOneRepository fetchOnlyOneRepository)
     {
         return await _fetchOnlyOneRepository.IsUserManager(userCode);
     }
+    //public async Task<string> GetManagerEmailByDeptCode(int DeptCode)
+    //{
+    //    return await _fetchOnlyOneRepository.GetManagerEmailByDeptCode(DeptCode);
+    //}
 }

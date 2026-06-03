@@ -2465,14 +2465,14 @@
     customViewDefaultView: false
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'customViewOn', {
-    glyphicon: 'glyphicon-list',
+    glyphicon: 'bi bi-list',
     fa: 'fa-list',
     bi: 'bi-list',
     icon: 'list',
     'material-icons': 'list'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'customViewOff', {
-    glyphicon: 'glyphicon-thumbnails',
+    glyphicon: 'bi bi-thumbnails',
     fa: 'fa-th',
     bi: 'bi-grid',
     icon: 'grid_on',

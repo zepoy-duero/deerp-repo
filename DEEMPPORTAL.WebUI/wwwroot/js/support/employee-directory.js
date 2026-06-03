@@ -183,18 +183,18 @@ async function getAllEmployeeDirectory() {
 }
 function showTotalRecordsSpinner() {
     $("#EmployeeDirectoryTotal").empty().append(
-        `<div id="" class="btn rounded-pill bg-main text-white">
-              <div class="spinner-border spinner-border-sm" role="status">
-                  <span class="visually-hidden">Loading...</span>
-              </div>
-                    <span class="blink align-middle ms-2">Loading...</span>
-              </div>`
-    )
-}
+            `<div id="" class="btn rounded-pill bg-main text-white">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                  </div>
+                        <span class="blink align-middle ms-2">Loading...</span>
+             </div>`
+        )
+    }
 function showTotalRecords(totalRecords) {
     $("#EmployeeDirectoryTotal").empty().append(
         `<div class="btn rounded-pill bg-main text-white">
-                <div class="badge fs-6 bg-danger rounded-circle text-white ms-0">${totalRecords}</div>
+                <div class="badge fs-6 bg-danger rounded-pill text-white ms-0">${totalRecords}</div>
          <span class="align-middle ms-1">Records</span>
         </div>`
     )
@@ -211,7 +211,6 @@ function render(containerId, employees) {
     console.log(employees)
     
 }
-
 // ---------------- UTIL ----------------
 function checkIfNull(val) {
     return val ?? "None";

@@ -2961,13 +2961,13 @@
     return tmpGroups;
   };
   Utils.assignIcons($.fn.bootstrapTable.icons, 'collapseGroup', {
-    glyphicon: 'glyphicon-chevron-up',
+    glyphicon: 'bi bi-chevron-up',
     fa: 'fa-angle-up',
     bi: 'bi-chevron-up',
     'material-icons': 'arrow_drop_down'
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'expandGroup', {
-    glyphicon: 'glyphicon-chevron-down',
+    glyphicon: 'bi bi-chevron-down',
     fa: 'fa-angle-down',
     bi: 'bi-chevron-down',
     'material-icons': 'arrow_drop_up'

@@ -192,7 +192,7 @@ function loadingToggleButton(element, bool) {
 		  <span class="visually-hidden">Loading...</span>
 		</div>`)
 	} else {
-		$(element).html(`<i class="fas fa-minus"></i>`)
+		$(element).html(`<i class="bi bi-minus"></i>`)
 	}
 }
 

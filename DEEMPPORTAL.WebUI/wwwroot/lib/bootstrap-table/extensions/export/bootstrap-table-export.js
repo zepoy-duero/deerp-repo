@@ -3488,7 +3488,7 @@
     forceHide: false
   });
   Utils.assignIcons($.fn.bootstrapTable.icons, 'export', {
-    glyphicon: 'glyphicon-export icon-share',
+    glyphicon: 'bi bi-export icon-share',
     fa: 'fa-download',
     bi: 'bi-download',
     icon: 'icon-download',

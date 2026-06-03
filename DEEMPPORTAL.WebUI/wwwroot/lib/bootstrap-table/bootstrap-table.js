@@ -7496,17 +7496,17 @@
   }[bootstrapVersion];
   var ICONS = {
     glyphicon: {
-      clearSearch: 'glyphicon-trash',
-      columns: 'glyphicon-th icon-th',
-      detailClose: 'glyphicon-minus icon-minus',
-      detailOpen: 'glyphicon-plus icon-plus',
-      fullscreen: 'glyphicon-fullscreen',
-      paginationSwitchDown: 'glyphicon-collapse-down icon-chevron-down',
-      paginationSwitchUp: 'glyphicon-collapse-up icon-chevron-up',
-      refresh: 'glyphicon-refresh icon-refresh',
-      search: 'glyphicon-search',
-      toggleOff: 'glyphicon-list-alt icon-list-alt',
-      toggleOn: 'glyphicon-list-alt icon-list-alt'
+      clearSearch: 'bi bi-trash',
+      columns: 'bi bi-th icon-th',
+      detailClose: 'bi bi-minus icon-minus',
+      detailOpen: 'bi bi-plus icon-plus',
+      fullscreen: 'bi bi-fullscreen',
+      paginationSwitchDown: 'bi bi-collapse-down icon-chevron-down',
+      paginationSwitchUp: 'bi bi-collapse-up icon-chevron-up',
+      refresh: 'bi bi-refresh icon-refresh',
+      search: 'bi bi-search',
+      toggleOff: 'bi bi-list-alt icon-list-alt',
+      toggleOn: 'bi bi-list-alt icon-list-alt'
     },
     fa: {
       clearSearch: 'fa-trash',

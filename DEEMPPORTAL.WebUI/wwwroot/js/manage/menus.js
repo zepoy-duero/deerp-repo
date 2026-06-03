@@ -175,7 +175,7 @@ async function displayMainMenuItems() {
 					<td>
 						${data[i].HAS_SUB_MENU === 'Y' ? `
 							<a href="javascript:void(0)" class="btn btn-secondary" data-main-menu-id="${data[i].MAIN_MENU_CODE}" onclick="toggleSubMenuItems(this)">
-								<i class="fas fa-chevron-down"></i>
+								<i class="bi bi-chevron-down"></i>
 							</a>
 						` : ``}
 					</td>
@@ -191,10 +191,10 @@ async function displayMainMenuItems() {
 					<td>
 						<button class="btn btn-secondary"
 								onClick="showModalEditMenuItems(${data[i].MAIN_MENU_CODE}, null, null)">
-							<i class="fas fa-pencil-alt"></i> Edit
+							<i class="bi bi-pencil-alt"></i> Edit
 						</button>
 						<button class="btn btn-secondary text-danger" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, 0, 0)">
-							<i class="fas fa-trash"></i> Trash
+							<i class="bi bi-trash"></i> Trash
 						</button>
 					</td>
 				</tr>`
@@ -237,7 +237,7 @@ async function toggleSubMenuItems(element) {
 				<td>
 					${data[i].HAS_SUB_MENU === 'Y' ? `
 						<a href="javascript:void(0)" class="btn btn-secondary" data-main-menu-id="${mainMenuId}" data-sub-menu-id="${data[i].MENU_SUB_CODE}" onclick="toggleSubLevelMenuItems(this)">
-							<i class="fas fa-chevron-down"></i>
+							<i class="bi bi-chevron-down"></i>
 						</a>
 					` : ``}
 				</td>
@@ -252,10 +252,10 @@ async function toggleSubMenuItems(element) {
 				<td>
 					<button class="btn btn-secondary rounded-1"
 								onClick="showModalEditMenuItems(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, null)">
-							<i class="fas fa-pencil-alt"></i> Edit
+							<i class="bi bi-pencil-alt"></i> Edit
 						</button>
 						<button class="btn btn-secondary text-danger rounded-1" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, 0)">
-							<i class="fas fa-trash"></i> Trash
+							<i class="bi bi-trash"></i> Trash
 						</button>
 				</td>
 			</tr>
@@ -309,10 +309,10 @@ async function toggleSubLevelMenuItems(element) {
 				<td>
 					<button class="btn btn-secondary rounded-1"
 								onClick="showModalEditMenuItems(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, ${data[i].MENU_SUB_LEVEL_CODE})">
-							<i class="fas fa-pencil-alt"></i> Edit
+							<i class="bi bi-pencil-alt"></i> Edit
 					</button>
 					<button class="btn btn-secondary rounded-1 text-danger" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, ${data[i].MENU_SUB_LEVEL_CODE})">
-						<i class="fas fa-trash"></i> Trash
+						<i class="bi bi-trash"></i> Trash
 					</button>
 				</td>
 			</tr>
