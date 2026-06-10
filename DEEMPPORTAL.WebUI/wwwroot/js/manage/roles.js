@@ -41,7 +41,7 @@ async function displayRecords() {
                         <input type="checkbox" class="form-check-input p-2 border-2" style="" value="${data[i].ROLE_CODE}" />
                     </td>
                     <td>
-                        <a href="javascript:void(0)"  class="btn btn-sm text-white rounded-1 " onclick="showModalPermission(${data[i].ROLE_CODE}, '${data[i].ROLE_NAME}')">
+                        <a href="javascript:void(0)"  class="btn btn-sm text-primary rounded-1 " onclick="showModalPermission(${data[i].ROLE_CODE}, '${data[i].ROLE_NAME}')">
                             <i class="bi bi-eye"></i> View
                         </a>
                     </td>

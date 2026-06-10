@@ -41,8 +41,12 @@ ViewData["Title"] = "Ticket";
                         <i class="bi bi-plus"></i> New Ticket
                     </div>
                     @{
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTableFilters.cshtml");
+                       
+                    }
+                    @{
 
-                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/TicketTable2.cshtml");
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
                     }
                 </div>
                

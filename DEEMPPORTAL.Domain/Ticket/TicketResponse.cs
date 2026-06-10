@@ -34,6 +34,7 @@ public class TicketResponse
     public string? Remarks { get; set; }
     public string? DeptName { get; set; }
     public string? ManagerEmailId { get; set; }
+    public string? RequestedByEmail { get; set; }
     public string? StringTicketId { get; set; }
     // Navigation Properties
     //public virtual required TicketPriority Priority { get; set; }

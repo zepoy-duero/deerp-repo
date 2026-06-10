@@ -26,7 +26,7 @@ public class UserSatisfactionController(
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> SendUserSatisfaction(UserSatisfactionViewModel model)
   {
-    var secretKey = "6LfoV9krAAAAALfJQl02coJvHttQn2mrJQyVk06e";
+    var secretKey = "6LdoJgotAAAAAEWDYbLBq4wBfhzY-8in6gofGm3_";
     var client = _httpClientFactory.CreateClient();
 
     var response = await client.PostAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={model.CAPTCHA_TOKEN}"

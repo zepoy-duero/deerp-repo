@@ -1,1 +1,3 @@
-﻿
+﻿Date			Version#		Description
+06-03-2026		2.0.0.0			first publish that include the version no.
+06-10-2026		2.0.0.1		    Ticketing System: added a feature - Send Nofication email to user after submitting a ticket

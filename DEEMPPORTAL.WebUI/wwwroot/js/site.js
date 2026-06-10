@@ -309,7 +309,6 @@ function initIntlTelInput() {
 function viewPdfUserGuide() {
 	window.open("/shop/spare-part/viewPdfUserGuide", "_blank");
 }
-
 function generateCheckbox(field, formCheckType) {
 	return `<div class="input-checkbox ${formCheckType ?? ''} py-1">
 				<input id="${field.VALUE}" value="${field.VALUE}" type="checkbox" class="form-check-input cbFilter" name="cbFilter[]" />
@@ -317,7 +316,6 @@ function generateCheckbox(field, formCheckType) {
 		   </div>
 		`;
 }
-
 function setLocalStorage(key, data) {
 	localStorage.setItem(key, JSON.stringify(data));
 }

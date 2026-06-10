@@ -6,12 +6,11 @@ const previewContainer = document.getElementById("previewContainer");
 const dropZone = document.getElementById("dropZone");
 let selectedFiles = [];
 let originalData = [];
-var userData = null;
 var NewTicketId = null;
 let NewTicket = {
     DeptCode:9,
     TicketNo: null,
-    RequestedDate: moment().format('YYYY-MM-DD, h:mm:ss a'),
+    RequestedDate: null,
     TicketDescription: '',
     TicketSubject: null,
     TaskTypeCode: null,
@@ -51,7 +50,7 @@ let attachment = {
 };
 const validationConfig = {
     "#TicketDepartment": "Please select the department.",
-    "#TicketRequestType": "Choose the type of your request.",
+    "#TicketRequestType": "Choose the type of your ",
     "#TIcketSubject": "Please indicate the ticket subject.",
     "#TicketDescription": "Describe the complete details.",
 };
@@ -62,36 +61,35 @@ const inputSelectors = [
     "#TicketDescription",
 ];
 const ticketsTable = $("#ticketsTable");
+let CurrentUser = null;
 
 $(async function () {
-  
 
-    await getAllTicket();
-    //await getAssigneeOptions(1, 1, 9);
-    //await getPriorityOptions(1, 1, 9);
-    //await getDurationUnitOptions();
-    //await getStatusOptions(1, 1, 9);
-    //await getDepartments();
-    //await getUserOptions();
-    //await getTypeOptions(1, 1, 9);
-    //await getModuleOptions(1, 1, 9);
+    let userData = await fetch(`/home/getUserDetails`);
+    CurrentUser = await userData.json();
+    let dateToday = moment(CurrentUser.DATE_TODAY).format("MMM DD, YYYY");
+    $("#RequestedDate").empty().append(dateToday);
+    await getAllTicket()
 
     $('#TicketDescription').summernote({
-            height: 200,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-          
-                ['insert', ['link']],
-                ['view', ['fullscreen']],
-            ],
+        height: 200,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+
+            ['insert', ['link']],
+            ['view', ['fullscreen']],
+        ],
     });
     //----------EVENT LISTENERS----------------------------
 
+    $('#createTicketModal').on('hidden.bs.modal', function () {
+        resetCreateTicketForm();
+    });
     //------ROW CLICKED--------------
     ticketsTable.on("click-row.bs.table", function (e, row, $element, field) {
         $("#editTicketModal").modal("toggle");
@@ -99,9 +97,9 @@ $(async function () {
         $("#editTicketDescription").val(row.TicketDescription);
         $("#editUserDropdownSelect").html(row.RequestedByName);
         $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
-        //$("#editUserDropdownSelect").val(row.RequestedByName);
+
         $("#editRequestedDate").val(row.RequestedDate);
-        console.log(row.TicketSubject)
+
         $('#editTicketDescription').summernote({
             height: 200,
             lang: 'en-US',
@@ -166,7 +164,7 @@ $(async function () {
     $("#btnResetFilter").on("click", function () {
         ticketsTable.bootstrapTable("clearFilterControl");
     });
-   
+
     // COLUMN TOGGLE
     $(".toggle-column").on("change", function () {
         let field = $(this).data("field");
@@ -223,8 +221,8 @@ $(async function () {
         $("#selectModule").val(value);
 
         $(".dropdown-menu").removeClass("show");
-    });
 
+    });
     // Search filter
     $("#moduleSearchInput").on("keyup", function () {
         let search = $(this).val().toLowerCase();
@@ -242,21 +240,21 @@ $(async function () {
             $("#dateFilter").addClass("disabled");
         }
     });
-    $("#openCreateTicketModal").on("click", async function () {
-        await getDepartments();
+    $("#createTicketModal").on('show.bs.modal',async function (event) {
+        $("#RequestedByName").empty().append(CurrentUser.EMP_NAME);
+        await getDepartments(1, 1);
         await getUserOptions();
         await getTypeOptions(1, 1, 9);
         await getModuleOptions(1, 1, 9);
         await getTypeOptions(1, 1, 9);
     });
-    // Click to open file dialog
-    $("#dropZone").on("click", () => TicketAttachments.click());
+     
+    $("#dropZone").on("click", () => { TicketAttachments.click() });
 
     // File input change
     $(TicketAttachments).on("change", (e) => {
         handleFiles(e.target.files);
     });
-
     // Drag events
     $("#dropZone").on("dragover", (e) => {
         e.preventDefault();
@@ -295,7 +293,7 @@ $(async function () {
         }
     });
 
-   
+
     $("#isMajorChange").on("change", function () {
         $("#managementApproval").toggleClass("d-none", !this.checked);
     });
@@ -318,115 +316,147 @@ $(async function () {
         $("#employeedropdown").show();
     });
 
-    
-
     $("#viewTicketDetailsBtn").on("click", () => {
         $("#editTicketModal").modal("toggle");
     });
 
     $("#submitTicket").on("click", async function (event) {
-            $("#submitTicket").empty().addClass('disabled').append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Loading...`)
-      event.preventDefault()
-      //uploadTicketAttachments()  test to upload files on local drive
-      
-      var markupStr = $('#TicketDescription').summernote('code');
-      console.log(markupStr)
-      console.log($("#createTicketForm"));
-      //return;
-      var forms = document.querySelectorAll('.needs-validation'); //select all elements that has '.needs-validation'
- 
-      NewTicket.TicketSubject = $("#TicketSubject").val();
-      NewTicket.TicketDescription = markupStr;
-      NewTicket.TaskTypeCode = $("#TicketRequestType").val();
-      console.log(NewTicket)
-      Array.prototype.slice.call(forms)
-          .forEach(async function (form) {
-              console.log(form)
-              if (!form.checkValidity()) {
-                
-                  alert("Validation Failed")
-                  //event.stopPropagation()
-              }
-              else {
+        var emailParams = 
+            {
+                Recipient: null,
+                RequestedByName: null,
+                ManagerName: null,
+                RequestedDate: null,
+                TicketSubject: null,
+                TicketDeptName: null,
+                TicketDescription: null,
+                TaskTypeName: null,
+                TicketId: null,
+                ManagerEmailId: null,
+                RequestedByEmail: null,
+                DeptCode: null,
+                TicketNo: null,
+            };
+        disableSubmitButton(); //disable the submit button   
+        event.preventDefault()
+
+
+        var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
+
+        var forms = document.querySelectorAll('.needs-validation'); //select all elements that has '.needs-validation'
+
+        NewTicket.TicketSubject = $("#TicketSubject").val();
+        NewTicket.TicketDescription = markupStr;
+        NewTicket.TaskTypeCode = $("#TaskTypeCode").val();
+        NewTicket.RequestedByCode = CurrentUser.USER_CODE;
+        NewTicket.RequestedDate = $("#RequestedDate").val();
+        NewTicket.RequestedByName = CurrentUser.EMP_NAME;
+
+        Array.prototype.slice.call(forms).forEach(async function (form) {
+                if (!form.checkValidity()) {
+                    alert("Validation Failed")
+                    toastr.danger("Please fill all the required fields", "Ticket");
+                }
+                else {
+                    try {
+                        let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
+                        emailParams.TicketId = response[0].StringTicketId;
+            
+                        emailParams.RequestedByName = response[0].RequestedByName;
+                   
+                        emailParams.RequestedDate = moment(response[0].RequestedDate).format('DD-MM-YYYY');
+                        emailParams.TicketSubject = response[0].TicketSubject;
+                        emailParams.TicketDeptName = response[0].DeptName;
+                        emailParams.TicketDescription = response[0].TicketDescription;
+                        emailParams.TaskTypeName = response[0].TaskTypeName;
+                        emailParams.StringTicketId = response[0].StringTicketId;
+                        emailParams.ManagerEmailId = response[0].ManagerEmailId;
+                        emailParams.RequestedByEmail = response[0].RequestedByEmail;
+                        $("#newTicketId").empty().append(response[0].TicketId);
+                        console.log(response)
+                        ticketsTable.bootstrapTable("clearFilterControl");
+                        insertNewRow(response); //insert new ticket to table
+                        resetCreateTicketForm()
+                        toastr.success("You have successfully submitted a New Ticket - " + response[0].StringTicketId, "Success");
+                        $("#createTicketModal").modal("hide");
+                        
+                       
+                        let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
+
+                        if(sentEmail) toastr.success("Email notifications are successfully sent", 'Success');
+                        else toastr.danger("Error while sending email notification", sentEmail);
+                    } catch (err) {
+                        toastr.danger("The server responded with an error - " + err, "Failed");
+                    }
                     
-                  let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-                  console.log(response)
-                  $("#newTicketId").empty().append(response[0].TicketId)
 
-                  ticketsTable.bootstrapTable("clearFilterControl");
-                  ticketsTable.bootstrapTable('insertRow', {
-                      index: 0,
-                      row: response[0],
-                  })
-                    form.classList.add('was-validated')
-                    $("#successAlert").removeClass("d-none");
+                    //form.classList.add('was-validated')
+                    //$("#successAlert").removeClass("d-none");
 
-                    setTimeout(function () {
-                      $("#successAlert").addClass("d-none");
-                    }, 3000);
-                  $("#submitTicket").empty().append('Submit Ticket').removeClass('disabled'); 
-              }
+                    //setTimeout(function () {
+                    //  $("#successAlert").addClass("d-none");
+                    //}, 3000);
+                    //$("#submitTicket").empty().append('Submit Ticket').removeClass('disabled');
 
-                 
-          })
-   
-  });
- 
-  // PREVIEW FILE
-  $("#btnPreview").on("click", function () {
-    let fileName = $(this)
-      .closest(".attachment-item")
-      .find(".file-name")
-      .text();
-    let fileUrl = "/img/" + fileName;
-
-    $("#previewImage, #previewPdf, #previewOther").addClass("d-none");
-
-    if (fileName.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      $("#previewImage").attr("src", fileUrl).removeClass("d-none");
-    } else if (fileName.match(/\.(pdf)$/i)) {
-      $("#previewPdf").attr("src", fileUrl).removeClass("d-none");
-    } else {
-      $("#previewOther").removeClass("d-none");
-    }
-
-    $("#attachmentPreviewContainer").toggleClass("d-none");
-  });
-
-  // DELETE FILE
-  $(".btnDelete").on("click", function () {
-    if (!confirm("Delete this file?")) return;
-
-    let item = $(this).closest(".attachment-item");
-    let fileName = item.find(".file-name").text();
-
-    $.post("/Attachment/Delete", { fileName: fileName }, function () {
-      item.remove();
+                }
+            });
+    
     });
-  });
+        // PREVIEW FILE
+     $("#btnPreview").on("click", function () {
+            let fileName = $(this)
+                .closest(".attachment-item")
+                .find(".file-name")
+                .text();
+            let fileUrl = "/img/" + fileName;
 
-  // RENAME FILE
-  $(".btnRename").on("click", function () {
-    let item = $(this).closest(".attachment-item");
+            $("#previewImage, #previewPdf, #previewOther").addClass("d-none");
 
-    let newName = item.find(".file-input").val();
+            if (fileName.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                $("#previewImage").attr("src", fileUrl).removeClass("d-none");
+            } else if (fileName.match(/\.(pdf)$/i)) {
+                $("#previewPdf").attr("src", fileUrl).removeClass("d-none");
+            } else {
+                $("#previewOther").removeClass("d-none");
+            }
+            $("#attachmentPreviewContainer").toggleClass("d-none");
+        });
 
-    $.post(
-      "/Attachment/Rename",
-      {
-        oldName: item.find(".file-name").text(),
-        newName: newName,
-      },
-      function () {
-        item.find(".file-name").text(newName);
+        // DELETE FILE
+    $(".btnDelete").on("click", function () {
+            if (!confirm("Delete this file?")) return;
 
-        alert("Renamed successfully!");
-      },
-    );
-  });
-    });
-   
+            let item = $(this).closest(".attachment-item");
+            let fileName = item.find(".file-name").text();
+
+            $.post("/Attachment/Delete", { fileName: fileName }, function () {
+                item.remove();
+            });
+        });
+
+        // RENAME FILE
+    $(".btnRename").on("click", function () {
+            let item = $(this).closest(".attachment-item");
+
+            let newName = item.find(".file-input").val();
+
+            $.post(
+                "/Attachment/Rename",
+                {
+                    oldName: item.find(".file-name").text(),
+                    newName: newName,
+                },
+                function () {
+                    item.find(".file-name").text(newName);
+
+                    alert("Renamed successfully!");
+                },
+            );
+        });
+
+});
+
+//-------FUNCTIONS------  
 function closeEmailModal() {
   $("#editTicketModal").modal("toggle");
   $("#emailModal").modal("toggle");
@@ -467,26 +497,23 @@ function renderDropdown(list) {
     );
   });
 }
-function getStatus(i) {
-  if (i % 2 == 1)
-    return '<span class="badge bg-success rounded-pill">Completed</span>';
-  else return '<span class="badge bg-primary rounded-pill">In Progress</span>';
-}
-
-
 
 //OPTIONS FOR COMBOS
-async function getDepartments() {
-  departmentOptions = await $.get(
-    `support/employee-directory/getAllDepartmentList`,
-  );
-  console.log(departmentOptions);
-  let options = `<a class="dropdown-item text-muted" value="0"> -- Choose department -- </a>`;
-  departmentOptions.forEach(function (i) {
-    if (i.ORG_CODE == 1 && i.LOC_CODE == 1)
-        options += `<a onclick="departmentSelected(event)" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
-  });
-  $("#departmentList").empty().append(options);
+async function getDepartments(OrgCode, LocCode) {
+    itr = 0;
+    departmentOptions = await $.get(`${gBaseUrl}/get-ticket-department-options`, {
+        OrgCode,
+        LocCode
+    });
+    console.log(departmentOptions)
+  let options = "";
+  
+    while (itr < departmentOptions.length) {
+        options += `<option value="${departmentOptions[itr].VALUE}"> ${departmentOptions[itr].TEXT} </option>`;
+        itr++;
+    }
+  console.log(options)
+    $("#TicketDepartmentOptions").empty().append(options);
 }
 
 function renderFilePreview(file) {
@@ -601,7 +628,7 @@ async function getTicketRequestedByOptions(){
 async function getUserOptions() {
   let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
     let options = "";
-    console.log(usersOptions);
+
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
             options += `<li onclick="requestedBySelected(event)" class="dropdown-item" data-value="${i.VALUE}">${i.TEXT}</li>`;
@@ -613,7 +640,6 @@ async function getUserOptions() {
     $("#requestedByNameList").append(options)
     //$("#filterRequestedByName").append(options)
 }
-
 async function getPriorityOptions(OrgCode, LocCode, DeptCode) {
   let priorityOptions = await $.get(`${gBaseUrl}/get-priority-options`, {
     OrgCode,
@@ -683,18 +709,11 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
 
     $("#filterType").empty().append(options);
 }
-
 async function getAllTicket() {
     ticketsTable.bootstrapTable('showLoading');
-
-    const filterParams = {
-        RequestedByName: $('#filterRequestedByName').val(),
-        TaskTypeCode: $('#filterType').val(),
-        StatusCode: $('#filterStatus').val(),
-        PriorityCode: $('#filterPriority').val()
-    }
+    
     const DeptCode = null;
-    console.log(filterParams)
+  
     let data = await $.get(`${gBaseUrl}/get-tickets`, { DeptCode: DeptCode });
     console.log(data);
    
@@ -703,8 +722,8 @@ async function getAllTicket() {
     
     ticketsTable.bootstrapTable("load", data)
         .bootstrapTable('hideLoading');
-}
 
+}
 function showTotalTicketsRecords(totalRecords) {
     $("#TicketsTotal").empty().append(
         `<div class="btn rounded-pill bg-main text-white text-center">
@@ -746,6 +765,26 @@ function uploadTicketAttachments() {
 }
 
 //---------CREATE NEW TICKET------------
+
+function insertNewRow(response) {
+    console.log(response)
+    ticketsTable.bootstrapTable('insertRow', {
+        index: 0,
+        row: response[0],
+       
+    })
+   ticketsTable.bootstrapTable('check', 0)
+}
+function resetCreateTicketForm() {
+    $("#TicketSubject").empty().removeClass("is-valid").removeClass("is-invalid");
+    $("#TicketDescription").empty().removeClass("is-valid").removeClass("is-invalid");
+    $("#TaskTypeCode").empty().removeClass("is-valid").removeClass("is-invalid");
+    $("#TicketDepartment").empty().removeClass("is-valid").removeClass("is-invalid");
+}
+function disableSubmitButton() {
+    $("#submitTicket").empty().addClass('disabled').append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...`)
+}
 function requestedBySelected(event) {
     console.log(event.target.dataset.value);
     console.log(event.target.innerHTML);
@@ -753,9 +792,9 @@ function requestedBySelected(event) {
 }
 function departmentSelected(event) {
 
-    NewTicket.DeptCode = DeptCode;
-    NewTicket.OrgCode = OrgCode;
-    NewTicket.LocCode = LocCode;
+    NewTicket.DeptCode = event.target.dataset.value;
+    NewTicket.OrgCode = 1;
+    NewTicket.LocCode = 1;
     $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
 }
 async function validateFormData() {

@@ -2,7 +2,7 @@
 	Layout = "_NoMenuLayout";
 	ViewData["Title"] = "User Satisfaction";
 }
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <!-- Main content here -->
 <div class="container">
 	<div class="page-inner p-4">
@@ -62,11 +62,12 @@
 												<textarea id="txtSuggestions" class="form-control rounded-2" rows="5" placeholder="Tell us about your suggestions" name="SUGGESTIONS"></textarea>
 											</div>
 										</div>
+								
 										<div class="form-group row d-flex align-items-center py-2">
 											<div class="col-2"></div>
 											<div class="col-9">
 												<input id="inpCaptchaToken" type="hidden" name="CAPTCHA_TOKEN" value="" />
-												<div class="g-recaptcha" data-sitekey="6LfoV9krAAAAAGEwcvCt5UgmwTVWzrXc47UBSFif" data-callback="setEnableSubmit"></div>
+												<div class="g-recaptcha" data-sitekey="6LdnUAotAAAAAJAcZ1MbvLGNQiGMcCT1olpyr9wW" data-callback="setEnableSubmit"></div>
 											</div>
 										</div>
 										<div class="form-group row d-flex align-items-center py-4">
@@ -89,6 +90,10 @@
 <!-- End of main content -->
 @section Scripts {
 	<script>
+		function setEnableSubmit(token) {
+		  document.getElementById("inpCaptchaToken").value = token
+		  document.getElementById("btnSubmit").disabled = false
+		}
 		document.querySelectorAll('.star-rating:not(.readonly) label').forEach(star => {
 				star.addEventListener('click', function() {
 						this.style.transform = 'scale(1.2)';
@@ -97,8 +102,8 @@
 						}, 200);
 				});
 		});
-
+		
 	</script>
-
+	
 	<script src="~/js/support/user-satisfaction.js" asp-append-version="true"></script>
 }

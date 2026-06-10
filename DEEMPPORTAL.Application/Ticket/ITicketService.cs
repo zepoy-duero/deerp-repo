@@ -1,4 +1,5 @@
 ﻿using DEEMPPORTAL.Domain;
+using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
 
@@ -12,11 +13,11 @@ namespace DEEMPPORTAL.Application.Ticket
         Task<IEnumerable<TicketSelectOptions>> GetAssigneeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<IEnumerable<TicketSelectOptions>> GetPriorityOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<IEnumerable<TicketSelectOptions>> GetModuleOptionsAsync(int OrgCode, int LocCode, int DeptCode);
-        Task<IEnumerable<SelectOptionResponse>> GetTicketDepartmentListAsync(int orgCode, int locCode);
+        Task<IEnumerable<TicketSelectOptions>> GetTicketDepartmentOptionsAsync(int OrgCode, int LocCode);
         Task<IEnumerable<TicketSelectOptions>> GetDurationUnitOptionsAsync();
         Task<IEnumerable<TicketSelectOptions>> GetStatusOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
-
+        Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
         //Task<IEnumerable<TicketSelectOptions>> GetAllLocationListAsync();
         //Task<IEnumerable<TicketSelectOptions>> GetAllDepartmentListAsync();
         //Task<IEnumerable<TicketSelectOptions>> GetFilteredOrganizationListAsync();

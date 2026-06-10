@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DEEMPPORTAL.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1725ed24c4ffc254b69cb18a67551694cb43e285")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30db13c93777d1733143df1e11ac34d92b567391")]
 [assembly: System.Reflection.AssemblyProductAttribute("DEEMPPORTAL.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DEEMPPORTAL.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

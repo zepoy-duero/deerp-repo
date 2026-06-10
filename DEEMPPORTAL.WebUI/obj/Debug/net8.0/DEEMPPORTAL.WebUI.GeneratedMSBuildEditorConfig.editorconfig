@@ -160,14 +160,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldERldGFpbHNDb21wb25lbnRzXFVzZXJSZXF1ZXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/TicketTable2.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXFRpY2tldFRhYmxlMi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/TicketTable3.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXFRpY2tldFRhYmxlMy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXF9DcmVhdGVUaWNrZXRNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -194,6 +186,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/_TicketTable.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXF9UaWNrZXRUYWJsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/Ticket/TicketViewComponents/_TicketTableFilters.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGlja2V0XFRpY2tldFZpZXdDb21wb25lbnRzXF9UaWNrZXRUYWJsZUZpbHRlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/User/Desktop/DAHBASHI ENGINEERING/EMPLOYEE PORTAL/DEEMPPORTAL.WebUI/Views/UserSatisfaction/Index.cshtml]

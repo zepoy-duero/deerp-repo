@@ -33,47 +33,33 @@
                                 <!--TICKET BASIC INFO-->
                                 <div class="row mb-3">
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                        <small class="text-muted pe-2">
+                                        <label class="text-muted pe-2">
                                            
                                             Requested By: 
-                                            </small>
-                                        <h6 name="RequestedByName" id="requestedBy" class="fw-bold"></h6>
+                                            </label>
+                                        <h6 name="RequestedByName" id="RequestedByName" class="fw-bold"></h6>
                                     </div>
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
                                         <small class="text-muted pe-2">
                                         
                                             Date: </small>
-                                        <h6 name="RequestedDate" id="requestedDate" class="fw-bold">May 14, 2026</h6>
+                                        <h6 name="RequestedDate" id="RequestedDate" class="fw-bold"></h6>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <!--TICKET ADDRESSED TO-->
 
+                               
                                     <div class="col-md-6">
-                                        <label class="form-label">
-                                       
+                                        <label for="TicketDepartmentOptions" class="form-label">
                                             Department
-                                            </label>
-                                        <!-- Hidden real select (for form submission) -->
-                                        <select  id="TicketDepartment" class="form-select d-none">
+                                        </label>
+                                        <select name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select">
                                         </select>
-                                        <!-- Custom dropdown -->
-                                        <div class="dropdown rounded-1">
-                                            <button name ="TicketDepartment" class="form-select rounded-1 text-start" type="button" id="departmentDropdownSelect" data-bs-toggle="dropdown">
-                                                Management Information System
-                                            </button>
-                                            <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
-                                                 <!-- Search input -->
-                                                <input type="text" id="departmentSearchInput" class="form-control mb-2" placeholder="Search..."> 
-                                                <!-- Options -->
-                                                <ul class="list-unstyled mb-0" id="departmentList">
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">
+                                        <label for="TaskTypeCode" class="form-label">
                                             Request Type</label>
                                         <select name="TaskTypeCode" id="TaskTypeCode" class="form-select">
                                         </select>
@@ -96,8 +82,6 @@
                                                 class="form-control" 
                                                 placeholder="Subject issue . . " 
                                                 required>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +97,6 @@
                                                  placeholder="Explain the issue in detail..." required></textarea> *@
                                                 <div name="TicketDescription" id="TicketDescription" rowspan="5"
                                                           placeholder="Explain the issue in detail..." required></div>
-                                          
                                         </div>
                                     </div>
                                 </div>

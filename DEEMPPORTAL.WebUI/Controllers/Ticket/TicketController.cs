@@ -6,6 +6,7 @@ using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.Ticket;
 using DEEMPPORTAL.WebUI.Models;
+using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +20,10 @@ public class TicketController(ISelectOptionsService selectOptionsService,
       IFetchOnlyOneService fetchOnlyOneService,
       ITicketService ticketService, IMapper mapper) : Controller
 {
-  private readonly ITicketService _ticketService = ticketService;
+    private readonly ITicketService _ticketService = ticketService;
     private readonly ISelectOptionsService _selectOptionsService = selectOptionsService;
     private readonly IFetchOnlyOneService _fetchOnlyOneService = fetchOnlyOneService;
+ 
     private readonly IMapper _mapper = mapper;
     [HttpGet("")]
     public IActionResult Index()
@@ -80,11 +82,11 @@ public class TicketController(ISelectOptionsService selectOptionsService,
     }
 
     [HttpGet("get-ticket-department-options")]
-    public async Task<IActionResult> GetTicketDepartment(int OrgCode, int LocCode)
+    public async Task<IEnumerable<TicketSelectOptions>> GetTicketDepartmentOptions(int OrgCode, int LocCode)
     {
-        var options = await _ticketService.GetTicketDepartmentListAsync(OrgCode, LocCode);
+        var options = await _ticketService.GetTicketDepartmentOptionsAsync(OrgCode, LocCode);
 
-        return Ok(options);
+        return options;
     }
     [HttpPost("create-ticket")]
     public async Task<IActionResult> CreateTicket(TicketModel model)
@@ -94,6 +96,7 @@ public class TicketController(ISelectOptionsService selectOptionsService,
 
             var mapped = _mapper.Map<CreateTicketParams>(model);
             var isSaved = await _ticketService.CreateTicketAsync(mapped);
+           
             //var managerEmailId = await _fetchOnlyOneService.GetManagerEmailByDeptCode(mapped.DeptCode);
             //var userEmailId = await _fetchOnlyOneService.GetUserEmailByUserCode(mapped.RequestedByCode);
 
@@ -115,6 +118,16 @@ public class TicketController(ISelectOptionsService selectOptionsService,
             }
         }
         return Ok();
+    }
+    [HttpPost("send-email-notification")]
+    public async Task<IActionResult> SendEmailNotification(TicketEmailNotification request)
+    {
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+          
+            var emailReceipt = await _ticketService.SendEmailNotificationAsync(request);
+            return Ok(emailReceipt);
+        }
     }
 }
 

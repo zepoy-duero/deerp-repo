@@ -174,7 +174,7 @@ async function displayMainMenuItems() {
 					</td>
 					<td>
 						${data[i].HAS_SUB_MENU === 'Y' ? `
-							<a href="javascript:void(0)" class="btn btn-secondary" data-main-menu-id="${data[i].MAIN_MENU_CODE}" onclick="toggleSubMenuItems(this)">
+							<a href="javascript:void(0)" class="btn btn-sm text-primary" data-main-menu-id="${data[i].MAIN_MENU_CODE}" onclick="toggleSubMenuItems(this)">
 								<i class="bi bi-chevron-down"></i>
 							</a>
 						` : ``}
@@ -189,11 +189,11 @@ async function displayMainMenuItems() {
 						<span class="badge rounded-pill text-bg-danger"></span>
 					</td>
 					<td>
-						<button class="btn btn-secondary"
+						<button class="btn btn-main"
 								onClick="showModalEditMenuItems(${data[i].MAIN_MENU_CODE}, null, null)">
 							<i class="bi bi-pencil-alt"></i> Edit
 						</button>
-						<button class="btn btn-secondary text-danger" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, 0, 0)">
+						<button class="btn btn-danger text-white" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, 0, 0)">
 							<i class="bi bi-trash"></i> Trash
 						</button>
 					</td>

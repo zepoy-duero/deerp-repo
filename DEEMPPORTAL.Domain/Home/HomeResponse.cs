@@ -3,6 +3,7 @@ namespace DEEMPPORTAL.Domain.Home;
 
 public class HomeResponse
 {
+	public DateTime DATE_TODAY { get; set; } 
     public int USER_CODE { get; set; }
     public string EMP_NAME { get; set; } = string.Empty;
 	public string EMP_POSITION { get; set; } = string.Empty;

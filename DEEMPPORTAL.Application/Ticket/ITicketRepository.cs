@@ -11,10 +11,11 @@ public interface ITicketRepository
     Task<IEnumerable<TicketSelectOptions>> GetAssigneeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
     Task<IEnumerable<TicketSelectOptions>> GetDurationUnitOptionsAsync();
     Task<IEnumerable<TicketSelectOptions>> GetModuleOptionsAsync(int OrgCode, int LocCode, int DeptCode);
-        Task<IEnumerable<SelectOptionResponse>> GetTicketDepartmentListAsync(int OrgCode, int locCode);
-        Task<IEnumerable<TicketSelectOptions>> GetPriorityOptionsAsync(int OrgCode, int LocCode, int DeptCode);
+    Task<IEnumerable<TicketSelectOptions>> GetTicketDepartmentOptionsAsync(int OrgCode, int LocCode);
+    Task<IEnumerable<TicketSelectOptions>> GetPriorityOptionsAsync(int OrgCode, int LocCode, int DeptCode);
     Task<IEnumerable<TicketSelectOptions>> GetStatusOptionsAsync(int OrgCode, int LocCode, int DeptCode);
     Task<IEnumerable<TicketSelectOptions>> GetUserOptionsAsync();
-     Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
+    Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
     Task<IEnumerable<TicketResponse>> CreateTicketAsync(CreateTicketParams request);
+    Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
 }
