@@ -54,68 +54,68 @@
     </div> *@
 
 
-<div class="container-fluid row d-flex flex-row row-cols-10 mt-5" id="filtersContainer">
-    <div class="col d-inline-flex">
-
+<div class="container-fluid mt-5" id="filtersContainer">
  
-    <div class="mx-1">
-        <label class="form-label extra-small fw-bold text-main">
-                Filters
-                <i class="bi bi-filter"></i>
-        </label>
+        <div class="d-flex flex-row">
+            <div class="mx-1">
+                <label class="form-label extra-small fw-bold text-main">
+                    Filters
+                    <i class="bi bi-filter"></i>
+                </label>
+
+            </div>
             <div class="vr mx-3"></div>
-    </div>
-   
-    <div class="mx-1">
-        <label for="DeptName" class="form-label extra-small">Department</label>
-        <select id="DeptName" class="form-select form-select-sm bootstrap-table-filter-control-DeptName">
-        </select>
-    </div>
-    <div class="mx-1">
-        <label for="ticketId" class="form-label extra-small">Ticket Id</label>
-        <input id="ticketId" class="form-control form-control-sm  bootstrap-table-filter-control-StringTicketId" />
-    </div>
-        <div class="mx-1">
-        <label for="requestedByName" class="form-label extra-small">Requested By</label>
-        <select id="requestedByName" class="form-select form-select-sm  bootstrap-table-filter-control-RequestedByName">
-        </select>
-    </div>
-        <div class="mx-1">
-        <label for="assignedTo" class="form-label extra-small">Assigned To</label>
-        <select id="assignedTo" class="form-select form-select-sm  bootstrap-table-filter-control-AssignedToName">
-        </select>
-    </div>
-        <div class="mx-1">
-        <label for="taskTypeName" class="form-label extra-small">Request Type</label>
-        <select id="taskTypeName" class="form-select form-select-sm  bootstrap-table-filter-control-TaskTypeName">
-        </select>
-    </div>
-        <div class="mx-1">
-        <label for="ticketPriority" class="form-label extra-small">Priority</label>
-        <select id="ticketPriority" class="form-select form-select-sm  bootstrap-table-filter-control-TicketPriority">
-        </select>
-    </div>
-        <div class="mx-1">
-        <label for="statusName" class="form-label extra-small">Status</label>
-        <select id="statusName" class="form-select form-select-sm  bootstrap-table-filter-control-StatusName">
-        </select>
-    </div>
-    <div class="mx-1">
-        <label for="requestedDate" class="form-label extra-small">Requested Date</label>
-        <select id="requestedDate" class="form-control form-control-sm  bootstrap-table-filter-control-RequestedDate">
-        </select>
-    </div>
-    <div class="ms-1">
-            <br />
-            <button id="btnResetFilter"
-                    class="btn btn-sm text-main fw-bold text-center align-center"
-                    title="Reset Filters">
-                <i class="bi bi-arrow-clockwise"></i>
-                Clear Filters
-            </button>
-    </div>
-        @* <input class="form-select" placeholder="Date Range" name="datefilter" value="Date range" /> *@
-    @* <div class="ms-1">
+            <div class="mx-1">
+                <label for="DeptName" class="form-label extra-small">Department</label>
+                <select id="DeptName" class="form-select form-select-sm bootstrap-table-filter-control-DeptName">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="ticketId" class="form-label extra-small">Ticket Id</label>
+                <input id="ticketId" class="form-control form-control-sm  bootstrap-table-filter-control-StringTicketId" />
+            </div>
+            <div class="mx-1">
+                <label for="requestedByName" class="form-label extra-small">Requested By</label>
+                <select id="requestedByName" class="form-select form-select-sm  bootstrap-table-filter-control-RequestedByName">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="assignedTo" class="form-label extra-small">Assigned To</label>
+                <select id="assignedTo" class="form-select form-select-sm  bootstrap-table-filter-control-AssignedToName">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="taskTypeName" class="form-label extra-small">Request Type</label>
+                <select id="taskTypeName" class="form-select form-select-sm  bootstrap-table-filter-control-TaskTypeName">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="ticketPriority" class="form-label extra-small">Priority</label>
+                <select id="ticketPriority" class="form-select form-select-sm  bootstrap-table-filter-control-TicketPriority">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="statusName" class="form-label extra-small">Status</label>
+                <select id="statusName" class="form-select form-select-sm  bootstrap-table-filter-control-StatusName">
+                </select>
+            </div>
+            <div class="mx-1">
+                <label for="requestedDate" class="form-label extra-small text-nowrap">Requested Date</label>
+                <select id="requestedDate" class="form-control form-control-sm  bootstrap-table-filter-control-RequestedDate">
+                </select>
+            </div>
+            <div class="">
+                <br />
+                <button id="btnResetFilter"
+                        class="btn btn-sm text-main extra-small text-nowrap fw-bold text-center align-center"
+                        title="Reset Filters">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+            @* <input class="form-select" placeholder="Date Range" name="datefilter" value="Date range" /> *@
+            @* <div class="ms-1">
         <div class="btn-group">
 
             <button id="btnResetFilter"
@@ -125,9 +125,11 @@
             </button>
         </div>
     </div> *@
-</div>
 
-</div>
+
+   
+    </div>
+
 <style>
    
 </style>

@@ -4,6 +4,7 @@ const homeUrl = "/home";
 const TicketAttachments = document.getElementById("TicketAttachments");
 const previewContainer = document.getElementById("previewContainer");
 const dropZone = document.getElementById("dropZone");
+let isEditingRequestedBy = false;
 let selectedFiles = [];
 let originalData = [];
 var NewTicketId = null;
@@ -87,19 +88,20 @@ $(async function () {
     });
     //----------EVENT LISTENERS----------------------------
 
-    $('#createTicketModal').on('hidden.bs.modal', function () {
-        resetCreateTicketForm();
-    });
+   
     //------ROW CLICKED--------------
-    ticketsTable.on("click-row.bs.table", function (e, row, $element, field) {
+    ticketsTable.on("click-row.bs.table", async function (e, row, $element, field) {
+        await getAllSelectOptions();
+
         $("#editTicketModal").modal("toggle");
+        $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
         $("#editTicketSubject").val(row.TicketSubject);
         $("#editTicketDescription").val(row.TicketDescription);
         $("#editUserDropdownSelect").html(row.RequestedByName);
         $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
-
+        $("#dateRequested").empty().append(moment(row.RequestedDate).format("LL"));
         $("#editRequestedDate").val(row.RequestedDate);
-
+        
         $('#editTicketDescription').summernote({
             height: 200,
             lang: 'en-US',
@@ -241,9 +243,12 @@ $(async function () {
         }
     });
     $("#createTicketModal").on('show.bs.modal',async function (event) {
-        $("#RequestedByName").empty().append(CurrentUser.EMP_NAME);
+        resetCreateTicketForm()
         await getDepartments(1, 1);
-        await getUserOptions();
+        //get options for requested by select component
+        let RequestedByNameOptions = await getTicketRequestedByOptions();
+        $("#SelectRequestedByName").empty().append(RequestedByNameOptions);
+
         await getTypeOptions(1, 1, 9);
         await getModuleOptions(1, 1, 9);
         await getTypeOptions(1, 1, 9);
@@ -321,22 +326,7 @@ $(async function () {
     });
 
     $("#submitTicket").on("click", async function (event) {
-        var emailParams = 
-            {
-                Recipient: null,
-                RequestedByName: null,
-                ManagerName: null,
-                RequestedDate: null,
-                TicketSubject: null,
-                TicketDeptName: null,
-                TicketDescription: null,
-                TaskTypeName: null,
-                TicketId: null,
-                ManagerEmailId: null,
-                RequestedByEmail: null,
-                DeptCode: null,
-                TicketNo: null,
-            };
+        
         disableSubmitButton(); //disable the submit button   
         event.preventDefault()
 
@@ -355,41 +345,42 @@ $(async function () {
         Array.prototype.slice.call(forms).forEach(async function (form) {
                 if (!form.checkValidity()) {
                     alert("Validation Failed")
-                    toastr.danger("Please fill all the required fields", "Ticket");
+                    toastr.error("Please fill all the required fields", "Ticket");
                 }
                 else {
                     try {
                         let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-                        emailParams.TicketId = response[0].StringTicketId;
-            
-                        emailParams.RequestedByName = response[0].RequestedByName;
-                   
-                        emailParams.RequestedDate = moment(response[0].RequestedDate).format('DD-MM-YYYY');
-                        emailParams.TicketSubject = response[0].TicketSubject;
-                        emailParams.TicketDeptName = response[0].DeptName;
-                        emailParams.TicketDescription = response[0].TicketDescription;
-                        emailParams.TaskTypeName = response[0].TaskTypeName;
-                        emailParams.StringTicketId = response[0].StringTicketId;
-                        emailParams.ManagerEmailId = response[0].ManagerEmailId;
-                        emailParams.RequestedByEmail = response[0].RequestedByEmail;
+
+                        let emailParams = await generateTicketEmailParams(response[0]);
+
                         $("#newTicketId").empty().append(response[0].TicketId);
                         console.log(response)
                         ticketsTable.bootstrapTable("clearFilterControl");
                         insertNewRow(response); //insert new ticket to table
-                        resetCreateTicketForm()
+                      
                         toastr.success("You have successfully submitted a New Ticket - " + response[0].StringTicketId, "Success");
-                        $("#createTicketModal").modal("hide");
+                      
                         
                        
                         let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
 
-                        if(sentEmail) toastr.success("Email notifications are successfully sent", 'Success');
-                        else toastr.danger("Error while sending email notification", sentEmail);
+                            if (sentEmail) {
+                                toastr.success("Email notifications are successfully sent", 'Success', {
+                                    timeOut: 3000,
+                                });
+                            }
+                            else {
+                                toastr.error("Error while sending email notification", sentEmail, {
+                                    timeOut: 3000,
+                                });
+                            }
                     } catch (err) {
-                        toastr.danger("The server responded with an error - " + err, "Failed");
+                        toastr.error("The server responded with an error - " + err, "Failed", {
+                            timeOut: 3000,
+                        });
                     }
                     
-
+                    $("#createTicketModal").modal("hide");
                     //form.classList.add('was-validated')
                     //$("#successAlert").removeClass("d-none");
 
@@ -452,11 +443,87 @@ $(async function () {
                     alert("Renamed successfully!");
                 },
             );
-        });
-
+    });
+    $("#createTicketModal").on("hidden.bs.modal", function (event) {
+        resetCreateTicketForm();
+        saveEditRequestedBy();
+        
+    });
+    
+   
 });
 
 //-------FUNCTIONS------  
+async function getAllSelectOptions() {
+    try {
+        await getUserOptions()
+        await getAssigneeOptions()
+        await getPriorityOptions();
+        await getModuleOptions();
+        await getTypeOptions()
+        await getDurationUnitOptions();
+        await getStatusOptions();
+      
+    } catch(err) {
+        toastr.error("There is an error on the server", "Error");
+    }
+    
+   
+}
+function showEditRequestedBy() {
+    // Switch to Edit Mode
+    $("#DisplayRequestedByName").addClass("d-none");
+    $("#SelectRequestedByName").removeClass("d-none");
+    $("#editBtn").addClass("d-none");
+    $("#checkBtn").removeClass("d-none");
+}
+function saveEditRequestedBy() {
+
+    $("#DisplayRequestedByName").removeClass("d-none")
+        .empty()
+        .append($("#SelectRequestedByName").val());
+    $("#SelectRequestedByName").addClass("d-none");
+    $("#editBtn").removeClass("d-none");
+    $("#checkBtn").addClass("d-none");
+}
+function toggleEditRequestedBy() {
+
+    isEditingRequestedBy = !isEditingRequestedBy;
+
+    if (isEditingRequestedBy) {
+
+        // Switch to Edit Mode
+        $("#DisplayRequestedByName").addClass("d-none");
+        $("#SelectRequestedByName").removeClass("d-none");
+        $("#editBtn").addClass("d-none");
+        $("#checkBtn").removeClass("d-none");
+
+
+
+    } else {
+
+        $("#DisplayRequestedByName").removeClass("d-none")
+            .empty()
+            .append($("#SelectRequestedByName").val());
+        $("#SelectRequestedByName").addClass("d-none");
+        $("#editBtn").removeClass("d-none");
+        $("#checkBtn").addClass("d-none");
+       
+    }
+}
+async function generateTicketEmailParams(ticket) {
+    let emailParams = {
+        RequestedByEmail: ticket.RequestedByEmail,
+        ManagerEmailId: ticket.ManagerEmailId,
+        TicketSubject: ticket.TicketSubject,
+        StringTicketId: ticket.StringTicketId,
+        RequestedByName: ticket.RequestedByName,
+        RequestedDate: ticket.RequestedDate,
+        TaskTypeName: ticket.TaskTypeName,
+        TicketDescription: ticket.TicketDescription
+    }
+    return emailParams;
+}
 function closeEmailModal() {
   $("#editTicketModal").modal("toggle");
   $("#emailModal").modal("toggle");
@@ -609,21 +676,21 @@ async function getAssigneeOptions(org_code, loc_code, dept_code) {
         }
   });
 
-    $("#assigneeList").empty().append(options);
+    $("#i").empty().append(options);
 
    
 }
 async function getTicketRequestedByOptions(){
     let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
-    let options = "";
+    let options = `<option  data-value=""> ${CurrentUser.EMP_NAME} </option >`;
     
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
-            options += `<a onclick="" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
+            options += `<option  data-value="${i.VALUE}"> ${i.TEXT} </option >`;
         }
     });
 
-    $("#filterRequestedByName").empty().append(options);
+    return options;
 }
 async function getUserOptions() {
   let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
@@ -776,14 +843,19 @@ function insertNewRow(response) {
    ticketsTable.bootstrapTable('check', 0)
 }
 function resetCreateTicketForm() {
-    $("#TicketSubject").empty().removeClass("is-valid").removeClass("is-invalid");
-    $("#TicketDescription").empty().removeClass("is-valid").removeClass("is-invalid");
-    $("#TaskTypeCode").empty().removeClass("is-valid").removeClass("is-invalid");
-    $("#TicketDepartment").empty().removeClass("is-valid").removeClass("is-invalid");
+    $("#DisplayRequestedByName").empty().append(CurrentUser.EMP_NAME);
+    $("#TicketSubject").val("").removeClass("is-valid").removeClass("is-invalid");
+    $('#TicketDescription').summernote('reset');
+    $("#TaskTypeCode").removeClass("is-valid").removeClass("is-invalid");
+    $("#TicketDepartment").removeClass("is-valid").removeClass("is-invalid");
+    enableSubmitButton();
 }
 function disableSubmitButton() {
     $("#submitTicket").empty().addClass('disabled').append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Loading...`)
+}
+function enableSubmitButton() {
+    $("#submitTicket").empty().removeClass('disabled').append("Submit Ticket")
 }
 function requestedBySelected(event) {
     console.log(event.target.dataset.value);

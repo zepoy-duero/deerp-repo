@@ -30,20 +30,38 @@
                         <div class="container-fluid">
                             <!-- Requested By -->
                             <form id="createTicketForm" class="form needs-validation">
-                                <!--TICKET BASIC INFO-->
                                 <div class="row mb-3">
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                        <label class="text-muted pe-2">
-                                           
-                                            Requested By: 
-                                            </label>
-                                        <h6 name="RequestedByName" id="RequestedByName" class="fw-bold"></h6>
-                                    </div>
-                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                        <small class="text-muted pe-2">
+
+                                        <label for="SelectRequestedByName" class="text-muted pe-2 text-nowrap">
+                                            Requested By:
+                                        </label>
+
+                                        <div class="RequestedByContainer flex-grow-1">
+
+                                            <!-- Display Mode -->
+                                            <div class="d-flex flex-row">
+                                                <h6 id="DisplayRequestedByName" class="fw-bold"></h6>
+                                              
+                                                <!-- Edit Mode -->
+                                                <select id="SelectRequestedByName"
+                                                        class="form-select form-select-sm d-none">
+                                                </select>
+                                                <i id="editBtn" onclick="showEditRequestedBy()" class="bi bi-pencil text-main extra-small ms-3 mt-1"></i>
+                                                <i id="checkBtn" onclick="saveEditRequestedBy()" class="bi bi-floppy2 text-main ms-3 mt-1 d-none"></i>
+                                            </div>
+                                            
+
+                                        </div>
                                         
-                                            Date: </small>
-                                        <h6 name="RequestedDate" id="RequestedDate" class="fw-bold"></h6>
+
+                                    </div>
+
+                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
+                                        <label class="text-muted pe-2 text-small">
+                                            Date:
+                                        </label>
+                                        <h6 id="RequestedDate" class="fw-bold"></h6>
                                     </div>
                                 </div>
 
@@ -55,13 +73,13 @@
                                         <label for="TicketDepartmentOptions" class="form-label">
                                             Department
                                         </label>
-                                        <select name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select">
+                                        <select name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select form-select-sm">
                                         </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="TaskTypeCode" class="form-label">
                                             Request Type</label>
-                                        <select name="TaskTypeCode" id="TaskTypeCode" class="form-select">
+                                        <select name="TaskTypeCode" id="TaskTypeCode" class="form-select form-select-sm">
                                         </select>
                                     </div>
 
