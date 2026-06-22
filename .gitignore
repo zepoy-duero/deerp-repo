@@ -365,3 +365,8 @@ FodyWeavers.xsd
 # Exclude the build output directories
 bin/
 obj/
+
+# Exclude configuration files with sensitive data
+*.config
+appsettings*.json
+!appsettings.json
