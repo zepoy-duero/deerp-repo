@@ -14,6 +14,7 @@
         public string? EMAIL_ADDRESS { get; set; } = null;
         public byte[]? EMP_PHOTO { get; set; }
         public string? IS_ACTIVE { get; set; }
+        public string? EMP_STATUS { get; set; }
     }
 
 }

@@ -9,6 +9,14 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     {
       return await _employeeDirectoryRepository.GetAllEmployeeDirectoryAsync(org_code, loc_code, dept_code);
     }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(int org_code, int loc_code, int dept_code)
+    {
+      return await _employeeDirectoryRepository.GetAllEmployeeFirefightersAsync(org_code, loc_code, dept_code);
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirstAidersAsync(int org_code, int loc_code, int dept_code)
+    {
+      return await _employeeDirectoryRepository.GetAllEmployeeFirstAidersAsync(org_code, loc_code, dept_code);
+    }
     public async Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync()
     {
       return await _employeeDirectoryRepository.GetAllOrganizationListAsync();
@@ -37,5 +45,7 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
      {
             return await _employeeDirectoryRepository.GetProfilePicAsync(EMP_CODE);
     }
+
+   
    }
 }

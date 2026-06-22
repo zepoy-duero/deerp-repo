@@ -3,7 +3,7 @@
     Layout = "_Layout";
     ViewData["Title"] = "Update Part Number Origin";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .edit-ash {
         background-color: #e8eff7;
@@ -94,8 +94,8 @@
                     Update Single Part Number Origin/HS Code
                 </div>
 
-                <div class="card-body singleCard">
-                    <form asp-action="Search" asp-controller="SingleRecordUpdate" method="post" id="frmSearch">
+                <div class="card-body">
+                    <form  asp-action="Search" asp-controller="SingleRecordUpdate" method="post" id="frmSearch">
                         <input type="hidden" asp-for="OrgCode" id="OrgCode" />
                         <input type="hidden" asp-for="SelectedSupplierName" id="SelectedSupplierName" />
                         <input type="hidden" asp-for="SelectedCategoryName" id="SelectedCategoryName" />
@@ -109,40 +109,42 @@
                         <input type="hidden" id="oldOrigin" />
                         <input type="hidden" id="oldHsCode" />
 
-                        <div class="row row-cols-auto g-4 align-items-end">
-                            <div class="col">
-                                <div class="selectCtgy">
-                                    <label class="form-label fw-semibold">Select Category</label>
-                                    <select class="form-select" id="ddlCategory" asp-for="SelectedCategory" asp-items="Model.Categories"></select>
+                        <div class="row gy-2 justify-content-center align-items-center">
+                        
+                                <div class="col-auto">
+                                    <label for="ddlCategory" class="form-label fw-semibold">Select Category</label> 
+                                    <select 
+                                        class="form-select form-control "
+                                        id="ddlCategory" 
+                                        asp-for="SelectedCategory" 
+                                        asp-items="Model.Categories">
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="selectPartNo">
-                                    <label class="form-label fw-semibold">Part No</label>
+                         
+                                <div class="col-auto">
+                                    <label for="txtPartNo" class="form-label fw-semibold">Part No</label>
                                     <input class="form-control" id="txtPartNo" asp-for="PartNo" />
                                 </div>
-                            </div>
-
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Select Supplier</label>
+                       
+                            <div class="col-auto">
+                                <label for="ddlSupplier" class="form-label fw-semibold">Select Supplier</label>
                                 <select id="ddlSupplier" class="form-select" asp-for="SelectedSupplier" asp-items="Model.Suppliers"></select>
                             </div>
-
-
-                            <div class="col-md-2 d-flex align-items-end px-4">
-                                <button type="submit" id="btnSearch" class="btn btn-danger w-100">
+                            <div class="col-auto d-flex flex-column justify-content-end">
+                          <br />
+                                <button type="submit" id="btnSearch" class="btn btn-sm btn-danger">
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
-
-
                         </div>
-                        <div class="mt-4" style="padding-left: 140px;">
-                            @* <button type="submit" id="btnSearch" class="btn btn-danger px-5">  <i class="bi bi-search"></i> Search</button> *@             
-                    <button type="button" class="btn btn-danger px-4 ms-5 me-2" id="btnAdd"> <i class="bi-plus-lg"></i>  Add</button>
-                            <button id="btnClear" type="button" class="btn btn-danger px-4"><i class="bi-x-circle"></i>   Clear</button>
-                        </div>
+                   
+                            <div class="mt-4 d-flex flex-row justify-content-center align-items-center">
+                                @* <button type="submit" id="btnSearch" class="btn btn-danger px-5">  <i class="bi bi-search"></i> Search</button> *@             
+                            <button type="button" class="btn btn-danger px-4 me-2" id="btnAdd"> <i class="bi-plus-lg"></i>  Add</button>
+                                <button id="btnClear" type="button" class="btn btn-danger px-4"><i class="bi-x-circle"></i>   Clear</button>
+                            </div>
+                       
+                       
                     </form>
                 </div>
             </div>
@@ -376,7 +378,7 @@
 </div>
 
 @section Scripts {
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         let selectedRow = null;
 

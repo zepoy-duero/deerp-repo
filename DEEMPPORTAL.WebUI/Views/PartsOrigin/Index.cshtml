@@ -8,6 +8,14 @@
         margin-bottom: 0px !important;
     }
 
+    .table-wrapper thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        /* 3. Re-apply background color so rows don't bleed through on scroll */
+        background-color: var(--bs-body-bg);
+    }
+
     /* adjust 0px–6px */
 </style>
 <div class="container">
@@ -114,13 +122,13 @@
                         </div>
                     </div>
 
-                    <div class="overflow-auto" style="max-height: 300px">
+                    <div class="overflow-auto table-wrapper" style="max-height: 300px">
 
                         <table class="table table-sm table-striped table-hover align-middle">
 
-                            <thead class="sticky-top bg-dard table-white">
+                            <thead class="table-light">
                                 <tr class="text-muted">
-                                    <th>Supplier</th>
+                                    <th class="position-sticky ">Supplier</th>
                                     <th>Invoice No</th>
                                     <th>Part No</th>
                                     <th>Description</th>
@@ -132,6 +140,7 @@
                             <tbody id="tblBody">
                                 <tr>
                                     <td colspan="12" class="text-center text-muted">No data</td>
+                                  
                                 </tr>
                             </tbody>
                         </table>

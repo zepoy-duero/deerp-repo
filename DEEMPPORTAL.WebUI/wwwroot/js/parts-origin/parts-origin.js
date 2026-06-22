@@ -2,7 +2,7 @@
 let processedRows = []; // IMPORTANT
 
 $(async function () {
-    setTableNoData();
+    //setTableNoData();
     $("#loadingSpinner").hide();
     //$("#btnProcess").prop("disabled", true);
 

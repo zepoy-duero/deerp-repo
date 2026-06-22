@@ -10,52 +10,60 @@ ViewData["Title"] = "Ticket";
 }
 
 <div class="container">
-    <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
-        <div class="flex-column align-items-center">
-            <div class="row d-flex justify-content-between align-items-center">
-                <!-- Title -->
-                <div class="col">
-                    <h5 class="page-title fs-5 fw-bolder text-main">
-                        Tickets
-                    </h5>
-                </div>
-
-                <div class="col text-end ms-auto">
-                    <div id="TicketsTotal" class="container">
-                        <div id="" class="btn rounded-pill bg-main text-white">
-
-                            <div class="spinner-border spinner-border-sm" role="status">
-                                <span class="visually-hidden">Loading...</span>
+    
+        <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
+            <div class="flex-column align-items-center">
+            
+                 
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <!-- Title -->
+                            <div class="col">
+                                <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                                            Tickets
+                                        </h5>
                             </div>
 
-                            <span class="blink align-middle ms-2">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-       
-            <div class="row d-flex justify-content-between align-items-center">
-                
-                <div class="col">
-                    <div id="openCreateTicketModal" class="btn btn-sm ms-3 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
-                        <i class="bi bi-plus"></i> New Ticket
-                    </div>
-                    @{
-                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTableFilters.cshtml");
-                       
-                    }
-                    @{
+                            <div class="col text-end ms-auto">
+                                <div id="TicketsTotal" class="container">
+                                    <div id="" class="btn rounded-pill bg-main text-white">
 
-                        await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
-                    }
-                </div>
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+
+                                        <span class="blink align-middle ms-2">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+               
+            
+
+             
+            <div class="card mt-3">
+                <div class="row d-flex justify-content-between align-items-center">
+                
+                    <div class="col">
+                        <div id="openCreateTicketModal" class="btn btn-sm ms-4 mt-4 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                            <i class="bi bi-plus"></i> New Ticket
+                        </div>
+                        @{
+                            await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTableFilters.cshtml");
+                       
+                        }
+                        @{
+
+                            await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
+                        }
+                    </div>
                
 
-            </div>
+                </div>
 
            
-        </div>
+            </div>
 
+        </div>
     </div>
 </div>
 

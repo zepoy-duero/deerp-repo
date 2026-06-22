@@ -224,6 +224,7 @@ async function toggleSubMenuItems(element) {
 
 	try {
 		const data = await getSubMenuItems(mainMenuId)
+		console.log(data)
 		const totalCount = data.length;
 		let tdDetails = ""
 
@@ -250,11 +251,11 @@ async function toggleSubMenuItems(element) {
 					<span class="badge rounded-pill text-bg-primary">${data[i].PARENT_MENU}</span>
 				</td>
 				<td>
-					<button class="btn btn-secondary rounded-1"
+					<button class="btn btn-main rounded-1"
 								onClick="showModalEditMenuItems(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, null)">
 							<i class="bi bi-pencil-alt"></i> Edit
 						</button>
-						<button class="btn btn-secondary text-danger rounded-1" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, 0)">
+						<button class="btn btn-danger text-white rounded-1" onclick="deleteMenuItem(${data[i].MAIN_MENU_CODE}, ${data[i].MENU_SUB_CODE}, 0)">
 							<i class="bi bi-trash"></i> Trash
 						</button>
 				</td>

@@ -8,6 +8,14 @@ public interface IEmployeeDirectoryRepository
      int org_code,
      int loc_code,
      int dept_code);
+  Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(
+     int org_code,
+     int loc_code,
+     int dept_code);
+  Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirstAidersAsync(
+     int org_code,
+     int loc_code,
+     int dept_code);
   Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync();
   Task<IEnumerable<SelectOptionResponse>> GetAllLocationListAsync();
   Task<IEnumerable<SelectOptionResponse>> GetAllDepartmentListAsync();

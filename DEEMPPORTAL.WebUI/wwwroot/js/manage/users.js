@@ -163,7 +163,7 @@ async function showModalUpdateUserAccount(userCode) {
     throw new Error(`Http error! Status: ${response.status}`)
 
   const data = await response.json()
-
+  console.log(data)
   $(gUserAccountModal).find("#inpUserCode").val(data.USER_CODE)
   $(gUserAccountModal).find("#selOrgCode").val(data.ORG_CODE).addClass("readonly-event")
   $(gUserAccountModal).find("#selLocCode").val(data.LOC_CODE).addClass("readonly-event")
@@ -193,7 +193,7 @@ async function submitSaveUser(element) {
   const token = $(form).find("input[name='__RequestVerificationToken']").val()
   const isValid = validateForm(form)
   const fd = new FormData(form)
-
+   
   // This is the overall input validation of the form
   if (!isValid) {
     alert("Please enter the required fields.")

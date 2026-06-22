@@ -16,13 +16,76 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
     public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(
      int orgCode,
      int locCode,
-     int deptCode)
+     int deptCode
+      )
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
 
         await conn.OpenAsync();
 
         const string storedProcedure = "CLOUD_v1_ERP_EMPLOYEE_DIRECTORY_sel";
+        var parameters = new
+        {
+            ORG_CODE = orgCode,
+            LOC_CODE = locCode,
+            DEPT_CODE = deptCode
+        };
+
+
+        var data = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        //var data = await multi.ReadAsync<EmployeeDirectoryResponse>();
+        //var totalCount = await multi.ReadFirstAsync<int>();
+
+        await conn.CloseAsync();
+
+        return data;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(
+     int orgCode,
+     int locCode,
+     int deptCode
+      )
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_FIREFIGHTER_EMP_sel";
+        var parameters = new
+        {
+            ORG_CODE = orgCode,
+            LOC_CODE = locCode,
+            DEPT_CODE = deptCode
+        };
+
+
+        var data = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        //var data = await multi.ReadAsync<EmployeeDirectoryResponse>();
+        //var totalCount = await multi.ReadFirstAsync<int>();
+
+        await conn.CloseAsync();
+
+        return data;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirstAidersAsync(
+     int orgCode,
+     int locCode,
+     int deptCode
+      )
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_FIRSTAIDER_EMP_sel";
         var parameters = new
         {
             ORG_CODE = orgCode,

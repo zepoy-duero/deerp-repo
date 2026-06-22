@@ -1,45 +1,57 @@
 ﻿<div id="ticketReview" class="card  section-card">
     <div class="card-header section-title border-2">
-        Review
-
+        Review/Release
     </div>
     <div class="card-body p-4">
         @* <div class="section-title text-main">Review</div> *@
         <div class="container-fluid">
-            <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <label>Reviewed By</label>
-                    <input class="form-control">
+            <div class="row g-0 mb-4">
+                <div class="col-md-3 d-flex flex-column">
+                    <div class="form-group">
+                        <label>Reviewed By</label>
+                        <input class="form-control" placeholder="Jeffvil Duero" readonly />
+                    </div>
+                    <div class="form-group mt-0">
+                        <label>Date</label>
+                        <input type="date" class="form-control" value="2026-06-17" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Version Number</label>
+                        <input class="form-control" value="v2.0.0.1" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label id="remarks">Reviewed Remarks</label>
+                        <textarea id="remarks" class="form-control"></textarea>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="fileInput" class="form-label">
+                            <i class="bi bi-images"></i>
+                            Upload attachment:
+                        </label>
+                        <div class="card shadow-sm pb-0">
+                            <div class="card-body">
+                                <!-- Drop Zone -->
+                                <div id="dropZone" class="drop-zone">
+                                    <i class="bi bi-cloud-upload"></i>
+                                    @* <p class="mb-1"><strong>DRAG & DROP or PASTE Screenshots here</strong></p>
+                                    <p class="text-muted mb-2">or click to browse</p> *@
+                                    <input type="file" id="TicketAttachments" hidden multiple
+                                           accept=".png,.pdf,.xls,.xlsx">
+                                </div>
+                                <!-- Preview List -->
+                                <div id="previewContainer" class="mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-                <div class="col-md-3">
-                    <label>Date</label>
-                    <input type="date" class="form-control">
-
-                </div>
-                @* <div class="col-md-3"><div class="form-floating"><input class="form-control"><label>Remarks</label></div></div> *@
-                <div class="col-md-3">
-                    <label>Version Number</label>
-                    <input class="form-control">
-
-                </div>
-
-            </div>
-            <div class="row mb-3">
+               
                 <div class="col-md-9">
-
-                    <label id="emailCorrespondence">Reviewed Remarks</label>
-                    <textarea id="reviewRemarks" class="form-control h-75"></textarea>
-
+                    @{
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/TicketHistory.cshtml");
+                    }
                 </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-9">
-                    <label id="remarks">Email Correspondence</label>
-                    <textarea id="remarks" class="form-control" style="height: 150px !important;"></textarea>
-                </div>
-
             </div>
         </div>
     </div>

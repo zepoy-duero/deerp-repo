@@ -29,33 +29,15 @@
                         <!-- Ticket Info -->
                         <div class="container-fluid">
                             <!-- Requested By -->
-                            <form id="createTicketForm" class="form needs-validation">
-                                <div class="row mb-3">
-                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
-
-                                        <label for="SelectRequestedByName" class="text-muted pe-2 text-nowrap">
-                                            Requested By:
-                                        </label>
-
-                                        <div class="RequestedByContainer flex-grow-1">
-
-                                            <!-- Display Mode -->
-                                            <div class="d-flex flex-row">
-                                                <h6 id="DisplayRequestedByName" class="fw-bold"></h6>
-                                              
-                                                <!-- Edit Mode -->
-                                                <select id="SelectRequestedByName"
-                                                        class="form-select form-select-sm d-none">
-                                                </select>
-                                                <i id="editBtn" onclick="showEditRequestedBy()" class="bi bi-pencil text-main extra-small ms-3 mt-1"></i>
-                                                <i id="checkBtn" onclick="saveEditRequestedBy()" class="bi bi-floppy2 text-main ms-3 mt-1 d-none"></i>
-                                            </div>
-                                            
-
-                                        </div>
-                                        
-
+                            <form id="createTicketForm" class="form needs-validation" novalidate>
+                           
+                                <div class="row gy-4 g-0 mb-2">
+                                    <div class="col-md-6">
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestedBy.cshtml");
+                                        }
                                     </div>
+                                  
 
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
                                         <label class="text-muted pe-2 text-small">
@@ -64,68 +46,67 @@
                                         <h6 id="RequestedDate" class="fw-bold"></h6>
                                     </div>
                                 </div>
-
-                                <div class="row mb-3">
-                                    <!--TICKET ADDRESSED TO-->
-
-                               
+                                <hr />
+                                <div class="row gy-4 g-0 mb-2">
                                     <div class="col-md-6">
-                                        <label for="TicketDepartmentOptions" class="form-label">
-                                            Department
-                                        </label>
-                                        <select name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select form-select-sm">
-                                        </select>
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectOrganization.cshtml");
+                                            // await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectLocation.cshtml");
+                                        }
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="TaskTypeCode" class="form-label">
-                                            Request Type</label>
-                                        <select name="TaskTypeCode" id="TaskTypeCode" class="form-select form-select-sm">
-                                        </select>
-                                    </div>
-
-                                    <!-- REQUEST TYPE -->
-
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label class="form-label">
-                                        
-                                            Ticket Subject</label>
-                                        <div class="input-group">
-                                            @* <span class="input-group-text " id="basic-addon1">
-                                                <i class="bi bi-book"></i>
-                                            </span> *@
-                                            <input name="TicketSubject" id="TicketSubject"
-                                                   type="text" 
-                                                class="form-control" 
-                                                placeholder="Subject issue . . " 
-                                                required>
-                                        </div>
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectLocation.cshtml");
+                                        }
                                     </div>
                                 </div>
-
-                                <div class="row ">
+                                <div class="row gy-4 mb-2">
+                                   
+                                    <div class="col-md-6">
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectDepartment.cshtml");
+                                       
+                                        }
+                                    </div>
+                                    <div class="col-md-6">
+                                        @{
+                                         
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestType.cshtml");
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row gy-4 g-0 mb-2">
                                     <div class="col-12">
-                                        <div class="mb-3">
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/InputTicketSubject.cshtml");
+                                        }
+                                    </div>
+                                   
+                                </div>
+
+                                <div class="row gy-4 g-0 mb-2">
+                                    <div class="col-12">
+                                        <div>
                                             <label class="form-label">
-                                 
-                                                Detailed description
+                                                 <small class="extra-small text-danger">*</small>
+                                                                Detailed description
+                                                <span id="summernoteInvalidFeedback" class="text-danger text-small d-none">This field is required</span>
                                                 </label>
-                                            @* <textarea name="TicketDescription" id="TicketDescription" rowspan="5"
-                                                 placeholder="Explain the issue in detail..." required></textarea> *@
-                                                <div name="TicketDescription" id="TicketDescription" rowspan="5"
+                                          
+                                         
+                                                <div name="TicketDescription" id="TicketDescription"
                                                           placeholder="Explain the issue in detail..." required></div>
+                                          
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="input-group-sm mx-0">
-
+                                <div class="row gy-4 g-0">
+                                    <div class="col h-50">
+                                        <div>
                                             <label for="fileInput" class="form-label">
                                                 <i class="bi bi-images"></i>
                                                 Upload attachment:</label>
-                                            <div class="card shadow-sm pb-0">
+                                            <div class="card shadow-sm pb-0 mb-0">
                                                 <div class="card-body">
                                                     <!-- Drop Zone -->
                                                     <div id="dropZone" class="drop-zone">
@@ -153,7 +134,14 @@
                 <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
                     Cancel
                 </a>
-                <button id="submitTicket" type="submit" class="btn btn-danger px-2">
+                <button 
+                    id="submitTicket" 
+                    type="submit" 
+                    class="btn btn-danger px-2" 
+                    aria-label="Fill all the required fields"
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="top"
+                        title="Fill all the required fields">
                     Submit Ticket
                 </button>
                

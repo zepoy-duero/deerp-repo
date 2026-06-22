@@ -30,6 +30,8 @@ public class EmployeeDirectoryController(
 
     return Ok(data);
   }
+  
+
   [Authorize]
   [HttpGet("getAllOrganizationList")]
   public async Task<IActionResult> GetAllOrganizationList()

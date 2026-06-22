@@ -1,5 +1,6 @@
-﻿const gBaseUrl = `/support/employee-directory`;
-
+﻿const empDirectoryUrl = `/support/employee-directory`;
+const empFirefighterUrl = `/support/certified-firefighting-operator`;
+const empFirstAiderUrl = `/support/certified-first-aider`;
 let organizations = [];
 let locations = [];
 let departments = [];
@@ -7,32 +8,32 @@ var emps = [];
 var isPageReload = true;
 $(async function () {
 
-        await loadOrganizations();
-        await loadLocations();
-        await loadDepartments();
-        await getAllEmployeeDirectory();
-   
+    await loadOrganizations();
+    await loadLocations();
+    await loadDepartments();
+    await currentPageRequest();   
     
     isPageReload = false;
     // Event bindings
     $("#select-organization").on("change", async (e) => {
         showSpinner();
-        console.log(e.event)
+    
         await loadLocations();
         await loadDepartments();
-        await getAllEmployeeDirectory()
+        await currentPageRequest();
     });
     $("#select-location").on("change", async () => {
         showSpinner()
         await loadDepartments();
-        await getAllEmployeeDirectory()
+        await currentPageRequest()
     });
     $("#select-department").on("change", async () => {
         showSpinner()
-        getAllEmployeeDirectory()
+        await currentPageRequest()
     });
 
-    $("#search-input").on("keyup",searchEmployees);
+    $("#search-input").on("keyup", searchEmployees);
+    $("#select-status").on("change", filterByStatus);
 });
 // ---------------- SEARCH ----------------
 function searchEmployees() {
@@ -48,6 +49,52 @@ function searchEmployees() {
             .toggle(name.includes(value));
     });
 }
+async function currentPageRequest() {
+    switch (getCurrentPageRoute()) {
+        case empDirectoryUrl:
+                        await getAllEmployeeDirectory();
+            break;
+        case empFirefighterUrl:
+                        await getAllEmployeeFirefighters();
+            break;
+        case empFirstAiderUrl:
+                        await getAllEmployeeFirstAiders();
+            break;
+    }
+   
+}
+function filterByStatus() {
+    const value = $(this).val().toLowerCase().trim();
+    console.log(value)
+    if (value == 'all') {
+        $("#employeeContainer .card").each(function () {
+            const status = $(this)
+                .find("#emp_status")
+                .text()
+                .toLowerCase();
+            // Hide/show the column wrapper
+            $(this)
+                .closest('[class^="col-"]')
+                .toggle(status.includes(''));
+        });
+      
+    } else {
+         $("#employeeContainer .card").each(function () {
+                const status = $(this)
+                    .find("#emp_status")
+                    .text()
+                    .toLowerCase();
+                // Hide/show the column wrapper
+                $(this)
+                    .closest('[class^="col-"]')
+                 .toggle(status.includes(value));
+
+            
+         });
+        
+    }
+   
+}
 // ---------------- HELPERS ----------------
 function showSpinner() {
     $("#employeeContainer").empty().append(spinnerComponent());
@@ -60,11 +107,11 @@ function spinnerComponent() {
 }
 // ---------------- LOAD DROPDOWNS ----------------
 async function loadOrganizations() {
-    organizations = await $.get(`${gBaseUrl}/getAllOrganizationList`);
+    organizations = await $.get(`${empDirectoryUrl}/getAllOrganizationList`);
     createSelectOptions("select-organization", organizations);
 }
 async function loadLocations() {
-    const filteredLoc = await $.get(`${gBaseUrl}/getFilteredLocationList`, {
+    const filteredLoc = await $.get(`${empDirectoryUrl}/getFilteredLocationList`, {
         orgCode: $("#select-organization").val()
     });
     createSelectOptions("select-location", filteredLoc);
@@ -74,8 +121,8 @@ async function loadDepartments() {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val()
     }
-    console.log(filterItems)
-    const filteredDept = await $.get(`${gBaseUrl}/getFilteredDepartmentList`, {
+
+    const filteredDept = await $.get(`${empDirectoryUrl}/getFilteredDepartmentList`, {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val()
     });
@@ -112,74 +159,77 @@ function createSelectOptions(selector, data) {
                     $("#" + selector).html(html);
                     break;
             }
-    //for (const item of data) {
-     
-    //    if (selector === "select-department" && item.VALUE == "19") {
-    //        html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`;
-    //    }
-    //    html += `<option value="${item.VALUE}">${item.TEXT}</option>`;
-    //}
-    //console.log(html)
-    //$("#" + selector).html(html);
+   
 }
-//function createSelectOptions(selector, data) {
-//    let html = ""
-//    if (isPageReload == true) {
-//        switch (selector) {
-//            case "select-organization":
-//                html += `<option value="0">All</option>`
-//                for (const item of data) {
-//                    if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-//                }
-//                $("#" + selector).html(html);
-//                break;
-//            case "select-location":
-               
-//                for (const item of data) {
-//                    if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-//                }
-//                $("#" + selector).html(html);
-//                break;
-//            case "select-department":        
-//                for (const item of data) {
-//                    if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-//                    else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-//                }
-//                $("#" + selector).html(html);
-//                break;
-//        }
-//    } else {
-//        if (selector === "select-organization") html += `<option value="0">All</option>`
-//        for (const item in data) {
-//            html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-//        }
-//        $("#" + selector).html(html);
-//    }
-//}
+function getCurrentPageRoute() {
+    const params = window.location.pathname;
+    return params;
+}
 
 // ---------------- EMPLOYEE LIST ----------------
 async function getAllEmployeeDirectory() {
+    
     const filterParams = {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val(),
-        deptCode: $("#select-department").val()
+        deptCode: $("#select-department").val(),
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isFirefighter: 
     };
-    console.log(filterParams)
+ 
     showTotalRecordsSpinner()
-    const employeeList = await $.get(
-        `${gBaseUrl}/getAllEmployeeDirectory`,
-        
-            //orgCode: $("#select-organization").val(),
-            //locCode: $("#select-location").val(),
-            //deptCode: $("#select-department").val()
+    let employeeList = await $.get(
+        `${empDirectoryUrl}/getAllEmployeeDirectory`,
             filterParams
     );
+   
     showTotalRecords(employeeList.length);
     render("employeeContainer", employeeList);
     
+    
+    
     //$("#summary").empty().append(employeeList.length)
+}
+async function getAllEmployeeFirefighters() {
+
+    const filterParams = {
+        orgCode: $("#select-organization").val(),
+        locCode: 0,
+        deptCode: 0,
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isFirefighter: 
+    };
+
+    showTotalRecordsSpinner()
+    let employeeList = await $.get(
+        `${empFirefighterUrl}/getAllEmployeeFirefighters`,
+        filterParams
+    );
+
+    showTotalRecords(employeeList.length);
+    render("employeeContainer", employeeList);
+
+
+}
+async function getAllEmployeeFirstAiders() {
+    const filterParams = {
+        orgCode: $("#select-organization").val(),
+        locCode: 0,
+        deptCode: 0,
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isFirefighter: 
+    };
+
+    showTotalRecordsSpinner()
+    let employeeList = await $.get(
+        `${empFirstAiderUrl}/getAllEmployeeFirstAiders`,
+        filterParams
+    );
+
+    showTotalRecords(employeeList.length);
+    render("employeeContainer", employeeList);
+
+
 }
 function showTotalRecordsSpinner() {
     $("#EmployeeDirectoryTotal").empty().append(
@@ -216,7 +266,7 @@ function checkIfNull(val) {
     return val ?? "None";
 }
 async function getProfilePic(EMP_CODE) {
-    let empPhoto = await $.get(`${gBaseUrl}/getProfilePic?`, { EMP_CODE: EMP_CODE });
+    let empPhoto = await $.get(`${empDirectoryUrl}/getProfilePic?`, { EMP_CODE: EMP_CODE });
     console.log(empPhoto)
 }
 
@@ -273,7 +323,7 @@ function createCard(emp) {
                           <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
                         </svg>
                         <small class="text-truncate emp-contacts">  ${checkIfNull(emp.EMAIL_ADDRESS)}</small>
-                      
+                        <div class="d-none" id="emp_status">${emp.EMP_STATUS}</div>
                         </div>
                     </div>
 

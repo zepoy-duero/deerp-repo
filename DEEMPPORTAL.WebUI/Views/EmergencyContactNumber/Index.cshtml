@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["title"] = "Emergency Contact Numbers";
+}
+<style>
+    @@keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .blink {
+        align-content: center;
+        align-items: center;
+        animation: blinker 1s linear infinite;
+    }
+</style>
+<div class="container">
+    <div class="page-inner">
+        <div class="flex-column">
+            <div class="row d-flex justify-content-between align-items-center">
+                <!-- Title -->
+                <div class="col">
+                    <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
+                        Emergency Contact Numbers
+                    </h5>
+                </div>
+                <hr />
+
+            </div>
+       
+
+           
+        </div>
+
+        <!-- Employee Cards Container -->
+        <div class="row g-2" id="emergencyContactNumberContainer">
+           <div class="col">
+               <table class="table striped table-bordered">
+                     <thead class="table-primary">
+                          <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Designation</th>
+                            <th scope="col">Telephone Number</th>
+                            <th scope="col">Mobile Number</th>
+                          </tr>
+                     </thead>
+                     <tbody id="emergencyContactNumberTableBody">
+                          <!-- Employee cards will be dynamically inserted here -->
+                    </tbody>    
+               </table>
+           </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+   <script>
+
+       $(async function(){
+              const emergencyContactNumbers = [
+               {
+                 "id": 1,
+                 "name": "General Security",
+                 "designation": "Security Department",
+                 "telephone_number": "+000 0 0000000",
+                 "mobile_number": "+000 00 000 0000"
+               },
+               {
+                 "id": 2,
+                 "name": "Jane Doe",
+                 "designation": "Maintenance Technician",
+                 "telephone_number": "+000 0 0000001",
+                 "mobile_number": "+000 00 000 0001"
+               },
+               {
+                 "id": 3,
+                 "name": "John Smith",
+                 "designation": "Support Engineer",
+                 "telephone_number": "+000 0 0000002",
+                 "mobile_number": "+000 00 000 0002"
+               },
+               {
+                 "id": 4,
+                 "name": "Alice Johnson",
+                 "designation": "Assistant Manager",
+                 "telephone_number": "+000 0 0000003",
+                 "mobile_number": "+000 00 000 0003"
+               },
+               {
+                 "id": 5,
+                 "name": "Robert Brown",
+                 "designation": "HR Supervisor",
+                 "telephone_number": "+000 0 0000004",
+                 "mobile_number": "+000 00 000 0004"
+               },
+               {
+                 "id": 6,
+                 "name": "Emily Davis",
+                 "designation": "HR Manager",
+                 "telephone_number": "+000 0 0000005",
+                 "mobile_number": "+000 00 000 0005"
+               }
+             ];
+
+         const tableBody = document.getElementById('emergencyContactNumberTableBody');
+         emergencyContactNumbers.forEach(contact => {
+             const row = document.createElement('tr');
+             row.innerHTML = `
+                  <td class="text-left">${contact.name}</td>
+                  <td class="text-left">${contact.designation}</td>
+                  <td class="text-left">${contact.telephone_number}</td>
+                  <td class="text-left">${contact.mobile_number}</td>
+             `;
+             tableBody.appendChild(row);
+         });
+       })
+           
+   </script>
+}
+<style>
+  
+</style>

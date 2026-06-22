@@ -1,0 +1,86 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <label class="form-label pt-3">Ticket History</label>
+            <!-- Timeline Timeline wrapper -->
+            <ul class="timeline list-unstyled position-relative  border border-left border-dark ">
+                <!-- Timeline 0 -->
+                <li class="timeline-item mb-5 position-relative">
+                    <div class="timeline-marker position-absolute rounded-circle bg-warning border border-warning" style="width: 1.5rem; height: 1.5rem; right: -0.75rem;"></div>
+                    <div class="timeline-content ps-4">
+                        <h5 class="fw-bold">Reviewing</h5>
+                        <span class="text-muted small">Jun 17, 2026</span>
+                        <p class="mt-2 text-secondary">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi vulputate aliquet.
+                        </p>
+                    </div>
+                </li>
+                <!-- Timeline Item 1 -->
+                <li class="timeline-item mb-5 position-relative">
+                    <div class="timeline-marker position-absolute rounded-circle bg-primary border border-white" style="width: 1.5rem; height: 1.5rem; left: -0.75rem;"></div>
+                    <div class="timeline-content ps-4">
+                        <h5 class="fw-bold">Testing</h5>
+                        <span class="text-muted small">Jun 17, 2026</span>
+                        <p class="mt-2 text-secondary">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi vulputate aliquet.
+                        </p>
+                    </div>
+                </li>
+
+                <!-- Timeline Item 2 -->
+                <li class="timeline-item mb-5 position-relative">
+                    <div class="timeline-marker position-absolute rounded-circle bg-success border border-white" style="width: 1.5rem; height: 1.5rem; left: -0.75rem;"></div>
+                    <div class="timeline-content ps-4">
+                        <h5 class="fw-bold">Ongoing</h5>
+                        <span class="text-muted small">June 15, 2026</span>
+                        <p class="mt-2 text-secondary">
+                            Curabitur aliquet quam id dui posuere blandit. Proin eget tortor risus. Cras ultricies ligula sed magna dictum porta.
+                        </p>
+                    </div>
+                </li>
+
+                <!-- Timeline Item 3 -->
+                <li class="timeline-item mb-5 position-relative">
+                    <div class="timeline-marker position-absolute rounded-circle bg-danger border border-white" style="width: 1.5rem; height: 1.5rem; left: -0.75rem;"></div>
+                    <div class="timeline-content ps-4">
+                        <h5 class="fw-bold">Approved by MIS Department Manager</h5>
+                        <span class="text-muted small">June 14, 2026</span>
+                        <p class="mt-2 text-secondary">
+                            Donec sollicitudin molestie malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+                        </p>
+                    </div>
+                </li>
+                <!-- Timeline Item 4 -->
+                <li class="timeline-item mb-5 position-relative">
+                    <div class="timeline-marker position-absolute rounded-circle bg-dark border border-white" style="width: 1.5rem; height: 1.5rem; left: -0.75rem;"></div>
+                    <div class="timeline-content ps-4">
+                        <h5 class="fw-bold">Ticket Submitted</h5>
+                        <span class="text-muted small">June 13, 2026</span>
+                        <p class="mt-2 text-secondary">
+                           Ticket MIS-1 has been submitted
+                        </p>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+<style scoped>
+    .timeline::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0.25rem;
+        width: 2px;
+        background-color: #dee2e6; /* Bootstrap border-light color */
+    }
+
+    .timeline-marker {
+        z-index: 1; /* Ensures the dot stays on top of the vertical line */
+        cursor: pointer;
+    }
+
+</style>
