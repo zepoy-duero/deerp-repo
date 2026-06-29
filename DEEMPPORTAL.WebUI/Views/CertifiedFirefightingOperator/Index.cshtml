@@ -14,11 +14,46 @@
         align-items: center;
         animation: blinker 1s linear infinite;
     }
+
+    .image-fade-edges {
+        /* Use a radial gradient mask to fade all 4 outer borders */
+        -webkit-mask-image: radial-gradient(circle, black 100%, transparent 100%);
+        mask-image: radial-gradient(circle, black 60%, transparent 100%);
+    }
+
+    #empCard {
+        transition: all 0.3s ease-in-out; 
+    }
+
+        #empCard:hover {
+            transform: scale(1.05);
+            box-shadow: 0 1rem 3rem rgba(0, 46, 90) !important;
+            z-index: 10; 
+        }
+
+    .emp-name {
+        font-size: medium
+    }
+
+    .emp-position {
+        font-size: small;
+        font-style: italic
+    }
+
+    .emp-contacts {
+        font-size: small
+    }
+
+   
 </style>
+@{
+    await Html.RenderPartialAsync("~/Views/CertifiedFirefightingOperator/Components/ConfirmRemoveFirefighterModal.cshtml");
+}
 <div class="container">
+    
     <div class="page-inner">
         <div class="flex-column">
-            <div class="row d-flex justify-content-between align-items-center">
+            <div class="row d-flex justify-content-between align-items-center mb-3">
                 <!-- Title -->
                 <div class="col">
                     <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
@@ -37,65 +72,101 @@
                         </div>
                     </div>
                 </div>
-
+            
             </div>
+            <hr class="" />
             <!-- Filters -->
-            <div class="row g-4 mb-4">
-                <div class="col-auto">
-                    <label for="select-organization" class="form-label fw-semibold">Choose Organization</label>
-                    <select id="select-organization" class="form-select select-organization">
-                    </select>
-                </div>
-                <div class="col d-none">
-                    <label for="select-location" class="form-label fw-semibold">Choose Location</label>
-                    <select id="select-location" class="form-select select-location">
-                    </select>
-                </div>
-                <div class="col d-none">
-                    <label for="select-status" class="form-label fw-semibold">Choose Status</label>
-                    <select id="select-status" class="form-select select-status">
-                        <option selected>All</option>
-                        <option>On Payroll</option>
-                        <option>Consultant</option>
-                    </select>
-                </div>
-                <div class="col d-none">
-                    <label for="select-department" class="form-label fw-semibold">Choose Department</label>
-                    <select id="select-department" class="form-select select-department">
-                    </select>
-                </div>
-                <div class="col d-none">
-                    <label for="search-input" class="form-label fw-semibold">Search . . .</label>
-                    <input id="search-input" class="form-control" placeholder="Type to search">
+            <div class="card mt-2 mb-2 p-4">
+                <div class="d-flex flex-row row-cols-12 p-4">
+                    <div class="col">
+                        <div class="row row-cols-3 g-0 mb-4 d-flex justify-content-between align-items-center">
+                            <div class="col-auto bg-light">
 
+                                <i class="bi bi-filter fs-4"></i>
+
+                            </div>
+                            <div class="col-auto text-start">
+
+                                <div class="d-flex flex-row align-items-end">
+
+
+
+                                    <select id="select-organization" class="form-select select-organization">
+                                    </select>
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-auto me-auto">
+                                @if (User.IsInRole("Manager - HR") || User.IsInRole("Super Admin"))
+                                {
+                                    await Html.RenderPartialAsync("~/Views/CertifiedFirefightingOperator/Components/AddFirefighterModal.cshtml");
+                                }
+
+
+                            </div>
+                            <div class="col d-none">
+                                <label for="select-location" class="form-label fw-semibold">Choose Location</label>
+                                <select id="select-location" class="form-select select-location">
+                                </select>
+                            </div>
+                            <div class="col d-none">
+                                <label for="select-status" class="form-label fw-semibold">Choose Status</label>
+                                <select id="select-status" class="form-select select-status">
+                                    <option selected>All</option>
+                                    <option>On Payroll</option>
+                                    <option>Consultant</option>
+                                </select>
+                            </div>
+                            <div class="col d-none">
+                                <label for="select-department" class="form-label fw-semibold">Choose Department</label>
+                                <select id="select-department" class="form-select select-department">
+                                </select>
+                            </div>
+                            <div class="col d-none">
+                                <label for="search-input" class="form-label fw-semibold">Search . . .</label>
+                                <input id="search-input" class="form-control" placeholder="Type to search">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="d-flex flex-row row-cols-1">
+                            <div class="col">
+                                <img src="~/files/2.png" style="width: 100% auto;max-height: 100px !important" class="card-img rounded float-end image-fade-edges" alt="...">
+
+                            </div>
+                        </div>
+                    </div>
+                
+                   
+                </div>
+                <div class="card-body px-4">
+                   
+                    <!-- Employee Cards Container -->
+                    <div class="row g-2" id="employeeContainer" style="overflow-y: scroll;max-height: 650px">
+                        <div class="d-flex justify-content-center align-items-center">
+                            
+                            <div class="spinner-grow top-50" style="width: 3rem; height: 3rem;" role="status">
+                                
+                            </div>
+                            <span class="visually-hidden">Updating...</span>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+       
         </div>
 
-        <!-- Employee Cards Container -->
-        <div class="row g-2" id="employeeContainer">
-            <div class="d-flex justify-content-center align-items-center">
-                <div class="spinner-grow top-50" style="width: 3rem; height: 3rem;" role="status"></div>
-            </div>
-
-        </div>
+        
     </div>
 </div>
 @section Scripts {
 
-    <script src="~/js/support/employee-directory.js" asp-append-version="true"></script>
+    <script src="~/js/support/certified-firefighting-operator.js" asp-append-version="true"></script>
+
 }
-<style>
-    .emp-name {
-        font-size: medium
-    }
-
-    .emp-position {
-        font-size: small;
-        font-style: italic
-    }
-
-    .emp-contacts {
-        font-size: small
-    }
-</style>

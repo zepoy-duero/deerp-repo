@@ -1,13 +1,13 @@
 ﻿using DEEMPPORTAL.Domain.Support;
-
+using DEEMPPORTAL.Domain.Manage.User;
 namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
 {
   public class EmployeeDirectoryService(IEmployeeDirectoryRepository employeeDirectoryRepository) : IEmployeeDirectoryService
   {
     private readonly IEmployeeDirectoryRepository _employeeDirectoryRepository = employeeDirectoryRepository;
-    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(int org_code, int loc_code, int dept_code)
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(int org_code, int loc_code, int dept_code,string status)
     {
-      return await _employeeDirectoryRepository.GetAllEmployeeDirectoryAsync(org_code, loc_code, dept_code);
+      return await _employeeDirectoryRepository.GetAllEmployeeDirectoryAsync(org_code, loc_code, dept_code,status);
     }
     public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(int org_code, int loc_code, int dept_code)
     {
@@ -44,6 +44,31 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     public async Task<byte[]?> GetProfilePicAsync(int EMP_CODE)
      {
             return await _employeeDirectoryRepository.GetProfilePicAsync(EMP_CODE);
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirefighterAsync(int USER_CODE)
+     {
+            return await _employeeDirectoryRepository.AddCertifiedFirefighterAsync(USER_CODE);
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirefighterAsync(int USER_CODE)
+     {
+            return await _employeeDirectoryRepository.RemoveCertifiedFirefighterAsync(USER_CODE);
+    }
+    
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserFireFighterOptionsAsync()
+     {
+            return await _employeeDirectoryRepository.GetUserFireFighterOptionsAsync();
+    }
+        public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE)
+        {
+            return await _employeeDirectoryRepository.AddCertifiedFirstAiderAsync(USER_CODE);
+        }
+        public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE)
+        {
+            return await _employeeDirectoryRepository.RemoveCertifiedFirstAiderAsync(USER_CODE);
+        }
+        public async Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync()
+     {
+            return await _employeeDirectoryRepository.GetUserFirstAiderOptionsAsync();
     }
 
    

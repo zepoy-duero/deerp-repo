@@ -4,3 +4,12 @@
 06-18-2026		2.0.0.2		    Fixed Issues on: 
 									- Parts Origin: Table header overlapsed by table rows while scrolling
 									- Support-HR Support: Fixed Empty icon components
+06-29-26		2.1.0.2			Support:
+									ADDED:
+										- New Page "Certified Firefighting Operator"
+										- New Page "Certified First Aider"
+										- New Page "Emergency Contact Numbers"
+										- Status Filter on "Employee Directory"
+								Library(Logos,Forms,Credit Application,Certificate):
+									Fixed:
+										- Organization Combobox filter does not match with the data on the list.

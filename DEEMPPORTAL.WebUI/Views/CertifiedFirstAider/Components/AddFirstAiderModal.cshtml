@@ -1,0 +1,80 @@
+﻿
+
+<!-- Modal -->
+<style scoped>
+    /* Custom rules to handle the layout smoothly */
+    .dropdown-menu-custom {
+        max-height: 300px;
+        overflow-y: auto;
+        width: 100%;
+        min-width: 250px;
+    }
+
+    .dropdown-item-check {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+
+        .dropdown-item-check:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-item-check input {
+            cursor: pointer;
+        }
+    /* Hide specific search results when filtered out */
+    .search-hidden {
+        display: none !important;
+    }
+
+    
+</style>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-danger rounded-1" data-bs-toggle="modal" data-bs-target="#addFirstAiderModal">
+    Add New
+</button>
+<div class="modal fade" id="addFirstAiderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-main text-white">
+                <h5 class="modal-title" id="AddFirstAider">Add a Certified First Aider</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row justify-content-start  p-4">
+                    <div class="col">
+                        <label class="form-label">Select Employee</label>
+                        <!-- Hidden real select (for form submission) -->
+                        <select id="selectFirstAiders" class="form-select d-none">
+                        </select>
+                        <!-- Custom dropdown -->
+                        <div class="dropdown rounded-1">
+                            <button class="form-select text-start text-muted" type="button" id="chooseFirstAiderEmployeeBtn" data-bs-toggle="dropdown">
+                                Employees
+                            </button>
+                            <div class="dropdown-menu w-100 p-2" style="max-height: 350px !important; overflow-y: scroll;">
+
+                                <!-- Search input -->
+                                <input type="text" id="FirstAiderSearchInput" class="form-control" placeholder="Search...">
+                                <!-- Options -->
+                                <ul class="list-unstyled mb-0 p-2" id="selectFirstAiderEmployee">
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeAddModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div id="submitBtn">
+                    <button id="submitCertifiedFirstAider" type="button" class="btn btn-danger">  
+                        <span id="submitBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

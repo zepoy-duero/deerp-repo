@@ -24,9 +24,9 @@ public class EmployeeDirectoryController(
 
   [Authorize]
   [HttpGet("getAllEmployeeDirectory")]
-  public async Task<IActionResult> GetAllEmployeeDirectory(int orgCode, int locCode, int deptCode)
+  public async Task<IActionResult> GetAllEmployeeDirectory(int orgCode, int locCode, int deptCode,string status)
   {
-    var data = await _employeeDirectoryService.GetAllEmployeeDirectoryAsync(orgCode, locCode, deptCode);
+    var data = await _employeeDirectoryService.GetAllEmployeeDirectoryAsync(orgCode, locCode, deptCode,status);
 
     return Ok(data);
   }

@@ -312,7 +312,11 @@ async function loadOrganization() {
 
   if (totalCount > 0) {
     for (let i = 0; i < data.length; i++) {
-      options += `<option value="${data[i].VALUE}">${data[i].TEXT}</option>`
+        if (data[i].VALUE == 1) {
+            options += `<option selected value="${data[i].VALUE}">${data[i].TEXT}</option>`
+        } else {
+            options += `<option value="${data[i].VALUE}">${data[i].TEXT}</option>`
+        }
     }
   }
 

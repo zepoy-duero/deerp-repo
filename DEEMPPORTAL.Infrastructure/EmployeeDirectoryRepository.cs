@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using DEEMPPORTAL.Application.Support.EmployeeDirectoryService;
+using DEEMPPORTAL.Common;
+using DEEMPPORTAL.Domain;
+using DEEMPPORTAL.Domain.Manage.User;
+using DEEMPPORTAL.Domain.Support;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using DEEMPPORTAL.Common;
-using DEEMPPORTAL.Domain.Support;
-using DEEMPPORTAL.Application.Support.EmployeeDirectoryService;
 
 namespace DEEMPPORTAL.Infrastructure;
 
@@ -16,7 +18,8 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
     public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(
      int orgCode,
      int locCode,
-     int deptCode
+     int deptCode,
+     string status
       )
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
@@ -28,7 +31,9 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
         {
             ORG_CODE = orgCode,
             LOC_CODE = locCode,
-            DEPT_CODE = deptCode
+            DEPT_CODE = deptCode,
+            STATUS = status
+
         };
 
 
@@ -210,5 +215,113 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
                  commandType: CommandType.StoredProcedure);
 
         return EMP_PHOTO;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirefighterAsync(int USER_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "dbo.CLOUD_v1_ERP_CERTIFIED_FIREFIGHTER_add";
+        var parameters = new
+        {
+           USER_CODE
+        };
+
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return user;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirefighterAsync(int USER_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "dbo.CLOUD_v1_ERP_CERTIFIED_FIREFIGHTER_del";
+        var parameters = new
+        {
+           USER_CODE
+        };
+
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return user;
+    }
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserFireFighterOptionsAsync()
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+        const string storedProcedure = "CLOUD_v1_ERP_CM_CERTIFIED_FIREFIGHTER_opts";
+        var results = await conn.QueryAsync<SelectOptionResponse>(
+            storedProcedure,
+            commandType: CommandType.StoredProcedure);
+        await conn.CloseAsync();
+
+        return results!;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CERTIFIED_FIRSTAIDER_add";
+        var parameters = new
+        {
+            USER_CODE
+        };
+
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return user;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "dbo.CLOUD_v1_ERP_CERTIFIED_FIRSTAIDER_del";
+        var parameters = new
+        {
+            USER_CODE
+        };
+
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return user;
+    }
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync()
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+        const string storedProcedure = "CLOUD_v1_ERP_CM_CERTIFIED_FIRSTAIDER_opts";
+        var results = await conn.QueryAsync<SelectOptionResponse>(
+            storedProcedure,
+            commandType: CommandType.StoredProcedure);
+        await conn.CloseAsync();
+
+        return results!;
     }
 }

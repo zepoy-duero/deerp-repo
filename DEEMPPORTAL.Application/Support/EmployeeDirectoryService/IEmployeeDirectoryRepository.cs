@@ -1,5 +1,5 @@
 ﻿using DEEMPPORTAL.Domain.Support;
-
+using DEEMPPORTAL.Domain.Manage.User;
 namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService;
 
 public interface IEmployeeDirectoryRepository
@@ -7,7 +7,7 @@ public interface IEmployeeDirectoryRepository
   Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(
      int org_code,
      int loc_code,
-     int dept_code);
+     int dept_code, string status);
   Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(
      int org_code,
      int loc_code,
@@ -23,4 +23,10 @@ public interface IEmployeeDirectoryRepository
   Task<IEnumerable<SelectOptionResponse>> GetFilteredLocationListAsync(int orgCode);
   Task<IEnumerable<SelectOptionResponse>> GetFilteredDepartmentListAsync(int orgCode, int locCode);
   Task<byte[]?> GetProfilePicAsync(int EMP_CODE);
+  Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirefighterAsync(int USER_CODE);
+  Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirefighterAsync(int USER_CODE);
+  Task<IEnumerable<SelectOptionResponse>> GetUserFireFighterOptionsAsync();
+    Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE);
+    Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE);
+    Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync();
 }

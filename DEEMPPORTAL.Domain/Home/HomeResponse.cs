@@ -12,4 +12,5 @@ public class HomeResponse
 	public string EMP_STATUS { get; set; } = string.Empty;
 	public string EMAIL_ADDRESS { get; set; } = string.Empty;
 	public string VAT_NO { get; set; } = string.Empty;
+    public int? CAN_EDIT { get; set; }
 }

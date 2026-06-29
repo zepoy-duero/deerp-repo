@@ -2,6 +2,7 @@
 {
     public class EmployeeDirectoryResponse
     {
+        public int USER_CODE { get; set; }
         public int ORG_CODE { get; set; }
         public int LOC_CODE { get; set; }
         public int DEPT_CODE { get; set; }
