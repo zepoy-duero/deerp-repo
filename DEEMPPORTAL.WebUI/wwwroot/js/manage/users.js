@@ -80,8 +80,13 @@ async function displayRecords(callback) {
 
         rows += `
                 <tr>
-                    <td id="org-code" class="d-none">${data[i].ORG_CODE}</td>
-                    <td class="align-left">${i + 1}</td>
+                    <td id="org-code">
+                    <div class="d-none">
+                     ${data[i].ORG_CODE}
+                    </div>
+                   
+                    </td>
+                    <td class="text-start">${i + 1}</td>
                     <td>
                         <button type="button" class="btn btn-danger rounded-1" onclick="showModalUpdateUserAccount(${data[i].USER_CODE})"><span class="bi bi-pencil-alt"></span> Edit</button>
                     </td>

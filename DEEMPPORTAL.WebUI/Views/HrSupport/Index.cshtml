@@ -2,7 +2,17 @@
 	Layout = "_Layout";
 	ViewData["Title"] = "Hr Support";
 }
+<style>
+	.hr-support-card {
+		transition: all 0.3s ease-in-out;
+	}
 
+	.hr-support-card:hover {
+			transform: scale(1.05);
+			box-shadow: 0 1rem 3rem rgba(0, 46, 90) !important;
+			z-index: 10;
+		}
+</style>
 <!-- Main content here -->
 <div class="container">
 	<div class="page-inner">
@@ -12,9 +22,9 @@
 		<div class="page-category">
 			<div class="card card-profile">
 				<div class="card-header bg-main-gradient rounded-top-2">
-					<div class="row">
+					<div class="row g-4">
 						<div class="col-sm-12 col-md-6 col-lg-4 my-5">
-							<div class="card border-0">
+							<div class="card border-0 hr-support-card">
 								<div class="card-body text-center py-5">
 									<i class="bi bi-envelope mb-3 text-primary" style="font-size: 5rem;"></i>
 									<h4 class="fs-4 fw-bolder text-main mb-5">Email Us</h4>
@@ -26,7 +36,7 @@
 							</div>
 						</div>
 						<div class="col-sm-12 col-md-6 col-lg-4 my-5">
-							<div class="card border-0">
+							<div class="card border-0 hr-support-card">
 								<div class="card-body text-center py-5">
 									<i class="bi bi-telephone-fill mb-3 text-danger" aria-hidden="true" style="font-size: 5rem;"></i>
 									<h4 class="fs-4 fw-bolder text-main mb-5">Call Us</h4>
@@ -44,7 +54,7 @@
 							</div>
 						</div>
 						<div class="col-sm-12 col-md-6 col-lg-4 my-5">
-							<div class="card border-0">
+							<div class="card border-0 hr-support-card">
 								<div class="card-body text-center py-5">
 									<i class="bi bi-globe-americas mb-3 text-info" aria-hidden="true" style="font-size: 5rem;"></i>
 									<h4 class="fs-4 fw-bolder text-main mb-5">Our Website</h4>

@@ -185,14 +185,14 @@
 		<div class="page-category">
 			<div class="card p-4">
 				<div class="card-header p-3">
-					<div class="row justify-content-between">
+					<div class="row d-flex justify-content-between align-items-center">
 						<div class="col-2">
 							<button class="btn btn-danger btn-sm" onclick="showModalCreateUserAccount(this)">
-								<i class="bi bi-plus small"></i>
+								<i class="bi bi-plus"></i>
 								New
 							</button>
 						</div>
-						<div class="col-5">
+						<div class="col-auto  ms-auto">
 
 							@* <label for="select-organization" class="form-label fw-semibold">Choose Organization</label> *@
 							<select id="select-organization" class="form-select select-organization">
@@ -200,7 +200,7 @@
 							</select>
 
 						</div>
-						<div class="col-5">
+						<div class="col-auto">
 							<div class="input-group">
 								<input id="inpSearch" type="text" class="form-control rounded-start-1"
 											 placeholder="Search for username or email address" aria-label="User Account Search">
@@ -217,11 +217,12 @@
 							<table id="tblUsers" class="table table-sm mb-0">
 								<thead class="table-light fw-bold">
 									<tr>
-										<th class="text-muted">#</th>
-										<th class="text-muted"></th>
+										<th scope="col" class="text-muted"></th>
+										<th scope="col" class="text-muted ps-4">#</th>
+										<th scope="col" class="text-muted"></th>
 										
-										<th class="text-muted">Employee&nbsp;Name</th>
-										<th class="text-muted">Actions</th>
+										<th scope="col" class="text-muted ps-4">Employee&nbsp;Name</th>
+										<th scope="col" class="text-muted">Actions</th>
 									</tr>
 								</thead>
 								<tbody></tbody>

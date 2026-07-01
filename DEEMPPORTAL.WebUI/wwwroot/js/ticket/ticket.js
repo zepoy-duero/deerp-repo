@@ -256,7 +256,7 @@ $(async function () {
 
         await getTypeOptions(1, 1, 9);
         await getModuleOptions(1, 1, 9);
-        await getTypeOptions(1, 1, 9);
+
     });
     
     $("#dropZone").on("click", () => { TicketAttachments.click() });
@@ -362,7 +362,7 @@ $(async function () {
                 timeOut: 3000,
             });
         } else {
-            loadingSubmitButton(); //disable the submit button   
+        
             //validate forms
             var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
 
@@ -375,6 +375,7 @@ $(async function () {
 
 
             try {
+                loadingSubmitButton(); //disable the submit button  
                 let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
                 let emailParams = await generateTicketEmailParams(response[0]);
 
@@ -384,8 +385,8 @@ $(async function () {
                 insertNewRow(response);    //insert new ticket to table
 
                 toastr.success("You have successfully submitted a New Ticket - " + response[0].StringTicketId, "Success");
-
-
+                disableSubmitButton();
+                resetCreateTicketForm();
 
                 let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
 
@@ -847,7 +848,7 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
     LocCode,
     DeptCode,
   });
-    let options = "<option value='null' class='active'>Request Type </option>";
+    let options = "";
 
   typeOptions.forEach(function (i) {
     options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
@@ -932,14 +933,18 @@ function resetCreateTicketForm() {
 }
 
 function loadingSubmitButton() {
-    $("#submitTicket").prop('disabled',true).append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Loading...`)
+    $("#submitTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...`);
 }
 function disableSubmitButton() {
-    $("#submitTicket").prop('disabled', true).attr('aria-label', 'Please fill all the required fields')
+    $("#submitTicket").prop('disabled', true).empty().append('Submit Ticket');
+   
+}
+function invalidInputsButton() {
+    $("#submitTicket").attr('aria-label', 'Please fill all the required fields');
 }
 function enableSubmitButton() {
-    $("#submitTicket").prop('disabled', false)
+    $("#submitTicket").prop('disabled', false).empty().append('Submit Ticket');
 }
 function requestedBySelected(event) {
     console.log(event.target.dataset.value);

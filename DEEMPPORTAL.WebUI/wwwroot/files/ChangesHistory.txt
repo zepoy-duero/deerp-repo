@@ -10,6 +10,8 @@
 										- New Page "Certified First Aider"
 										- New Page "Emergency Contact Numbers"
 										- Status Filter on "Employee Directory"
+						
 								Library(Logos,Forms,Credit Application,Certificate):
 									Fixed:
 										- Organization Combobox filter does not match with the data on the list.
+										- Set default value on Organization Combobox to "Dahbashi Group of Companies" when the page is loaded.
