@@ -31,7 +31,11 @@ $(async function () {
         await currentPageRequest();
     });
     $("#select-location").on("change", async () => {
+        console.log($("#select-location").val())
         showSpinner()
+        if ($("#select-location").val() == 11) {
+            $("#select-department").val('17');
+        }
         await loadDepartments();
         await currentPageRequest()
     });
@@ -215,7 +219,7 @@ async function loadDepartments() {
     createSelectOptions("select-department", filteredDept); 
 }
 function createSelectOptions(selector, data) {
-
+    
     let html = `<option value="0">All</option>`;
     //let html = (selector === "select-organization")
     //    ? ""
@@ -237,7 +241,10 @@ function createSelectOptions(selector, data) {
                     }
                     $("#" + selector).html(html);
                     break;
-                case "select-department":
+        case "select-department":
+                    if ($("#select-location").val() == 11) {
+                        html = '';
+                    }
                     for (const item of data) {
                         if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
                         else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
@@ -258,7 +265,7 @@ async function getAllEmployeeDirectory() {
     const filterParams = {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val(),
-        deptCode: $("#select-department").val(),
+        deptCode: ($("#select-location").val() == 11) ? 17 : $("#select-department").val(),
         status: $("#select-status option:selected").text(),
         //isFirefighter: 
     };
@@ -313,8 +320,6 @@ async function getAllEmployeeFirstAiders() {
 
     showTotalRecords(employeeList.length);
    await render("employeeContainer", employeeList);
-
-
 }
 function showTotalRecordsSpinner() {
     $("#EmployeeDirectoryTotal").empty().append(

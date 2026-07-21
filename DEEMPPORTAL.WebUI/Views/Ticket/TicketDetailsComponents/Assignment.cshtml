@@ -1,59 +1,61 @@
-﻿<div id="ticketAssignedTo" class="card  section-card">
+﻿<div id="ticketAssignedTo" class="card section-card">
     <div class="card-header section-title border-2">
-        Assignment
-
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+               Assignment
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="toggleEditAssignment">
+                <label class="form-check-label" for="toggleEditAssignment">Edit Mode</label>
+            </div>
+            <div class="d-none">
+                <button id="assignmentEditBtn" class="btn btn-sm btn-danger rounded-pill">
+                    EDIT
+                    <i class="bi bi-pencil-square ms-2"></i>
+                </button>
+                <span id="editingAssignment" class="d-none">
+                    Edit M
+                    <button title="Close edit mode" type="button" class="btn-close btn-sm" aria-label="Close"></button>
+                </span>
+            </div>
+        </div>
     </div>
     <div class="card-body">
-
         <div class="container-fluid">
             <!-- Row 1 -->
             <div class="row g-0 pe-0 mb-3">
                 <div class="col-md-3">
                     <label class="form-label">Assigned To</label>
-
-                    <!-- Hidden real select (for form submission) -->
-                    <select id="selectAssignee" class="form-select d-none">
-                    </select>
-
-                    <!-- Custom dropdown -->
+                    <input id="assignedToCode" class="form-control d-none" />
+                    <input id="assignedToName" class="form-control d-none" />
+                    <!-- <input dropdown -->
                     <div class="dropdown rounded-1">
-                        <button class="form-select text-start text-muted" type="button" id="assigneeDropdownSelect" data-bs-toggle="dropdown">
-                            Jeffvil Duero
+                        <button disabled class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" id="assigneeDropdownSelect" data-bs-toggle="dropdown">
+                           Not yet assigned
                         </button>
-
                         <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
-
                             <!-- Search input -->
                             <input type="text" id="assigneeSearchInput" class="form-control mb-2" placeholder="Search...">
-
                             <!-- Options -->
                             <ul class="list-unstyled mb-0" id="assigneeList">
                             </ul>
 
                         </div>
                     </div>
+                    <hr />
+               
                 </div>
-                <div class="col-md-3 px-0">
-                    <label class="form-label">Priority</label>
-                    <select id="selectPriority" class="form-select"></select>
-                </div>
-                @* <div class="col-md-6 ">
-                                                        <label class="form-label">Module</label>
-                                                        <select id="selectModule" class="form-select">
-                                               
-                                                        </select>
-                                                    </div> *@
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="form-label">Module</label>
 
                     <!-- Hidden real select (for form submission) -->
-                    <select id="selectModule" class="form-select d-none">
-                    </select>
+                    <input id="moduleName" class="form-control d-none" />
+
 
                     <!-- Custom dropdown -->
                     <div class="dropdown rounded-1">
-                        <button class="form-select text-start text-muted" type="button" id="moduleDropdownSelect" data-bs-toggle="dropdown">
-                            Employee Portal
+                        <button class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" disabled id="moduleDropdownSelect" data-bs-toggle="dropdown">
+                            Select here . . .
                         </button>
 
                         <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
@@ -67,43 +69,98 @@
 
                         </div>
                     </div>
+                    <hr />
                 </div>
+                <div class="col-md-3 px-0">
+                    <label for="priorityCode" class="form-label">Priority</label>
+
+
+                    <!-- Hidden real select (for form submission) -->
+                    <select id="priorityCode" class="form-control-plaintext text-muted fw-bold" disabled>
+                    </select>
+                    <!-- Custom dropdown -->
+                    @* <div class="dropdown rounded-1">
+                        <button class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" disabled id="priorityDropdownSelect" data-bs-toggle="dropdown">
+                            Select here . . .
+                        </button>
+
+                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
+
+                          
+                            <!-- Options -->
+                            <ul class="list-unstyled mb-0" id="priorityList">
+                            </ul>
+
+                        </div>
+                    </div> *@
+                    <hr />
+                </div>
+              
+              
             </div>
 
             <!-- Row 2 -->
-            <div class="row g-0 mb-2 pe-0">
-
+            <div class="row g-0 mb-3 pe-0">
                 <div class="col-md-3">
                     <label class="form-label">Type</label>
-                    <select id="selectType" class="form-select">
-                    </select>
-                </div>
+                    <input id="taskTypeCode" class="form-control d-none" />
+                    <input id="taskTypeName" class="form-control d-none" />
+                    <!-- Custom dropdown -->
+                    <div class="dropdown rounded-1">
+                        <button disabled class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" id="typeDropdownSelect" data-bs-toggle="dropdown">
+                            
+                        </button>
 
+                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
+
+                            <!-- Search input -->
+                            <input type="text" id="typeSearchInput" class="form-control mb-2" placeholder="Search...">
+
+                            <!-- Options -->
+                            <ul class="list-unstyled mb-0" id="typeList">
+                            </ul>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                </div>
                 <div class="col-md-3 px-0">
                     <label class="form-label">Duration</label>
                     <div class="d-flex gap-2">
-                        <input type="number" value="0" class="form-control w-25">
-                        <select id="selectDurationUnit" class="form-select w-75">
+                        <input id="ticketDuration" type="number" class="form-control-plaintext text-muted fw-bold w-25" disabled>
+                        <select id="ticketDurationUnit" class="form-control-plaintext text-muted fw-bold w-75" disabled>
                         </select>
                     </div>
+                    <hr/>
                 </div>
 
                 <div class="col-md-2 pe-0">
                     <label class="form-label">Start</label>
-                    <input type="date" class="form-control">
+                    <input id="startDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                    <hr />
                 </div>
 
                 <div class="col-md-2">
                     <label class="form-label">End</label>
-                    <input type="date" class="form-control">
+                    <input id="finishDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                    <hr />
                 </div>
             </div>
 
             <!-- Row 3 -->
             <div class="row">
-                <div class="col-md-3">
+                @* <div class="col-md-3">
                     <label class="form-label">Status</label>
                     <select id="selectStatus" class="form-select"></select>
+                </div> *@
+                <div class="col-md-3">
+                    <label for="statusCode" class="form-label">Status</label>
+                   
+                    <select id="statusCode" class="form-control-plaintext text-muted fw-bold d-none">
+                    </select>
+                    <input type="button" id="statusName" class="btn  border-0 no-box-shadow rounded-pill" disabled />
+                  
                 </div>
             </div>
         </div>

@@ -1,0 +1,220 @@
+﻿<style>
+    /* Correspondence container */
+    .correspondence-list {
+        height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Correspondence item */
+    .correspondence-item {
+        cursor: pointer;
+        border-left: 3px solid transparent !important;
+        transition: all 0.2s ease-in-out;
+    }
+
+        /* Hover */
+        .correspondence-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Selected item */
+        .correspondence-item.active {
+          
+            color: #212529;
+            border-left: 3px solid #0d6efd !important;
+        }
+
+            /* Keep muted text readable when selected */
+            .correspondence-item.active .text-muted {
+                color: #6c757d !important;
+            }
+
+    /* Message editor */
+    #txtCorrespondence {
+        resize: vertical;
+        min-height: 150px;
+    }
+</style>
+<div class="card shadow-sm" >
+    <!-- Header -->
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0">
+                <i class="bi bi-envelope me-2"></i>
+                Ticket Correspondence
+            </h5>
+            <small class="text-muted">
+                Ticket #TKT-2026-0001
+            </small>
+        </div>
+
+        <button type="button"
+                id="btnNewReply"
+                class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-plus-lg me-1"></i>
+            New Reply
+        </button>
+    </div>
+
+
+    <!-- Correspondence List -->
+    <div class="card-body p-0">
+
+        <div id="correspondenceList"
+             class="list-group list-group-flush correspondence-list">
+
+            <!-- Correspondence Item 1 -->
+            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small>3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <small>jeffvil@dahbashi.com</small>
+            </a>
+            <!-- Correspondence Item 2 -->
+            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <small class="text-muted">landrex@dahbashi.com</small>
+            </a>
+
+            <!-- Correspondence Item 3 -->
+            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <small class="text-muted">jeffvil@dahbashi.com</small>
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Editor -->
+    <div class="card-footer bg-white">
+
+        <div class="mb-2">
+            <label for="txtCorrespondence"
+                   class="form-label fw-semibold mb-1">
+                Message
+            </label>
+
+            <textarea id="txtCorrespondence"
+                      class="form-control"
+                      rows="7"
+                      placeholder="Write your reply here..."></textarea>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <small class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Select a correspondence above to edit its content.
+            </small>
+
+            <button type="button"
+                    id="btnSendCorrespondence"
+                    class="btn btn-primary">
+
+                <i class="bi bi-send me-1"></i>
+                Send
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+$(document).ready(function () {
+
+    // Load selected correspondence
+    $(".correspondence-item").on("click", function () {
+
+        // Remove active state
+        $(".correspondence-item").removeClass("active");
+
+        // Add active state
+        $(this).addClass("active");
+
+        // Get correspondence content
+        const content = $(this).attr("data-content");
+
+        // Load content into textarea
+        $("#txtCorrespondence").val(content);
+
+        // Store selected correspondence ID
+        $("#txtCorrespondence").data(
+            "correspondence-id",
+            $(this).data("id")
+        );
+    });
+
+
+    // New Reply
+    $("#btnNewReply").on("click", function () {
+
+        // Remove selected correspondence
+        $(".correspondence-item").removeClass("active");
+
+        // Clear textarea
+        $("#txtCorrespondence").val("");
+
+        // Remove selected ID
+        $("#txtCorrespondence").removeData("correspondence-id");
+
+        // Focus textarea
+        $("#txtCorrespondence").focus();
+    });
+
+
+    // Send correspondence
+    $("#btnSendCorrespondence").on("click", function () {
+
+        const correspondenceId =
+            $("#txtCorrespondence").data("correspondence-id");
+
+        const message =
+            $("#txtCorrespondence").val().trim();
+
+        if (!message) {
+
+            alert("Please enter a message.");
+
+            $("#txtCorrespondence").focus();
+
+            return;
+        }
+
+
+        // Determine if editing or creating a new message
+        if (correspondenceId) {
+
+            console.log(
+                "Updating correspondence:",
+                correspondenceId
+            );
+
+        } else {
+
+            console.log(
+                "Sending new correspondence"
+            );
+
+        }
+
+
+        console.log("Message:", message);
+
+        // TODO:
+        // Send AJAX request to your ASP.NET MVC controller
+    });
+
+});

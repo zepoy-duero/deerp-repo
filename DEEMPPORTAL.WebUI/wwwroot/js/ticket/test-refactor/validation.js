@@ -1,0 +1,4 @@
+﻿validateFormData()
+validateFirst()
+validateSummerNote()
+toggleSubmitButton()

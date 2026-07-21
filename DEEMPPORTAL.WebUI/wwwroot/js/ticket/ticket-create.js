@@ -1,26 +1,34 @@
 ﻿$(async function () {
+    await loadRequestedByComponent();
+    await loadRequestedDateComponent();
+    await loadFormRequiredFields()
     await getCurrentUser();
     await initSummerNote();
     await getOrganizationOptions();
     await getLocationOptions($("#SelectTicketOrganization").val());
     await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
     await getTypeOptions();
-    
+
+    //--------EVENT LISTENERS----------------
+    $("#toggleRequestedBy").on("click", function () {
+        $("#requestedByName").toggleClass('d-none');
+        $("#requestedByCode").toggleClass('d-none');
+    });
+    $("#toggleRequestedDate").on("click", function () {
+        $("#requestedDate").toggleClass('form-control-plaintext fw-bold form-control')
+            .prop('disabled', function (i, value) {
+                return !val;
+            })            ;
+        $("#editrequestedDate").toggleClass('d-none');
+    });
 });
 
 //-----------------------------FUNCTIONS-----------------------------
-async function getCurrentUser() {
-    try {
-        let userData = await fetch(`/home/getUserDetails`);
-        CurrentUser = await userData.json();
-        fillRequestedBy(CurrentUser.EMP_NAME);
-        fillRequestedDate(CurrentUser.DATE_TODAY);
-    } catch (error) {
-        toastr.error("Failed to fetch user details", 'Error', {
-            timeOut: 3000,
-        });
-    }
-   
+async function loadRequestedBy() {
+    $("#requestedByName").empty().append(await getCurrentUser());
+}
+async function loadRequestedDate() {
+    $("#requestedDate").empty().val(moment().format("YYYY-MM-DD");
 }
 async function initSummerNote() {
     $('#TicketDescription').summernote({
@@ -38,12 +46,7 @@ async function initSummerNote() {
         ],
     });
 }
-function fillRequestedBy(EMP_NAME) {
-    $("#RequestedBy").empty().append(EMP_NAME);
-}
-function fillRequestedDate(DATE_TODAY) {
-    $("#RequestedDate").empty().append(moment(DATE_TODAY).format("MMM DD, YYYY"));
-}
+
 
  async function getOrganizationOptions() {
     let organizations = await $.get(`support/employee-directory/getAllOrganizationList`);

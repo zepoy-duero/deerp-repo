@@ -22,6 +22,7 @@
     }
 
     #empCard {
+      
         transition: all 0.3s ease-in-out;
     }
 
@@ -77,7 +78,7 @@
             <!-- Filters -->
             <div class="card mt-2 mb-2 p-4">
 
-                <div class="d-flex flex-row row-cols-12 p-4">
+                <div class="d-flex flex-row row-cols-12">
                     <div class="col">
                         <div class="row row-cols-3 g-0 mb-4 d-flex justify-content-between align-items-center">
                             <div class="col-auto bg-light">
@@ -95,6 +96,7 @@
                                         <option>Select Organization</option>
                                     </select>
                                     </div> *@
+                               
                                 
                             </div>
                             <div class="col-auto me-auto">
@@ -105,20 +107,23 @@
 
 
                             </div>
-                           
-                           
-
-
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="d-flex flex-row row-cols-1">
-                            <div class="col">
-                                <img src="~/files/firstaid-main-color.png" style="width: 100% auto;max-height: 100px !important" class="card-img rounded float-end image-fade-edges" alt="...">
-
+                            <div class="col-6">
+                                <div class="row d-flex justify-content-between align-items-center">
+                                    <img src="~/files/imgBanner.png" style="max-height: 100px !important" class="card-img rounded  image-fade-edges" alt="...">
+                                </div>
                             </div>
+                            @* <div class="col-auto">
+                              
+                                    @{
+                                        await Html.RenderPartialAsync("~/Views/CertifiedFirstAider/Components/ImageBanner.cshtml");
+                                    }
+                             
+                               
+                            </div> *@
+                           
                         </div>
                     </div>
+                   
 
 
                 </div>

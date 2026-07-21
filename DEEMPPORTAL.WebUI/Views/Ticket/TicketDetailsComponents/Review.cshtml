@@ -1,6 +1,15 @@
 ﻿<div id="ticketReview" class="card  section-card">
     <div class="card-header section-title border-2">
-        Review/Release
+       
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                Review/Release
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="toggleEditReview">
+                <label class="form-check-label" for="toggleEditReview">Edit Mode</label>
+            </div>
+        </div>
     </div>
     <div class="card-body p-4">
         @* <div class="section-title text-main">Review</div> *@
@@ -9,19 +18,19 @@
                 <div class="col-md-3 d-flex flex-column">
                     <div class="form-group">
                         <label>Reviewed By</label>
-                        <input class="form-control" placeholder="Jeffvil Duero" readonly />
+                        <input id="reviewedByName" class="form-control" placeholder="Jeffvil Duero" disabled />
                     </div>
                     <div class="form-group mt-0">
-                        <label>Date</label>
-                        <input type="date" class="form-control" value="2026-06-17" readonly />
+                        <label>Reviewed Date</label>
+                        <input id="reviewedDate" type="date" class="form-control" value="2026-06-17" disabled />
                     </div>
                     <div class="form-group">
                         <label>Version Number</label>
-                        <input class="form-control" value="v2.0.0.1" readonly />
+                        <input id="versionNo" class="form-control" value="v2.0.0.1" disabled />
                     </div>
                     <div class="form-group">
-                        <label id="remarks">Reviewed Remarks</label>
-                        <textarea id="remarks" class="form-control"></textarea>
+                        <label for="remarks">Reviewed Remarks</label>
+                        <textarea id="remarks" class="form-control" disabled></textarea>
 
                     </div>
                     <div class="form-group">
@@ -44,13 +53,39 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="form-group d-none">
+                        <input id="updatedBy" class="form-control d-none"/>
+                        <input type="date" id="updatedDate" class="form-control d-none" />
+                    </div>
                 </div>
-               
+              
                 <div class="col-md-9">
-                    @{
-                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/TicketHistory.cshtml");
-                    }
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#Correspondence">Correspondence</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#History">History</a>
+                        </li>
+                    
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                       
+                        <div class="tab-pane container active " id="Correspondence">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/TicketCorrespondence.cshtml");
+                            }
+                        </div>
+                        <div class="tab-pane container fade" id="History">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/TicketHistory.cshtml");
+                            }
+                        </div>
+                    </div>
+                   
                 </div>
             </div>
         </div>

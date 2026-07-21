@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static DEEMPPORTAL.WebUI.Models.Ticket.Ticket;
+
 
 namespace DEEMPPORTAL.WebUI.Models.Ticket
 {

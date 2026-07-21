@@ -44,9 +44,26 @@
             color: #fff !important;
         }
 
+    .list-group-item {
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+        .list-group-item:hover {
+            background: #e9ecef;
+        }
+
+        .list-group-item.active {
+            background-color: #002e5a;
+            color: #fff !important;
+        }
     /* Section Cards */
     .section-card {
         min-height: 500px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
     }
 
     .section-title {
@@ -54,7 +71,9 @@
         font-size: 16px;
         margin-bottom: 15px;
         color: #002e5a;
-        background-color: lightblue
+        background-color: lightblue;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
  
     }
 
@@ -133,6 +152,7 @@
         line-height: 1;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
+   
 </style>
 
 <div class="modal fade bg-grey" id="emailModal" tabindex="-1">
@@ -143,7 +163,7 @@
                 <button id="closeEmailModal()" type="button" class="btn-close btn-close-white" data-bs-target="#emaiModal" data-bs-dismiss="modal"></button>
             </div>
 
-            <div class="modal-body px-4 bg-grey">
+            <div class="modal-body px-4 py-4">
                 <div class="container-fluid">
                     <div class="row g-3">
                         <div class="col-md-1">
@@ -153,7 +173,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <strong class="text-decoration-underline mb-3">jeffvil@dahbashi.com</strong><br />
+                            <strong class="text-decoration-underline mb-3">info@dahbashi.com</strong><br />
                             <strong class="text-decoration-underline mb-3">salem@dahbashi.com</strong><br />
                             <span class="text-decoration-underline mb-5">
                                 <small id="staticCC" class="text-muted" onclick="selectCC()">Optional</small>
@@ -210,7 +230,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="editTicketModal" tabindex="-1">
+<div class="modal fade" id="editTicketModal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
 
@@ -253,30 +273,26 @@
                                     </a>
                                 </div>
                              </div>
-
                         </div>
-
                         <!-- CONTENT -->
                         <div class="col-10 ps-0">
-                            <div class="container-fluid">
-                                <div data-bs-spy="scroll"
-                                     data-bs-target="#ticketNav"
-                                     data-bs-offset="50"
-                                     tabindex="0"
-                                >
-                                    @{
-
-                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml");
-                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Assignment.cshtml");
-                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Approvals.cshtml");
-                                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Review.cshtml");
-                                    }
-                                   
+                            
+                                <div class="container-fluid">
+                                    <div data-bs-spy="scroll"
+                                         data-bs-target="#ticketNav"
+                                         data-bs-offset="50"
+                                         tabindex="0">
+                                         <form id="editTicketForm" class="form">
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml");
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Assignment.cshtml");
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Approvals.cshtml");
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Review.cshtml");
+                                        }
+                                    </form>
+                                    </div>
                                 </div>
-                           
-
-                        </div>
-
+                            
                     </div>
                     </div>
 
@@ -284,12 +300,13 @@
           
             </div>
             <!-- FOOTER -->
-            <div class="modal-footer position-sticky mb-0 border-0">
-                                <button class="btn btn-danger float-start mb-0">
-                                    <i class="bi bi-cloud-arrow-up me-2"></i>
-                                    Update Ticket
-                                </button>
-                            </div> 
+            <div class="modal-footer position-sticky mb-2 border-0">
+                <button id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">
+                                  
+                                    Update
+                    <i class="bi bi-cloud-arrow-up ms-2"></i>
+                 </button>
+            </div> 
         </div>
     </div>
 </div>

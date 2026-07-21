@@ -28,7 +28,7 @@
            data-search-selector="#customSearch"
            data-filter-control="true"
            data-filter-control-container="#filtersContainer"
-         
+           data-unique-id="TicketId"
            data-toolbar="#toolbar"
            data-height="620"
            data-show-button-text="true"
@@ -42,23 +42,27 @@
            data-pagination-next-text="Next"
            data-page-number="1"
            data-filter-control-search-clear="true"
-           data-loading-template="loadingTemplate"
-
            data-classes="table table-bordered table-striped table-sm pg-primary">
         <thead class="table-light table-sm">
             <tr>
                 <th data-checkbox="true"
                     data-halign="center">
                 </th>
-
+                <th data-field="TicketId"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-filter-control="input"
+                    data-visible="false"
+                    data-filter-control-placeholder="Type here . . ."
+                    class="text-nowrap p-0 m-0">
+                    
+                </th>
                 <th data-field="StringTicketId"
                     data-halign="center"
                     data-searchable="true"
                     data-sortable="true"
                     data-formatter="IdFormatter"
-                   
                     data-filter-control="input"
-               
                     data-filter-control-placeholder="Search . ."
                     class="text-nowrap">
                     Ticket ID
@@ -98,13 +102,23 @@
                 <th data-field="RequestedDate"
                     data-halign="center"
                     data-sortable="true"
-                    data-formatter="dateFormatter"
+               
                     data-filter-control="select"
-                    data-filter-data-collector="customDateCollector"
-                    data-filter-control-placeholder="All"
+                
+                    data-filter-control-placeholder="2026"
                     class="text-nowrap p-0 m-0">
                     Requested Date
                 </th>
+                @* <th data-field="RequestedDate"
+                    data-halign="center"
+                    data-sortable="true"
+                    data-formatter="dateFormatter"
+                    data-filter-control="select"
+                    data-filter-data-collector="customDateCollector"
+                    data-filter-control-placeholder="2026"
+                    class="text-nowrap p-0 m-0">
+                    Requested Date
+                </th> *@
                 <th data-field="TaskTypeName"
                     data-halign="center"
                     data-sortable="true"
@@ -150,20 +164,22 @@
      window.IdFormatter = (value,row) =>{
                  return `<div class='text-main fw-bold text-decoration-underline text-nowrap'>${value}</div>`
          }
-     window.loadingTemplate = () => {
-      loadingTemplate
-         // return '<div class="ph-item"><div class="ph-picture"></div></div>'
-             return `<div class="progress">
-      <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>`
+       window.detailFormatter = (index, row) => {
+      const html = []
 
-     }
+      for (const [key, value] of Object.entries(row)) {
+        html.push(`<p><b>${key}:</b> ${value}</p>`)
+      }
+      return html.join('')
+    }
       function customDateCollector(value) {
       if (!value) return [];
-
+      // console.log(value)
       // Split by comma, then trim whitespace from each generated tag item
       return value.split(',').map(function(item) {
-         return moment(value).format("YYYY")
+          // console.log(item)
+          
+         return new Date(value).getFullYear()
         
       });
     }

@@ -7,65 +7,82 @@ using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace DEEMPPORTAL.Infrastructure;
 
-public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService emailService) : ITicketRepository
+public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService emailService, ILogger<TicketRepository> logger) : ITicketRepository
 {
-
     private readonly ConnectionPool _cp = cp;
     private readonly CurrentUser _cu = cu;
     private readonly EmailService _emailService = emailService;
-    public async Task<IEnumerable<TicketResponse>> CreateTicketAsync(CreateTicketParams request)
+    private readonly ILogger<TicketRepository> _logger = logger;
+
+    public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
         await conn.OpenAsync();
-        const string storedProcedure = "CLOUD_v1_ERP_TICKET_create";
+        const string storedProcedure = "CLOUD_v1_ERP_TICKET_add";
         var parameters = new
         {
+            request.OrgCode,
+            request.LocCode,
             request.DeptCode,
             request.RequestedByCode,
             request.RequestedByName,
             request.RequestedDate,
             request.TaskTypeCode,
-            request.TicketDescription,
-            request.TicketSubject
+            request.TicketSubject,
+            request.TicketDescription
         };
-        var rowsAffected = await conn.QueryAsync<TicketResponse>(
+
+        try
+        {
+            _logger.LogInformation("CreateTicketAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { /* ignore serialization errors */ }
+
+        var updatedTicket = await conn.QuerySingleAsync<TicketResponse>(
             storedProcedure,
             parameters,
             commandType: CommandType.StoredProcedure);
 
         await conn.CloseAsync();
 
-        return rowsAffected;
+        return updatedTicket;
     }
-    public async Task<IEnumerable<TicketResponse>> GetAllTicketAsync(
-   
-     int DeptCode)
+
+    public async Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int OrgCode,int LocCode,int DeptCode )
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
 
         await conn.OpenAsync();
 
-        const string storedProcedure = "CLOUD_v1_ERP_TICKET_MAST_sel";
+        const string storedProcedure = "CLOUD_v1_ERP_TICKET_getAll";
+
         var parameters = new
         {
-             DeptCode
+            OrgCode,
+            LocCode,
+            DeptCode
         };
 
+        try
+        {
+            _logger.LogInformation("GetAllTicketAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { }
 
         var data = await conn.QueryAsync<TicketResponse>(
             storedProcedure,
             parameters,
             commandType: CommandType.StoredProcedure);
-
-        //var data = await multi.ReadAsync<TicketSelectOptions>();
-        //var totalCount = await multi.ReadFirstAsync<int>();
 
         await conn.CloseAsync();
 
@@ -210,20 +227,91 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
 
         return results!;
     }
+    public async Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "dbo.CLOUD_v1_ERP_TICKET_update";
+        var parameters = new
+        {
+            ticket.TicketId,
+            ticket.OrgCode,
+            ticket.LocCode,
+            ticket.DeptCode,
+            ticket.TicketNo,
+            ticket.RequestedByCode,
+            ticket.RequestedByName,
+            ticket.RequestedDate,
+            ticket.TicketSubject,
+            ticket.StartDate,
+            ticket.TicketDescription,
+            ticket.TicketDuration,
+            ticket.TicketDurationUnit,
+            ticket.FinishDate,
+            ticket.AssignedToCode,
+            ticket.AssignedToName,
+            ticket.ModuleName,
+            ticket.PriorityCode,
+            ticket.StatusCode,
+            ticket.TaskTypeCode,
+            ticket.ApproveByManager,
+            ticket.IsManagementApproval,
+            ticket.UpdatedBy,
+            ticket.UpdatedDate,
+            ticket.ReviewedBy,
+            ticket.ReviewedDate,
+            ticket.Remarks,
+            ticket.VersionNo,
+            ticket.ManagerEmailId,
+            ticket.RequestedByEmail,
+        };
+
+        try
+        {
+            _logger.LogInformation("UpdateTicketAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { /* ignore serialization errors */ }
+
+        try
+        {
+            var updatedTicket = await conn.QuerySingleAsync<TicketResponse>(
+                storedProcedure,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+
+            await conn.CloseAsync();
+
+            return updatedTicket;
+        }
+        catch (SqlException ex)
+        {
+            // log detailed context to help diagnose parameter conversion errors
+            _logger.LogError(ex, "SQL error executing {StoredProcedure}. Parameters: {Params}", storedProcedure, SafeSerialize(parameters));
+            throw;
+        }
+    }
+
+    // Replace the existing SendEmailNotificationAsync method with this safer implementation
     public async Task<bool> SendEmailNotificationAsync(TicketEmailNotification request)
     {
-        
-        string subject, body, sender, recipient, cc, bcc,managerEmailBody,userEmailBody;
-   
-        userEmailBody = $@"<html>
+        if (request == null)
+        {
+            _logger.LogWarning("SendEmailNotificationAsync called with null request");
+            return false;
+        }
+
+        // Prepare email bodies (keep as before)
+        var userEmailBody = $@"<html>
                  <body style=""font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 20px;"">
                     <div style=""max-width: 600px; margin: 0 auto; border: 1px solid #dddddd; padding: 20px; border-radius: 5px;"">
-                        <p>Dear <Strong>{request.RequestedByName}</strong> ,</p>
+                        <p>Dear <strong>{request.RequestedByName}</strong>,</p>
                         <p>Your ticket has been successfully submitted to the <strong>Management Information System</strong>  department.</p>
         
                         <h3 style=""color: #555555; border-bottom: 1px solid #eeeeee; padding-bottom: 5px;"">Submission Details</h3>
                         <ul style=""list-style-type: none; padding-left: 0;"">
-                                <li style=""margin-bottom: 8px;""><strong>Ticket ID: </strong> {request.StringTicketId}</li>
+                            <li style=""margin-bottom: 8px;""><strong>Ticket ID: </strong> {request.StringTicketId}</li>
                             <li style=""margin-bottom: 8px;""><strong>Date Submitted: </strong> {request.RequestedDate}</li>
                         
                             <li style=""margin-bottom: 8px;""><strong>Request Type: </strong> {request.TaskTypeName}</li>
@@ -240,15 +328,15 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
                 </body>
               </html>";
 
-        managerEmailBody = $@"<html>
+        var managerEmailBody = $@"<html>
                  <body style=""font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 20px;"">
                     <div style=""max-width: 600px; margin: 0 auto; border: 1px solid #dddddd; padding: 20px; border-radius: 5px;"">
-                        <p>Dear <Strong>Manager</strong> ,</p>
-                        <p>A new ticket has been submitted by <strong>{request.RequestedByName}</strong>   and is currently pending your approval.</p>
+                        <p>Dear <strong>Manager</strong>,</p>
+                        <p>A new ticket has been submitted by <strong>{request.RequestedByName}</strong> and is currently pending your approval.</p>
         
                         <h3 style=""color: #555555; border-bottom: 1px solid #eeeeee; padding-bottom: 5px;"">Submission Details</h3>
                         <ul style=""list-style-type: none; padding-left: 0;"">
-                                <li style=""margin-bottom: 8px;""><strong>Ticket ID: </strong> {request.StringTicketId}</li>
+                            <li style=""margin-bottom: 8px;""><strong>Ticket ID: </strong> {request.StringTicketId}</li>
                             <li style=""margin-bottom: 8px;""><strong>Date Submitted: </strong> {request.RequestedDate}</li>
                         
                             <li style=""margin-bottom: 8px;""><strong>Request Type: </strong> {request.TaskTypeName}</li>
@@ -256,8 +344,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
                             <li style=""margin-bottom: 8px;""><strong>Description: </strong> {request.TicketDescription}</li>
                         </ul>
         
-                        <p>Please log in to the <a href=""employee.dahbashi.com"" style=""color: #0066cc; text-decoration: none;""><strong>MIS Ticketing Portal</strong></a> to review the request and approve or reject it so the department can proceed.
-</p>
+                        <p>Please log in to the <a href=""employee.dahbashi.com"" style=""color: #0066cc; text-decoration: none;""><strong>MIS Ticketing Portal</strong></a> to review the request and approve or reject it.</p>
         
                         <hr style=""border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;"">
                         
@@ -266,33 +353,66 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
                 </body>
               </html>";
 
-        sender = "info@dahbashi.com";
-        recipient = request.RequestedByEmail;
-        cc = string.Empty;
-        bcc = "";
-        subject = "New Ticket " + request.StringTicketId ;
-        //body = 
-        // send a notifcation to the ticket submitter
+        // Constants / defaults
+        const string sender = "info@dahbashi.com";
+        const string cc = "";
+        const string bcc = "";
+        var subject = "New Ticket " + (request.StringTicketId ?? string.Empty);
+
+        bool sendToUser = false;
+        bool sendToManager = false;
+
+        // Send to user only if email is present
+        if (!string.IsNullOrWhiteSpace(request.RequestedByEmail))
+        {
+            try
+            {
+                sendToUser = await _emailService.SendAsync(sender, request.RequestedByEmail!, subject, userEmailBody, cc, bcc);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending user email to {Recipient} for ticket {Ticket}", request.RequestedByEmail, request.StringTicketId);
+                sendToUser = false;
+            }
+        }
+        else
+        {
+            _logger.LogWarning("Skipped sending user email because RequestedByEmail is null/empty for ticket {Ticket}", request.StringTicketId);
+        }
+
+        // Send to manager only if email is present
+        if (!string.IsNullOrWhiteSpace(request.ManagerEmailId))
+        {
+            try
+            {
+                sendToManager = await _emailService.SendAsync(sender, request.ManagerEmailId!, subject, managerEmailBody, cc, bcc);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending manager email to {Recipient} for ticket {Ticket}", request.ManagerEmailId, request.StringTicketId);
+                sendToManager = false;
+            }
+        }
+        else
+        {
+            _logger.LogWarning("Skipped sending manager email because ManagerEmailId is null/empty for ticket {Ticket}", request.StringTicketId);
+        }
+
+        // Keep previous behavior: consider full success only when both were sent.
+        // If you prefer a different policy (e.g. return true if at least one sent), change accordingly.
+        return sendToUser && sendToManager;
+    }
+
+    // Add this helper at the bottom of the class if you need safe serialization in logs
+    private static string SafeSerialize(object obj)
+    {
         try
         {
-            var sendToUser = await _emailService.SendAsync(sender, request.RequestedByEmail, subject, userEmailBody, cc, bcc);
-            var sendToManager= await _emailService.SendAsync(sender, request.ManagerEmailId, subject, managerEmailBody, cc, bcc);
-
-            if (sendToUser && sendToManager) {
-                return true;
-            } else
-            {
-                return false;
-            }
-
-            
+            return JsonSerializer.Serialize(obj);
         }
-        catch { 
-            return false;
+        catch
+        {
+            return obj?.ToString() ?? string.Empty;
         }
-       
-
     }
-    
-
 }

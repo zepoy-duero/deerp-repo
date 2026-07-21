@@ -24,5 +24,6 @@ public class AppProfile : AutoMapper.Profile
         CreateMap<LibraryInformationDetailViewModel, LibraryInformationRequest>();
         CreateMap<MenuViewModel, MenuRequest>();
         CreateMap<TicketModel, CreateTicketParams>();
+        CreateMap<TicketViewModel, UpdateTicketParams>();
     }
 }

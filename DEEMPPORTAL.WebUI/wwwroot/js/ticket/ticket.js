@@ -4,44 +4,21 @@ const homeUrl = "/home";
 const TicketAttachments = document.getElementById("TicketAttachments");
 const previewContainer = document.getElementById("previewContainer");
 const dropZone = document.getElementById("dropZone");
+const $editTicketModal = $("#editTicketModal");
+var selectedTicket = null;
 let isEditingRequestedBy = false;
 let selectedFiles = [];
 let originalData = [];
 var NewTicketId = null;
+
 let NewTicket = {
     DeptCode:9,
-    TicketNo: null,
     RequestedDate: null,
-    TicketDescription: '',
-    TicketSubject: null,
-    TaskTypeCode: null,
-}
-let EditTicket = {
-    RequestedByCode: null,
-    DeptCode: null,
-    TicketNo: null,
-    RequestedByName: null,
-    RequestedDate: null,
-    TicketSubject: null,
-    StartDate: null,
     TicketDescription: null,
-    TicketDuration: null,
-    TicketDurationUnit: null,
-    FinishDate: null,
-    AssignedToCode: null,
-    AssignedToName: null,
-    ModuleName: null,
-    PriorityCode: null,
-    StatusCode: null,
+    TicketSubject: null,
     TaskTypeCode: null,
-    ApproveByManager: null,
-    IsManagementApproval: null,
-    UpdatedBy: null,
-    UpdatedDate: null,
-    ReviewedBy: null,
-    ReviewedDate: null,
-    Remarks: null
 }
+
 let attachment = {
     AttachmentId: null,
     TicketId: null,
@@ -56,430 +33,44 @@ const validationConfig = {
     "#TicketDescription": "Describe the complete details.",
 };
 const inputSelectors = [
-    "#SelectRequestedByName",
+    "#SelectTicketOrganization",
+    "#SelectTicketLocation",
     "#TicketDepartmentOptions",
     "#TaskTypeCode",
-    "#TicketSubject",
-    "#TicketDescription",
+    "#TicketSubject"
 ];
 const ticketsTable = $("#ticketsTable");
 let CurrentUser = null;
+let UserAssignee = null;
+
 
 $(async function () {  
+    // Fix: Destructure 'default' and rename it to 'TicketTable'
+    //const { default: TicketTable } = await import("./test-refactor/table.js");
+
+    //// Fix: Instantiation now works properly
+    //let test = new TicketTable();
+    //console.log(test.showTotalTicketsRecords('success'));
+    ticketsTable.bootstrapTable('showLoading');
     let userData = await fetch(`/home/getUserDetails`);
     CurrentUser = await userData.json();
+    console.log(CurrentUser)
     let dateToday = moment(CurrentUser.DATE_TODAY).format("MMM DD, YYYY");
-    $("#RequestedDate").empty().append(dateToday);
+    $("#DateRequested").empty().append(dateToday);
     await getAllTicket()
 
-    $('#TicketDescription').summernote({
-        height: 100,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['fontsize', ['fontsize']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-           
-            ['insert', ['link','picture']],
-            ['view', ['fullscreen']],
-        ],
-        placeholder: 'Explain the issue in detail...'
-    });
-    //----------EVENT LISTENERS----------------------------
-
-   
-    //------ROW CLICKED--------------
-    ticketsTable.on("click-row.bs.table", async function (e, row, $element, field) {
-        await getAllSelectOptions();
-
-        $("#editTicketModal").modal("toggle");
-        $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
-        $("#editTicketSubject").val(row.TicketSubject);
-        $("#editTicketDescription").val(row.TicketDescription);
-        $("#editUserDropdownSelect").html(row.RequestedByName);
-        $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
-        $("#dateRequested").empty().append(moment(row.RequestedDate).format("LL"));
-        $("#editRequestedDate").val(row.RequestedDate);
-        
-        $('#editTicketDescription').summernote({
-            height: 150,
-            lang: 'en-US',
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen']],
-
-            ],
-
-        });
-    });
-    //--------------------------------
-    //DATE RANGE PICKER
-    $('input[name="datefilter"]').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            cancelLabel: 'Clear'
-        }
-    });
-
-    $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-    });
-
-    $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-        $(this).val('');
-    });
-    // APPLY FILTER
-    $("#btnFilter").on("click", function () {
-        let searchText = $('#customSearch').val().toLowerCase();
-        let fromDate = $("#dateFrom").val();
-        let toDate = $("#dateTo").val();
-
-        let filtered = originalData.filter((item) => {
-            // 🔍 TEXT SEARCH (all fields)
-            let matchText = Object.values(item).some((val) =>
-                String(val).toLowerCase().includes(searchText),
-            );
-
-            // 📅 DATE FILTER
-            let itemDate = item.dateSubmitted;
-
-            let matchDate = true;
-
-            if (fromDate && itemDate < fromDate) matchDate = false;
-            if (toDate && itemDate > toDate) matchDate = false;
-
-            return matchText && matchDate;
-        });
-
-        ticketsTable.bootstrapTable("load", filtered);
-    });
-
-    // RESET FILTER
-    $("#btnResetFilter").on("click", function () {
-        ticketsTable.bootstrapTable("clearFilterControl");
-    });
-
-    // COLUMN TOGGLE
-    $(".toggle-column").on("change", function () {
-        let field = $(this).data("field");
-
-        $(this).is(":checked")
-            ? ticketsTable.bootstrapTable("showColumn", field)
-            : ticketsTable.bootstrapTable("hideColumn", field);
-    });
-
-    // Select item
-    $("#userList").on("click", ".dropdown-item", function () {
-        let text = $(this).text();
-        let value = $(this).data("value");
-
-        $("#dropdownSelect").text(text);
-        $("#selectUser").val(value);
-
-        $(".dropdown-menu").removeClass("show");
-    });
-
-    // Search filter
-    $("#userSearchInput").on("keyup", function () {
-        let search = $(this).val().toLowerCase();
-
-        $("#userList li").each(function () {
-            let text = $(this).text().toLowerCase();
-            $(this).toggle(text.includes(search));
-        });
-    });
-    $("#assigneeList").on("click", ".dropdown-item", function () {
-        let text = $(this).text();
-        let value = $(this).data("value");
-
-        $("#dropdownSelect2").text(text);
-        $("#selectAssignee").val(value);
-
-        $(".dropdown-menu").removeClass("show");
-    });
-
-    // Search filter
-    $("#assigneeSearchInput").on("keyup", function () {
-        let search = $(this).val().toLowerCase();
-
-        $("#assigneeList li").each(function () {
-            let text = $(this).text().toLowerCase();
-            $(this).toggle(text.includes(search));
-        });
-    });
-    $("#moduleList").on("click", ".dropdown-item", function () {
-        let text = $(this).text();
-        let value = $(this).data("value");
-
-        $("#dropdownSelect3").text(text);
-        $("#selectModule").val(value);
-
-        $(".dropdown-menu").removeClass("show");
-
-    });
-    // Search filter
-    $("#moduleSearchInput").on("keyup", function () {
-        let search = $(this).val().toLowerCase();
-
-        $("#moduleList li").each(function () {
-            let text = $(this).text().toLowerCase();
-            $(this).toggle(text.includes(search));
-        });
-    });
-
-    $("#dateTo").on("change", function () {
-        if ($("#dateTo").val() && $("#dateFrom").val()) {
-            $("#dateFilter").removeClass("disabled");
-        } else {
-            $("#dateFilter").addClass("disabled");
-        }
-    });
-    $("#createTicketModal").on('show.bs.modal',async function (event) {
-        resetCreateTicketForm()
-       
-        await getOrganizationOptions();
-        await getLocationOptions($("#SelectTicketOrganization").val());
-        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
-       
-        //get options for requested by select component
-        let RequestedByNameOptions = await getTicketRequestedByOptions();
-        $("#SelectRequestedByName").empty().append(RequestedByNameOptions);
-
-        await getTypeOptions(1, 1, 9);
-        await getModuleOptions(1, 1, 9);
-
-    });
-    
-    $("#dropZone").on("click", () => { TicketAttachments.click() });
-
-    // File input change
-    $(TicketAttachments).on("change", (e) => {
-        handleFiles(e.target.files);
-    });
-    // Drag events
-    $("#dropZone").on("dragover", (e) => {
-        e.preventDefault();
-        dropZone.classList.add("dragover");
-    });
-
-    $("#dropZone").on("dragleave", () => {
-        dropZone.classList.remove("dragover");
-    });
-
-    $("#dropZone").on("drop", (e) => {
-        e.preventDefault();
-        dropZone.classList.remove("dragover");
-        handleFiles(e.dataTransfer.files);
-    });
-    $(window).on("paste", (e) => {
-        // Get items from the clipboard (using originalEvent for jQuery compatibility)
-        const items = (e.originalEvent || e).clipboardData.items;
-        const pastedFiles = [];
-
-        for (const item of items) {
-            if (item.type.indexOf("image") !== -1) {
-                const blob = item.getAsFile();
-                if (blob) {
-                    // Wrap the blob in a File object to give it a name and timestamp
-                    const file = new File([blob], `screenshot_${Date.now()}.png`, {
-                        type: blob.type,
-                    });
-                    pastedFiles.push(file);
-                }
-            }
-        }
-
-        if (pastedFiles.length > 0) {
-            handleFiles(pastedFiles);
-        }
-    });
-
-
-    $("#isMajorChange").on("change", function () {
-        $("#managementApproval").toggleClass("d-none", !this.checked);
-    });
-
-    // Search as user types
-    $("#employeeSearch").on("keyup", function () {
-        console.log("enter");
-        let keyword = $(this).val().toLowerCase();
-
-        if (keyword.length === 0) {
-            $("#employeedropdown").hide();
-            return;
-        }
-
-        let filtered = employees.filter((emp) =>
-            emp.name.toLowerCase().includes(keyword),
-        );
-
-        renderDropdown(filtered);
-        $("#employeedropdown").show();
-    });
-
-    $("#viewTicketDetailsBtn").on("click", () => {
-        $("#editTicketModal").modal("toggle");
-    });
- 
-    //$("#TicketDepartmentOptions").on("change", function (event) {
-    //    const previousElement = event.currentTarget.previousElementSibling;
-    //    console.log(previousElement)
-    //    $("#ticketDepartmentRequired").empty().append(`<i class="bi bi-check text-success"></i>`);
-    //    //previousElement.classList.toggle("bi-check");
-    //    NewTicket.DeptCode = event.target.dataset.value;
-    //    NewTicket.OrgCode = 1;
-    //    NewTicket.LocCode = 1;
-    //    $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
-
-    //})
-    $("#TaskTypeCode").on('change', function (event) {
-        const previousElement = event.currentTarget.previousElementSibling;
-        console.log(previousElement)
-        previousElement.classList.toggle("bi-asterisk");
-        previousElement.classList.toggle("bi-check");
-        NewTicket.DeptCode = event.target.dataset.value;
-        NewTicket.OrgCode = 1;
-        NewTicket.LocCode = 1;
-        $("#departmentDropdownSelect").empty().append(event.target.innerHTML)
-    })
-    $("#TicketSubject").on("focusout", function () {
-        validateForm();
-    })
-   
-    $("#submitTicket").on("click", async function (event) {
-        event.preventDefault()
-        if (!validateFirst()) {
-            toastr.error("All fields are required!", 'Validation failed', {
-                timeOut: 3000,
-            });
-        } else {
-        
-            //validate forms
-            var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
-
-            NewTicket.TicketSubject = $("#TicketSubject").val();
-            NewTicket.TicketDescription = markupStr;
-            NewTicket.TaskTypeCode = $("#TaskTypeCode").val();
-            NewTicket.RequestedByCode = CurrentUser.USER_CODE;
-            NewTicket.RequestedDate = $("#RequestedDate").val();
-            NewTicket.RequestedByName = CurrentUser.EMP_NAME;
-
-
-            try {
-                loadingSubmitButton(); //disable the submit button  
-                let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-                let emailParams = await generateTicketEmailParams(response[0]);
-
-                $("#newTicketId").empty().append(response[0].TicketId);
-
-                clearTicketFilterControl(); //reset filter control
-                insertNewRow(response);    //insert new ticket to table
-
-                toastr.success("You have successfully submitted a New Ticket - " + response[0].StringTicketId, "Success");
-                disableSubmitButton();
-                resetCreateTicketForm();
-
-                let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
-
-                if (sentEmail) {
-                    toastr.success("Email notifications are successfully sent", 'Success', {
-                        timeOut: 3000,
-                    });
-                }
-                else {
-                    toastr.error("Error while sending email notification", sentEmail, {
-                        timeOut: 3000,
-                    });
-                }
-            } catch (err) {
-                toastr.error("The server responded with an error - " + err, "Failed", {
-                    timeOut: 3000,
-                });
-            }
-
-            $("#createTicketModal").modal("hide");    
-        }
-                
-   
-    
-    });
-        // PREVIEW FILE
-     $("#btnPreview").on("click", function () {
-            let fileName = $(this)
-                .closest(".attachment-item")
-                .find(".file-name")
-                .text();
-            let fileUrl = "/img/" + fileName;
-
-            $("#previewImage, #previewPdf, #previewOther").addClass("d-none");
-
-            if (fileName.match(/\.(jpg|jpeg|png|gif)$/i)) {
-                $("#previewImage").attr("src", fileUrl).removeClass("d-none");
-            } else if (fileName.match(/\.(pdf)$/i)) {
-                $("#previewPdf").attr("src", fileUrl).removeClass("d-none");
-            } else {
-                $("#previewOther").removeClass("d-none");
-            }
-            $("#attachmentPreviewContainer").toggleClass("d-none");
-        });
-
-        // DELETE FILE
-    $(".btnDelete").on("click", function () {
-            if (!confirm("Delete this file?")) return;
-
-            let item = $(this).closest(".attachment-item");
-            let fileName = item.find(".file-name").text();
-
-            $.post("/Attachment/Delete", { fileName: fileName }, function () {
-                item.remove();
-            });
-        });
-
-        // RENAME FILE
-    $(".btnRename").on("click", function () {
-            let item = $(this).closest(".attachment-item");
-
-            let newName = item.find(".file-input").val();
-
-            $.post(
-                "/Attachment/Rename",
-                {
-                    oldName: item.find(".file-name").text(),
-                    newName: newName,
-                },
-                function () {
-                    item.find(".file-name").text(newName);
-
-                    alert("Renamed successfully!");
-                },
-            );
-    });
-    $("#createTicketModal").on("hidden.bs.modal", function (event) {
-        resetCreateTicketForm();
-        saveEditRequestedBy();
-    });
-    $("#SelectTicketOrganization").on("change", async function () {
-        await getLocationOptions($("#SelectTicketOrganization").val());
-        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
-
-    });
-    $("#SelectTicketLocation").on("change", async function () {
-        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
-
-    });
+    bindEventHandlers();
+    ticketsTable.bootstrapTable('hideLoading');
    
 });
 
 //-------FUNCTIONS------ 
+function createManagerApprovalStatusOptions() {
+
+    let options = `<option selected value="0" >Pending</option>
+                             <option value="1">Approved</option>`;
+    $("#approveByManager").empty().append(options)
+}
 async function getOrganizationOptions() {
     let organizations = await $.get(`support/employee-directory/getAllOrganizationList`);
     console.log(organizations)
@@ -491,7 +82,7 @@ async function getOrganizationOptions() {
 }
 async function getLocationOptions(selectedOrg) {
     const filteredLoc = await $.get(`support/employee-directory/getFilteredLocationList`, {
-        orgCode: selectedOrg
+        OrgCode: selectedOrg
     });
     createTicketSelectOptions("select-location", filteredLoc);
     
@@ -533,13 +124,14 @@ function clearTicketFilterControl() {
 }
 async function getAllSelectOptions() {
     try {
-        await getUserOptions()
-        await getAssigneeOptions()
-        await getPriorityOptions();
-        await getModuleOptions();
-        await getTypeOptions()
-        await getDurationUnitOptions();
-        await getStatusOptions();
+        await getUserOptions(1, 1, 9)
+        await getAssigneeOptions(1,1,9)
+        await getPriorityOptions(1,1,9);
+        await getModuleOptions(1, 1, 9);
+        await getTypeOptions(1, 1, 9)
+        await getDurationUnitOptions(1, 1, 9);
+        await getStatusOptions(1, 1, 9);
+        createManagerApprovalStatusOptions();
       
     } catch(err) {
         toastr.error("There is an error on the server", "Error");
@@ -561,31 +153,7 @@ function saveEditRequestedBy() {
     $("#editBtn").removeClass("d-none");
     $("#checkBtn").addClass("d-none");
 }
-function toggleEditRequestedBy() {
 
-    isEditingRequestedBy = !isEditingRequestedBy;
-
-    if (isEditingRequestedBy) {
-
-        // Switch to Edit Mode
-        $("#DisplayRequestedByName").addClass("d-none");
-        $("#SelectRequestedByName").removeClass("d-none");
-        $("#editBtn").addClass("d-none");
-        $("#checkBtn").removeClass("d-none");
-
-
-
-    } else {
-
-        $("#DisplayRequestedByName").removeClass("d-none")
-            .empty()
-            .append($("#SelectRequestedByName").val());
-        $("#SelectRequestedByName").addClass("d-none");
-        $("#editBtn").removeClass("d-none");
-        $("#checkBtn").addClass("d-none");
-       
-    }
-}
 async function generateTicketEmailParams(ticket) {
     let emailParams = {
         RequestedByEmail: ticket.RequestedByEmail,
@@ -744,22 +312,28 @@ async function selectCC() {
   $("#staticCC").hide();
   $("#addCC").toggleClass("d-none");
 }
-async function getAssigneeOptions(org_code, loc_code, dept_code) {
+function assigneeSelected(event) {
+    console.log(event.target.dataset.value);
+    console.log(event.target.innerHTML);
+    $("#assigneeDropdownSelect").empty().html(event.target.innerHTML)
+    $("#assignedToName").val(event.target.innerHTML)
+    $("#assignedToCode").val(event.target.dataset.value)
+}
+async function getAssigneeOptions(OrgCode, LocCode, DeptCode) {
   let usersOptions = await $.get(`${gBaseUrl}/get-assignee-options`, {
-    org_code,
-    loc_code,
-    dept_code,
+    OrgCode,
+    LocCode,
+    DeptCode,
   });
+  console.log(usersOptions)
   let options = "";
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
-            options += `<a onclick="" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </a >`;
+            options += `<li onclick="assigneeSelected(event)" class="dropdown-item" data-value="${i.VALUE}"> ${i.TEXT} </li >`;
         }
   });
 
-    $("#i").empty().append(options);
-
-   
+    $("#assigneeList").empty().append(options);
 }
 async function getTicketRequestedByOptions(){
     let usersOptions = await $.get(`${gBaseUrl}/get-user-options`);
@@ -795,13 +369,13 @@ async function getPriorityOptions(OrgCode, LocCode, DeptCode) {
     DeptCode,
   });
   console.log(priorityOptions);
-  let options = "";
-  priorityOptions.forEach(function (i) {
-    options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
-  });
+    let options = "";
+    priorityOptions.forEach(function (i) {
+          options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
+      });
 
-    $("#selectPriority").empty().append(options);
-    $("#filterPriority").append(options);
+    $("#priorityCode").empty().append(options);
+  
 }
 async function getModuleOptions(OrgCode, LocCode, DeptCode) {
   let moduleOptions = await $.get(`${gBaseUrl}/get-module-options`, {
@@ -811,7 +385,7 @@ async function getModuleOptions(OrgCode, LocCode, DeptCode) {
   });
   let options = "";
   moduleOptions.forEach(function (i) {
-    options += `<li class="dropdown-item text-truncate" data-value="${i.VALUE}">${i.TEXT}</li>`;
+      options += `<li onclick="moduleSelected(event)" class="dropdown-item text-truncate" data-value="${i.VALUE}">${i.TEXT}</li>`;
   });
 
   $("#moduleList").empty().append(options);
@@ -819,14 +393,16 @@ async function getModuleOptions(OrgCode, LocCode, DeptCode) {
 async function getDurationUnitOptions() {
   let durationUnitOptions = await $.get(
     `${gBaseUrl}/get-duration-unit-options`,
-  );
-  let options = "";
+    );
+    console.log(durationUnitOptions)
+    let options = "";
+  
   durationUnitOptions.forEach(function (i) {
-    options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
+      options += `<option value="${i.TEXT}"> ${i.TEXT} </option>`;
+     
   });
 
-    $("#selectDurationUnit").empty().append(options);
- 
+    $("#ticketDurationUnit").empty().append(options);
 }
 async function getStatusOptions(OrgCode, LocCode, DeptCode) {
   let statusOptions = await $.get(`${gBaseUrl}/get-status-options`, {
@@ -839,7 +415,7 @@ async function getStatusOptions(OrgCode, LocCode, DeptCode) {
     options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
   });
 
-    $("#selectStatus").empty().append(options);
+    $("#statusCode").empty().append(options);
     $("#filterStatus").append(options);
 }
 async function getTypeOptions(OrgCode, LocCode, DeptCode) {
@@ -849,27 +425,32 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
     DeptCode,
   });
     let options = "";
+    let listOptions = "";
 
   typeOptions.forEach(function (i) {
-    options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
+      options += `<option value="${i.VALUE}"> ${i.TEXT} </option>`;
+      listOptions += `<li onclick="tasktypeSelected(event)" class="dropdown-item text-truncate" data-value="${i.VALUE}">${i.TEXT}</li>`;
   });
+    $("#typeList").empty().append(listOptions);
     $("#TaskTypeCode").empty().append(options);
     
     //$("#filterType").empty().append(options);
 }
 async function getAllTicket() {
-    ticketsTable.bootstrapTable('showLoading');
-    
-    const DeptCode = null;
-  
-    let data = await $.get(`${gBaseUrl}/get-tickets`, { DeptCode: DeptCode });
-    console.log(data);
    
+    const params = {
+        OrgCode: 1,
+        LocCode: 1,
+        DeptCode: null,
+    }
+
+    let data = await $.get(`${gBaseUrl}/get-tickets`, params);
+    console.log(data);
+
     showTotalTicketsRecords(data.length);
     window.originalData = data;
-    
-    ticketsTable.bootstrapTable("load", data)
-        .bootstrapTable('hideLoading');
+
+    ticketsTable.bootstrapTable('load', data);
 
 }
 function showTotalTicketsRecords(totalRecords) {
@@ -897,7 +478,7 @@ function uploadTicketAttachments() {
         formData.append('file', TicketAttachments.files[0]);
 
         $.ajax({
-            url: '/Upload/SaveFile', // Replace with your actual backend URL
+            url: 'MyTickets/upload-ticket-attachments', // Replace with your actual backend URL
             type: 'POST',
             data: formData,
             contentType: false, // Required: prevents jQuery from setting content-type header
@@ -918,7 +499,7 @@ function insertNewRow(response) {
     console.log(response)
     ticketsTable.bootstrapTable('insertRow', {
         index: 0,
-        row: response[0],
+        row: response,
        
     })
    ticketsTable.bootstrapTable('check', 0)
@@ -930,11 +511,19 @@ function resetCreateTicketForm() {
     $("#TaskTypeCode").removeClass("is-valid").removeClass("is-invalid");
     $("#TicketDepartment").removeClass("is-valid").removeClass("is-invalid");
     //disableSubmitButton();
+   
 }
 
 function loadingSubmitButton() {
     $("#submitTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Loading...`);
+}
+function loadingSubmitEditButton() {
+    $("#btnUpdateTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...`);
+}
+function enableSubmitEditButton() {
+    $("#btnUpdateTicket").prop('disabled', false).empty().append('Update Ticket');
 }
 function disableSubmitButton() {
     $("#submitTicket").prop('disabled', true).empty().append('Submit Ticket');
@@ -949,35 +538,87 @@ function enableSubmitButton() {
 function requestedBySelected(event) {
     console.log(event.target.dataset.value);
     console.log(event.target.innerHTML);
-    $("#filterRequestedByName").empty().append(filterRequestedByName)
+
+    // update visible display element so the selected name shows in the UI
+    $("#displayRequestedByName").empty().html(event.target.innerHTML);
+   
+
+    // keep form values in hidden inputs (if present) for submission
+    $("#editRequestedByName").val(event.target.innerHTML);
+    $("#editRequestedByCode").val(event.target.dataset.value);
+}
+function moduleSelected(event) {
+    console.log(event.target.dataset.value);
+    console.log(event.target.innerHTML);
+    $("#moduleDropdownSelect").empty().html(event.target.innerHTML)
+    $("#moduleName").val(event.target.innerHTML)
+
+}
+function tasktypeSelected(event) {
+    console.log(event.target.dataset.value);
+    console.log(event.target.innerHTML);
+    $("#typeDropdownSelect").empty().html(event.target.innerHTML)
+    $("#taskTypeName").val(event.target.innerHTML)
+    $("#taskTypeCode").val(event.target.dataset.value)
+
 }
 
+// Validate regular inputs and summernote content
 async function validateFormData() {
+    let validated = true;
+
+    // iterate required controls (native HTML5 validation)
     inputSelectors.forEach(selector => {
         const $el = $(selector);
-        // Remove old validation state/tooltips
-        $el.removeClass("is-invalid");
-        const oldTooltip = bootstrap.Tooltip.getInstance($el[0]);
-        if (oldTooltip) oldTooltip.dispose();
 
-        if ($el.val().trim() === "") {
+        // Reset old state
+        $el.removeClass("is-invalid");
+        $el.removeClass("is-valid");
+
+        if ($el.length === 0) {
+            // skip missing selectors
+            return;
+        }
+
+        // Use native validity for selects/inputs
+        if (!$el[0].checkValidity()) {
             validated = false;
             $el.addClass("is-invalid");
 
-            // 3. Create the white tooltip with custom message
-            new bootstrap.Tooltip($el[0], {
-                title: validationConfig[selector],
-                placement: "right",
-                trigger: "manual",
-                customClass: "white-tooltip"
-            }).show();
+            // show bootstrap invalid feedback if present
+            const feedback = $el.next(".invalid-feedback");
+            if (feedback.length) feedback.show();
         } else {
             $el.addClass("is-valid");
-            validated = true;
         }
     });
 
+    // Validate summernote (TicketDescription)
+    if (!validateSummerNote()) {
+        validated = false;
+    }
+
     return validated;
+}
+function validateFirst() {
+    var $form = $('#createTicketForm');
+
+    // trigger browser validation UI if native required fields are missing
+    if ($form.length && $form[0].checkValidity() === false) {
+        // ensure summernote feedback is updated as well
+        validateSummerNote();
+        $form.addClass('was-validated');
+        return false;
+    }
+
+    // run our combined validator (includes summernote check)
+    const ok = validateFormData();
+    if (!ok) {
+        $form.addClass('was-validated');
+    } else {
+        $form.removeClass('was-validated');
+    }
+    return ok;
 }
 function toggleSubmitButton() {
     if (validateForm()) {
@@ -986,28 +627,35 @@ function toggleSubmitButton() {
         disableSubmitButton()
     }
 }
-function validateForm() {
-    console.log($("#TicketSubject").val());
-    //if($("#TicketSubject").val())
-}
-function validateFirst() {
-        var $form = $('#createTicketForm');
-    if ($form[0].checkValidity() === false) {
-        validateSummerNote();
-            $form.addClass('was-validated');
+
+
+function validateSummerNote() {
+    // If summernote instance exists, use its API; otherwise fall back to checking innerHTML
+    const $editor = $('#TicketDescription');
+    if ($editor.length === 0) return true;
+
+    // If summernote has been initialized, .summernote('isEmpty') is available
+    try {
+        const isEmpty = $editor.summernote && $editor.summernote('isEmpty');
+        if (isEmpty) {
+            $("#summernoteInvalidFeedback").removeClass('d-none');
             return false;
         } else {
-        if(validateSummerNote())
-        $form.addClass('was-validated');
-        return true;
+            $("#summernoteInvalidFeedback").addClass('d-none');
+            return true;
         }
-
-}
-function validateSummerNote() {
-    if ($('#summernote').summernote('isEmpty')) {
-        $("#summernoteInvalidFeedback").toggleClass('d-none')
-        return false;
-    } else {
-        return true;
+    } catch (err) {
+        // fallback: read HTML and strip tags/spaces
+        const html = $editor.html() || "";
+        if (html.replace(/<[^>]*>/g, '').trim().length === 0) {
+            $("#summernoteInvalidFeedback").removeClass('d-none');
+            return false;
+        } else {
+            $("#summernoteInvalidFeedback").addClass('d-none');
+            return true;
+        }
     }
+}
+async function updateTicket(ticket) {
+    let response = await $.put(`${gBaseUrl}/update-ticket`, ticket);
 }

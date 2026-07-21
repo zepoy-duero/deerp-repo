@@ -1,0 +1,19 @@
+﻿<div class="col-md-6 d-flex justify-content-start align-items-start">
+    <label for="dateRequested" class="text-muted pe-2 text-nowrap">
+        Date:
+    </label>
+    <div class="RequestedDateContainer flex-grow-0">
+        <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+            <!-- Display Mode -->
+            <h6 id="dateRequestedField" class="fw-bold text-muted text-nowrap"></h6>
+         
+            <!-- Edit Mode -->
+            <input class="form-control form-control-sm d-none" type="date" id="DateRequested" />
+
+            <!-- Edit / Save icons -->
+            @* <i id="editRequestDate" type="button" onclick="editDateRequested()" class="bi bi-pencil-square text-main extra-small ms-1"></i> *@
+            @* <i id="saveRequestDate" onclick="saveDateRequested()" class="bi bi-close text-main ms-1 d-none"></i> *@
+            <button id="saveRequestDate" onclick="saveDateRequested()" type="button" class="btn-close d-none" aria-label="Close"></button>
+        </div>
+    </div>
+</div>

@@ -7,8 +7,8 @@ namespace DEEMPPORTAL.Application.Ticket
 {
     public interface ITicketService
     {
-        Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int DeptCode);
-        Task<IEnumerable<TicketResponse>> CreateTicketAsync(CreateTicketParams request);
+        Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int OrgCode, int LocCode, int DeptCode);
+        Task<TicketResponse> CreateTicketAsync(CreateTicketParams request);
         Task<IEnumerable<TicketSelectOptions>> GetUserOptionsAsync();
         Task<IEnumerable<TicketSelectOptions>> GetAssigneeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<IEnumerable<TicketSelectOptions>> GetPriorityOptionsAsync(int OrgCode, int LocCode, int DeptCode);
@@ -18,6 +18,7 @@ namespace DEEMPPORTAL.Application.Ticket
         Task<IEnumerable<TicketSelectOptions>> GetStatusOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
+        Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket);
         //Task<IEnumerable<TicketSelectOptions>> GetAllLocationListAsync();
         //Task<IEnumerable<TicketSelectOptions>> GetAllDepartmentListAsync();
         //Task<IEnumerable<TicketSelectOptions>> GetFilteredOrganizationListAsync();

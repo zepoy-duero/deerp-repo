@@ -7,6 +7,7 @@ ViewData["Title"] = "Ticket";
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
+    // await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketDetailsModal.cshtml");
 }
 
 <div class="container">
@@ -19,7 +20,10 @@ ViewData["Title"] = "Ticket";
                             <!-- Title -->
                             <div class="col">
                                 <h5 class="page-title mb-3 fs-5 fw-bolder text-main">
-                                            Tickets
+                                            Tickets - 
+                                            <span class="bg-danger text-white p-2">
+                                                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                                This Module Under Development</span>
                                         </h5>
                             </div>
 
@@ -70,8 +74,8 @@ ViewData["Title"] = "Ticket";
 
 @section Scripts {
     <!--BOOTSTRAP TABLE PLUGIN DEPENDECIES-->
-
    
-
+    @* <script src="~/js/ticket/ticket-assignee.js" asp-append-version="true"></script> *@
+    <script src="~/js/ticket/ticket-event-handlers.js" asp-append-version="true"></script>
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
 }

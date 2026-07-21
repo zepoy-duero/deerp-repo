@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-
 using DEEMPPORTAL.Application.Shared;
-
 using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.Ticket;
 using DEEMPPORTAL.WebUI.Models;
-using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 
 namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
@@ -18,13 +17,14 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 [Route("MyTickets")]
 public class TicketController(ISelectOptionsService selectOptionsService,
       IFetchOnlyOneService fetchOnlyOneService,
-      ITicketService ticketService, IMapper mapper) : Controller
+      ITicketService ticketService, IMapper mapper, ILogger<TicketController> logger) : Controller
 {
     private readonly ITicketService _ticketService = ticketService;
     private readonly ISelectOptionsService _selectOptionsService = selectOptionsService;
     private readonly IFetchOnlyOneService _fetchOnlyOneService = fetchOnlyOneService;
- 
     private readonly IMapper _mapper = mapper;
+    private readonly ILogger<TicketController> _logger = logger;
+
     [HttpGet("")]
     public IActionResult Index()
     {
@@ -32,12 +32,41 @@ public class TicketController(ISelectOptionsService selectOptionsService,
     }
 
     [HttpGet("get-tickets")]
-    public async Task<IActionResult> GetAllTicket(int DeptCode)
+    public async Task<IActionResult> GetAllTicket(int OrgCode, int LocCode,int DeptCode)    
     {
-        var data = await _ticketService.GetAllTicketAsync(DeptCode);
-
+        var data = await _ticketService.GetAllTicketAsync(OrgCode, LocCode,DeptCode);
         return Ok(data);
     }
+
+    [HttpPost("update-ticket")]
+    public async Task<IActionResult> UpdateTicket(TicketViewModel ticket)
+    {
+            if (!ModelState.IsValid) 
+            {
+                _logger.LogWarning("UpdateTicket called with invalid ModelState: {ModelStateErrors}", JsonSerializer.Serialize(ModelState.Where(m=>m.Value.Errors.Count>0).ToDictionary(k=>k.Key,v=>v.Value.Errors.Select(e=>e.ErrorMessage))));
+                return BadRequest(ModelState);
+            }
+
+            // Defensive logging: log incoming payload and mapped DTO
+            try
+            {
+                _logger.LogInformation("UpdateTicket called. Incoming model: {Model}", JsonSerializer.Serialize(ticket));
+            }
+            catch { /* ignore serialization errors */ }
+
+            var mapped = _mapper.Map<UpdateTicketParams>(ticket);
+
+            try
+            {
+                _logger.LogInformation("Mapped UpdateTicketParams: {Mapped}", JsonSerializer.Serialize(mapped));
+            }
+            catch { /* ignore serialization errors */ }
+
+            var updatedTicket = await _ticketService.UpdateTicketAsync(mapped);
+
+            return Ok(updatedTicket);
+    }
+
     [HttpGet("get-user-options")]
     public async Task<IEnumerable<TicketSelectOptions>> GetUserOptions()
     {
@@ -95,16 +124,16 @@ public class TicketController(ISelectOptionsService selectOptionsService,
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var mapped = _mapper.Map<CreateTicketParams>(model);
-            var isSaved = await _ticketService.CreateTicketAsync(mapped);
+            var updatedTicket = await _ticketService.CreateTicketAsync(mapped);
            
             //var managerEmailId = await _fetchOnlyOneService.GetManagerEmailByDeptCode(mapped.DeptCode);
             //var userEmailId = await _fetchOnlyOneService.GetUserEmailByUserCode(mapped.RequestedByCode);
 
-            return Ok(isSaved);
+            return Ok(updatedTicket);
         }
     }
 
-    [HttpPost]
+    [HttpPost("upload-ticket-attachments")]
     public async Task<IActionResult> Upload(IFormFile file)
     {
         if (file != null && file.Length > 0)

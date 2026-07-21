@@ -1,19 +1,19 @@
 ﻿<div class="col-md-6 d-flex justify-content-start align-items-start">
-
-    <label for="SelectRequestedByName" class="text-muted pe-2 text-nowrap">
+    <label for="requestedBy" class="text-muted pe-2 text-nowrap">
         Requested By:
     </label>
     <div class="RequestedByContainer flex-grow-0">
-       
-        <div class="d-flex flex-row">
+        <div class="d-flex flex-row justify-content-center align-items-center gap-2">
             <!-- Display Mode -->
-            <h6 id="DisplayRequestedByName" class="fw-bold text-nowrap"></h6>
+            <h6 id="displayRequestedBy" class="fw-bold text-muted text-nowrap"></h6>
+
             <!-- Edit Mode -->
-            @* <select id="SelectRequestedByName"
-                    class="form-select form-select-sm d-none" required>
-            </select>
-            <i id="editBtn" onclick="showEditRequestedBy()" class="bi bi-pencil text-main extra-small ms-3 mt-1"></i>
-            <i id="checkBtn" onclick="saveEditRequestedBy()" class="bi bi-floppy2 text-main ms-3 mt-1 d-none"></i> *@
+            <select class="form-select-plaintext form-select-sm d-none" id="requestedBy"></select>
+            <input id="requestedByCode" class="d-none" />
+            <!-- Edit / Save icons -->
+            @* <i id="editRequestedBy" type="button" onclick="editRequestedBy()" class="bi bi-pencil-square text-main extra-small ms-1"></i> *@
+            @* <i id="saveRequestDate" onclick="saveDateRequested()" class="bi bi-close text-main ms-1 d-none"></i> *@
+            <button id="saveRequestedBy" onclick="saveRequestedBy()" type="button" class="btn-close d-none" aria-label="Close"></button>
         </div>
     </div>
 </div>

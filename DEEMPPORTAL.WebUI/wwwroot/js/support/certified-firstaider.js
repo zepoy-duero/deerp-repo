@@ -294,7 +294,7 @@ async function createUserSelectOptions() {
 function createCard(emp) {
 
     return `
-        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 employee-col">
+        <div class="col-md-4 col-lg-2 employee-col">
             <div id="empCard" class="card border-${emp.IS_ACTIVE ? 'primary' : 'secondary'} text-center shadow-sm h-90 position-relative">
                 <div class="card-body">                    
                     <div class="position-relative">

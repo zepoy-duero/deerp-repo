@@ -1,103 +1,83 @@
 ﻿<div id="ticketUserRequest" class="card  section-card">
     <div class="card-header section-title border-2">
-        User Request
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+                User Request
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="toggleEditUserRequest">
+                <label class="form-check-label" for="toggleEditUserRequest">Edit Mode</label>
+            </div>
+            <div class="d-none">
+                <button id="userRequestEditBtn" class="btn btn-sm btn-danger rounded-pill">
+                    EDIT
+                    <i class="bi bi-pencil-square ms-2"></i>
+                </button>
+                <button id="userRequestUpdateBtn" class="btn btn-sm btn-main  rounded-pill d-none">
+                    SAVE
+                    <i class="bi bi-floppy-fill ms-2"></i>
+                </button>
+                
+            </div>
+        </div>
+       
     </div>
     <div class="card-body">
         <div class="container-fluid">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Ticket Subject</label>
-                    <div class="input-group">
-                        <span class="input-group-text " id="basic-addon1">
-                            <i class="bi bi-ticket"></i>
-                        </span>
-                        <input  id="editTicketSubject" type="text" class="form-control" />
+                    
+                        <input id="ticketSubject"  class="form-control-plaintext text-muted fw-bold " disabled />
 
-
-                    </div>
+                    <hr />
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Requested By</label>
-                    <!-- Hidden real select (for form submission) -->
-                    <select id="editSelectUser" class="form-select d-none">
-                    </select>
-                    <!-- Custom dropdown -->
-                    <div class="dropdown rounded-1">
-                        <button class="form-select  text-start text-muted" type="button" id="editUserDropdownSelect" data-bs-toggle="dropdown">
-                            Landrex Rebruera
-                        </button>
-                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
 
-                            <!-- Search input -->
-                            <input type="text" id="userSearchInput" class="form-control" placeholder="Search...">
-                            <!-- Options -->
-                            <ul class="list-unstyled mb-0 p-2" id="userList">
-                            </ul>
 
-                        </div>
+                    <input id="editRequestedByCode" class="form-control d-none" />
+                 
+                    <input id="editRequestedByName" class="form-control d-none" />
+                        <!-- Custom dropdown -->
+                        <div class="dropdown rounded-1">
+                        <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="displayRequestedByName" data-bs-toggle="dropdown">
+                                Landrex Rebruera
+                            </button>
+                            <div class="dropdown-menu w-100 p-2" >
+
+                                <!-- Search input -->
+                                <input type="text" id="userSearchInput" class="form-control" placeholder="Search...">
+                                <!-- Options -->
+                            <ul class="list-unstyled mb-0 p-2" id="userList" style="max-height: 200px !important; overflow-y: scroll;">
+                                </ul>
+
+                            </div>
+                     
                     </div>
+                    <hr />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label d-flex justify-content-between align-items-center">
-                        <span>Requested Date</span>
-                        @* <span id="editRequestDate" class="ms-2"><i class="bi bi-pen text-main" onclick="editDateRequested()"></i></span>
-                        <span id="saveRequestDate" class="ms-2  d-none"><i class="bi bi-floppy-disk text-main" onclick="saveDateRequested()"></i></span> *@
-                    </label>
-
-                    <div class="input-group ">
-                        <span class="text-center input-group-text">
-                            <i class="bi bi-calendar" id="basic-addon1"></i>
-                        </span>
-                        <span id="dateRequested" class="form-control">Mar 31, 2026</span>
-                        <input id="editRequestedDate" type="date" class="form-control d-none">
-
-                    </div>
-
-                    @*     <input type="date" class="form-control d-none" />
-
-                                                        <span class="form-control">
-                                                            <i class="bi bi-calendar" id="basic-addon1"></i>
-                                                            Mar 31, 2026</span> *@
-                    @* <div class="calendar-card">
-                                                            <div class="calendar-header">
-                                                                April
-                                                            </div>
-                                                            <div class="calendar-body">
-                                                                <div class="calendar-day">18</div>
-                                                            </div>
-                                                        </div> *@
-
+                    <label for="editRequestedDate" class="form-label">
+                        Requested Date
+                         </label>
+                    <input id="displayRequestedDate" class="form-control-plaintext text-muted fw-bold" disabled />
+                    <input id="editRequestedDate" type="date" class="form-control d-none"/>
+                        <hr />
                 </div>
                 <div class="col-md-6">
-                    <label for="editTicketDescription" class="form-label">Description</label>
-                    <textarea id="editTicketDescription" class="form-control" style="height: 200px" placeholder="Detailed description"></textarea>
+                    <label for="ticketDescription" class="form-label">Description</label>
+                    <textarea id="ticketDescription" class="form-control text-muted" style="height: 200px !important" placeholder="Detailed description"></textarea>
                 </div>
                 <div class="col-md-6">
-                    @* <div class="row text-center">
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 1" class="img-fluid rounded placeholder-glow">
-                                                            </div>
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 2" class="img-fluid rounded">
-                                                            </div>
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 3" class="img-fluid rounded">
-                                                            </div>/
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 4" class="img-fluid rounded">
-                                                            </div>
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 5" class="img-fluid rounded">
-                                                            </div>
-                                                            <div class="col-md-4 mb-4">
-                                                                <img src="https://via.placeholder.com/300x200" alt="Image 6" class="img-fluid rounded">
-                                                            </div>
-                                                        </div> *@
                     <label class="form-label">Attachments</label>
                     <div class="attachment-box d-none">
                         <div class="text-muted">Upload files</div>
                         <input type="file" class="form-control mt-2" multiple>
+                        <div class="d-none" id="ticketAttachments">
+
+                        </div>
                     </div>
                     <div id="attachmentsPreviewContainer" class="" style="max-height: 200px; overflow-y:scroll"></div>
                 </div>

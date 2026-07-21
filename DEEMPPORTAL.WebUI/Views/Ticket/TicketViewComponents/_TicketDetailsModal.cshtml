@@ -7,7 +7,7 @@
         margin-bottom: 15px;
     }
 </style>
-<div class="modal fade" id="editTicketModal" tabindex="-1" aria-labelledby="editTicketModalLabel" aria-hidden="true">
+<div class="modal fade" id="ticketDetailsModal" tabindex="-1" aria-labelledby="ticketDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-fullscreen">
         <div class="modal-content ">
             <div class="modal-header small fw-bold bg-main-gradient text-white rounded-top">
@@ -19,32 +19,38 @@
                 <button type="button" class="btn-close rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div id="list-example" class="list-group">
+                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
+                        <i class="bi bi-person-circle me-2"></i>
+                        User Request
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
+                        <i class="bi bi-person-down me-2"></i>
+                        <span> Assigned To</span>
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        @{
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
+                        <i class="bi bi-hand-thumbs-up me-2"></i>
+                        Approvals
+                    </a>
+                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
 
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml");
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Approvals.cshtml");
-                        }
-                    </div>
-                   <div class="col-md-6">
-                        @{
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Assignment.cshtml");
-                            
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Review.cshtml");
-                        }
-                   </div>
-
-                    <!-- RIGHT CONTENT -->
-                    <div class="col">
-                       
-
-                    </div>
-                  
-
+                        <i class="bi bi-list-stars me-2"></i>
+                        Review
+                    </a>
                 </div>
-               
+                <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+                    @{
+
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/UserRequest.cshtml");
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Approvals.cshtml");
+
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Assignment.cshtml");
+
+                        await Html.RenderPartialAsync("~/Views/Ticket/TicketDetailsComponents/Review.cshtml");
+                    }
+                </div>
+                        
             </div>
 
             <!-- FOOTER -->

@@ -1,9 +1,11 @@
-﻿using DEEMPPORTAL.Application.Shared;
+﻿using DEEMPPORTAL.Application.Manage.Menu;
+using DEEMPPORTAL.Application.Shared;
 using DEEMPPORTAL.Common;
 using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using System.Globalization;
 
 
@@ -13,16 +15,16 @@ public class TicketService(ITicketRepository ticketRepository, EmailService emai
 {
     private readonly ITicketRepository _ticketRepository = ticketRepository;
     private readonly EmailService _emailService = emailService;
-    public async Task<IEnumerable<TicketResponse>> CreateTicketAsync(CreateTicketParams request)
+    public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
         
         var result = await _ticketRepository.CreateTicketAsync(request);
        
         return result;
     }
-    public async Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int DeptCode)
+    public async Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int OrgCode, int LocCode, int DeptCode)
     {
-        return await _ticketRepository.GetAllTicketAsync(DeptCode);
+        return await _ticketRepository.GetAllTicketAsync(OrgCode,LocCode,DeptCode);
     }
 
     public async Task<IEnumerable<TicketSelectOptions>> GetUserOptionsAsync()
@@ -67,5 +69,11 @@ public class TicketService(ITicketRepository ticketRepository, EmailService emai
         //bool isManager = await _fetchOnlyOneRepository.IsUserManager(request.USER_CODE);
 
 
+    }
+    public async Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket)
+    {
+     
+        var updatedTicket = await _ticketRepository.UpdateTicketAsync(ticket);
+        return updatedTicket;
     }
 }

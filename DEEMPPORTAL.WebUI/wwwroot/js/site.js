@@ -146,6 +146,8 @@ function validateForm(formId) {
 	$(inputs).each(function() {
 		const value = String($(this).val()).trim();
 		if (value === '') {
+			const oldTooltip = bootstrap.Tooltip.getInstance(value);
+			if (oldTooltip) oldTooltip.dispose();
 			isValid = false;
 			$(this).addClass("is-invalid")
 		} else {

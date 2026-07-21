@@ -1,6 +1,41 @@
-﻿﻿<!-- Button trigger modal -->
+﻿<style>
+    .drop-zone {
+        border: 2px dashed #6c757d;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .drop-zone.dragover {
+            background-color: #e9ecef;
+        }
+
+    .file-preview-item {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+</style>
 <!-- Modal -->
-<div class="modal fade" id="createTicketModal" tabindex="-1" aria-labelledby="createTicketModalLabel">
+<div class="modal fade" id="createTicketModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createTicketModalLabel">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <!--HEADER-->
@@ -40,10 +75,10 @@
                                   
 
                                     <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                        <label class="text-muted pe-2 text-small">
-                                            Date:
-                                        </label>
-                                        <h6 id="RequestedDate" class="fw-bold"></h6>
+                                        @{
+                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/RequestedDateComponent.cshtml");
+                                        }
+                                        
                                     </div>
                                 </div>
                                 <hr />
@@ -134,6 +169,9 @@
                 <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
                     Cancel
                 </a>
+                @* <a onclick="resetEntries(event)" id="cancelBtn" class="btn btn-outline-secondary">
+                    Cancel
+                </a> *@
                 <button 
                     id="submitTicket" 
                     type="submit" 
@@ -149,148 +187,4 @@
         </div>
     </div>
 </div>
-<style>
-    .drop-zone {
-        border: 2px dashed #6c757d;
-        border-radius: 10px;
-        padding: 40px;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-        .drop-zone.dragover {
-            background-color: #e9ecef;
-        }
-
-    .file-preview-item {
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .file-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .file-icon {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-    }
-</style>
-@* <script src="~/js/ticket/ticket.js"></script> *@
-@* <script>
-    const dropZone = document.getElementById("dropZone");
-    const fileInput = document.getElementById("fileInput");
-    const previewContainer = document.getElementById("previewContainer");
-
-    let selectedFiles = [];
-
-    // Click to open file dialog
-    dropZone.addEventListener("click", () => fileInput.click());
-
-    // File input change
-    fileInput.addEventListener("change", (e) => {
-        handleFiles(e.target.files);
-
-    });
-
-    // Drag events
-    dropZone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropZone.classList.add("dragover");
-    });
-
-    dropZone.addEventListener("dragleave", () => {
-        dropZone.classList.remove("dragover");
-    });
-
-    dropZone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropZone.classList.remove("dragover");
-        handleFiles(e.dataTransfer.files);
-    });
-
-    function handleFiles(files) {
-        for (let file of files) {
-
-            if (!isValidFileType(file)) {
-                alert(`Invalid file type: ${file.name}`);
-                continue;
-            }
-
-            selectedFiles.push(file);
-            renderFilePreview(file);
-        }
-
-        fileInput.value = "";
-    }
-
-    function isValidFileType(file) {
-        const allowedTypes = [
-            "image/png",
-            "application/pdf",
-            "application/vnd.ms-excel",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        ];
-
-        return allowedTypes.includes(file.type);
-    }
-
-    function renderFilePreview(file) {
-        const fileItem = document.createElement("div");
-        fileItem.className = "file-preview-item";
-
-        const fileInfo = document.createElement("div");
-        fileInfo.className = "file-info";
-
-        // File Icon or Thumbnail
-        let iconElement;
-
-        if (file.type === "image/png") {
-            iconElement = document.createElement("img");
-            iconElement.className = "file-icon";
-            iconElement.src = URL.createObjectURL(file);
-        } else {
-            iconElement = document.createElement("img");
-            iconElement.className = "file-icon";
-
-            if (file.type === "application/pdf") {
-                iconElement.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-            } else {
-                iconElement.src = "https://cdn-icons-png.flaticon.com/512/732/732220.png";
-            }
-        }
-
-        const fileName = document.createElement("div");
-        fileName.innerHTML = `
-            <div><strong>${file.name}</strong></div>
-            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
-        `;
-
-        fileInfo.appendChild(iconElement);
-        fileInfo.appendChild(fileName);
-
-        // Remove Button
-        const removeBtn = document.createElement("button");
-        removeBtn.className = "btn btn-sm btn-outline-danger";
-        removeBtn.innerText = "Remove";
-
-        removeBtn.addEventListener("click", () => {
-            selectedFiles = selectedFiles.filter(f => f !== file);
-            fileItem.remove();
-        });
-
-        fileItem.appendChild(fileInfo);
-        fileItem.appendChild(removeBtn);
-
-        previewContainer.appendChild(fileItem);
-    }
-</script> *@
+@* <script src="~/js/ticket/ticket-create.js"></script> *@
