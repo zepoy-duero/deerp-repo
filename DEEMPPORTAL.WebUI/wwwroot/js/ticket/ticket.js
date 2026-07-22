@@ -1,7 +1,7 @@
 ﻿const gBaseUrl = "/MyTickets";
 const homeUrl = "/home";
 
-const TicketAttachments = document.getElementById("TicketAttachments");
+const TicketAttachments = document.getElementById("attachmentsPreviewContainer");
 const previewContainer = document.getElementById("previewContainer");
 const dropZone = document.getElementById("dropZone");
 const $editTicketModal = $("#editTicketModal");

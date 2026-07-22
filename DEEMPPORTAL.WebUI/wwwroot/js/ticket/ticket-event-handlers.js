@@ -1,17 +1,6 @@
 ﻿function bindEventHandlers() {
     //----------EVENT LISTENERS----------------------------
 
-    $("#toggleEditUserRequest").on("change", function (event) {
-        event.preventDefault();
-        const switchElement = document.getElementById('toggleEditUserRequest');
-
-        // Check the state (returns true if turned on, false if turned off)
-        const isChecked = switchElement.checked;
-        console.log(isChecked)
-        //$("#toggleEditUserRequest").val(true)
- 
-        toggleUserRequestEditMode(isChecked);
-    });
 
     // RESET FILTER
     $("#btnResetFilter").on("click", function () {
@@ -211,8 +200,8 @@
 
 
 
-   
- 
+
+
 
     $("#updateTicket").on("click", async function (event) {
         event.preventDefault();
@@ -240,7 +229,7 @@
             return;
         } else {
 
-            
+
             var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
             NewTicket.OrgCode = $("#SelectTicketOrganization").val();
             NewTicket.LocCode = $("#SelectTicketLocation").val();
@@ -254,12 +243,11 @@
             NewTicket.RequestedByEmail = CurrentUser.EMAIL_ADDRESS;
 
             console.log(NewTicket);
-         
+
 
             try {
                 loadingSubmitButton(); //disable the submit button  
                 let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-                console.log(response)
                 let emailParams = await generateTicketEmailParams(response);
                 console.log(response)
                 $("#newTicketId").empty().append(response.TicketId);
@@ -268,7 +256,7 @@
                 insertNewRow(response);    //insert new ticket to table
 
                 toastr.success("You have successfully submitted a New Ticket - " + response.StringTicketId, "Success");
-                //disableSubmitButton();
+                disableSubmitButton();
                 resetCreateTicketForm();
 
                 let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
@@ -291,7 +279,7 @@
                 enableSubmitButton()
             }
 
-          
+
         }
     });
     // PREVIEW FILE
@@ -347,15 +335,15 @@
     });
     $("#createTicketModal").on("hidden.bs.modal", function (event) {
         resetCreateTicketForm();
-        
+
         //saveEditRequestedBy();
     });
     $("#editTicketModal").on("hidden.bs.modal", function (event) {
-        //enableSubmitButton();
-        toggleButtonOff(false);
-        //var modal = bootstrap.Modal.getOrCreateInstance($editTicketModal);
-        //$editTicketModal.dispose()
-        //saveEditRequestedBy();
+        toggleEditMode();
+        $("#toggleEditUserRequest").trigger('change')
+        $("#toggleEditAssignment").trigger('change')
+        $("#toggleEditApprovals").trigger('change')
+        $("#toggleEditReview").trigger('change')
     });
     $("#SelectTicketOrganization").on("change", async function () {
         await getLocationOptions($("#SelectTicketOrganization").val());
@@ -373,9 +361,9 @@
         console.log(Object.keys(updateParams).length)
         //return 1;
         try {
-            
+
             let response = await $.post(`MyTickets/update-ticket`, updateParams);
-                    console.log(response)
+            console.log(response)
             ticketsTable.bootstrapTable('updateByUniqueId', {
                 id: response.TicketId,
                 row: response,
@@ -383,16 +371,16 @@
             });
             toastr.success("You have successfully updated ticket " + response.StringTicketId + " details", "Success");
             enableSubmitEditButton();
-        } catch(error) {
+        } catch (error) {
             toastr.error("Error while updating ticket information. Error: " + error, "Failed");
             enableSubmitEditButton();
         }
-        
+
 
     });
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
         // HEAD
-   
+
         //toggleEditMode();
         selectedTicket = row;
         $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
@@ -406,14 +394,48 @@
         await setAssignmentFormValue(row);
         await setApprovalsFormValue(row);
         await setReviewFormValue(row);
-        
+
         // Optional: Open an edit modal if your form lives inside one
         // $('#editTicketModal').modal('show');
         $editTicketModal.modal('show');
     });
     //when user click edit button from the User Request Section
-    
+    $("#toggleEditUserRequest").on("change", function (event) {
+  
+        event.preventDefault();
+        const switchElement = document.getElementById('toggleEditUserRequest');
+
+        // Check the state (returns true if turned on, false if turned off)
+        const isChecked = switchElement.checked;
+        console.log(isChecked)
+        //$("#toggleEditUserRequest").val(true)
+
+        $("#userRequestEditBtn,#userRequestUpdateBtn").toggleClass('d-none');
+
+        // make the RequestedBy field editable: show the select, hide the display
+        $("#displayRequestedByName")
+            .toggleClass('form-control-plaintext form-select fw-bold')
+            .prop('disabled', function (i, val) {
+                return !val; // Toggles the current state
+            });
+        $("#displayRequestedDate,#editRequestedDate").toggleClass('d-none')
+
+
+        $("#ticketSubject").prop("disabled", function (i, val) {
+            return !val;
+        });
+        $("#ticketSubject").toggleClass('form-control-plaintext form-control');
+
+        console.log($('#ticketSubject').prop('disabled') == true)
+        if (isChecked) {
+            $('#ticketDescription').summernote('enable');
+        } else {
+            $('#ticketDescription').summernote('disable');
+        }
+    });
+
     $("#toggleEditAssignment").on("change", function (event) {
+       
         event.preventDefault()
         // Get the element by its ID
         const switchElement = document.getElementById('toggleEditAssignment');
@@ -426,25 +448,23 @@
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
-        $("#ticketDuration,#approveByManager").toggleClass('form-control-plaintext form-control fw-bold')
-            .prop('disabled', function (i, val) {
-                return !val; // Toggles the current state
-            });
+        
         $("#startDate,#finishDate").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
         $("#statusCode,#statusName ").toggleClass('d-none');
 
     });
-  
-    $("#toggleEditApprovals").on("click", function () {
+
+    $("#toggleEditApprovals").on("change", function () {
+      
         $("#approveByManager").toggleClass('form-control-plaintext text-muted form-select fw-bold')
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
     });
-    $("#toggleEditReview").on("click", function () {
-
+    $("#toggleEditReview").on("change", function () {
+     
         $("#reviewedByName").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
@@ -492,8 +512,8 @@ function getAssignmentFieldValues() {
 }
 function getApprovalFieldValues() {
     return {
-        DeptName:$("#deptName").val(),
-        ApproveByManager: $("#approveByManager").val() ?  true : false,
+        DeptName: $("#deptName").val(),
+        ApproveByManager: $("#approveByManager").val() ? true : false,
         IsManagementApproval: $("#isManagementApproval").is('checked'),
         ManagerEmailId: $("#managerEmailId").val(),
         RequestedByEmail: $("#requestedByEmail").val()
@@ -533,22 +553,22 @@ async function setUserRequestFormValue(row) {
 
     $("#displayRequestedDate").val(moment(row.RequestedDate).format("MM-DD-YYYY"));
     $("#editRequestedDate").val(moment(row.RequestedDate).format("YYYY-MM-DD"));
-  
-    $('#ticketDescription').summernote({
-                height: 200,
-                lang: 'en-US',
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['fontsize', ['fontsize']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen']],
 
-                ],
+    $('#ticketDescription').summernote({
+        height: 200,
+        lang: 'en-US',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen']],
+
+        ],
 
     });
     $("#ticketDescription").summernote('code', row.TicketDescription);
@@ -557,39 +577,16 @@ async function setUserRequestFormValue(row) {
     //            height: 200,
     //            lang: 'en-US',
     //            toolbar: [
-                   
+
     //                ['insert', ['picture']],
-           
+
 
     //            ],
 
     //        });
     //$("#ticketAttachments").val(row.TicketAttachments);
 }
-function toggleUserRequestEditMode(switchState) {
-    $("#userRequestEditBtn,#userRequestUpdateBtn").toggleClass('d-none');
 
-    // make the RequestedBy field editable: show the select, hide the display
-    $("#displayRequestedByName")
-        .toggleClass('form-control-plaintext form-select fw-bold')
-        .prop('disabled', function (i, val) {
-            return !val; // Toggles the current state
-        });
-    $("#displayRequestedDate,#editRequestedDate").toggleClass('d-none')
-
-
-    $("#ticketSubject").prop("disabled", function (i, val) {
-        return !val;
-    });
-    $("#ticketSubject").toggleClass('form-control-plaintext form-control');
-
-    console.log($('#ticketSubject').prop('disabled') == true)
-    if (switchState) {
-        $('#ticketDescription').summernote('enable');
-    } else {
-        $('#ticketDescription').summernote('disable');
-    }
-}
 async function setAssignmentFormValue(row) {
     console.log(row)
     //ASSIGNMENT
@@ -602,9 +599,9 @@ async function setAssignmentFormValue(row) {
     $("#taskTypeCode").val(row.TaskTypeCode ? row.TaskTypeCode : 1);
     $("#taskTypeName").val(row.TaskTypeName ? row.TaskTypeName : 'None selected');
     $("#typeDropdownSelect").html(row.TaskTypeName ? row.TaskTypeName : 'None selected');
-    $("#ticketDuration").val(row.TicketDuration ? row.TicketDuration : 0 );
+    $("#ticketDuration").val(row.TicketDuration ? row.TicketDuration : 0);
     $("#ticketDurationUnit").val(row.TicketDurationUnit ? row.TicketDurationUnit : 'Day');
-  
+
     $("#startDate").val(moment(row.StartDate).format("YYYY-MM-DD"));
     $("#finishDate").val(moment(row.FinishDate).format("YYYY-MM-DD"));
     $("#statusCode").val(row.StatusCode ? row.StatusCode : 3);
@@ -613,23 +610,23 @@ async function setAssignmentFormValue(row) {
     $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'Not Scheduled'));
 }
 async function setApprovalsFormValue(row) {
-   
+
     //APPROVALS
     $("#deptName").val(row.DeptName ? row.DeptName : 'Not yet Updated');
     $("#approveByManager").val(row.ApproveByManager ? 1 : 0);
-    $("#isManagementApproval").prop('checked', row.IsManagementApproval);
+    $("#isManagementApproval").prop('checked', row.IsManagementApproval ? row.IsManagementApproval : 0);
     $("#managerEmailId").val(row.ManagerEmailId ? row.ManagerEmailId : '');
     $("#requestedByEmail").val(row.RequestedByEmail ? row.RequestedByEmail : '');
 
     if ($("#isManagementApproval").is(':checked')) {
         $("#managementApprovalRequired").removeClass('d-none')
     }
-   
+
 }
 async function setReviewFormValue(row) {
     //REVIEW/RELEASE
     $("#reviewedByName").val(row.ReviewedBy ? row.ReviewedBy : CurrentUser.EMP_NAME)
-   
+
     $("#reviewedDate").val(row.Reviewed_Date ? row.reviewDate : moment().format("YYYY-MM-DD"));
     $("#versionNo").val(row.VersionNo ? row.VersionNo : 2.);
     $("#remarks").val(row.Remarks ? row.Remarks : 'No Data');
@@ -640,12 +637,12 @@ async function setReviewFormValue(row) {
 
 }
 
-function toggleButtonOff(state) {
+function toggleEditMode() {
 
-    $("#toggleEditUserRequest").prop('checked', state);
-    $("#toggleEditAssignment").prop('checked', state);
-    $("#toggleEditApprovals").prop('checked', state);
-    $("#toggleEditReview").prop('checked', state);
+    $("#toggleEditUserRequest").prop('checked', false);
+    $("#toggleEditAssignment").prop('checked', false);
+    $("#toggleEditApprovals").prop('checked', false);
+    $("#toggleEditReview").prop('checked', false);
 }
 function getStatusColor(status) {
     switch (status) {
