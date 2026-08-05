@@ -1,11 +1,18 @@
-﻿<div>
-    <label for="SelectTicketOrganization">
-        <small id="ticketOrganizationRequired" class="text-danger">*</small>
-        Organization
+﻿<div  class="">
+    <label for="SelectTicketOrganization" class="form-label small d-flex align-items-center">
+        <span><small id="ticketOrganizationRequired" class="text-danger">*</small> Organization</span>
+        @* <span class="ms-auto">
+            <i id="changeOrganization" class="bi bi-pencil btn text-primary"></i>
+        </span> *@
     </label>
+
     <select name="SelectTicketOrganization" id="SelectTicketOrganization" class="form-select form-select-sm" required>
     </select>
- 
+    <input class="form-control d-none" id="OrgCode" name="OrgCode" value="1"/>
+    @* <small  class="d-inline-flex flex-grow-1 float-end text-muted fst-italic" style="font-size: 0.8rem;">
+        change? Click
+        <a id="toggleOrganization" href="#" type="button" class="text-primary-emphasis text-decoration-underline ms-1">here</a>
+    </small> *@
 
     <div class="invalid-feedback">This field is required</div>
 

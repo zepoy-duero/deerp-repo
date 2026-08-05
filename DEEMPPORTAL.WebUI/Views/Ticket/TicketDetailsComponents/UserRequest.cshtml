@@ -1,4 +1,39 @@
-﻿<div id="ticketUserRequest" class="card  section-card">
+﻿<style>
+    .editDropZone {
+        border: 2px dashed #6c757d;
+        border-radius: 10px;
+        padding: 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .drop-editDropZone.dragover {
+            background-color: #e9ecef;
+        }
+    .file-preview-item {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+</style>
+<div id="ticketUserRequest" class="card  section-card">
     <div class="card-header section-title border-2">
         <div class="d-flex justify-content-between align-items-center">
             <div class="">
@@ -63,24 +98,51 @@
                         Requested Date
                          </label>
                     <input id="displayRequestedDate" class="form-control-plaintext text-muted fw-bold" disabled />
-                    <input id="editRequestedDate" type="date" class="form-control d-none"/>
+                    <input id="editRequestedDate" name="editRequestedDate" type="date" class="form-control d-none" />
                         <hr />
                 </div>
                 <div class="col-md-6">
-                    <label for="ticketDescription" class="form-label">Description</label>
-                    <textarea id="ticketDescription" class="form-control text-muted" style="height: 200px !important" placeholder="Detailed description"></textarea>
+                    <label for="editTicketDescription" class="form-label">Description</label>
+                    <textarea id="editTicketDescription" class="form-control text-muted" style="height: 200px !important" placeholder="Detailed description"></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Attachments</label>
-                    <div class="attachment-box d-none">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-inline-flex"></div>
+                        <label class="form-label">
+                            Attachments
+
+                        </label>
+                        <div class="d-inline-flex me-auto">
+
+                        </div>
+                        <btn id="editAttachBtn" class="btn btn-sm d-none">
+                           
+                            <i class="bi bi-plus me-1 text-main"></i>
+                            ADD
+                        </btn>
+                        @* <btn id="getTicketAttachmentsId" class="btn btn-sm ">
+
+                            <i class="bi bi-arrow-clockwise me-1 text-main"></i>
+                            REFRESH
+                        </btn> *@
+                    </div>
+                    
+                    <hr />
+                    <!-- Attach icon that opens hidden file picker -->
+                    @* <button id="editAttachBtn" type="button" class="btn ms-2" title="Attach files">
+                        <i class="bi bi-paperclip"></i>
+                    </button> *@
+                    <!-- Hidden file input for edit modal -->
+                    <input id="editTicketAttachments" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />
+
+                    @* <div class="attachment-box d-none">
                         <div class="text-muted">Upload files</div>
                         <input type="file" class="form-control mt-2" multiple>
                         <div class="d-none" id="ticketAttachments">
-
                         </div>
-                    </div>
-            
-                    <div id="attachmentsPreviewContainer" class="" style="max-height: 200px; overflow-y:scroll"></div>
+                    </div> *@
+                    @* <div id="attachmentsPreviewContainer" class="" style="max-height: 250px; overflow-y:scroll"></div> *@
+                    <div id="attachmentsPreviewContainer"></div>
                 </div>
             </div>
         </div>

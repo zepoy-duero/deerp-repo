@@ -155,8 +155,9 @@ public class FormRepository(ConnectionPool cp, CurrentUser cu) : IFormRepository
         const string storedProcedure = "dbo.CLOUD_v1_ERP_LIBRARY_ATTACHMENT_crt";
         var parameters = new
         {
-            TT = dt.AsTableValuedParameter("dbo.TT_CLOUD_v1_ERP_LIBRARY_ATTACHMENT"),
             USER_ID = _cu.UserId,
+            TT = dt.AsTableValuedParameter("dbo.TT_CLOUD_v1_ERP_LIBRARY_ATTACHMENT"),
+          
         };
 
         var rowsAffected = await conn.ExecuteAsync(

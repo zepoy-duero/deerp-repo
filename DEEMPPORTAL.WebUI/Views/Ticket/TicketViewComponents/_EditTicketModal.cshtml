@@ -1,21 +1,12 @@
 ﻿<style>
-    /* .modal-body {
-        padding: 0;
-        height: calc(100vh - 56px);
-        overflow: hidden;
-    } */
-    /* .fas {
-        color: #002e5a !important;
-    } */
-    
     .input-group{
         margin-left: 0 !important;
         padding-left: 0 !important;
     }
-    .modal-content {
+    /* .modal-content {
         height: 100vh;
-       
-    }
+        width: auto
+    } */
 
     /* Sidebar */
     .modalNavSidebar {
@@ -52,11 +43,12 @@
     }
 
         .list-group-item:hover {
-            background: #e9ecef;
+            background: #002e5a;
+            color: #fff !important;
         }
 
         .list-group-item.active {
-            background-color: #002e5a;
+            background-color: #002e5a !important;
             color: #fff !important;
         }
     /* Section Cards */
@@ -152,7 +144,16 @@
         line-height: 1;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
-   
+
+  /*   .file-icon {
+        transition: all 0.3s ease-in-out;
+    }
+
+        .file-icon:hover {
+            transform: scale(5.05);
+            box-shadow: 0 1rem 3rem rgba(0, 46, 90) !important;
+            z-index: 10;
+        } */
 </style>
 
 <div class="modal fade bg-grey" id="emailModal" tabindex="-1">
@@ -324,6 +325,7 @@
         let iconElement;
 
         if (file.type === "image/png") {
+ 
             iconElement = document.createElement("img");
             iconElement.className = "file-icon";
             iconElement.src = URL.createObjectURL();

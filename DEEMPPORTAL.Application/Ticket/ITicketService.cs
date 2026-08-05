@@ -2,6 +2,7 @@
 using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
+using Microsoft.AspNetCore.Http;
 
 namespace DEEMPPORTAL.Application.Ticket
 {
@@ -19,12 +20,7 @@ namespace DEEMPPORTAL.Application.Ticket
         Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
         Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket);
-        //Task<IEnumerable<TicketSelectOptions>> GetAllLocationListAsync();
-        //Task<IEnumerable<TicketSelectOptions>> GetAllDepartmentListAsync();
-        //Task<IEnumerable<TicketSelectOptions>> GetFilteredOrganizationListAsync();
-        //Task<IEnumerable<TicketSelectOptions>> GetFilteredLocationListAsync(int orgCode);
-        //Task<IEnumerable<TicketSelectOptions>> GetFilteredDepartmentListAsync(int orgCode, int locCode);
-        //Task<byte[]?> GetProfilePicAsync(int EMP_CODE);
+        Task<bool> UploadTicketAttachmentsAsync(int ticketId, IEnumerable<IFormFile> files);
 
     }
 }

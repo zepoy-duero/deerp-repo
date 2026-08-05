@@ -1,4 +1,7 @@
-﻿namespace DEEMPPORTAL.Domain.Ticket
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.ComponentModel.DataAnnotations;
+namespace DEEMPPORTAL.Domain.Ticket
 {
     public class CreateTicketParams
     {
@@ -15,5 +18,7 @@
         public string? TicketSubject { get; set; }
     
         public string? TicketDescription { get; set; }
+       
+
     }
 }

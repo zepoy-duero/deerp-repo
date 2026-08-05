@@ -1,4 +1,5 @@
 ﻿function bindEventHandlers() {
+   
     //----------EVENT LISTENERS----------------------------
 
 
@@ -9,8 +10,7 @@
 
     // COLUMN TOGGLE
     $(".toggle-column").on("change", function () {
-        let field = $(this).data("field"); submi
-
+        let field = $(this).data("field");
         $(this).is(":checked")
             ? ticketsTable.bootstrapTable("showColumn", field)
             : ticketsTable.bootstrapTable("hideColumn", field);
@@ -43,9 +43,16 @@
 
         $("#assigneeDropdownSelect").html(text);
         $("#selectAssignee").val(value);
-
+        
         $(".dropdown-menu").removeClass("show");
     });
+    $("#selectAssignee").on("change", function () {
+        if (selectedTicket.StatusName == 'New') {
+            $("#statusCode").val(2);
+            $("#statusName").val('Assigned');
+
+        }
+    })
     $("#moduleList").on("click", ".dropdown-item", function () {
         let text = $(this).text();
         let value = $(this).data("value");
@@ -82,61 +89,79 @@
             $("#dateFilter").addClass("disabled");
         }
     });
-
-    $("#createTicketModal").on('show.bs.modal', async function (event) {
-        resetCreateTicketForm();
-
-        await getOrganizationOptions();
-        await getLocationOptions($("#SelectTicketOrganization").val());
-        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
-
-        // get options for requested by select component and populate edit-select
-        let RequestedByNameOptions = await getTicketRequestedByOptions();
-        $("#SelectRequestedByName").empty().append(RequestedByNameOptions);
-
-        // set display and hidden values for current user
-        $("#DisplayRequestedByName").html(CurrentUser.EMP_NAME);
-        $("#displayRequestedBy").html(CurrentUser.EMP_NAME);
-        $("#requestedBy").val(CurrentUser.EMP_NAME);
-        $("#requestedByCode").val(CurrentUser.USER_CODE);
-
-        // set the date input and display (keep display readable)
-        $("#dateRequested").val(CurrentUser.DATE_TODAY);
-        if (typeof moment !== "undefined") {
-            $("#dateRequestedField").empty().append(moment(CurrentUser.DATE_TODAY).format("MMM DD, YYYY"));
-        } else {
-            $("#dateRequestedField").empty().append(CurrentUser.DATE_TODAY);
-        }
-
-        // initialize summernote for create form only if not already initialized
-        const $td = $('#TicketDescription');
-        if ($td.length && $td.next('.note-editor').length === 0) {
-            $td.summernote({
-                height: 200,
-                lang: 'en-US',
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['fontsize', ['fontsize']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen']],
-                ],
-            });
-        }
-
-        await getTypeOptions(1, 1, 9);
-        await getModuleOptions(1, 1, 9);
+    //BOUND TO SELECT DEPT COMPONENT
+    $("#toggleOrgLoc").on('click', function () {
+        $("#orgComponent,#locComponent").removeClass('col-md-4 d-none')
+            .addClass('col-md-6');
+        $(this).toggle('hide');
+       
     });
-    $("#dropZone").on("click", () => { TicketAttachments.click() });
+    $("#toggleOrganization").on('click', function () {
+        $("#SelectTicketOrganization")
+            .prop('disabled', function (i, value) {
+                return !value;
+            })
+    });
+    $("#toggleLocation").on('click', function () {
+        $("#SelectTicketLocation")
+            .prop('disabled', function (i, value) {
+                return !value;
+            })
+    });
+    $("#changeOrganization").on("click", function () {
+        $("#selectOrg,#SelectTicketOrganization").toggleClass("d-none");
+        $(this).toggleClass("bi bi-pencil bi bi-sign-do-not-enter-fill");
+    })
+    $("#changeLocation").on("click", function () {
+        $("#selectLoc,#SelectTicketLocation").toggleClass("d-none");
+        $(this).toggleClass("bi bi-pencil bi bi-sign-do-not-enter-fill");
+    })
+
+    $("#openCreateTicketModal").on("click", async function (event) {
+        await resetCreateTicketForm();
+        await showCreateTicketModal(event);
+        tooltip.show();
+     
+    })
+   
+    $("#TicketAttachments").on("change", function (e) {
+    
+        //console.log($(this));
+        //return;
+        handleFiles(e.target.files);
+      
+        
+
+        if (e.target.files.length >= 1) {
+            tooltip.hide();
+        } else {
+            tooltip.show();
+        }
+        //    console.log(e.target.files)
+            //renderFilePreview(e.target.files)
+    })
+    $("#editTicketAttachments").on("change", function (e) {
+        handleFiles(e.target.files);
+        //    console.log(e.target.files)
+        //renderFilePreview(e.target.files)
+    })
+    $("#dropZone").on("click", (e) => {
+        const fileInput = document.getElementById('TicketAttachments');
+        try {
+            fileInput.showPicker(); // Opens the native OS file picker
+        } catch (error) {
+            console.error("Picker could not be opened:", error);
+        }
+
+    });
+    //$("#editDropZone").on("click", () => { editTicketAttachments.click() });
 
     // File input change
-    $(TicketAttachments).on("change", (e) => {
-        handleFiles(e.target.files);
-    });
+    //$(TicketAttachments).on("change", (e) => {
+    //    handleFiles(e.target.files);
+    //    console.log(e.target.files)
+    //    renderFilePreview(e.target.files)
+    //});
     // Drag events
     $("#dropZone").on("dragover", (e) => {
         e.preventDefault();
@@ -174,8 +199,15 @@
             handleFiles(pastedFiles);
         }
     });
+    $("#getTicketAttachmentsId").on('click',  function () {
+        console.log(selectedTicket)
+        let attachments = getTicketAttachments(selectedTicket.TicketId);
+        renderEditFilePreviewFromPath()
+    })
+    $("#returnToCreateTicketModal").on('click', function () {
+           $("#createTicketModal").modal('show');
 
-
+    })
     $("#isManagementApproval").on("change", function () {
         $("#managementApprovalRequired").toggleClass("d-none", !this.checked);
     });
@@ -219,69 +251,40 @@
             }
         }
     });
+    $("#cancelUploadAttachment").on("click", function () {
+    
+        $("#createTicketModal").modal('show');
+       
+    });
     $("#submitTicket").on("click", async function (event) {
-        event.preventDefault();
 
+        event.preventDefault();
         if (!validateFirst()) {
             toastr.error("All fields are required!", 'Validation failed', {
                 timeOut: 3000,
             });
             return;
         } else {
-
-
-            var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
-            NewTicket.OrgCode = $("#SelectTicketOrganization").val();
-            NewTicket.LocCode = $("#SelectTicketLocation").val();
-            NewTicket.DeptCode = $("#TicketDepartmentOptions").val();
-            NewTicket.TicketSubject = $("#TicketSubject").val();
-            NewTicket.TicketDescription = markupStr;
-            NewTicket.TaskTypeCode = $("#TaskTypeCode").val();
-            NewTicket.RequestedByCode = CurrentUser.USER_CODE;
-            NewTicket.RequestedDate = CurrentUser.DATE_TODAY;
-            NewTicket.RequestedByName = CurrentUser.EMP_NAME;
-            NewTicket.RequestedByEmail = CurrentUser.EMAIL_ADDRESS;
-
-            console.log(NewTicket);
-
-
-            try {
-                loadingSubmitButton(); //disable the submit button  
-                let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-                let emailParams = await generateTicketEmailParams(response);
-                console.log(response)
-                $("#newTicketId").empty().append(response.TicketId);
-
-                clearTicketFilterControl(); //reset filter control
-                insertNewRow(response);    //insert new ticket to table
-
-                toastr.success("You have successfully submitted a New Ticket - " + response.StringTicketId, "Success");
-                disableSubmitButton();
-                resetCreateTicketForm();
-
-                let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
-
-                if (sentEmail) {
-                    toastr.success("Email notifications are successfully sent", 'Success', {
-                        timeOut: 2000,
-                    });
-                }
-                else {
-                    toastr.error("Error while sending email notification", sentEmail, {
-                        timeOut: 2000,
-                    });
-                }
-                $("#createTicketModal").modal("hide");
-            } catch (err) {
-                toastr.error("The server responded with an error - " + err, "Failed", {
-                    timeOut: 3000,
-                });
-                enableSubmitButton()
-            }
-
-
+            await submitNewTicket();
         }
     });
+    $("#addAttachment").on('click', function () {
+        $("#createTicketModal").modal('show');
+        $("#TicketAttachments").click();
+    })
+    //async function confirmSubmitWithoutAttachment() {
+    //    const result = confirm("Are you sure you want to submit this ticket without attachments?");
+
+    //    // Evaluates the user's selection
+    //    if (result) {
+    //        await submitTicketRequest();
+    //    } else {
+    //        return; // User canceled the action
+    //    }
+    //}
+    $("#confirmSubmitBtn").on('click', async function () {
+        await submitTicketRequest();
+    })
     // PREVIEW FILE
     $("#btnPreview").on("click", function () {
         let fileName = $(this)
@@ -333,25 +336,50 @@
             },
         );
     });
-    $("#createTicketModal").on("hidden.bs.modal", function (event) {
-        resetCreateTicketForm();
+    // hook the edit attachments input to upload immediately after selection
+    //$("#editTicketAttachments").on("change", function (e) {
+    //    const files = Array.from(e.target.files || []);
+    //    if (files.length === 0) return;
+    //    uploadEditFiles(files);
+    //    $(this).val(''); // clear input so same file can be re-selected later
+    //});
+    
+    //$("#editTicketModal").on("hidden.bs.modal", function (event) {
+        //toggleEditMode();
+        //if ($("#toggleEditUserRequest").is('checked')) {
+        //    $("#toggleEditUserRequest").trigger('change')
+        //}
+        //if ($("#toggleEditUserRequest").is('checked')) {
 
-        //saveEditRequestedBy();
-    });
-    $("#editTicketModal").on("hidden.bs.modal", function (event) {
-        toggleEditMode();
-        $("#toggleEditUserRequest").trigger('change')
-        $("#toggleEditAssignment").trigger('change')
-        $("#toggleEditApprovals").trigger('change')
-        $("#toggleEditReview").trigger('change')
-    });
+        //}
+        //if ($("#toggleEditUserRequest").is('checked')) {
+
+        //}
+        //if ($("#toggleEditUserRequest").is('checked')) {
+
+        //}
+        
+        //$("#toggleEditAssignment").trigger('change')
+        //$("#toggleEditApprovals").trigger('change')
+        //$("#toggleEditReview").trigger('change')
+    //});
     $("#SelectTicketOrganization").on("change", async function () {
-        await getLocationOptions($("#SelectTicketOrganization").val());
-        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
+        await getLocationOptions($("#SelectTicketOrganization").val())
+            .then(async function () {
+                await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
+
+            });
+            
+        console.log($(this).val())
+        $("#OrgCode").val($(this).val());
 
     });
+    $("#changeOrgLoc").on("click", function () {
+        $("#orgComponent,#locComponent").toggleClass('d-none');
+    })
     $("#SelectTicketLocation").on("change", async function () {
-        await getDepartmentOptions($("#+").val(), $("#SelectTicketLocation").val());
+        await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
+        $("#LocCode").val($(this).val());
 
     });
     $("#btnUpdateTicket").on("click", async function () {
@@ -364,6 +392,9 @@
 
             let response = await $.post(`MyTickets/update-ticket`, updateParams);
             console.log(response)
+            selectedTicket = response;
+            //UPDATE THE FORM VALUES ON THE OPEN MODAL
+            updateModalFormValues(response)
             ticketsTable.bootstrapTable('updateByUniqueId', {
                 id: response.TicketId,
                 row: response,
@@ -380,11 +411,13 @@
     });
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
         // HEAD
-
-        //toggleEditMode();
+        console.log(row.TicketId)
+        activeAttachmentContainer = 'edit';
+        toggleEditMode();
         selectedTicket = row;
         $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
-
+        //$("attachmentsPreviewContainer").empty();
+       
         $("#ticketId").val(row.TicketId);
         $("#deptCode").val(row.DeptCode);
         $("#ticketNo").val(row.TicketNo);
@@ -398,6 +431,10 @@
         // Optional: Open an edit modal if your form lives inside one
         // $('#editTicketModal').modal('show');
         $editTicketModal.modal('show');
+    });
+    //TRIGGER THE ATTACH FILE INPUT FIELD
+    $("#editAttachBtn").on('click', function () {
+        $("#editTicketAttachments").trigger("click");
     });
     //when user click edit button from the User Request Section
     $("#toggleEditUserRequest").on("change", function (event) {
@@ -420,18 +457,19 @@
             });
         $("#displayRequestedDate,#editRequestedDate").toggleClass('d-none')
 
-
+        //$("#editTicketAttachments").toggleClass('d-none')
         $("#ticketSubject").prop("disabled", function (i, val) {
             return !val;
         });
         $("#ticketSubject").toggleClass('form-control-plaintext form-control');
 
-        console.log($('#ticketSubject').prop('disabled') == true)
+        console.log(isChecked)
         if (isChecked) {
-            $('#ticketDescription').summernote('enable');
+            $('#editTicketDescription').summernote('enable');
         } else {
-            $('#ticketDescription').summernote('disable');
+            $('#editTicketDescription').summernote('disable');
         }
+        $("#editAttachBtn").toggleClass('d-none');
     });
 
     $("#toggleEditAssignment").on("change", function (event) {
@@ -448,7 +486,9 @@
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
-        
+        $("#ticketDuration").prop('disabled', function (i, val) {
+            return !val; // Toggles the current state
+        });
         $("#startDate,#finishDate").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
@@ -488,15 +528,21 @@ function getUserRequestFieldValues() {
         LocCode: selectedTicket.LocCode,
         DeptCode: selectedTicket.DeptCode,
         TicketNo: selectedTicket.TicketNo,
-        TicketSubject: $("#ticketSubject").val(),
-        RequestedByCode: $("#editRequestedByCode").val(),
-        RequestedByName: $("#editRequestedByName").val(),
-        RequestedDate: $("#editRequestedDate").val(),
-        TicketDescription: $("#ticketDescription").val(),
+        TicketSubject: $("#ticketSubject").val() ?? selectedTicket.TicketSubject,
+        RequestedByCode: $("#editRequestedByCode").val() ?? selectedTicket.RequestedByCode,
+        RequestedByName: $("#editRequestedByName").val() ?? selectedTicket.RequestedByName,
+        RequestedDate: $("#editRequestedDate").val() ?? selectedTicket.RequestedDate,
+        TicketDescription: $("#editTicketDescription").summernote('code'),
     };
 }
+function updateModalFormValues(ticket) {
+    setUserRequestFormValue(ticket);
+    setAssignmentFormValue(ticket);
+    setApprovalsFormValue(ticket);
+    setReviewFormValue(ticket);
+}
 function getAssignmentFieldValues() {
-    console.log($("#ticketDurationUnit").text())
+   
     return {
         AssignedToCode: $("#assignedToCode").val(), //assignment
         AssignedToName: $("#assignedToName").val(),
@@ -546,68 +592,63 @@ async function setUserRequestFormValue(row) {
     //let userRequestData = {
 
     //}
+     loadTicketAttachments(row.TicketId);
+   
     $("#ticketSubject").val(row.TicketSubject);
     $("#editRequestedByCode").val(row.RequestedByCode);
     $("#editRequestedByName").val(row.RequestedByName);
     $("#displayRequestedByName").val(row.RequestedByName);
 
     $("#displayRequestedDate").val(moment(row.RequestedDate).format("MM-DD-YYYY"));
-    $("#editRequestedDate").val(moment(row.RequestedDate).format("YYYY-MM-DD"));
+   
+    $("#editRequestedDate").val(row.RequestedDate).attr('value',moment(row.RequestedDate).format('MM/DD/YYYY'));
 
-    $('#ticketDescription').summernote({
+    $('#editTicketDescription').summernote({
         height: 200,
         lang: 'en-US',
         toolbar: [
-            ['style', ['style']],
             ['font', ['bold', 'underline', 'clear']],
             ['fontname', ['fontname']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen']],
-
         ],
 
     });
-    $("#ticketDescription").summernote('code', row.TicketDescription);
-    $("#ticketDescription").summernote('disable');
-    //$('#attachmentsPreviewContainer').summernote({
-    //            height: 200,
-    //            lang: 'en-US',
-    //            toolbar: [
-
-    //                ['insert', ['picture']],
-
-
-    //            ],
-
-    //        });
-    //$("#ticketAttachments").val(row.TicketAttachments);
+    $("#editTicketDescription").summernote('code', row.TicketDescription);
+    $("#editTicketDescription").summernote('disable');
+   
+   
 }
 
 async function setAssignmentFormValue(row) {
     console.log(row)
     //ASSIGNMENT
+    //ASSIGNEE
     $("#assignedToCode").val(row.AssignedToCode);
     $("#assignedToName").val(row.AssignedToName);
     $("#assigneeDropdownSelect").html(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
+    //PRIORITY
     $("#priorityCode").val(row.PriorityCode ? row.PriorityCode : 3);
     $("#ticketPriority").val(row.TicketPriority);
+    //MODULE
     $("#moduleName").val(row.ModuleName);
+    //TASKTYPE
     $("#taskTypeCode").val(row.TaskTypeCode ? row.TaskTypeCode : 1);
     $("#taskTypeName").val(row.TaskTypeName ? row.TaskTypeName : 'None selected');
     $("#typeDropdownSelect").html(row.TaskTypeName ? row.TaskTypeName : 'None selected');
+    //DURATION
     $("#ticketDuration").val(row.TicketDuration ? row.TicketDuration : 0);
     $("#ticketDurationUnit").val(row.TicketDurationUnit ? row.TicketDurationUnit : 'Day');
-
+    //START AND FINISH DATE
     $("#startDate").val(moment(row.StartDate).format("YYYY-MM-DD"));
     $("#finishDate").val(moment(row.FinishDate).format("YYYY-MM-DD"));
+    //STATUS
     $("#statusCode").val(row.StatusCode ? row.StatusCode : 3);
-    $("#statusName").val(row.StatusName ? row.StatusName : 'Not Scheduled');
-    //$("#statusName").addClass('btn  border-0 no-box-shadow rounded-pill')
-    $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'Not Scheduled'));
+    $("#statusName").val(row.StatusName ? row.StatusName : 'New');
+    const section2 = document.getElementById('toggleEditAssignment');
+    $("#statusName").toggleClass('btn btn-lg rounded-pill')
+    $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'New'));
 }
 async function setApprovalsFormValue(row) {
 
@@ -636,27 +677,58 @@ async function setReviewFormValue(row) {
     $("#stringTicketId").val(row.StringTicketId ? row.StringTicketId : '');
 
 }
-
+//RESETS THE EDIT TICKET MODAL FORM FIELDS AND TOGGLE BUTTON TO ITS INITIAL STATE
 function toggleEditMode() {
+    const section1 = document.getElementById('toggleEditUserRequest');
+    const section2 = document.getElementById('toggleEditAssignment');
+    const section3 = document.getElementById('toggleEditApprovals');
+    const section4 = document.getElementById('toggleEditReview');
+    const s1 = section1.checked;
+    const s2 = section2.checked;
+    const s3 = section3.checked;
+    const s4 = section4.checked;
 
-    $("#toggleEditUserRequest").prop('checked', false);
-    $("#toggleEditAssignment").prop('checked', false);
-    $("#toggleEditApprovals").prop('checked', false);
-    $("#toggleEditReview").prop('checked', false);
+
+    if (s1) {
+        $("#toggleEditUserRequest").prop('checked', false).trigger('change');
+    }
+   
+    if (s2) {
+        $("#toggleEditAssignment").prop('checked', false).trigger('change');
+    }
+   
+    if (s3) {
+        $("#toggleEditApprovals").prop('checked', false).trigger('change');
+    }
+   
+    if (s4) {
+        $("#toggleEditReview").prop('checked', false).trigger('change');
+    }
 }
+
 function getStatusColor(status) {
     switch (status) {
-        case 'Not Scheduled': return 'btn-black';
+        case 'New': return 'btn-dark';
             break;
         case null: return 'd-none';
             break;
-        case 'In Progress': return 'btn-danger';
+        case 'Assigned': return 'btn-danger';
             break;
-        case 'Testing': return 'btn-primary';
+        case 'In Progress': return 'btn-primary';
             break;
-        case 'Maintenance': return 'btn-warning dark';
+        case 'Testing': return 'btn-secondary';
             break;
-        case 'Complete': return 'btn-success text-white';
+        case 'Pending User': return 'btn-warning dark';
+            break;
+        case 'Pending Third Party': return 'btn-warning dark';
+            break;
+        case 'On Hold': return 'btn-warning dark';
+            break;
+        case 'Resolved': return 'btn-success text-white';
+            break;
+        case 'Closed': return 'btn-dark text-white';
+            break;
+        case 'Cancelled': return 'text-muted';
             break;
         default: return '';
             break;

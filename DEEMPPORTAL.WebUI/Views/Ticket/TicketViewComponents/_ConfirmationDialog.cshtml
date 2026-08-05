@@ -1,0 +1,46 @@
+﻿<style scoped>
+    dialog {
+        border: none;
+        border-radius: 8px;
+        padding: 20px;
+        width: 300px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .dialog-header {
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+        .dialog-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+    .dialog-body {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .dialog-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+</style>
+<dialog id="confirmationDialog">
+    <div class="dialog-header">
+        <h3>Notice</h3>
+    </div>
+    <div class="dialog-body">
+        <p>This is a centered message inside the dialog box.</p>
+    </div>
+    <div class="dialog-footer">
+        <button class="btn btn-secondary btn-sm text-nowrap" id="addAttachment">Add attachment</button>
+        <button class="btn btn-danger btn-sm text-nowrap" id="proceedWithoutAttachment">Proceed without attachment</button>
+    </div>
+</dialog>

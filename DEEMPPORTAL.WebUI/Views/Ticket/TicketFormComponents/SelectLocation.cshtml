@@ -1,11 +1,18 @@
-﻿<div>
-    <label for="SelectTicketLocation">
-        <small id="ticketLocationRequired" class="text-danger">*</small>
-        Location
+﻿<div id="" class="">
+    <label for="SelectTicketLocation" class="form-label small d-flex align-items-center">
+        <span><small id="ticketLocationRequired" class="text-danger">*</small> Location</span>
+        @* <span class="ms-auto">
+            <i id="changeLocation" class="bi bi-pencil btn text-primary"></i>
+        </span> *@
     </label>
-    <select name="SelectTicketLocation" id="SelectTicketLocation" class="form-select form-select-sm" required>
-    </select>
    
+    <select value="1" name="SelectTicketLocation" id="SelectTicketLocation" class="form-select form-select-sm" required>
+    </select>
+    <input class="form-control d-none" id="LocCode" name="LocCode" autocomplete="SelectTicketLocation" />
+    @* <small  class="d-inline-flex flex-grow-1 float-end text-muted fst-italic" style="font-size: 0.8rem;">
+        change? Click
+        <a id="toggleLocation" href="#" type="button" class="text-primary-emphasis text-decoration-underline ms-1">here</a>
+    </small> *@
 
     <div class="invalid-feedback">This field is required</div>
 </div>

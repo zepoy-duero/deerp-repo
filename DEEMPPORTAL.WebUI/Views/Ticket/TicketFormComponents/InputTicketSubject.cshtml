@@ -1,20 +1,21 @@
 ﻿<div>
-    <label class="form-label">
+    <label for="TicketSubject" class="form-label">
 
         <small id="ticketSubjectRequired" class="text-danger extra-small">*</small>Ticket Subject
     </label>
     
-    <div class="input-group">
+    
         @* <span class="input-group-text " id="basic-addon1">
                                                 <i class="bi bi-book"></i>
                                             </span> *@
         <input name="TicketSubject" id="TicketSubject"
                type="text"
-               class="form-control"
+               class="form-control form-control-sm"
                placeholder="Subject issue . . "
-               required>
+               required aria-describedby="subjectIssue" required>
+       
         <div class="invalid-feedback">This field is required</div>
-    </div>
+
   
 
 </div>

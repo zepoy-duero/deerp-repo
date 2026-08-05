@@ -1,23 +1,24 @@
-﻿using DEEMPPORTAL.Application.Manage.Menu;
-using DEEMPPORTAL.Application.Shared;
+﻿using DEEMPPORTAL.Application.Library.Form;
 using DEEMPPORTAL.Common;
 using DEEMPPORTAL.Domain;
-using DEEMPPORTAL.Domain.HR;
-using DEEMPPORTAL.Domain.Support;
+using DEEMPPORTAL.Domain.Library;
 using DEEMPPORTAL.Domain.Ticket;
-using DocumentFormat.OpenXml.Office2016.Excel;
-using System.Globalization;
+
+using Microsoft.AspNetCore.Http;
+using System.Data;
+using System.Net.Mail;
+
 
 
 namespace DEEMPPORTAL.Application.Ticket;
 
-public class TicketService(ITicketRepository ticketRepository, EmailService emailService) : ITicketService
+public class TicketService(ITicketRepository ticketRepository, EmailService emailService, CurrentUser cu) : ITicketService
 {
     private readonly ITicketRepository _ticketRepository = ticketRepository;
     private readonly EmailService _emailService = emailService;
+    private readonly CurrentUser _cu = cu;
     public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
-        
         var result = await _ticketRepository.CreateTicketAsync(request);
        
         return result;
@@ -62,18 +63,44 @@ public class TicketService(ITicketRepository ticketRepository, EmailService emai
     public async Task<bool> SendEmailNotificationAsync(TicketEmailNotification request)
     {
         return await _ticketRepository.SendEmailNotificationAsync(request);
-        // todos instead of fetchhing the email by function include it in the response
-        //string userEmail = await _fetchOnlyOneRepository.GetUserEmailByUserCode(request.USER_CODE);
-        //string departmentManagerEmail = await _fetchOnlyOneRepository.GetManagerEmailByUserCode(request.USER_CODE);
-        //string hrEmail = await _fetchOnlyOneRepository.GetHrEmailByUserCode(request.USER_CODE);
-        //bool isManager = await _fetchOnlyOneRepository.IsUserManager(request.USER_CODE);
-
-
     }
     public async Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket)
     {
-     
         var updatedTicket = await _ticketRepository.UpdateTicketAsync(ticket);
         return updatedTicket;
+    }
+
+   
+    public async Task<bool> UploadTicketAttachmentsAsync(int ticketId,IEnumerable<IFormFile> TicketAttachments)
+    {
+        var id = ticketId;
+        // Prepare DataTable that matches the SQL TVP type "dbo.TicketAttachmentType"
+        var dt = new DataTable();
+        dt.Columns.Add("FileName", typeof(string));
+        dt.Columns.Add("FileExtension", typeof(string));
+        dt.Columns.Add("FileSize", typeof(int));
+        dt.Columns.Add("FileAttachment", typeof(byte[]));
+        dt.Columns.Add("UploadedDate", typeof(DateTime));
+        dt.Columns.Add("UpdatedBy", typeof(int));
+
+        foreach (var file in TicketAttachments)
+        {
+            if (file.Length > 0)
+            {
+                using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+
+                // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
+                dt.Rows.Add(
+                    file.FileName,
+                    Path.GetExtension(file.FileName)?.TrimStart('.') ?? string.Empty,
+                    (int)file.Length,
+                    ms.ToArray(),
+                    DateTime.UtcNow,
+                    _cu.UserId
+                );
+            }
+        }
+        return await _ticketRepository.UploadTicketAttachmentsAsync(ticketId, dt);
     }
 }

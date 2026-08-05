@@ -9,6 +9,7 @@
         width: 100%;
         height: 100%;
         padding: 0;
+        padding-bottom: 4;
         margin: 0;
     }
     .page-item, .active{
@@ -23,14 +24,15 @@
 
 <div class="container-fluid">
 
-    <table id="ticketsTable"
+    <table class="table table-bordered table-striped table-sm pg-primary" id="ticketsTable"
            data-toggle="table"
            data-search-selector="#customSearch"
            data-filter-control="true"
            data-filter-control-container="#filtersContainer"
+           data-resizable="true"
            data-unique-id="TicketId"
            data-toolbar="#toolbar"
-           data-height="620"
+            data-height="620"
            data-show-button-text="true"
            data-buttons-class="mx-2"
            data-show-columns="true"
@@ -42,73 +44,127 @@
            data-pagination-next-text="Next"
            data-page-number="1"
            data-filter-control-search-clear="true"
-           data-classes="table table-bordered table-striped table-sm pg-primary">
-        <thead class="table-light table-sm">
+           data-sort-select-options="true"
+         
+          >
+        <thead class="table-sm table-light ">
             <tr>
                 <th data-checkbox="true"
                     data-halign="center">
                 </th>
                 <th data-field="TicketId"
-                    data-halign="center"
+                    data-halign="left"
                     data-sortable="true"
                     data-filter-control="input"
                     data-visible="false"
                     data-filter-control-placeholder="Type here . . ."
-                    class="text-nowrap p-0 m-0">
+                    class="text-nowrap">
                     
                 </th>
                 <th data-field="StringTicketId"
-                    data-halign="center"
+                    data-halign="start"
+                    data-align="left"
                     data-searchable="true"
                     data-sortable="true"
+                    data-width="30"
                     data-formatter="IdFormatter"
                     data-filter-control="input"
                     data-filter-control-placeholder="Search . ."
-                    class="text-nowrap">
+                    class="ps-4">
                     Ticket ID
                 </th>
-                <th data-field="RequestedByName"
-                    data-halign="center"
+                <th data-field="RequestedDate"
+                    data-halign="start"
+                    data-align="left"
                     data-sortable="true"
+                    data-width="50"
+                    data-unit="px"
+                    data-formatter="dateFormatter"
+                    class="ps-4">
+                    Requested Date
+                </th>
+                <th data-field="TicketYear"
                     data-filter-control="select"
                     data-filter-control-placeholder="All"
-                    class="text-nowrap p-0 m-0">
+                   
+                    data-filter-default="'2026'"
+                    class="text-nowrap d-none">
+                    Year
+                </th>
+                <th data-field="RequestedByName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-formatter="requestedByFormatter"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    data-width="150"
+                    data-unit="px"
+                    class="ps-4"
+                   >
                     Requested By
                 </th>
 
                 <th data-field="TicketSubject"
-                    data-halign="center"
-                    data-sortable="true"
-                    class="text-nowrap p-0 m-0">
+                    data-halign="start"
+                    data-align="left"
+          
+                    
+                    data-formatter="subjectFormatter"                   
+                    class="ps-4">
                     Subject
                 </th>
-
-                <th data-field="AssignedToName"
-                    data-halign="center"
+                <th data-field="StatusName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-width="50"
+                    data-formatter="statusFormatter"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    class="ps-4">
+                    Status
+                </th>
+                <th data-field="TicketPriority"
+                    data-halign="start"
+                    data-align="left"
+                    data-width="20"
                     data-sortable="true"
                     data-filter-control="select"
                     data-filter-control-placeholder="All"
-                    class="text-nowrap p-0 m-0">
+                    class="ps-4">
+                    Priority
+                </th>
+                <th data-field="TaskTypeName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    class="ps-4">
+                    Request Type
+                </th>
+                <th data-field="AssignedToName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                 
+                    class="ps-4">
                     Assigned To
                 </th>
                 <th data-field="DeptName"
-                    data-halign="center"
+                    data-halign="start"
+                    data-align="left"
                     data-sortable="true"
+                    data-visible="false"
                     data-filter-control="select"
                     data-filter-control-placeholder="All"
-                    class="text-nowrap ">
+                    class="ps-4">
                     Department
                 </th>
-                <th data-field="RequestedDate"
-                    data-halign="center"
-                    data-sortable="true"
-               
-                    data-filter-control="select"
                 
-                    data-filter-control-placeholder="2026"
-                    class="text-nowrap p-0 m-0">
-                    Requested Date
-                </th>
                 @* <th data-field="RequestedDate"
                     data-halign="center"
                     data-sortable="true"
@@ -119,50 +175,54 @@
                     class="text-nowrap p-0 m-0">
                     Requested Date
                 </th> *@
-                <th data-field="TaskTypeName"
-                    data-halign="center"
-                    data-sortable="true"
-                    data-filter-control="select"
-                    data-filter-control-placeholder="All"
-                    class="text-nowrap p-0 m-0">
-                    Request Type
-                </th>
-                <th data-field="StatusName"
-                    data-halign="center"
-                    data-sortable="true"
-                    data-formatter="statusFormatter"
-                    data-filter-control="select"
-                    data-filter-control-placeholder="All"
-                    class="text-nowrap p-0 m-0">
-                    Status
-                </th>
+                
+                
 
-                <th data-field="TicketPriority"
-                    data-halign="center"
-                    data-sortable="true"
-                    data-filter-control="select"
-                    data-filter-control-placeholder="All"
-                    class="text-nowrap p-0 m-0">
-                    Priority
-                </th>
+               
             </tr>
         </thead>
+        
     </table>
 </div>
 <script>
+    window.loadingTemplate = () => {
+    
+   
+      return '<div class="ph-item"><div class="ph-picture"></div></div>'
+    
+  }
 
      window.statusFormatter = (value, row) => {
          if(value != null){
-    return `<div class='btn ${statusColor(value)} btn-rounded  btn-sm w-100 text-nowrap'>${value}</div>`
+    return `<div class='${statusColor(value)} text-nowrap'>${value}</div>`
          }
 
      }
+     window.subjectFormatter = (value, row) => {
+
+         let el = `<div class="d-inline-block text-truncate" style="max-width: 150px !important;" title="${value}">
+          ${value}
+        </div>`
+
+         return el;
+     }
+     window.requestedByFormatter = (value, row) => {
+
+         let el = `<div class="d-inline-block text-truncate" style="max-width: 100px !important;" title="${value}">
+          ${value}
+        </div>`
+
+         return el;
+     }
      window.dateFormatter = (value, row) => {
-         var d = moment(value).format("DD-MM-YYYY")
-         return d;
+         if(value !== undefined && value !== null){
+             var d = moment(value).format("DD-MM-YYYY hh:mm")
+             return d;
+         }
+         
      }
      window.IdFormatter = (value,row) =>{
-                 return `<div class='text-main fw-bold text-decoration-underline text-nowrap'>${value}</div>`
+                 return `<div class='text-main fw-bold text-decoration-underline text-nowrap text-start'>${value}</div>`
          }
        window.detailFormatter = (index, row) => {
       const html = []
@@ -173,13 +233,14 @@
       return html.join('')
     }
       function customDateCollector(value) {
+       
       if (!value) return [];
       // console.log(value)
       // Split by comma, then trim whitespace from each generated tag item
       return value.split(',').map(function(item) {
           // console.log(item)
           
-         return new Date(value).getFullYear()
+         return Number(new Date(value).getFullYear());
         
       });
     }
@@ -199,20 +260,32 @@
               return data.TicketId.startsWith(searchString);
             }
      function statusColor(status) {
-         switch (status) {
-             case 'Not Scheduled': return 'text-dark';
-                 break;
-            case null: return 'd-none';
-                 break;
-             case 'In Progress': return 'text-danger';
-                 break;
-             case 'Testing': return 'text-primary';
-                 break;
-             case 'Maintenance': return 'text-warning dark';
-                 break;
-             case 'Complete': return 'text-green';
-                 break;
-         }
+          switch (status) {
+          case 'New': return 'text-dark';
+              break;
+          case null: return 'd-none';
+              break;
+            case 'Assigned': return 'text-danger';
+              break;
+            case 'In Progress': return 'text-primary';
+              break;
+            case 'Testing': return 'text-secondary';
+              break;
+            case 'Pending User': return 'text-warning ';
+              break;
+            case 'Pending Third Party': return 'text-warning ';
+              break;
+            case 'On Hold': return 'text-warning ';
+              break;
+            case 'Resolved': return 'text-success';
+              break;
+            case 'Closed': return 'text-dark';
+              break;
+          case 'Cancelled': return 'text-muted';
+              break;
+          default: return '';
+              break;
+      }
      }
 
 </script>

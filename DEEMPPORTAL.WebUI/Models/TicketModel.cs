@@ -14,5 +14,6 @@
         public string? TicketSubject { get; set; }
 
         public string? TicketDescription { get; set; }
+        public List<IFormFile>? TicketAttachments { get; set; }
     }
 }

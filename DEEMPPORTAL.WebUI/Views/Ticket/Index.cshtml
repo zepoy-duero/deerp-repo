@@ -3,13 +3,13 @@ Layout = "_Layout";
 ViewData["Title"] = "Ticket";
 }
 
-
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
-    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
-    // await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketDetailsModal.cshtml");
 }
+@{
+    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
 
+}
 <div class="container">
     
         <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
@@ -78,4 +78,7 @@ ViewData["Title"] = "Ticket";
     @* <script src="~/js/ticket/ticket-assignee.js" asp-append-version="true"></script> *@
     <script src="~/js/ticket/ticket-event-handlers.js" asp-append-version="true"></script>
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
+@*         <script src="~/js/ticket/ticket-create.js" asp-append-version="true"></script>
+    <script src="~/js/ticket/ticket-edit.js" asp-append-version="true"></script>
+ *@
 }

@@ -34,6 +34,6 @@
         public string? ManagerEmailId { get; set; }
         public string? RequestedByEmail { get; set; }
 
-
+        public List<TicketAttachmentsParams>? TicketAttachments { get; set; } = new();
     }
 }

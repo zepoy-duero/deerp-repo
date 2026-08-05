@@ -377,7 +377,7 @@ function prependEmployeeCardList(employees) {
 }
 // ---------------- UTIL ----------------
 function checkIfNull(val) {
-    return val ?? "None";
+    return val ?? "No data";
 }
 async function getProfilePic(EMP_CODE) {
     let empPhoto = await $.get(`${empDirectoryUrl}/getProfilePic?`, { EMP_CODE: EMP_CODE });

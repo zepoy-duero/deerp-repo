@@ -1,8 +1,8 @@
-﻿<style>
+﻿<style >
     .drop-zone {
         border: 2px dashed #6c757d;
         border-radius: 10px;
-        padding: 40px;
+        padding: 10px;
         text-align: center;
         cursor: pointer;
         transition: background-color 0.3s ease;
@@ -33,11 +33,21 @@
         height: 40px;
         object-fit: cover;
     }
+    /* Change the tooltip body background and text color */
+    .tooltip .tooltip-inner {
+        background-color: #002e5a; /* Your custom color (e.g., Bootstrap Primary Blue) */
+        color: #ffffff;
+    }
+
+   
 </style>
+
+
 <!-- Modal -->
-<div class="modal fade" id="createTicketModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createTicketModalLabel">
+<div class="modal fade" id="createTicketModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="createTicketModalLabel" aria->
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
+          
             <!--HEADER-->
             <div class="modal-header small fw-bold bg-main text-white rounded-top">
                 <span class="modal-title fs-6 mx-4" id="createTicketModalLabel">New Ticket</span>
@@ -45,146 +55,139 @@
             </div>
             <!--BODY-->
             <div class="modal-body">
-                <div class="card no-box-shadow">
+                    <form id="createTicketForm" class="form needs-validation" novalidate>
+                        <div class="card no-box-shadow">
 
-                    <div id="successAlert" class="alert alert-success d-none">
-                        <div class="row">
-                            <div class="col">
-                                <i class="bi bi-check"></i>
-                                <span class="text-end">
-                                    You have successfully created a new ticket!
-                                </span>
+                            <div id="successAlert" class="alert alert-success d-none">
+                                <div class="row">
+                                    <div class="col">
+                                        <i class="bi bi-check"></i>
+                                        <span class="text-end">
+                                            You have successfully created a new ticket!
+                                        </span>
+                                    </div>
+                                    <div id="newTicketId" class="col-2 text-end fw-bold">
+                                        MIS#0001
+                                    </div>
+                                </div>
                             </div>
-                            <div id="newTicketId" class="col-2 text-end fw-bold">
-                                MIS#0001
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <!-- Ticket Info -->
-                        <div class="container-fluid">
-                            <!-- Requested By -->
-                            <form id="createTicketForm" class="form needs-validation" novalidate>
-                           
-                                <div class="row gy-4 g-0 mb-2">
-                                    <div class="col-md-6">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestedBy.cshtml");
-                                        }
-                                    </div>
-                                  
-
-                                    <div class="col-md-6 d-flex justify-content-start align-items-start">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/RequestedDateComponent.cshtml");
-                                        }
-                                        
-                                    </div>
-                                </div>
-                                <hr />
-                                <div class="row gy-4 g-0 mb-2">
-                                    <div class="col-md-6">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectOrganization.cshtml");
-                                            // await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectLocation.cshtml");
-                                        }
-                                    </div>
-                                    <div class="col-md-6">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectLocation.cshtml");
-                                        }
-                                    </div>
-                                </div>
-                                <div class="row gy-4 mb-2">
-                                   
-                                    <div class="col-md-6">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectDepartment.cshtml");
-                                       
-                                        }
-                                    </div>
-                                    <div class="col-md-6">
-                                        @{
-                                         
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestType.cshtml");
-                                        }
-                                    </div>
-                                </div>
-                                <div class="row gy-4 g-0 mb-2">
-                                    <div class="col-12">
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/InputTicketSubject.cshtml");
-                                        }
-                                    </div>
-                                   
-                                </div>
-
-                                <div class="row gy-4 g-0 mb-2">
-                                    <div class="col-12">
-                                        <div>
-                                            <label class="form-label">
-                                                 <small class="extra-small text-danger">*</small>
-                                                                Detailed description
-                                                <span id="summernoteInvalidFeedback" class="text-danger text-small d-none">This field is required</span>
-                                                </label>
-                                          
-                                         
-                                                <div name="TicketDescription" id="TicketDescription"
-                                                          placeholder="Explain the issue in detail..." required></div>
-                                          
+                            <div class="card-body">
+                                <!-- Ticket Info -->
+                                    <!-- Requested By -->
+                                  <div class="container-fluid">
+                                        <div class="row gy-4 g-0 mb-2">
+                                            <div class="col-md-6">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestedBy.cshtml");
+                                                }
+                                            </div>
+                                            <div class="col-md-6">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/RequestedDateComponent.cshtml");
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row g-0">
-                                    <div class="col h-50">
-                                        <div>
-                                            <label for="fileInput" class="form-label">
-                                                <i class="bi bi-images"></i>
-                                                Upload attachment:</label>
-                                            <div class="card shadow-sm pb-0 mb-0">
-                                                <div class="card-body">
-                                                    <!-- Drop Zone -->
-                                                    <div id="dropZone" class="drop-zone">
-                                                        <i class="bi bi-cloud-upload"></i>
-                                                        <p class="mb-1"><strong>DRAG & DROP or PASTE Screenshots here</strong></p>
-                                                        <p class="text-muted mb-2">or click to browse</p>
-                                                        <input type="file" id="TicketAttachments" hidden multiple
-                                                               accept=".png,.pdf,.xls,.xlsx">
-                                                    </div>
-                                                    <!-- Preview List -->
-                                                    <div id="previewContainer" class="mt-2"></div>
+                                        <hr />
+                                        <div class="row gy-4 g-0 mb-2">
+                                            <div class="col-md-6 d-none" id="orgComponent">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectOrganization.cshtml");
+                                                }
+                                            </div>
+                                            <div class="col-md-6 d-none" id="locComponent">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectLocation.cshtml");
+                                                }
+                                            </div>
+                                            <div class="col-md-6" id="deptComponent">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectDepartment.cshtml");
+                                                }
+                                            </div>
+                                            <div class="col-md-6" id="requestTypeComponent">
+                                                @{
+
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/SelectRequestType.cshtml");
+                                                }
+                                            </div>
+
+                                            <div class="col-md-12" id="subjectComponent">
+                                                @{
+                                                    await Html.RenderPartialAsync("~/Views/Ticket/TicketFormComponents/InputTicketSubject.cshtml");
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row gy-4 g-0 mb-2 mt-1">
+                                            <div class="col-12">
+                                                <div>
+                                                    <label class="form-label">
+                                                        <small class="extra-small text-danger">*</small>
+                                                        Detailed description
+                                                    </label>
+                                                    <span id="summernoteInvalidFeedback" class="text-danger text-small d-none">This field is required</span>
+                                                    <textarea name="TicketDescription" id="TicketDescription"
+                                                              placeholder="Explain the issue in detail..." required>
+                                                    </textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                               
-                            </form>
+                                        <div class="row g-0">
+                                            <div class="col h-50">
+                                                <div>
+                                                    <label id="fileInputLabel" for="fileInput" class="form-label">
+                                                        <i class="bi bi-images"></i>
+                                                        Upload attachment:
+                                                    </label>
+                                                    <div class="card shadow-sm pb-0 mb-0">
+                                                        <div class="card-body" id="AttachmentTooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="Tip: Add attachments for faster ticket resolution!">
+                                                            <!-- Drop Zone -->
+                                                            <div id="dropZone" class="drop-zone" style="max-height: 100px !important;">
+                                                                <i class="bi bi-cloud-upload"></i>
+                                                                <p class="mb-1"><strong>DRAG & DROP or PASTE Screenshots here</strong></p>
+                                                                <p class="text-muted mb-2">or click to browse</p>
+                                                                <input 
+                                                                    type="file" 
+                                                                    id="TicketAttachments" 
+                                                                    hidden 
+                                                                    multiple 
+                                                                    accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip,.rar">
+                                                            </div>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div class="form-text">
+                                                                    Tip: Add attachments for faster ticket resolution.
+                                                                </div>
+                                                            </div>
+                                                            <!-- Preview List -->
+                                                            <div id="previewContainer" class="mt-2"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </form>
             </div>
             <!-- FOOTER -->
             <div class="modal-footer text-end">
-                <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
-                    Cancel
-                </a>
-                @* <a onclick="resetEntries(event)" id="cancelBtn" class="btn btn-outline-secondary">
-                    Cancel
-                </a> *@
-                <button 
-                    id="submitTicket" 
-                    type="submit" 
-                    class="btn btn-danger px-2" 
-                    aria-label="Fill all the required fields"
-                    data-bs-toggle="tooltip" 
-                    data-bs-placement="top"
-                        title="Fill all the required fields">
-                    Submit Ticket
-                </button>
+                    <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    @* <a onclick="resetEntries(event)" id="cancelBtn" class="btn btn-outline-secondary">
+                        Cancel
+                    </a> *@
+                    <button 
+                        type="button"
+                        id="submitTicket" 
+                        class="btn btn-danger px-2" 
+                        aria-label="Fill all the required fields"
+                        >
+                        Submit Ticket
+                    </button>
+                </div>
                
-            </div>
+           
         </div>
     </div>
 </div>
-@* <script src="~/js/ticket/ticket-create.js"></script> *@

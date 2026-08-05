@@ -1,6 +1,7 @@
 ﻿using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
+using Microsoft.AspNetCore.Http;
 using System.Data;
 
 namespace DEEMPPORTAL.Application.Ticket;
@@ -19,4 +20,7 @@ public interface ITicketRepository
     Task<TicketResponse> CreateTicketAsync(CreateTicketParams request);
     Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
     Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket);
+
+    // Accept prepared DataTable representing TVP for upload
+    Task<bool> UploadTicketAttachmentsAsync(int ticketId, DataTable ticketAttachments);
 }

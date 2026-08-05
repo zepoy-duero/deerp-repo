@@ -1,10 +1,23 @@
 ﻿<div>
-    <label for="TicketDepartmentOptions" class="form-label">
-        <small id="ticketDepartmentRequired" class="text-danger">*</small>
-        Department 
-    </label>
-    <select name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select form-select-sm" required>
+    <label for="TicketDepartmentOptions" class="form-label d-flex flex-row">
+            <small id="ticketDepartmentRequired" class="text-danger d-inline-flex">*</small>
+            Department
+      
+</label>
+    <select value="9" name="TicketDepartmentOptions" id="TicketDepartmentOptions" class="form-select form-select-sm" required>
     </select>
+    <input class="form-control d-none" id="DeptCode" name="DeptCode" autocomplete="TicketDepartmentOptions" />
+    @* <span class="form-text">
+        change organization/location?
+        Click <small class="extra-small text-decoration-underline text-primary" type="button" id="changeOrgLoc">here</small>
+    </span> *@
+    <div class="form-text">
+        <!--clickable caption that toggles select Organization/Location Component hidden display property -->
+        @* <small id="toggleOrgLoc" class="d-inline-flex flex-grow-1 float-end text-muted fst-italic" style="font-size: 0.8rem;">
+            change organization/location? Click
+            <a  href="#" type="button" class="text-primary-emphasis text-decoration-underline ms-1">here</a>
+            </small> *@
+    </div>
     <div class="invalid-feedback">This field is required</div>
     
 </div>

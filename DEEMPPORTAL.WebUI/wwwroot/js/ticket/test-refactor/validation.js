@@ -1,4 +1,0 @@
-﻿validateFormData()
-validateFirst()
-validateSummerNote()
-toggleSubmitButton()
