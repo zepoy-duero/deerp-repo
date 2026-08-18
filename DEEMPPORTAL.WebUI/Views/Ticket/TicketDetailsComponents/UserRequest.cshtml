@@ -120,29 +120,30 @@
                             <i class="bi bi-plus me-1 text-main"></i>
                             ADD
                         </btn>
-                        @* <btn id="getTicketAttachmentsId" class="btn btn-sm ">
-
-                            <i class="bi bi-arrow-clockwise me-1 text-main"></i>
-                            REFRESH
-                        </btn> *@
+                       
+                     
                     </div>
                     
                     <hr />
-                    <!-- Attach icon that opens hidden file picker -->
-                    @* <button id="editAttachBtn" type="button" class="btn ms-2" title="Attach files">
-                        <i class="bi bi-paperclip"></i>
-                    </button> *@
+                   
                     <!-- Hidden file input for edit modal -->
                     <input id="editTicketAttachments" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />
 
-                    @* <div class="attachment-box d-none">
-                        <div class="text-muted">Upload files</div>
-                        <input type="file" class="form-control mt-2" multiple>
-                        <div class="d-none" id="ticketAttachments">
+                 
+                    <div id="attachmentsPreviewContainer" style="height: 200px !important;overflow-y: scroll !important;">
+                        <div class="file-preview-item border rounded p-2 mb-2 bg-light d-inline-block w-100">
+                            <div class="file-info d-flex align-items-center placeholder-glow">
+                                <!-- Icon Placeholder -->
+                                <div class="file-icon rounded me-2 placeholder" style="width: 40px; height: 40px;"></div>
+                                <!-- Text Placeholders -->
+                                <div class="w-100">
+                                    <div class="placeholder col-8 bg-dark mb-1" style="height: 16px; display: block;"></div>
+                                    <small class="placeholder col-4 d-block" style="height: 12px;"></small>
+                                </div>
+                            </div>
                         </div>
-                    </div> *@
-                    @* <div id="attachmentsPreviewContainer" class="" style="max-height: 250px; overflow-y:scroll"></div> *@
-                    <div id="attachmentsPreviewContainer"></div>
+
+                    </div>
                 </div>
             </div>
         </div>

@@ -20,7 +20,25 @@ namespace DEEMPPORTAL.Application.Ticket
         Task<IEnumerable<TicketSelectOptions>> GetTypeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
         Task<bool> SendEmailNotificationAsync(TicketEmailNotification request);
         Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket);
-        Task<bool> UploadTicketAttachmentsAsync(int ticketId, IEnumerable<IFormFile> files);
 
+        Task<IEnumerable<TicketAttachmentsResponse>> GetTicketAttachmentsAsync(int ticketId);
+        Task<bool> UploadTicketAttachmentsAsync(int TicketId,List<IFormFile>? ticketAttachment);
+        Task<bool> DeleteTicketAttachmentAsync(int attachmentId);
+
+        //TICKET CORRESPONDENCE
+        Task<TicketCorrespondence?> GetByIdAsync(
+                int correspondenceId);
+
+        Task<List<TicketCorrespondence>> GetByTicketIdAsync(
+            int ticketId);
+
+        Task<TicketCorrespondence?> InsertAsync(
+            TicketCorrespondenceRequest model);
+
+        Task<TicketCorrespondence?> UpdateAsync(
+            UpdateTicketCorrespondenceRequest model);
+
+        Task<bool> DeleteAsync(
+            DeleteTicketCorrespondenceRequest model);
     }
 }

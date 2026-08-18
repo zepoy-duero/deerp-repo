@@ -1,11 +1,15 @@
 ﻿<div class="col-md-6 d-flex justify-content-start align-items-start">
     <label for="requestedBy" class="text-muted pe-2 text-nowrap">
-        Requested By:
+        Requested By: 
     </label>
     <div class="RequestedByContainer flex-grow-0">
         <div class="d-flex flex-row justify-content-center align-items-center gap-2">
             <!-- Display Mode -->
-            <h6 id="displayRequestedBy" class="fw-bold text-muted text-nowrap"></h6>
+            <h6 id="displayRequestedBy d-none" class="fw-bold text-muted text-nowrap"></h6>
+            <div class="placeholder-glow">
+                <h6 id="requestedByPlaceholder" class="fw-bold text-muted text-nowrap"></h6>
+            </div>
+           
             <input class="form-control d-none" id="RequestedByCode" name="RequestedByCode" />
             <input class="form-control d-none" id="RequestedByName" name="RequestedByName" />
             <!-- Edit Mode -->

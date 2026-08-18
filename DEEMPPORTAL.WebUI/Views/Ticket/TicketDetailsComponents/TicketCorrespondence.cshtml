@@ -1,10 +1,5 @@
 ﻿<style>
-    /* Correspondence container */
-    .correspondence-list {
-        height: 400px;
-        overflow-y: auto;
-    }
-
+    
     /* Correspondence item */
     .correspondence-item {
         cursor: pointer;
@@ -14,7 +9,7 @@
 
         /* Hover */
         .correspondence-item:hover {
-            background-color: #f8f9fa;
+            background-color: #002e5a;
         }
 
         /* Selected item */
@@ -35,7 +30,7 @@
         min-height: 150px;
     }
 </style>
-<div class="card shadow-sm" >
+<div class="card shadow-sm h-100">
     <!-- Header -->
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <div>
@@ -58,13 +53,15 @@
 
 
     <!-- Correspondence List -->
-    <div class="card-body p-0 " style="max-height: 500px; overflow-y: scroll">
+    <div class="card-body p-0 ">
 
         <div id="correspondenceList"
-             class="list-group list-group-flush correspondence-list">
+             class="list-group list-group-flush correspondence-list"
+             style="max-height: 300px !important; overflow-y: scroll">
 
             <!-- Correspondence Item 1 -->
-            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+            <a href="#" data-ticket-id="1" 
+            class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">List group item heading</h5>
                     <small>3 days ago</small>
@@ -73,7 +70,7 @@
                 <small>jeffvil@dahbashi.com</small>
             </a>
             <!-- Correspondence Item 2 -->
-            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+            <a href="#" data-ticket-id="2" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">List group item heading</h5>
                     <small class="text-muted">3 days ago</small>
@@ -83,7 +80,7 @@
             </a>
 
             <!-- Correspondence Item 3 -->
-            <a href="#" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
+            <a href="#" data-ticket-id="3" class="list-group-item correspondence-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">List group item heading</h5>
                     <small class="text-muted">3 days ago</small>
@@ -98,7 +95,7 @@
 
 
     <!-- Editor -->
-    <div class="card-footer bg-white">
+    <div class="card-footer bg-white p-2">
 
         <div class="mb-2">
             <label for="txtCorrespondence"
@@ -108,11 +105,11 @@
 
             <textarea id="txtCorrespondence"
                       class="form-control"
-                      rows="7"
+                      rows="4"
                       placeholder="Write your reply here..."></textarea>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center gap-2">
 
             <small class="text-muted">
                 <i class="bi bi-info-circle me-1"></i>
@@ -121,10 +118,10 @@
 
             <button type="button"
                     id="btnSendCorrespondence"
-                    class="btn btn-primary">
+                    class="btn btn-primary btn-sm">
 
                 <i class="bi bi-send me-1"></i>
-                Send
+                Post
 
             </button>
 
@@ -133,88 +130,3 @@
     </div>
 
 </div>
-$(document).ready(function () {
-
-    // Load selected correspondence
-    $(".correspondence-item").on("click", function () {
-
-        // Remove active state
-        $(".correspondence-item").removeClass("active");
-
-        // Add active state
-        $(this).addClass("active");
-
-        // Get correspondence content
-        const content = $(this).attr("data-content");
-
-        // Load content into textarea
-        $("#txtCorrespondence").val(content);
-
-        // Store selected correspondence ID
-        $("#txtCorrespondence").data(
-            "correspondence-id",
-            $(this).data("id")
-        );
-    });
-
-
-    // New Reply
-    $("#btnNewReply").on("click", function () {
-
-        // Remove selected correspondence
-        $(".correspondence-item").removeClass("active");
-
-        // Clear textarea
-        $("#txtCorrespondence").val("");
-
-        // Remove selected ID
-        $("#txtCorrespondence").removeData("correspondence-id");
-
-        // Focus textarea
-        $("#txtCorrespondence").focus();
-    });
-
-
-    // Send correspondence
-    $("#btnSendCorrespondence").on("click", function () {
-
-        const correspondenceId =
-            $("#txtCorrespondence").data("correspondence-id");
-
-        const message =
-            $("#txtCorrespondence").val().trim();
-
-        if (!message) {
-
-            alert("Please enter a message.");
-
-            $("#txtCorrespondence").focus();
-
-            return;
-        }
-
-
-        // Determine if editing or creating a new message
-        if (correspondenceId) {
-
-            console.log(
-                "Updating correspondence:",
-                correspondenceId
-            );
-
-        } else {
-
-            console.log(
-                "Sending new correspondence"
-            );
-
-        }
-
-
-        console.log("Message:", message);
-
-        // TODO:
-        // Send AJAX request to your ASP.NET MVC controller
-    });
-
-});

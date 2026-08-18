@@ -1,0 +1,122 @@
+﻿<style scoped>
+    .skills-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .skill-item {
+        position: relative;
+        width: 150px;
+        height: 150px;
+    }
+
+    .skill-circle {
+        width: 100%;
+        height: 100%;
+    }
+
+        .skill-circle circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transform: translate(5px, 5px);
+        }
+
+        .skill-circle .bg {
+            stroke: rgba(255, 255, 255, 0.2);
+        }
+
+        .skill-circle .progress {
+            stroke: #ffffff;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+    .skill-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .skill-percent {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .skill-name {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .animated {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+        .animated.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+</style>
+<div class="container">
+   
+            <div class="skills-container">
+             
+          
+                        <div class="skill-item mx-auto animated" data-skill="Progress" data-percent="80">
+                            <svg class="skill-circle">
+                                <circle class="bg" cx="70" cy="70" r="70"></circle>
+                                <circle class="progress" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                            <div class="skill-text">
+                                <div class="skill-percent">0%</div>
+                                <div class="skill-name">Uploading</div>
+                            </div>
+                        </div>
+               
+            </div>
+    
+</div>
+<script>
+    document.onload(function(){
+        document.addEventListener('DOMContentLoaded', () => {
+        const skills = document.querySelectorAll('.skill-item');
+        const animateSkill = (skill) => {
+            const circle = skill.querySelector('.progress');
+            const percent = skill.dataset.percent;
+            const percentText = skill.querySelector('.skill-percent');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            let count = 0;
+            const timer = setInterval(() => {
+                if (count >= percent) {
+                    clearInterval(timer);
+                } else {
+                    count++;
+                    percentText.textContent = count + '%';
+                }
+            }, 15);
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    animateSkill(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        skills.forEach(skill => observer.observe(skill));
+    });
+    })
+        
+</script>

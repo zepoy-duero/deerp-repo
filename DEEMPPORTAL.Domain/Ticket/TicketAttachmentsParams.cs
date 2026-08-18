@@ -1,4 +1,6 @@
-﻿namespace DEEMPPORTAL.Domain.Ticket
+﻿using Microsoft.AspNetCore.Http;
+
+namespace DEEMPPORTAL.Domain.Ticket
 {
     public class TicketAttachmentsParams
     {
@@ -10,7 +12,7 @@
 
         public string? FileExtension { get; set; }
         public int? FileSize { get; set; }
-        public byte[]? FileAttachment { get; set; }
+        public IFormFile? FileAttachment { get; set; }
         public DateTime? UploadedDate { get; set; }
         public int? UpdatedBy { get; set; }
     }

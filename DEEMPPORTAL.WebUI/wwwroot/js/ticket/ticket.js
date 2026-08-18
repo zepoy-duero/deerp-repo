@@ -48,33 +48,24 @@ const inputSelectors = [
 let CurrentUser = null;
 let UserAssignee = null;
 const ticketsTable = $("#ticketsTable");
-var exampleTriggerEl = document.getElementById('AttachmentTooltip');
-var tooltip = bootstrap.Tooltip.getOrCreateInstance(exampleTriggerEl)
-var formData = new FormData();
+//var exampleTriggerEl = document.getElementById('AttachmentTooltip');
+//var tooltip = bootstrap.Tooltip.getOrCreateInstance(exampleTriggerEl)
+//var formData = new FormData();
 $(async function () {  
-     // Returns a Bootstrap tooltip instance
-    
-    // Fix: Destructure 'default' and rename it to 'TicketTable'
-    //const { default: TicketTable } = await import("./test-refactor/table.js");
-
-    //// Fix: Instantiation now works properly
-    //let test = new TicketTable();
-    //console.log(test.showTotalTicketsRecords('success'));
-
+   
     ticketsTable.bootstrapTable('showLoading');
-    
+    selectedFiles = [];
     let userData = await fetch(`/home/getUserDetails`);
     CurrentUser = await userData.json();
     console.log(CurrentUser)
     let dateToday = moment(CurrentUser.DATE_TODAY).format("MMM DD, YYYY");
-    $("#DateRequested").empty().append(dateToday);
-    await getAllTicket();
 
+    await getAllTicket();
     bindEventHandlers();
     ticketsTable.bootstrapTable('hideLoading');
     //$('#requestedDateFilter').val(moment().format("YYYY"))
-   
-   
+ 
+    
 });
 
 //-------FUNCTIONS------ 
@@ -89,7 +80,7 @@ async function getOrganizationOptions() {
     console.log(organizations)
     createTicketSelectOptions("select-organization", organizations);
 
-    let selectedOrg = $("#SelectTicketOrganization").val();
+    let selectedOrg = $("#select-organization").val();
        
     await getLocationOptions(selectedOrg)
 }
@@ -97,23 +88,31 @@ async function getLocationOptions(selectedOrg) {
     const filteredLoc = await $.get(`support/employee-directory/getFilteredLocationList`, {
         OrgCode: selectedOrg
     });
+    console.log(filteredLoc)
     createTicketSelectOptions("select-location", filteredLoc);
+    let selectedLoc = $("#select-location").val();
+    await getDepartmentOptions(selectedOrg, selectedLoc)
+}
+//OPTIONS FOR COMBOS
+async function getDepartmentOptions(OrgCode, LocCode) {
+    itr = 0;
+    departmentOptions = await $.get(`${gBaseUrl}/get-ticket-department-options`, {
+        OrgCode,
+        LocCode
+    });
+    console.log(departmentOptions)
+    createTicketSelectOptions('select-department', departmentOptions)
     
 }
 function createTicketSelectOptions(selector, data) {
-
     let html = ``;
-    //let html = (selector === "select-organization")
-    //    ? ""
-    //    : `<option value="0">All</option>`;
-
     switch (selector) {
         case "select-organization":
             for (const item of data) {
                 if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
                 else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
             }
-            $("#SelectTicketOrganization").html(html);
+            $("#select-organization").empty().append(html);
             break;
         case "select-location":
 
@@ -121,14 +120,14 @@ function createTicketSelectOptions(selector, data) {
                 if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
                 else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
             }
-            $("#SelectTicketLocation").html(html);
+            $("#select-location").empty().append(html);
             break;
         case "select-department":
             for (const item of data) {
-                if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                if (item.VALUE == 9) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
                 else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
             }
-            $("#SelectTicketDepartment").html(html);
+            $("#select-department").empty().append(html);
             break;
     }
 }
@@ -167,17 +166,23 @@ function saveEditRequestedBy() {
     $("#checkBtn").addClass("d-none");
 }
 
-async function generateTicketEmailParams(ticket) {
+function generateTicketEmailParams(ticket) {
     let emailParams = {
-        RequestedByEmail: ticket.RequestedByEmail,
+        RequestedByName: ticket.RequestedByName,
+        RequestedDate: ticket.RequestedDate,
+        TicketSubject: ticket.TicketSubject,
+        TicketDeptName: ticket.DeptName,
+        TicketDescription: ticket.TicketDescription,
+        TaskTypeName: ticket.TaskTypeName,
+        TicketId: ticket.TicketId,
         //ManagerEmailId: ticket.ManagerEmailId,
         ManagerEmailId: "radhika@dahbashi.com",
-        TicketSubject: ticket.TicketSubject,
+        RequestedByEmail: ticket.RequestedByEmail,
+        TicketNo: ticket.TicketNo,
         StringTicketId: ticket.StringTicketId,
-        RequestedByName: ticket.RequestedByName,
-        RequestedDate: moment(ticket.RequestedDate).format('DD-MM-YYY hh:mm:ss'),
-        TaskTypeName: ticket.TaskTypeName,
-        TicketDescription: ticket.TicketDescription
+      
+       
+        
     }
     return emailParams;
 }
@@ -222,29 +227,7 @@ function renderDropdown(list) {
   });
 }
 
-//OPTIONS FOR COMBOS
-async function getDepartmentOptions(OrgCode, LocCode) {
-    itr = 0;
-    departmentOptions = await $.get(`${gBaseUrl}/get-ticket-department-options`, {
-        OrgCode,
-        LocCode
-    });
-  
-  let options = "";
-  
-    while (itr < departmentOptions.length) {
-        if (departmentOptions[itr].VALUE == 9) {
-            options += `<option selected value="${departmentOptions[itr].VALUE}"> ${departmentOptions[itr].TEXT} </option>`;
-            itr++;
-        } else {
-            options += `<option value="${departmentOptions[itr].VALUE}"> ${departmentOptions[itr].TEXT} </option>`;
-            itr++;
-        }
-       
-    }
-  console.log(options)
-    $("#TicketDepartmentOptions").empty().append(options);
-}
+
 function showPreview(event) {
     console.log(event.target.src);
   
@@ -254,12 +237,77 @@ function showPreview(event) {
     //$("#AttachmentView").attr('src', event.target.src);
     //$("#imageModal").modal("show");
 }
+function showTicketAttachmentList(attachments) {
+    let attachmentList = ''
+    if (attachments.length >= 1) {
+         attachments.forEach(function (i) {
+             attachmentList += `<div class="file-preview-item" data-attachment-id="${i.AttachmentId}">
+            <div class="file-info">
+            <a href="data:image/jpg;base64,${i.FileAttachment}"">
+                 <img class="file-icon" onclick="downloadFile(${i.FileAttachment})"
+                   src="data:image/jpg;base64,${i.FileAttachment}">
+                   </a>
+                 <div>
+                     <div>
+                        <strong>${i.FileName}</strong>
+                     </div>
+                        <small class="text-muted">${i.FileSize} KB</small>
+                    </div>
+                </div>
+                <div>
+                  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                      <div class="btn-group me-2" role="group" aria-label="Second group">
+                       <button onclick="downloadFile('${i.FileAttachment}')" type="button" class="btn btn-primary">
+                      <i class="bi bi-download"></i>
+                    </button>
+                    </div>
+                      <div class="btn-group" role="group" aria-label="Third group">
+                       <button onclick="deleteTicketAttachment(${i.AttachmentId})"  type="button" class="btn btn-danger">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                   </div>
+
+                </div>
+            </div>`
+    })
+    }
+
+    $("#attachmentsPreviewContainer").empty().append(attachmentList);
+
+
+    
+}
+function downloadFile(base64String,fileName,contentType) {
+    const linkSource = `data:${contentType};base64,${base64String}`;
+    const downloadLink = document.createElement("a");
+    
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+   
+}
+function openBase64InNewTab(base64Data) {
+    // Extract content and content type
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'image/png' });
+    const blobUrl = URL.createObjectURL(blob);
+
+    window.open(blobUrl, '_blank');
+}
+
+
 function renderFilePreview(file) {
-    console.log(file)
+  console.log(file)
   const fileItem = document.createElement("div");
-    fileItem.className = "file-preview-item";
-    fileItem.setAttribute('type', 'button'); 
-    fileItem.setAttribute('onclick', 'showPreview(event)'); 
+  fileItem.className = "file-preview-item"; 
 
   const fileInfo = document.createElement("div");
   fileInfo.className = "file-info";
@@ -267,13 +315,17 @@ function renderFilePreview(file) {
   // File Icon or Thumbnail
   let iconElement;
 
-  if (file.type === "image/png") {
+  if (file.type === "image/png" || file.type === "image/jpeg" ) {
     iconElement = document.createElement("img");
-    iconElement.className = "file-icon";
+      iconElement.className = "file-icon";
+      iconElement.setAttribute('id', 'openPreviewModal');
+
       if (activeAttachmentContainer == 'add') {
           iconElement.src = URL.createObjectURL(file);
-      } else {
-          iconElement.src = file.url;
+      }
+      if (activeAttachmentContainer == 'edit')
+      {
+          iconElement.src = URL.createObjectURL(file);
       }
     
   } else {
@@ -287,43 +339,72 @@ function renderFilePreview(file) {
     }
   }
 
-    const fileName = document.createElement("div");
+  const fileName = document.createElement("div");
   console.log(fileName)
   fileName.innerHTML = `
             <div><strong>${file.name}</strong></div>
-            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+            <small class="form-text text-muted">${(file.size / 1024).toFixed(2)} KB</small>
         `;
 
+    // Progress Bar
+  const progressBar = document.createElement("progress");
+  progressBar.className = "file-progress-bar me-2"; // 'me-2' adds Bootstrap spacing on the right
+  progressBar.value = 50;
+  progressBar.max = 100;
+
+    
   fileInfo.appendChild(iconElement);
+   
   fileInfo.appendChild(fileName);
 
   // Remove Button
-  const removeBtn = document.createElement("button");
-  removeBtn.className = "btn btn-sm btn-outline-danger";
-  removeBtn.innerText = "Remove";
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "btn btn-danger";
+    const i = document.createElement("i")
+    i.className = "bi bi-trash"
+    //removeBtn.className = "";
+    removeBtn.appendChild(i);
+  //removeBtn.innerText = "Remove";
 
   removeBtn.addEventListener("click", () => {
     selectedFiles = selectedFiles.filter((f) => f !== file);
     fileItem.remove();
   });
 
-  fileItem.appendChild(fileInfo);
+    fileItem.appendChild(fileInfo);
+    //fileItem.appendChild(await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_ProgressCircle.cshtml"));
   fileItem.appendChild(removeBtn);
 
+  
     if (activeAttachmentContainer == 'add') previewContainer.appendChild(fileItem);
     else attachmentsPreviewContainer.append(fileItem);
 }
-function handleFiles(files) {
-  for (let file of files) {
-    if (!isValidFileType(file)) {
-      alert(`Invalid file type: ${file.name}`);
-      continue;
-    }
 
+async function handleFiles(files) {
+    console.log(typeof files)
+    if (files.length > 10) {
+        alert(`Please select not more than 10 files`);
+        return;
+    }
+  for (let file of files) {   
+    if (!isValidFileSize(file)) {
+        alert(`Please select a file under 2MB`);
+          continue;
+      }
+     
+      //if (!checkIfDuplicateFile(file)) {
+      //    toastr.error('File duplicated', 'Error')
+      //    continue;
+      //}
+
+      file.TicketId = null;
       selectedFiles.push(file);
-    renderFilePreview(file);
-  }
- 
+      
+      renderFilePreview(file);
+    
+    }
+  console.log(selectedFiles)
+    //showTicketAttachmentList(selectedFiles); 
     // Clear the native file input safely — avoid referencing an undefined variable.
     // Try by id first, then by common selector as fallback.
     const fileInput = document.getElementById("TicketAttachments") || document.querySelector('input[type="file"][name="files"]');
@@ -334,6 +415,14 @@ function handleFiles(files) {
             // Some older browsers or custom inputs might throw; ignore silently.
             console.warn("Could not clear file input value", e);
         }
+    }
+}
+
+function isValidFileSize(file) {
+    if (file.size / (1024 * 1024) > 2) {
+        return false;
+    } else {
+        return true;
     }
 }
 function isValidFileType(file) {
@@ -377,6 +466,31 @@ async function openSendEmailModal() {
 async function selectCC() {
   $("#staticCC").hide();
   $("#addCC").toggleClass("d-none");
+}
+async function mapFileToModel(file) {
+    // Convert the file to a byte array (Base64 string)
+    const base64String = await convertFileToBase64(file);
+
+    // Strip the data URL prefix (e.g., "data:image/png;base64,") to get pure base64
+    const pureBase64 = base64String.split(',')[1];
+
+    // Map directly to your C# Model properties
+    const fileModel = {
+        FileName: file.name.split('.').slice(0, -1).join('.'), // Name without extension
+        FileExtension: '.' + file.name.split('.').pop(),       // e.g., ".png"
+        FileSize: file.size,                                   // Size in bytes
+        FileAttachment: pureBase64                             // Maps to byte[]
+    };
+    return fileModel;
+}
+// Helper function to read file as Base64
+async function convertFileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
 }
 function assigneeSelected(event) {
     console.log(event.target.dataset.value);
@@ -519,6 +633,7 @@ async function getAllTicket() {
     ticketsTable.bootstrapTable('load', data);
 
 }
+
 function showTotalTicketsRecords(totalRecords) {
     $("#TicketsTotal").empty().append(
         `<div class="btn rounded-pill bg-main text-white text-center">
@@ -528,67 +643,47 @@ function showTotalTicketsRecords(totalRecords) {
     )
 }
 //---------CREATE NEW TICKET------------
-function setSummernoteValue(e) {
-    var file = e.target.files[0];
 
-    if (file) {
-        var reader = new FileReader();
+async function deleteTicketAttachment(attachmentId) {
+    console.log(attachmentId)
+    if (!attachmentId) {
+        toastr.error("Missing attachment ID.", "Error");
+        return false;
+    }
 
-        // Read the file based on its type
-        if (file.type.match('image.*')) {
-            // Handle images: Convert to Base64 and insert as an <img> tag
-            reader.onload = function (event) {
-                var imageHtml = '<img src="' + event.target.result + '" alt="' + file.name + '" class="img-fluid" />';
-                $('#Attachments').summernote('pasteHTML', imageHtml);
-            };
-            reader.readAsDataURL(file);
-        } else if (file.type.match('text.*')) {
-            // Handle text files: Read text content and insert it directly
-            reader.onload = function (event) {
-                var textContent = event.target.result;
-                $('#Attachments').summernote('code', textContent);
-            };
-            reader.readAsText(file);
+    // Confirm before delete
+    if (!confirm("Are you sure you want to delete this attachment?")) {
+        return false;
+    }
+
+    try {
+        const response = await $.ajax({
+            url: `${gBaseUrl}/delete-attachment?attachmentId=${attachmentId}`,
+            type: 'POST'
+        });
+
+        if (response.success) {
+            toastr.success("Attachment deleted successfully.", "Success");
+            const element = document.querySelector(`[data-attachment-id="${attachmentId}"]`);
+            if (element) {
+                element.remove();
+            }
+            // Remove UI element
+            //$(`[data-attachment-id="${attachmentId}"]`).fadeOut(300, function () {
+            //    $(this).remove();
+            //});
+
+            return true;
         } else {
-            // Handle other files: Create a downloadable anchor link
-            reader.onload = function (event) {
-                var linkHtml = '<a href="' + event.target.result + '" download="' + file.name + '">' + file.name + '</a>';
-                $('#Attachments').summernote('pasteHTML', linkHtml);
-            };
-            reader.readAsDataURL(file);
+            toastr.error(response.message || "Failed to delete attachment.", "Error");
+            return false;
         }
+    } catch (error) {
+        console.error("Delete attachment error:", error);
+        toastr.error("An error occurred while deleting the attachment.", "Error");
+        return false;
     }
 }
-async function uploadTicketAttachments(ticketId) {
-        var fileAttach = $('#TicketAttachments')[0].files;
-        console.log(fileAttach)
-        if (fileAttach.length === 0) {
-            alert('Please select a file first.');
-            return;
-        }
-
-        var formData = new FormData();
-        for (var i = 0; i < fileAttach.length; i++) {
-            formData.append('files', fileAttach[i]);
-        }
-        formData.append('ticketId', ticketId);
-
-        try {
-            let uploadedAttachments = await $.ajax({
-                url: 'MyTickets/upload-ticket-attachments',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false
-            });
-
-            console.log(uploadedAttachments);
-            toastr.success('Success uploading ticket attachments');
-        } catch (error) {
-            console.error(error);
-            toastr.error('Upload failed: ' + error.statusText);
-        }
-    }
 function insertNewRow(response) {
         console.log(response)
         ticketsTable.bootstrapTable('insertRow', {
@@ -598,98 +693,116 @@ function insertNewRow(response) {
         })
         ticketsTable.bootstrapTable('check', 0)
     }
-   
-async function showCreateTicketModal(event) {
-    event.preventDefault();
-    activeAttachmentContainer = 'add';
-    await getOrganizationOptions();
-    await getLocationOptions($("#SelectTicketOrganization").val());
-    await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
-    $("#selectOrg").val($("#SelectTicketOrganization").find('option:selected').text())
-    $("#selectLoc").val($("#SelectTicketLocation").find('option:selected').text())
-    // get options for requested by select component and populate edit-select
-    let RequestedByNameOptions = await getTicketRequestedByOptions();
-    $("#SelectRequestedByName").empty().append(RequestedByNameOptions);
-
-    // set display and hidden values for current user
-    $("#DisplayRequestedByName").html(CurrentUser.EMP_NAME);
-    $("#displayRequestedBy").html(CurrentUser.EMP_NAME);
-    $("#requestedBy").val(CurrentUser.EMP_NAME);
-    $("#requestedByCode").val(CurrentUser.USER_CODE);
-
-    // set the date input and display (keep display readable)
-    $("#dateRequested").val(CurrentUser.DATE_TODAY);
-    if (typeof moment !== "undefined") {
-        $("#dateRequestedField").empty().append(moment(CurrentUser.DATE_TODAY).format("MM-DD-YYYY"));
-    } else {
-        $("#dateRequestedField").empty().append(moment(CurrentUser.DATE_TODAY).format("MM-DD-YYYY"));
+async function getCreateTicketSelectOptions() {
+    try {
+        await getOrganizationOptions();
+        //await getLocationOptions($("#SelectTicketOrganization").val());
+        //await getDepartmentOptions($("#SelectTicketOrganization").val(), $("#SelectTicketLocation").val());
+        await getTypeOptions(1, 1, 9);
+        await getModuleOptions(1, 1, 9);
+    } catch(error) {
+        toastr.error("An error occured while fetching data from the server", "Error");
     }
-    await getTypeOptions(1, 1, 9);
-    await getModuleOptions(1, 1, 9);
    
+} 
+
+function resetTicketDescription() {
+    $('#TicketDescription').summernote({
+        disableDragAndDrop: true,
+        height: 100,
+        focus: false,
+        lang: 'en-US',
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        toolbar: [
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+            //['insert', ['link', 'picture', 'video']],
+        ],
+
+    });
+    setTimeout(function () {
+        $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
+    }, 100);
+    
+    $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
 }
+
 async function resetCreateTicketForm() {
+    await getCreateTicketSelectOptions();
+    selectedFiles = [];
+    $("#createTicketForm").removeClass('was-validated').trigger('reset');
+    $("#TaskTypeCode").removeClass("is-valid").removeClass("is-invalid");
+    $("#select-organization").removeClass("is-valid").removeClass("is-invalid");
+    $("#select-location").removeClass("is-valid").removeClass("is-invalid");
+    $("#select-department").removeClass("is-valid").removeClass("is-invalid");
+    $("#TicketSubject").val("").removeClass("is-valid").removeClass("is-invalid");
+    resetTicketDescription();
+   
+    $("#RequestedByName").val(CurrentUser.EMP_NAME);
+    $("#RequestedByCode").val(CurrentUser.USER_CODE);
+    $("#RequestedDate").empty().append(moment(CurrentUser.DATE_TODAY).format("DD-MM-YYYY"));
+    $("#TicketAttachments").val('');
+    //resetTicketDescription();
+    //$("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
+    $("#previewContainer").empty();
+    $("#TicketSubject").trigger('focus')
 
-    formData.append('OrgCode', 1);
-    formData.append('LocCode', 1);
-    formData.append('DeptCode', 9);
-    formData.append('RequestedByCode', CurrentUser.USER_CODE);
-    formData.append('RequestedByName', CurrentUser.EMP_NAME);
-    formData.append('RequestedDate', CurrentUser.DATE_TODAY);
-    formData.append('TaskTypeCode', $('#TaskTypeCode').val() ?? 1);
-    formData.append('TicketSubject', $('#TicketSubject').val());
-    formData.append('TicketDescription', $('#TicketDescription').val());
-    formData.append('TicketAttachments', $('#TicketAttachments')[0].files[0]);
-    console.log(Object.fromEntries(formData));
-        
-        $("#createTicketForm").removeClass('was-validated')
-        $("#DisplayRequestedByName").empty().append(CurrentUser.EMP_NAME);
-        $("#TicketSubject").val("").removeClass("is-valid").removeClass("is-invalid");
-        //$('#TicketDescription').summernote('reset');
-        $("#summernoteInvalidFeedback").addClass('d-none')
+}
+//configure the parameters
 
-        $("#TaskTypeCode").removeClass("is-valid").removeClass("is-invalid");
-        $("#TicketDepartmentOptions").removeClass("is-valid").removeClass("is-invalid");
-        $("#SelectTicketLocation").removeClass("is-valid").removeClass("is-invalid");
-        $("#SelectTicketOrganization").removeClass("is-valid").removeClass("is-invalid");
-        $("#TicketDepartment").removeClass("is-valid").removeClass("is-invalid");
-        $('#TicketDescription').summernote({
-            height: 100,
-            lang: 'en-US',
-            toolbar: [
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                //['insert', ['link', 'picture', 'video']],
-            ],
-
-        });
-        $("#TicketAttachmentContainer").summernote({
-            height: 250,
-            toolbar: false,
-            
-        });
-        $('#TicketDescription').summernote('reset');
-    }
 function getCreateTicketParams() {
+    // Create a new FormData instance
+    const fd = new FormData();
+    // Define the raw parameter object
     var formData = {
-        OrgCode: $('#SelectOrganization').val(),
-        LocCode: $('#SelectLocation').val(),
-        DeptCode: $('#TicketDepartmentOptions').val(), // Hidden input storing the ID
+        OrgCode: $('#select-organization').val(),
+        LocCode: $('#select-location').val(),
+        DeptCode: $('#select-department').val(),
         TaskTypeCode: $('#TaskTypeCode').val(),
         TicketSubject: $('#TicketSubject').val(),
-        TicketDescription: $('#TicketDescription').val(),
+        TicketDescription: $('#TicketDescription').summernote('code'),
         TicketAttachments: $('#TicketAttachments').val(),
     };
+
+    // Add extra user details
     formData.RequestedByCode = CurrentUser.USER_CODE;
     formData.RequestedDate = CurrentUser.DATE_TODAY;
     formData.RequestedByName = CurrentUser.EMP_NAME;
 
-    return formData;
+    // Append each property to the FormData object
+    for (const key in formData) {
+        if (formData.hasOwnProperty(key)) {
+            // Handle null/undefined values safely by converting to empty strings
+            fd.append(key, formData[key] !== null && formData[key] !== undefined ? formData[key] : '');
+        }
+    }
 
+    return fd;
 }
+
+//function getCreateTicketParams() {
+//    const formElement = $('#createTicketForm')[0] //
+//   let fd = new FormData(formElement)//generate the formData parameter
+//    var formData = {
+//        OrgCode: $('#SelectTicketOrganization').val(),
+//        LocCode: $('#SelectTicketLocation').val(),
+//        DeptCode: $('#TicketDepartmentOptions').val(), // Hidden input storing the ID
+//        TaskTypeCode: $('#TaskTypeCode').val(),
+//        TicketSubject: $('#TicketSubject').val(),
+//        TicketDescription: $('#TicketDescription').val(),
+//        TicketAttachments: $('#TicketAttachments').val(),
+//    };
+//    formData.RequestedByCode = CurrentUser.USER_CODE;
+//    formData.RequestedDate = CurrentUser.DATE_TODAY;
+//    formData.RequestedByName = CurrentUser.EMP_NAME;
+
+//    return formData;
+
+//}
 //function setDefaultTicketParams() {
 //    var param = new FormData();
 //    param.append() = 
@@ -717,6 +830,10 @@ function loadingSendEmailButton() {
         $("#submitTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Sending email...`);
     }
+function loadingUploadAttachmentButton() {
+        $("#submitTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Uploading Attachment...`);
+    }
 function loadingSubmitEditButton() {
         $("#btnUpdateTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Updating ...`);
@@ -733,7 +850,8 @@ function invalidInputsButton() {
     }
 function enableSubmitButton() {
         $("#submitTicket").prop('disabled', false).empty().append('Submit Ticket');
-    }
+}
+
 function requestedBySelected(event) {
         console.log(event.target.dataset.value);
         console.log(event.target.innerHTML);
@@ -855,138 +973,130 @@ function validateSummerNote() {
             }
         }
 }
-function checkIfDuplicateFile(ticketFiles) {
-    // Prevent duplicate files
-    const alreadyExists =
-        Array.from(ticketFiles.files)
-            .some(existingFile =>
-                existingFile.name === file.name &&
-                existingFile.size === file.size
-            );
-
-    if (alreadyExists) {
-        return 0;
-    } else {
-        return 1;
-    }
+function checkIfDuplicateFile(file) {
+    console.log(file)
+    let duplicated = false;
+    selectedFiles.forEach(function (i) {
+        if (file.name == i.name && file.size == i.size) {
+            duplicated = true;
+            return false;
+        } else return true;
+    })
+    return duplicated;
 }
-
-async function submitNewTicket() {
-    const formElement = $('#createTicketForm')[0]
-    console.log(formElement)
-
-
-    const fd = new FormData(formElement)
-    console.log(Object.fromEntries(fd));
-    //return;
-    loadingSubmitButton();
+async function uploadTicketAttachments(TicketId) {
+    loadingUploadAttachmentButton();
+    const data = new FormData();
+    Array.from(selectedFiles).forEach((file) => {
+        // Use the exact same key name to append multiple files as an array
+        data.append('TicketAttachments', file);
+    });
+    data.append("TicketId", TicketId);
     try {
-        const response = await fetch(`${gBaseUrl}/create-ticket`, {
-            method: "POST",
-            body: fd
+        //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
+        let response = await $.ajax({
+            url: 'MyTickets/upload-ticket-attachments',
+            type: 'POST',
+            data: data,
+            contentType: false,
+            processData: false
         });
-        var res = await response.json()
-        if (!response.ok) {
-            toastr.error(res.message, "Error")
-            enableSubmitButton()
-     
+
+        if (response) {
+            return true;
+        } else {
+            return false;
         }
-       
-        console.log(res)
-        enableSubmitButton()
-        clearTicketFilterControl(); //reset filter control
-        insertNewRow(response); //insert the newly added ticket to the tickets table
-            toastr.success("You have successfully submitted a New Ticket - " + res.StringTicketId, "Success", {
-                timeOut: 3000,
-            });
     } catch (error) {
-        console.error("Submission failed:", error);
-        toastr.error("Something went wrong. Please contact your administrator.", "System Error");
+        console.error(error);
+        toastr.error('Upload failed: ' + error.statusText);
     } finally {
         enableSubmitButton();
     }
 }
-async function submitTicketRequest() {
+async function sendEmailNotification(params) {
  
-
-        var markupStr = $('#TicketDescription').summernote('code'); //get the data from the summernote
-        NewTicket.OrgCode = $("#SelectTicketOrganization").val();
-        NewTicket.LocCode = $("#SelectTicketLocation").val();
-        NewTicket.DeptCode = $("#TicketDepartmentOptions").val();
-        NewTicket.TicketSubject = $("#TicketSubject").val();
-        NewTicket.TicketDescription = markupStr;
-        NewTicket.TaskTypeCode = $("#TaskTypeCode").val();
-        NewTicket.RequestedByCode = CurrentUser.USER_CODE;
-        NewTicket.RequestedDate = CurrentUser.DATE_TODAY;
-        NewTicket.RequestedByName = CurrentUser.EMP_NAME;
-        NewTicket.RequestedByEmail = CurrentUser.EMAIL_ADDRESS;
-        NewTicket.TicketAttachments = $("#TicketAttachments").val();
-  
-    const form = $("#createTicketForm");
-
-    const fd = new FormData(form)
-    fd.append('RequestedByCode', CurrentUser.USER_CODE);
-    fd.append('RequestedDate', CurrentUser.DATE_TODAY);
-    fd.append('RequestedByName', CurrentUser.EMP_NAME);
-    fd.append('RequestedByEmail', CurrentUser.EMAIL_ADDRESS);
-    console.log(fd);
-    return;
-
-
-        try {
-            loadingSubmitButton(); //disable the submit button  
-            //SUBMIT TICKET
-            let response = await $.post(`${gBaseUrl}/create-ticket`, NewTicket);
-            console.log(response);
-            toastr.success("You have successfully submitted a New Ticket - " + response.StringTicketId, "Success", {
-                timeOut: 3000,
-            });
-            clearTicketFilterControl(); //reset filter control
-            insertNewRow(response);    //insert new ticket to table
-            //CLOSE THE MODAL
-            $("#createTicketModal").modal("hide");
-
-            //UPLOAD TICKET ATTACHMENTS ON THE LOCAL SERVER MACHINE
-            //await uploadTicketAttachments(response.TicketId);
-            //RESET THE FORM
-            await resetCreateTicketForm();
-            //SEND EMAIL NOTIFICATION
-            let emailParams = await generateTicketEmailParams(response);
-            toastr.info("Sending email notification in progress", 'Success', {
-                timeOut: 3000,
-            });
-            $("#newTicketId").empty().append(response.TicketId);
-
-
-
-
-
-
-            let sentEmail = await $.post(`${gBaseUrl}/send-email-notification`, emailParams);
-
-            loadingSendEmailButton();
-            if (sentEmail) {
-                toastr.success("Email notifications are successfully sent", 'Success', {
-                    timeOut: 3000,
-                });
-
-            }
-            else {
-                toastr.error("Error while sending email notification", sentEmail, {
-                    timeOut: 3000,
-                });
-            }
-
-
-        } catch (err) {
-            toastr.error("The server responded with an error - " + err, "Failed", {
-                timeOut: 3000,
-            });
-
-        }
-        enableSubmitButton();
+    return await $.post(`${gBaseUrl}/send-email-notification`, params );   
+}
+//function getCreateTicketParams() {
+//    const formElement = $('#createTicketForm')[0] //
+//    let fd = new FormData(formElement)//generate the formData parameter
+//    console.log()
+//    return fd;
+//}
+async function notifyByEmail(newTicket) {
+    loadingSendEmailButton();
+    let sentEmail = await sendEmailNotification(generateTicketEmailParams(newTicket))//send email notification request
+    if (sentEmail) {
+        toastr.success("Email notifications are successfully sent", 'Success', {
+            timeOut: 3000,
+        });
+    } else {
+        toastr.error("Error while sending email notification", sentEmail, {
+            timeOut: 3000,
+        });
     }
+    return sentEmail;
+}
+async function uploadAttachments(newTicket) {
+  
+    //send attachments upload request
+   
+        try {
+            loadingUploadAttachmentButton();
+            let uploaded = await uploadTicketAttachments(newTicket.TicketId); //upload the selected ticket attachment files
+            if (uploaded) {
+                toastr.success("You have successfully uploaded the attachments for the Ticket - " + newTicket.StringTicketId, "Success", {
+                    timeOut: 3000,
+                });
+                $("#createTicketModal").modal('hide');
+                return uploaded;
+            }
+        } catch (error) {
+            toastr.error("Something went wrong. Please contact your administrator.", "System Error");
+            disableSubmitButton()
+            return;
+        }
 
+}
+async function submitNewTicket() {
+    loadingSubmitButton();
+    let params = getCreateTicketParams();
+    console.log(params)
+
+    let newTicket = await createTicket(params);//send create ticket request
+    clearTicketFilterControl();
+    insertNewRow(newTicket);
+    console.log(newTicket)
+        if (!newTicket) {
+            toastr.error(newTicket.message, "Error")
+            return;
+        } else {
+            toastr.success("You have successfully submitted a New Ticket - " + newTicket.StringTicketId, "Success", {
+                timeOut: 3000,
+            });
+            let emailSent = await notifyByEmail(newTicket); //send email notification
+                if (!emailSent) {
+                    return;
+                }
+                else {
+                    let attachmentsUploaded = await uploadAttachments(newTicket); //upload the ticket attachments
+                    if (attachmentsUploaded) {
+                        $("#createTicketModal").modal('hide');
+                        return;
+                    }
+                }
+        }
+}
+async function createTicket(params){
+    const response = await fetch(`${gBaseUrl}/create-ticket`, {
+        method: "POST",
+        body: params
+    });
+    var res = await response.json()
+   
+    return res;
+}
 async function updateTicket(ticket) {
     let response = await $.put(`${gBaseUrl}/update-ticket`, ticket);
 }
@@ -997,19 +1107,7 @@ async function getTicketAttachments(ticketId) {
 
     return ticketId;
 }
-function loadTicketAttachments(ticketId) {
-
-    //const $attachmentList = $("#attachmentList");
-    //const $loading = $("#attachmentsLoading");
-    //const $noAttachments = $("#noAttachments");
-    //const $attachmentCount = $("#attachmentCount");
-
-    //// Reset UI
-    attachmentsPreviewContainer.empty();
-    //$attachmentList.empty();
-    //$noAttachments.addClass("d-none");
-    //$loading.removeClass("d-none");
-    //$attachmentCount.text("0");
+async function loadTicketAttachments(ticketId) {
 
     $.ajax({
         url: "/MyTickets/get-ticket-attachments",
@@ -1018,60 +1116,11 @@ function loadTicketAttachments(ticketId) {
             ticketId: ticketId
         },
         success: function (response) {
-            console.log(response)
-            //$loading.addClass("d-none");
-
-            if (!response.success || response.count === 0) {
-
-                //$noAttachments.removeClass("d-none");
-
-                return;
-            }
-
-            //$attachmentCount.text(response.count);
-            handleFiles(response.files)
-            //$.each(response.files, function (index, file) {
-            //    //renderFilePreview(file)
-            //    console.log(file)
-            //    const fileIcon = getAttachmentIcon(file.fileType);
-
-            //    const attachmentHtml = `
-            //        <a href="${file.fileUrl}"
-            //           target="_blank"
-            //           class="list-group-item list-group-item-action">
-
-            //            <div class="d-flex justify-content-between align-items-center">
-
-            //                <div class="d-flex me-3">
-            //                    <i class="${fileIcon} fs-4"></i>
-            //                </div>
-
-            //                <div class="d-flex">
-
-            //                    <div class="text-truncate fw-semibold"
-            //                         title="${escapeHtml(file.fileName)}">
-
-            //                        ${escapeHtml(file.fileName)}
-
-            //                    </div>
-
-            //                    <small class="text-muted">
-            //                        ${file.extension.toUpperCase()}
-            //                    </small>
-
-            //                </div>
-
-            //                <div class="d-flex ms-auto">
-            //                    <i class="bi bi-box-arrow-up-right"></i>
-            //                </div>
-
-            //            </div>
-
-            //        </a>
-            //    `;
-            
-            //    attachmentsPreviewContainer.append(attachmentHtml);
-            //});
+    
+                console.log(response)
+            showTicketAttachmentList(response)
+            //handleFiles(response)
+      
         },
 
         error: function (xhr) {

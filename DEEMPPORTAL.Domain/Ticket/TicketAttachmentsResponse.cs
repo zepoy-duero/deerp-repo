@@ -2,7 +2,7 @@
 {
     public class TicketAttachmentsResponse
     {
-        public int AttachmentID { get; set; }
+        public int AttachmentId { get; set; }
         public int TicketId { get; set; }
 
         public string? FileName { get; set; }

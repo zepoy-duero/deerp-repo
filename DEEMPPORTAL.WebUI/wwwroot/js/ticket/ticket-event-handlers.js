@@ -118,33 +118,81 @@
     })
 
     $("#openCreateTicketModal").on("click", async function (event) {
-        await resetCreateTicketForm();
-        await showCreateTicketModal(event);
-        tooltip.show();
-     
-    })
+        activeAttachmentContainer = 'add';
+        selectedFiles = []
+        resetCreateTicketForm();
+        $("#createTicketModal").modal('show');
+    });
    
     $("#TicketAttachments").on("change", function (e) {
-    
-        //console.log($(this));
-        //return;
-        handleFiles(e.target.files);
-      
-        
-
-        if (e.target.files.length >= 1) {
-            tooltip.hide();
-        } else {
-            tooltip.show();
+        let isDuplicated = false;
+        if (e.target.files.length > 10) {
+            alert(`Please select not more than 10 files`);
+            return;
         }
-        //    console.log(e.target.files)
-            //renderFilePreview(e.target.files)
+        const filesArray = Array.from(e.target.files); 
+        console.log(filesArray)
+        if (filesArray.length >= 1) {
+            for (let file of filesArray) {
+                if (!isValidFileSize(file)) {
+                    toastr.error(`Please select a file under 2MB`, "Error");
+                    continue;
+                }
+                if (checkIfDuplicateFile(file)) {
+                    toastr.error(`The file named ${file.name} already selected`, "Error");
+                    isDuplicated = true
+                    continue;
+                } else {
+                    selectedFiles.push(file)
+                }
+            }
+        }
+     console.log(isDuplicated)
+        if (!isDuplicated) {
+            handleFiles(filesArray);
+        } else return;
     })
-    $("#editTicketAttachments").on("change", function (e) {
-        handleFiles(e.target.files);
-        //    console.log(e.target.files)
-        //renderFilePreview(e.target.files)
+    $("#editTicketAttachments").on("change", async function (e) {
+        let isDuplicated = false;
+        if (e.target.files.length > 10) {
+            alert(`Please select not more than 10 files`);
+            return;
+        }
+        console.log(e.target.files);
+        const filesArray = Array.from(e.target.files);
+  
+        if (filesArray.length >= 1) {
+            for (let file of filesArray) {
+                if (!isValidFileSize(file)) {
+                    toastr.error(`Please select a file under 2MB`, "Error");
+                    continue;
+                }
+                console.log(checkIfDuplicateFile(file))
+                if (checkIfDuplicateFile(file)) {
+                    toastr.error(`The file named ${file.name} already selected`, "Error");
+                    isDuplicated = true
+                    continue;
+                } else {
+                    isDuplicated = false;
+                    selectedFiles.push(file)
+                    //renderFilePreview(file)
+                }
+            }
+        }
+        if (!isDuplicated) {
+            await uploadTicketAttachments(selectedTicket.TicketId)
+            await loadTicketAttachments(selectedTicket.TicketId)
+            //handleFiles(filesArray);
+            //showTicketAttachmentList(filesArray);
+            //renderFilePreview(filesArray)
+        } else return;
+       
     })
+    $("#deleteAttachment").on("click", () => {
+        selectedFiles = selectedFiles.filter((f) => f !== file);
+        showTicketAttachments(selectedFiles);
+        //fileItem.remove();
+    });
     $("#dropZone").on("click", (e) => {
         const fileInput = document.getElementById('TicketAttachments');
         try {
@@ -268,10 +316,10 @@
             await submitNewTicket();
         }
     });
-    $("#addAttachment").on('click', function () {
-        $("#createTicketModal").modal('show');
-        $("#TicketAttachments").click();
-    })
+    //$("#addAttachment").on('click', function () {
+    //    $("#createTicketModal").modal('show');
+    //    $("#TicketAttachments").click();
+    //})
     //async function confirmSubmitWithoutAttachment() {
     //    const result = confirm("Are you sure you want to submit this ticket without attachments?");
 
@@ -382,6 +430,9 @@
         $("#LocCode").val($(this).val());
 
     });
+    //$("#createTicketModal").on("hidden.bs.modal", function () {
+    //    resetCreateTicketForm();
+    //})
     $("#btnUpdateTicket").on("click", async function () {
         loadingSubmitEditButton();
         const updateParams = getUpdateTicketParams();
@@ -412,6 +463,7 @@
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
         // HEAD
         console.log(row.TicketId)
+        selectedFiles = [];
         activeAttachmentContainer = 'edit';
         toggleEditMode();
         selectedTicket = row;
@@ -441,7 +493,7 @@
   
         event.preventDefault();
         const switchElement = document.getElementById('toggleEditUserRequest');
-
+       
         // Check the state (returns true if turned on, false if turned off)
         const isChecked = switchElement.checked;
         console.log(isChecked)
@@ -466,6 +518,9 @@
         console.log(isChecked)
         if (isChecked) {
             $('#editTicketDescription').summernote('enable');
+            setTimeout(function () {
+                $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
+            }, 100);
         } else {
             $('#editTicketDescription').summernote('disable');
         }
@@ -503,6 +558,7 @@
                 return !val; // Toggles the current state
             });
     });
+
     $("#toggleEditReview").on("change", function () {
      
         $("#reviewedByName").prop('disabled', function (i, val) {
@@ -519,8 +575,24 @@
         });
 
     });
+    $("#correspondenceList").on('click', function (event) {
+        // Find the clicked item or its closest list-item parent
+        const item = event.target.closest('.correspondence-item');
+        const correspondenceContent = item.querySelector('p').textContent;
+        console.log(item.querySelector('p').textContent)
+        // If the click wasn't inside a list item, do nothing
+        if (!item) return;
 
+        // Prevent default anchor behavior
+        event.preventDefault();
+
+        // Access custom data attributes (e.g., data-ticket-id="1")
+        const ticketId = item.dataset.ticketId;
+        console.log(`Clicked ticket ID: ${ticketId}`);
+        $("#txtCorrespondence").val(correspondenceContent)
+    })
 }
+
 function getUserRequestFieldValues() {
     return {
         TicketId: selectedTicket.TicketId, //user request
@@ -531,7 +603,7 @@ function getUserRequestFieldValues() {
         TicketSubject: $("#ticketSubject").val() ?? selectedTicket.TicketSubject,
         RequestedByCode: $("#editRequestedByCode").val() ?? selectedTicket.RequestedByCode,
         RequestedByName: $("#editRequestedByName").val() ?? selectedTicket.RequestedByName,
-        RequestedDate: $("#editRequestedDate").val() ?? selectedTicket.RequestedDate,
+        RequestedDate: $("#displayRequestedDate").val() ?? selectedTicket.RequestedDate,
         TicketDescription: $("#editTicketDescription").summernote('code'),
     };
 }
@@ -588,39 +660,34 @@ function getUpdateTicketParams() {
     return updateTicketParams;
 }
 async function setUserRequestFormValue(row) {
-    //USER REQUEST
-    //let userRequestData = {
-
-    //}
-     loadTicketAttachments(row.TicketId);
-   
     $("#ticketSubject").val(row.TicketSubject);
     $("#editRequestedByCode").val(row.RequestedByCode);
     $("#editRequestedByName").val(row.RequestedByName);
     $("#displayRequestedByName").val(row.RequestedByName);
-
     $("#displayRequestedDate").val(moment(row.RequestedDate).format("MM-DD-YYYY"));
-   
     $("#editRequestedDate").val(row.RequestedDate).attr('value',moment(row.RequestedDate).format('MM/DD/YYYY'));
-
     $('#editTicketDescription').summernote({
-        height: 200,
+        disableDragAndDrop: true,
+        height: 100,
+        focus: false,
         lang: 'en-US',
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
         toolbar: [
             ['font', ['bold', 'underline', 'clear']],
             ['fontname', ['fontname']],
             ['fontsize', ['fontsize']],
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+            //['insert', ['link', 'picture', 'video']],
         ],
-
     });
+   
     $("#editTicketDescription").summernote('code', row.TicketDescription);
+    
     $("#editTicketDescription").summernote('disable');
-   
-   
+    await loadTicketAttachments(row.TicketId);
 }
-
 async function setAssignmentFormValue(row) {
     console.log(row)
     //ASSIGNMENT
@@ -651,18 +718,15 @@ async function setAssignmentFormValue(row) {
     $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'New'));
 }
 async function setApprovalsFormValue(row) {
-
     //APPROVALS
     $("#deptName").val(row.DeptName ? row.DeptName : 'Not yet Updated');
     $("#approveByManager").val(row.ApproveByManager ? 1 : 0);
     $("#isManagementApproval").prop('checked', row.IsManagementApproval ? row.IsManagementApproval : 0);
     $("#managerEmailId").val(row.ManagerEmailId ? row.ManagerEmailId : '');
     $("#requestedByEmail").val(row.RequestedByEmail ? row.RequestedByEmail : '');
-
     if ($("#isManagementApproval").is(':checked')) {
         $("#managementApprovalRequired").removeClass('d-none')
     }
-
 }
 async function setReviewFormValue(row) {
     //REVIEW/RELEASE

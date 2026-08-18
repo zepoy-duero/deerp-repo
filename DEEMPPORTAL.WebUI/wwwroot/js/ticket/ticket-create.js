@@ -65,7 +65,7 @@ let selectedFiles = [];
 // INITIALIZATION
 // ============================================================
 
-$(document).ready(function () {
+$(async function () {
 
     initializeCreateTicket();
 
@@ -89,28 +89,29 @@ function initializeCreateTicket() {
 
 function initializeCreateTicketForm() {
 
-    const $description =
-        $("#TicketDescription");
+    $('#TicketDescription').summernote({
+        disableDragAndDrop: true,
+        height: 100,
+        lang: 'en-US',
 
-    if ($description.length) {
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        toolbar: [
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+            //['insert', ['link', 'picture', 'video']],
+        ],
 
-        $description.summernote({
-
-            height: 100,
-
-            lang: "en-US",
-
-            toolbar: [
-                ["font", ["bold", "underline", "clear"]],
-                ["fontname", ["fontname"]],
-                ["fontsize", ["fontsize"]],
-                ["color", ["color"]],
-                ["para", ["ul", "ol", "paragraph"]]
-            ]
-
-        });
-
-    }
+    });
+    setTimeout(function () {
+        $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
+    }, 100);
+ 
+    $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none');
+    
 
 }
 

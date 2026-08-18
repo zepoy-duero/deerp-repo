@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 namespace DEEMPPORTAL.Domain.Ticket
 {
     public class CreateTicketParams
@@ -18,7 +19,6 @@ namespace DEEMPPORTAL.Domain.Ticket
         public string? TicketSubject { get; set; }
     
         public string? TicketDescription { get; set; }
-       
-
+        //public List<IFormFile>? TicketAttachments { get; set; } = new List<IFormFile>();
     }
 }

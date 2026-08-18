@@ -12,21 +12,26 @@ using System.Net.Mail;
 
 namespace DEEMPPORTAL.Application.Ticket;
 
-public class TicketService(ITicketRepository ticketRepository, EmailService emailService, CurrentUser cu) : ITicketService
+public class TicketService(ITicketRepository ticketRepository,
+    EmailService emailService, 
+    CurrentUser cu
+    ) : ITicketService
 {
     private readonly ITicketRepository _ticketRepository = ticketRepository;
     private readonly EmailService _emailService = emailService;
     private readonly CurrentUser _cu = cu;
     public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
+
         var result = await _ticketRepository.CreateTicketAsync(request);
-       
+
         return result;
     }
     public async Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int OrgCode, int LocCode, int DeptCode)
     {
-        return await _ticketRepository.GetAllTicketAsync(OrgCode,LocCode,DeptCode);
+        return await _ticketRepository.GetAllTicketAsync(OrgCode, LocCode, DeptCode);
     }
+
 
     public async Task<IEnumerable<TicketSelectOptions>> GetUserOptionsAsync()
     {
@@ -70,12 +75,11 @@ public class TicketService(ITicketRepository ticketRepository, EmailService emai
         return updatedTicket;
     }
 
-   
-    public async Task<bool> UploadTicketAttachmentsAsync(int ticketId,IEnumerable<IFormFile> TicketAttachments)
+
+    public async Task<bool> UploadTicketAttachmentsAsync(int TicketId,List<IFormFile>? TicketAttachments)
     {
-        var id = ticketId;
-        // Prepare DataTable that matches the SQL TVP type "dbo.TicketAttachmentType"
         var dt = new DataTable();
+        dt.Columns.Add("TicketId", typeof(int));
         dt.Columns.Add("FileName", typeof(string));
         dt.Columns.Add("FileExtension", typeof(string));
         dt.Columns.Add("FileSize", typeof(int));
@@ -83,24 +87,53 @@ public class TicketService(ITicketRepository ticketRepository, EmailService emai
         dt.Columns.Add("UploadedDate", typeof(DateTime));
         dt.Columns.Add("UpdatedBy", typeof(int));
 
-        foreach (var file in TicketAttachments)
+        if (TicketAttachments != null)
         {
-            if (file.Length > 0)
+            foreach (var ticketAttachment in TicketAttachments)
             {
                 using var ms = new MemoryStream();
-                await file.CopyToAsync(ms);
+                await ticketAttachment.CopyToAsync(ms);
 
                 // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
                 dt.Rows.Add(
-                    file.FileName,
-                    Path.GetExtension(file.FileName)?.TrimStart('.') ?? string.Empty,
-                    (int)file.Length,
+                    TicketId,
+                    ticketAttachment.FileName,
+                    Path.GetExtension(ticketAttachment.FileName)?.TrimStart('.') ?? string.Empty,
+                    (int)ticketAttachment.Length / 1024,
                     ms.ToArray(),
                     DateTime.UtcNow,
                     _cu.UserId
                 );
             }
         }
-        return await _ticketRepository.UploadTicketAttachmentsAsync(ticketId, dt);
+        return await _ticketRepository.UploadTicketAttachmentsAsync(dt);
+    }
+    public async Task<IEnumerable<TicketAttachmentsResponse>> GetTicketAttachmentsAsync(int TicketId)
+    {
+        return await _ticketRepository.GetTicketAttachmentsAsync(TicketId);
+    }
+    public async Task<bool> DeleteTicketAttachmentAsync(int attachmentId)
+    {
+        return await _ticketRepository.DeleteTicketAttachmentAsync(attachmentId);
+    }
+    public async Task<TicketCorrespondence?> GetByIdAsync(int correspondenceId)
+    {
+        return await _ticketRepository.GetByIdAsync(correspondenceId);
+    }
+    public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId)
+    {
+        return await _ticketRepository.GetByTicketIdAsync(ticketId);
+    }
+    public async Task<TicketCorrespondence?> InsertAsync(TicketCorrespondenceRequest model)
+    {
+        return await _ticketRepository.InsertAsync(model);
+    }
+    public async Task<TicketCorrespondence?> UpdateAsync(UpdateTicketCorrespondenceRequest model)
+    {
+        return await _ticketRepository.UpdateAsync(model);
+    }
+    public async Task<bool> DeleteAsync(DeleteTicketCorrespondenceRequest model)
+    {
+        return await _ticketRepository.DeleteAsync(model);
     }
 }

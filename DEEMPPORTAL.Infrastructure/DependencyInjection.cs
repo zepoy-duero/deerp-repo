@@ -13,12 +13,12 @@ using DEEMPPORTAL.Application.Manage.Role;
 using DEEMPPORTAL.Application.Manage.RoleMenu;
 using DEEMPPORTAL.Application.Manage.User;
 using DEEMPPORTAL.Application.MyProfile;
+using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Application.Report;
 using DEEMPPORTAL.Application.Shared;
 using DEEMPPORTAL.Application.Support;
 using DEEMPPORTAL.Application.Support.EmployeeDirectoryService;
 using DEEMPPORTAL.Application.Support.SpeedDialDirectoryService;
-using DEEMPPORTAL.Application.PartsOrigin;
 using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Common;
 using Erp.Application.MyProfile;
@@ -99,6 +99,7 @@ public static class DependencyInjection
 		services.AddScoped<ITicketRepository, TicketRepository>();
 		services.AddScoped<ITicketService, TicketService>();
 
+    
         services.AddScoped<IPartsOriginRepository, PartsOriginRepository>();
 		services.AddScoped<IPartsOriginService, PartsOriginService>();
 

@@ -2,6 +2,7 @@
 using DEEMPPORTAL.Application.Shared;
 using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Domain;
+using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Ticket;
 using DEEMPPORTAL.WebUI.Models;
 using DocumentFormat.OpenXml.EMMA;
@@ -20,7 +21,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 [Route("MyTickets")]
 public class TicketController(ISelectOptionsService selectOptionsService,
       IFetchOnlyOneService fetchOnlyOneService,
-      ITicketService ticketService, IMapper mapper, ILogger<TicketController> logger) : Controller
+      ITicketService ticketService, 
+      IMapper mapper, ILogger<TicketController> logger) : Controller
 {
     private readonly ITicketService _ticketService = ticketService;
     private readonly ISelectOptionsService _selectOptionsService = selectOptionsService;
@@ -41,7 +43,60 @@ public class TicketController(ISelectOptionsService selectOptionsService,
         var data = await _ticketService.GetAllTicketAsync(OrgCode, LocCode,DeptCode);
         return Ok(data);
     }
+    [HttpPost("create-ticket")]
+    public async Task<IActionResult> CreateTicket([FromForm] TicketModel model)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
+        var mapped = _mapper.Map<CreateTicketParams>(model);
+
+        var updatedTicket = await _ticketService.CreateTicketAsync(mapped);
+            
+        return Ok(updatedTicket);
+    }
+    [HttpPost("upload-ticket-attachments")]
+    public async Task<IActionResult> UploadTicketAttachments([FromForm] int TicketId, [FromForm] List<IFormFile>? TicketAttachments)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        if (!await _ticketService.UploadTicketAttachmentsAsync(TicketId,TicketAttachments))
+            return BadRequest(new
+            {
+                isSuccess = false,
+                message = "Failed to upload ticket attachment. Please try again."
+            });
+
+        return Ok(new
+        {
+            isSuccess = true,
+            message = "Successfully created a new attachment."
+        });
+    }
+    [HttpPost("delete-attachment")]
+    public async Task<IActionResult> DeleteAttachment(int attachmentId)
+    {
+        if (attachmentId <= 0)
+        {
+            return BadRequest(new { success = false, message = "Invalid attachment or ticket ID." });
+        }
+
+        try
+        {
+            var result = await _ticketService.DeleteTicketAttachmentAsync(attachmentId);
+
+            if (result)
+            {
+                return Ok(new { success = true, message = "Attachment deleted successfully." });
+            }
+
+            return BadRequest(new { success = false, message = "Failed to delete attachment." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting attachment {AttachmentId}", attachmentId);
+            return StatusCode(500, new { success = false, message = "An error occurred while deleting the attachment." });
+        }
+    }
     [HttpPost("update-ticket")]
     public async Task<IActionResult> UpdateTicket(TicketViewModel ticket)
     {
@@ -121,123 +176,14 @@ public class TicketController(ISelectOptionsService selectOptionsService,
 
         return options;
     }
-    [HttpPost("create-ticket")]
-    public async Task<IActionResult> CreateTicket([FromForm] TicketModel model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
+   
 
-        var mapped = _mapper.Map<CreateTicketParams>(model);
-        var updatedTicket = await _ticketService.CreateTicketAsync(mapped);
-
-        if (updatedTicket != null && model?.TicketAttachments != null && model.TicketAttachments.Count > 0)
-        {
-            // Upload attachments (service will convert files -> DataTable -> repository TVP call)
-            var uploadSucceeded = await _ticketService.UploadTicketAttachmentsAsync(updatedTicket.TicketId, model.TicketAttachments);
-
-            // Optionally, attach a flag or returned info to the ticket response.
-            // Keep response simple: add a boolean property if TicketResponse supports it, otherwise return combined object.
-            if (!uploadSucceeded)
-            {
-                _logger.LogWarning("Attachments upload failed for TicketId {TicketId}", updatedTicket.TicketId);
-            }
-        }
-
-        return Ok(updatedTicket);
-    }
-
-    
-    [HttpPost("ticket-attachments")]
-    public async Task<IActionResult> TicketAttachments(IFormFile files, string ticketId)
-    {
-        var _baseUploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-        // 1. Validation
-        if (files == null || files.Length == 0)
-        {
-            return BadRequest("Please select a file first.");
-        }
-
-        if (string.IsNullOrWhiteSpace(ticketId))
-        {
-            return BadRequest("Invalid or missing Ticket ID.");
-        }
-
-        // 2. Prevent path traversal attacks by cleaning the ticket ID
-    
-
-        // 3. Dynamic target directory path
-        var targetFolder = Path.Combine(_baseUploadFolder, ticketId.ToString());
-
-        if (!Directory.Exists(targetFolder))
-        {
-            Directory.CreateDirectory(targetFolder);
-        }
-
-        // 4. File save logic
-        var safeFileName = Path.GetFileName(files.FileName);
-        var fullPath = Path.Combine(targetFolder, safeFileName);
-
-        using (var stream = new FileStream(fullPath, FileMode.Create))
-        {
-            await files.CopyToAsync(stream);
-        }
-      
-        return Json(new { success = true, message = "File uploaded to ticket folder successfully!" });
-    }
     [HttpGet("get-ticket-attachments")]
-    public IActionResult GetTicketAttachments(int ticketId)
+    public async Task<IActionResult> GetTicketAttachments(int TicketId)
     {
-        var baseUploadFolder = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "wwwroot",
-            "uploads"
-        );
-
-        var targetFolder = Path.Combine(
-            baseUploadFolder,
-            ticketId.ToString()
-        );
-
-        // Folder does not exist
-        if (!Directory.Exists(targetFolder))
-        {
-            return Ok(new
-            {
-                success = true,
-                ticketId = ticketId,
-                count = 0,
-                files = new List<object>()
-            });
-        }
-
-        var files = Directory.GetFiles(targetFolder)
-            .Select(filePath =>
-            {
-                var fileInfo = new FileInfo(filePath);
-                var fileName = Path.GetFileName(filePath);
-                var extension = Path.GetExtension(filePath).ToLowerInvariant();
-                long fileSizeBytes = fileInfo.Length; // Size in bytes
-
-                return new
-                {
-                    name = fileName,
-                    url = $"/uploads/{ticketId}/{Uri.EscapeDataString(fileName)}",
-                    extension = extension,
-                    type = GetMimeType(extension),
-                    size = fileSizeBytes
-                };
-            })
-            .ToList();
-
-        return Ok(new
-        {
-            success = true,
-            ticketId = ticketId,
-            count = files.Count,
-            files = files
-        });
+        var ticketAttachments = await _ticketService.GetTicketAttachmentsAsync(TicketId);
+        return Ok(ticketAttachments);
     }
-
     private string GetMimeType(string extension)
     {
         return extension switch
@@ -279,23 +225,6 @@ public class TicketController(ISelectOptionsService selectOptionsService,
             return Ok(emailReceipt);
         }
     }
-    [HttpPost("upload-ticket-attachments")]
-    public async Task<IActionResult> UploadTicketAttachments(int ticketId, [FromForm] IEnumerable<IFormFile> TicketAttachments)
-    {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        if (!await _ticketService.UploadTicketAttachmentsAsync(ticketId, TicketAttachments))
-            return BadRequest(new
-            {
-                isSuccess = false,
-                message = "Failed to upload ticket attachment. Please try again."
-            });
-
-        return Ok(new
-        {
-            isSuccess = true,
-            message = "Successfully created a new attachment."
-        });
-    }
+       
 }
 
