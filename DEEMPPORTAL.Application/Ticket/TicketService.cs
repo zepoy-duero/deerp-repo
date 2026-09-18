@@ -108,13 +108,53 @@ public class TicketService(ITicketRepository ticketRepository,
         }
         return await _ticketRepository.UploadTicketAttachmentsAsync(dt);
     }
+    public async Task<bool> UploadCorrespondenceAttachmentsAsync(int TicketId,List<IFormFile>? CorrespondenceAttachments)
+    {
+        var dt = new DataTable();
+        dt.Columns.Add("TicketId", typeof(int));
+        dt.Columns.Add("FileName", typeof(string));
+        dt.Columns.Add("FileExtension", typeof(string));
+        dt.Columns.Add("FileSize", typeof(int));
+        dt.Columns.Add("FileAttachment", typeof(byte[]));
+        dt.Columns.Add("UploadedDate", typeof(DateTime));
+        dt.Columns.Add("UpdatedBy", typeof(int));
+
+        if (CorrespondenceAttachments != null)
+        {
+            foreach (var correspondenceAttachment in CorrespondenceAttachments)
+            {
+                using var ms = new MemoryStream();
+                await correspondenceAttachment.CopyToAsync(ms);
+
+                // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
+                dt.Rows.Add(
+                    TicketId,
+                    correspondenceAttachment.FileName,
+                    Path.GetExtension(correspondenceAttachment.FileName)?.TrimStart('.') ?? string.Empty,
+                    (int)correspondenceAttachment.Length / 1024,
+                    ms.ToArray(),
+                    DateTime.UtcNow,
+                    _cu.UserId
+                );
+            }
+        }
+        return await _ticketRepository.UploadCorrespondenceAttachmentsAsync(dt);
+    }
     public async Task<IEnumerable<TicketAttachmentsResponse>> GetTicketAttachmentsAsync(int TicketId)
     {
         return await _ticketRepository.GetTicketAttachmentsAsync(TicketId);
     }
+    public async Task<AttachmentResponse> GetAttachmentAsync(int AttachmentId)
+    {
+        return await _ticketRepository.GetAttachmentAsync(AttachmentId);
+    }
     public async Task<bool> DeleteTicketAttachmentAsync(int attachmentId)
     {
         return await _ticketRepository.DeleteTicketAttachmentAsync(attachmentId);
+    }
+    public async Task<bool> DeleteCorrespondenceAttachmentAsync(int attachmentId)
+    {
+        return await _ticketRepository.DeleteCorrespondenceAttachmentAsync(attachmentId);
     }
     public async Task<TicketCorrespondence?> GetByIdAsync(int correspondenceId)
     {
@@ -123,6 +163,14 @@ public class TicketService(ITicketRepository ticketRepository,
     public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId)
     {
         return await _ticketRepository.GetByTicketIdAsync(ticketId);
+    }
+    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId)
+    {
+        return await _ticketRepository.GetCorrespondenceAttachmentsAsync(TicketId);
+    }
+    public async Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int AttachmentId)
+    {
+        return await _ticketRepository.GetCorrespondenceAttachmentAsync(AttachmentId);
     }
     public async Task<TicketCorrespondence?> InsertAsync(TicketCorrespondenceRequest model)
     {

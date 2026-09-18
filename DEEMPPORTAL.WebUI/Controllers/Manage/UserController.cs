@@ -5,6 +5,7 @@ using DEEMPPORTAL.Domain.Manage.User;
 using DEEMPPORTAL.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DEEMPPORTAL.WebUI.Controllers.Manage;
 
@@ -13,13 +14,15 @@ namespace DEEMPPORTAL.WebUI.Controllers.Manage;
 public class UserController(
     IUserService userService,
     IMapper mapper,
-    ISelectOptionsService selectOptionsService) : Controller
+    ISelectOptionsService selectOptionsService,
+     ILogger<UserController> logger) : Controller
 {
   private readonly ISelectOptionsService _selectOptionsService = selectOptionsService;
   private readonly IUserService _userService = userService;
   private readonly IMapper _mapper = mapper;
+    private readonly ILogger<UserController> _logger = logger;
 
-  [HttpGet("")]
+    [HttpGet("")]
   public IActionResult Index() => View();
 
   [HttpGet("getAllOrganizations")]
@@ -36,14 +39,43 @@ public class UserController(
     return Ok(options);
   }
 
-  [HttpGet("getEmployee")]
-  public async Task<IActionResult> GetEmployee(string searchParam)
-  {
-    var options = await _selectOptionsService.GetEmployeeAsync(searchParam);
-    return Ok(options);
-  }
+    //[HttpGet("getEmployee")]
+    //public async Task<IActionResult> GetEmployee(string searchParam, int orgCode)
+    //{
+    //          var options = await _selectOptionsService.GetEmployeeAsync(searchParam, orgCode);
+    //          return Ok(options);    
+    //}
+    [HttpGet("getEmployee")]
+    public async Task<IActionResult> GetEmployee(string searchParam, int orgCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(searchParam))
+            {
+                return BadRequest(new { error = "Search parameter is required" });
+            }
 
-  [HttpGet("getEmployeeDetails")]
+            if (orgCode <= 0)
+            {
+                return BadRequest(new { error = "Invalid organization code" });
+            }
+
+            var options = await _selectOptionsService.GetEmployeeAsync(searchParam, orgCode);
+            return Ok(options);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Invalid argument in GetEmployee. SearchParam: {SearchParam}, OrgCode: {OrgCode}", searchParam, orgCode);
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving employees. SearchParam: {SearchParam}, OrgCode: {OrgCode}", searchParam, orgCode);
+            return StatusCode(500, new { error = "Failed to load employees. Please try again later." });
+        }
+    }
+
+    [HttpGet("getEmployeeDetails")]
   public async Task<IActionResult> GetEmployeeDetails(int empCode, string empName, int orgCode, int locCode)
   {
     var results = await _userService.GetEmployeeDetailsAsync(empCode, empName, orgCode, locCode);

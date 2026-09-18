@@ -88,16 +88,17 @@ public class SelectOptionsRepository(ConnectionPool cp, CurrentUser cu) : ISelec
         return options;
     }
 
-    public async Task<IEnumerable<SelectOption>> GetEmployeeAsync(string searchParam)
+    public async Task<IEnumerable<SelectOption>> GetEmployeeAsync(string searchParam,int orgCode)
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
 
         await conn.OpenAsync();
 
-        const string storedProcedure = "CLOUD_v1_ERP_EMPLOYEE_MAST_opts";
+        const string storedProcedure = "CLOUD_v1_ERP_EMPLOYEE_MAST_test_opts";
         var parameters = new
         {
-            SEARCH_PARAM = searchParam
+            SEARCH_PARAM = searchParam,
+            ORG_CODE = orgCode
         };
 
         var options = await conn.QueryAsync<SelectOption>(

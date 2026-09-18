@@ -14,7 +14,7 @@ $(function () {
 	// Global ajax error
 	// Throws an error after a certain time if the session is expired.
 	$(document).ajaxError(function (event, request, settings) {
-		 //$("#modalLoadingScreen").css("display", "")
+		//$("#modalLoadingScreen").css("display", "")
 		// $("#shopMain").css("overflow", "").css("padding-right", "")
 
 		// redirect to the login page if the user session is expired.
@@ -143,7 +143,7 @@ function validateForm(formId) {
 	const inputs = $(formId).find("input.required, select.required, textarea.required")
 	let isValid = true;
 
-	$(inputs).each(function() {
+	$(inputs).each(function () {
 		const value = String($(this).val()).trim();
 		if (value === '') {
 			const oldTooltip = bootstrap.Tooltip.getInstance(value);
@@ -287,22 +287,22 @@ function initIntlTelInput() {
 		initialCountry: "auto",
 		separateDialCode: true,
 		loadUtilsOnInit: "/js/utils.js",
-		geoIpLookup: function(callback) {
+		geoIpLookup: function (callback) {
 			fetch("https://ipapi.co/json")
-				.then(function(res) { 
-					return res.json(); 
+				.then(function (res) {
+					return res.json();
 				})
-				.then(function(data) { 
-					callback(data.country_code); 
+				.then(function (data) {
+					callback(data.country_code);
 				})
-				.catch(function() { 
-					callback("us"); 
+				.catch(function () {
+					callback("us");
 				});
 		},
-		hiddenInput: function(telInputName) {
+		hiddenInput: function (telInputName) {
 			return "PhoneFull"
 		},
-		customPlaceholder: function(selectedCountryPlaceholder) {
+		customPlaceholder: function (selectedCountryPlaceholder) {
 			return " e.g " + selectedCountryPlaceholder
 		},
 	});

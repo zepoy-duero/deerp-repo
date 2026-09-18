@@ -111,6 +111,37 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
 
         return data;
     }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeEquipmentOperatorAsync(
+     int orgCode,
+     int locCode,
+     int deptCode
+      )
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_EQUIPMENT_OPERATOR_EMP_sel";
+        var parameters = new
+        {
+            ORG_CODE = orgCode,
+            LOC_CODE = locCode,
+            DEPT_CODE = deptCode
+        };
+
+
+        var data = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        //var data = await multi.ReadAsync<EmployeeDirectoryResponse>();
+        //var totalCount = await multi.ReadFirstAsync<int>();
+
+        await conn.CloseAsync();
+
+        return data;
+    }
 
     public async Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync()
     {
@@ -317,6 +348,57 @@ public class EmployeeDirectoryRepository(ConnectionPool cp, CurrentUser cu) : IE
         await using var conn = new SqlConnection(_cp.ConnectionName);
         await conn.OpenAsync();
         const string storedProcedure = "CLOUD_v1_ERP_CM_CERTIFIED_FIRSTAIDER_opts";
+        var results = await conn.QueryAsync<SelectOptionResponse>(
+            storedProcedure,
+            commandType: CommandType.StoredProcedure);
+        await conn.CloseAsync();
+
+        return results!;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedEquipmentOperatorAsync(int USER_CODE, string EQUIPMENT)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CERTIFIED_EQUIPMENT_OPERATOR_add";
+        var parameters = new
+        {
+            USER_CODE,
+            EQUIPMENT
+        };
+
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return user;
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedEquipmentOperatorAsync(int USER_CODE)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+
+        const string storedProcedure = "dbo.CLOUD_v1_ERP_CERTIFIED_EQUIPMENT_OPERATOR_del";
+        var parameters = new
+        {
+            USER_CODE
+        };
+        var user = await conn.QueryAsync<EmployeeDirectoryResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+        await conn.CloseAsync();
+        return user;
+    }
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserEquipmentOperatorOptionsAsync()
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+        const string storedProcedure = "CLOUD_v1_ERP_CM_CERTIFIED_EQUIPMENT_OPERATOR_opts";
         var results = await conn.QueryAsync<SelectOptionResponse>(
             storedProcedure,
             commandType: CommandType.StoredProcedure);

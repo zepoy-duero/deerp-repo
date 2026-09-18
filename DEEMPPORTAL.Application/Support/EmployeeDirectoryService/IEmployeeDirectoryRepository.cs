@@ -16,6 +16,10 @@ public interface IEmployeeDirectoryRepository
      int org_code,
      int loc_code,
      int dept_code);
+  Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeEquipmentOperatorAsync(
+     int org_code,
+     int loc_code,
+     int dept_code);
   Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync();
   Task<IEnumerable<SelectOptionResponse>> GetAllLocationListAsync();
   Task<IEnumerable<SelectOptionResponse>> GetAllDepartmentListAsync();
@@ -29,4 +33,7 @@ public interface IEmployeeDirectoryRepository
     Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE);
     Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE);
     Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync();
+         Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedEquipmentOperatorAsync(int USER_CODE, string EQUIPMENT);
+    Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedEquipmentOperatorAsync(int USER_CODE);
+    Task<IEnumerable<SelectOptionResponse>> GetUserEquipmentOperatorOptionsAsync();
 }

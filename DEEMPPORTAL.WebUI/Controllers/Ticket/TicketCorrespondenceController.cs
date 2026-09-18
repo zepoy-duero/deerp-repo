@@ -3,17 +3,23 @@ using DEEMPPORTAL.Domain.Ticket;
 using DEEMPPORTAL.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DEEMPPORTAL.WebUI.Controllers.Ticket
 {
     [Authorize]
     [Route("MyTickets/ticket-correspondence")]
     public class TicketCorrespondenceController(
-        ITicketRepository correspondenceRepository) : Controller
+        ITicketRepository correspondenceRepository,
+         ITicketService ticketService,
+        ILogger<TicketCorrespondenceController> logger) : Controller
     {
+        private readonly ITicketService _ticketService = ticketService;
         private readonly ITicketRepository
             _correspondenceRepository =
                 correspondenceRepository;
+        private readonly ILogger<TicketCorrespondenceController> _logger = logger;
+
 
 
         /* =========================================================
@@ -109,8 +115,7 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
         ========================================================= */
 
         [HttpPost]
-        public async Task<IActionResult> Insert(
-            [FromBody] TicketCorrespondenceRequest model)
+        public async Task<IActionResult> Insert([FromBody] TicketCorrespondenceRequest model)
         {
             try
             {
@@ -289,62 +294,61 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
            DELETE /api/ticket-correspondence/1
         ========================================================= */
 
-        [HttpDelete("{correspondenceId:int}")]
-        public async Task<IActionResult> Delete(
-            int correspondenceId,
-            [FromBody]
-            DeleteTicketCorrespondenceRequest model)
+        [HttpPost("delete-attachment")]
+        public async Task<IActionResult> DeleteAttachment(int attachmentId)
         {
+            if (attachmentId <= 0)
+            {
+                return BadRequest(new { success = false, message = "Invalid attachment or ticket ID." });
+            }
+
             try
             {
-                if (correspondenceId !=
-                    model.CorrespondenceId)
+                var result = await _ticketService.DeleteCorrespondenceAttachmentAsync(attachmentId);
+
+                if (result)
                 {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        message =
-                            "CorrespondenceId mismatch."
-                    });
+                    return Ok(new { success = true, message = "Attachment deleted successfully." });
                 }
 
-
-                var deleted =
-                    await _correspondenceRepository
-                        .DeleteAsync(model);
-
-
-                if (!deleted)
-                {
-                    return NotFound(new
-                    {
-                        success = false,
-                        message =
-                            "Correspondence not found."
-                    });
-                }
-
-
-                return Ok(new
-                {
-                    success = true,
-                    message =
-                        "Correspondence deleted successfully."
-                });
+                return BadRequest(new { success = false, message = "Failed to delete attachment." });
             }
             catch (Exception ex)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new
-                    {
-                        success = false,
-                        message =
-                            "An error occurred while deleting the correspondence.",
-                        error = ex.Message
-                    }
-                );
+                _logger.LogError(ex, "Error deleting attachment {AttachmentId}", attachmentId);
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the attachment." });
             }
+        }
+
+        [HttpPost("upload-attachment")]
+        public async Task<IActionResult> UploadCorrespondenceAttachments([FromForm] int TicketId, [FromForm] List<IFormFile>? TicketAttachments)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (!await _ticketService.UploadCorrespondenceAttachmentsAsync(TicketId, TicketAttachments))
+                return BadRequest(new
+                {
+                    isSuccess = false,
+                    message = "Failed to upload correspondence attachment. Please try again."
+                });
+
+            return Ok(new
+            {
+                isSuccess = true,
+                message = "Successfully created a new attachment."
+            });
+        }
+        [HttpGet("get-attachments")]
+        public async Task<IActionResult> GetCorrespondenceAttachments(int TicketId)
+        {
+            var ticketAttachments = await _ticketService.GetCorrespondenceAttachmentsAsync(TicketId);
+            return Ok(ticketAttachments);
+        }
+        [HttpGet("get-attachment")]
+        public async Task<IActionResult> GetCorrespondenceAttachment(int AttachmentId)
+        {
+            var ticketAttachment = await _ticketService.GetCorrespondenceAttachmentAsync(AttachmentId);
+            return Ok(ticketAttachment);
         }
     }
 }

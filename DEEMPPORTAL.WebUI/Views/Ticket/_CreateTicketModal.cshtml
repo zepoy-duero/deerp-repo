@@ -84,9 +84,7 @@
                 <button type="button" class="btn-close btn-close-white rounded-1" data-bs-dismiss="modal" aria-label="Close"></button>
                 
             </div>
-            @* <div class="progress w-100">
-                <div class="progress-bar w-75  h-auto" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-            </div> *@
+         
             <!--BODY-->
             <div class="modal-body">
                     <form id="createTicketForm" class="form needs-validation" novalidate>
@@ -96,36 +94,32 @@
                             
                             <!-- Requested By -->
                                   <div class="container-fluid">
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col-6">
                                                 <div class="d-flex flex-row align-items-center">
                                                     <label for="RequestedByName" class="text-nowrap">Requested By:</label>
-
                                                     <strong id="RequestedByName" class="ms-2">Jeffvil Duero</strong>
                                                     <input class="d-none" id="RequestedByCode" />
-
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="d-flex flex-row align-items-center">
                                                     <label for="RequestedDate" class="text-nowrap">Date:</label>
                                                     <strong id="RequestedDate" class="ms-2">Jeffvil Duero</strong>
-                                            <i id="changeOrgLoc" class="d-flex bi bi-three-dots-vertical ms-auto float-end" title="Click to edit Organization/Location">
-                                            </i>
+                                                    <i id="changeOrgLoc" class="d-flex bi bi-three-dots-vertical ms-auto float-end" title="Click to edit Organization/Location">
+                                                    </i>
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr />
+                                        @* <hr /> *@
                                         <div class="row gy-2">
                                             <div class="col-md-6 d-none" id="orgComponent">
-                                                
                                                     <label for="OrgCode" class="form-label small d-flex align-items-center">
                                                         <span><small id="ticketOrganizationRequired" class="text-danger">*</small> Organization</span>
                                                     </label>
-                                        <select value="1" name="select-organization" id="select-organization" class="form-select form-select-sm" required>
-                                                        </select>
+                                                    <select value="1" name="select-organization" id="select-organization" class="form-select form-select-sm" required>
+                                                    </select>
                                                     <div class="invalid-feedback">This field is required</div>
-                                              
                                             </div>
                                             <div class="col-md-6 d-none" id="locComponent">
                                           
@@ -167,7 +161,6 @@
                                                     <input name="TicketSubject" id="TicketSubject"
                                                            type="text"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Subject issue . . "
                                                            required aria-describedby="subjectIssue">
                                                     <div class="invalid-feedback">This field is required</div>                                              
                                             </div>
@@ -229,9 +222,7 @@
                     <a id="cancelBtn" data-bs-dismiss="modal" class="btn btn-outline-secondary">
                         Cancel
                     </a>
-                    @* <a onclick="resetEntries(event)" id="cancelBtn" class="btn btn-outline-secondary">
-                        Cancel
-                    </a> *@
+                 
                     <button 
                         type="button"
                         id="submitTicket" 

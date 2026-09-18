@@ -2,38 +2,454 @@
 	ViewData["title"] = "Ask AI Assitant";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <style>
-        /* Smooth fade-in animation for a premium feel */
-        @@keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+<style>
+    :root {
+        --red: #EB1C23;
+        --blue: #163160;
+        --grey: #C4C6C8;
+        --ink: #14213d;
+        --muted: #667085;
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --shadow: 0 18px 50px rgba(22, 49, 96, 0.12);
+        --radius: 22px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+    /* Smooth fade-in animation for a premium feel */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
         }
-        .animate-fade-in {
-            animation: fadeIn 1.2s ease-out forwards;
+
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
-        /* Soft text shadow to make it pop */
-        .text-glow {
-            text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1.2s ease-out forwards;
+    }
+    /* Soft text shadow to make it pop */
+    .text-glow {
+        text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Inter, Arial, sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 8% 8%, rgba(235,28,35,.10), transparent 28%), radial-gradient(circle at 92% 20%, rgba(22,49,96,.12), transparent 30%), linear-gradient(135deg, #f8fafc 0%, #eef3f9 100%);
+    }
+
+    .topbar {
+        height: 74px;
+        background: rgba(255,255,255,.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(22,49,96,.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 34px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: white;
+        font-weight: 800;
+        font-size: 18px;
+        background: linear-gradient(145deg, var(--red), #b70f16);
+        box-shadow: 0 8px 20px rgba(235,28,35,.25);
+    }
+
+    .brand-name {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: .3px;
+        color: var(--blue);
+    }
+
+    .brand-sub {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #475467;
+        background: #f8fafc;
+        padding: 9px 14px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        background: #16a34a;
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(22,163,74,.12);
+    }
+
+    .layout {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 34px;
+        display: grid;
+        grid-template-columns: 390px minmax(0, 1fr);
+        gap: 28px;
+        min-height: calc(100vh - 74px);
+    }
+
+    .intro {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10px 8px 20px;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(235,28,35,.08);
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+    }
+
+    h1 {
+        margin: 0;
+        color: var(--blue);
+        font-size: clamp(38px, 4vw, 58px);
+        line-height: 1.03;
+        letter-spacing: -2px;
+    }
+
+        h1 span {
+            color: var(--red);
         }
-    </style>
+
+    .lead {
+        margin: 20px 0 26px;
+        font-size: 17px;
+        line-height: 1.65;
+        color: #526070;
+        max-width: 370px;
+    }
+
+    .capabilities {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .capability {
+        background: rgba(255,255,255,.78);
+        border: 1px solid rgba(22,49,96,.09);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 8px 24px rgba(22,49,96,.05);
+    }
+
+        .capability .icon {
+            font-size: 22px;
+            margin-bottom: 9px;
+        }
+
+        .capability strong {
+            display: block;
+            color: var(--blue);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .capability small {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+    .chat-card {
+        background: rgba(255,255,255,.88);
+        border: 1px solid rgba(22,49,96,.10);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        min-height: 700px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        height: 78px;
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        color: white;
+        background: linear-gradient(115deg, var(--blue), #244b82);
+    }
+
+    .ai-avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: white;
+        color: var(--blue);
+        font-size: 22px;
+        box-shadow: 0 5px 16px rgba(0,0,0,.18);
+    }
+
+    .chat-title strong {
+        display: block;
+        font-size: 16px;
+    }
+
+    .chat-title small {
+        opacity: .75;
+        font-size: 12px;
+    }
+
+    .chat-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+    }
+
+        .chat-actions button {
+            border: 0;
+            background: rgba(255,255,255,.12);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .chat-actions button:hover {
+                background: rgba(255,255,255,.22);
+            }
+
+    .chat-frame {
+        position: relative;
+        flex: 1;
+        min-height: 620px;
+        background: white;
+    }
+
+    #copilotFrame {
+        width: 100%;
+        height: 100%;
+        min-height: 620px;
+        border: 0;
+        /* display: block; */
+        background: white;
+    }
+
+    .notice {
+        padding: 10px 16px;
+        font-size: 11px;
+        color: #667085;
+        background: #f8fafc;
+        border-top: 1px solid var(--border);
+        text-align: center;
+    }
+
+    .footer {
+        text-align: center;
+        padding: 16px;
+        color: #98a2b3;
+        font-size: 11px;
+    }
+
+    @@media (max-width: 1050px) {
+        .layout
+
+    {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+    .intro {
+        justify-content: flex-start;
+        padding-top: 10px;
+    }
+
+    .lead {
+        max-width: 720px;
+    }
+
+    .chat-card {
+        min-height: 680px;
+    }
+
+    }
+
+    @@media (max-width: 600px) {
+        .topbar
+
+    {
+        padding: 0 16px;
+    }
+
+    .brand-sub, .status {
+        display: none;
+    }
+
+    .layout {
+        padding: 14px;
+    }
+
+    h1 {
+        font-size: 42px;
+    }
+
+    .capabilities {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .chat-card {
+        border-radius: 16px;
+    }
+
+    .chat-frame, #copilotFrame {
+        min-height: 600px;
+    }
+
+    }
+</style>
 <div class="container">
 	<div class="page-inner">
-		<div class="flex-column">
-			<h5 class="page-title mb-3 fs-5 fw-bolder text-main">
-				Under Development
-			</h5>
-			<div class="page-category">
-				<div class="bg-main bg-gradient d-flex align-items-center justify-content-center min-vh-100 m-0">
-					<!-- Center Heading -->
-					 <h1 class="display-1 fw-extrabold text-center text-transparent bg-clip-text bg-gradient bg-info-subtle text-white text-glow animate-fade-in lh-base pb-3">
-                    Coming Soon
-                </h1>
-				</div>
-			</div>
-		</div>
+		
+                    <div class="row flex-row">
+                        <div class="col-md-5">
+                            <div class="brand">
+                                <div class="brand-mark">DE</div>
+                                <div>
+                                    <div class="brand-name">DAHBASHI AI</div>
+                                    <div class="brand-sub">Intelligent Business Assistant</div>
+                                </div>
+                            </div>
+                            <section class="intro">
+                                <div class="eyebrow">✦ Enterprise AI</div>
+
+                                <h1>Your <span>Intelligent</span><br>Business Assistant</h1>
+
+                                <p class="lead">
+                                    Ask questions, find information and get assistance.
+                                </p>
+
+                                <div class="capabilities">
+                                    <div class="capability">
+                                        <div class="icon">👥</div>
+                                        <strong>HR</strong>
+                                        <small>Find employee and HR information.</small>
+                                    </div>
+
+                                    <div class="capability">
+                                        <div class="icon">💻</div>
+                                        <strong>IT Support</strong>
+                                        <small>Get help with technology and IT questions.</small>
+                                    </div>
+                                    <div class="capability">
+                                        <div class="icon">&#127970</div>
+                                        <strong>Company Profile</strong>
+                                        <small>Ask questions about Company Profile.</small>
+                                    </div>
+
+                                    <div class="capability">
+                                        <div class="icon">&#128221</div>
+                                        <strong>Warranty Policy</strong>
+                                        <small>Get assistance with Warranty Policy.</small>
+                                    </div>
+
+
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-md-7">
+                            <section class="chat-card">
+
+                                <div class="chat-header">
+                                    <div class="ai-avatar">✦</div>
+
+                                    <div class="chat-title">
+                                        <strong>Powered by Microsoft Copilot Studio</strong>
+
+                                    </div>
+
+                                    <div class="chat-actions">
+                                        <button title="Reload agent" onclick="reloadAgent()">↻</button>
+                                        <button title="Open agent" onclick="openAgent()">↗</button>
+                                    </div>
+                                </div>
+
+                                <div class="chat-frame">
+                                    <iframe id="copilotFrame"
+                                            title=""
+                                            src="https://copilotstudio.microsoft.com/environments/Default-06b0a815-9b39-4a80-b4cd-c3945c9559f3/bots/cr44c_askAiAssistant/canvas?__version__=2&enableFileAttachment=true&tenantId=06b0a815-9b39-4a80-b4cd-c3945c9559f3"
+                                            allow="microphone; camera; geolocation; clipboard-read; clipboard-write"
+                                            loading="eager">
+                                    </iframe>
+                                </div>
+
+                                <div class="notice">
+                                    DAHBASHI AI • Secure enterprise assistant • Microsoft Copilot Studio
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+               
 	</div>
 </div>
 
 @section Scripts
-{}
+{
+    <script>
+        const agentUrl =
+          "https://copilotstudio.microsoft.com/environments/Default-06b0a815-9b39-4a80-b4cd-c3945c9559f3/bots/cr44c_askAiAssistant/canvas?__version__=2&enableFileAttachment=true&tenantId=06b0a815-9b39-4a80-b4cd-c3945c9559f3";
+
+        function reloadAgent() {
+          const frame = document.getElementById("copilotFrame");
+          frame.src = agentUrl;
+        }
+
+        function openAgent() {
+          window.open(agentUrl, "_blank", "noopener,noreferrer");
+        }
+    </script>
+}
 	

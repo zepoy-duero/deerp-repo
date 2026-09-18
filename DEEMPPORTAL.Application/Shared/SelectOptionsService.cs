@@ -26,9 +26,9 @@ public class SelectOptionsService(ISelectOptionsRepository selectOptionsReposito
         return await _selectOptionsRepository.GetAllSubMenuAsync(mainMenuCode);
     }
 
-    public async Task<IEnumerable<SelectOption>> GetEmployeeAsync(string searchParam)
+    public async Task<IEnumerable<SelectOption>> GetEmployeeAsync(string searchParam, int orgCode)
     {
-        return await _selectOptionsRepository.GetEmployeeAsync(searchParam);
+        return await _selectOptionsRepository.GetEmployeeAsync(searchParam, orgCode);
     }
 
     public async Task<IEnumerable<SelectOption>> GetAllRoleAsync()

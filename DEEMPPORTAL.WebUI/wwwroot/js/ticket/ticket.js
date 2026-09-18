@@ -62,17 +62,40 @@ $(async function () {
 
     await getAllTicket();
     bindEventHandlers();
+    await bindCorrespondenceHandlers();
     ticketsTable.bootstrapTable('hideLoading');
     //$('#requestedDateFilter').val(moment().format("YYYY"))
- 
-    
+    $('#requestedDateFilter').val('2026').trigger('change');
+    $("#openCreateTicketModal").attr('disabled', false);
+    $('#TicketDescription').summernote({
+        disableDragAndDrop: true,
+        height: 150,
+        focus: false,
+        lang: 'en-US',
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        toolbar: [
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+            //['insert', ['link', 'picture', 'video']],
+        ],
+
+    });
+    setTimeout(function () {
+        $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
+    }, 100);
+
+    $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
 });
 
 //-------FUNCTIONS------ 
 function createManagerApprovalStatusOptions() {
 
-    let options = `<option selected value="0" >Pending</option>
-                             <option value="1">Approved</option>`;
+    let options = `<option selected value="0">⏳ Pending</option>
+                                <option value="1">✅ Approved</option>`;
     $("#approveByManager").empty().append(options)
 }
 async function getOrganizationOptions() {
@@ -238,54 +261,144 @@ function showPreview(event) {
     //$("#imageModal").modal("show");
 }
 function showTicketAttachmentList(attachments) {
-    let attachmentList = ''
+    let attachmentList = '';
+    const editUserSwitch = document.getElementById('toggleEditUserRequest');
+    const isSwitchOn = editUserSwitch.checked;
     if (attachments.length >= 1) {
-         attachments.forEach(function (i) {
-             attachmentList += `<div class="file-preview-item" data-attachment-id="${i.AttachmentId}">
+        attachments.forEach(function (i) {
+            let imgThumbnail = '';
+            console.log(i)
+            if (i.FileExtension.trim() === 'pdf') imgThumbnail = `img/pdf-icon.png`;
+            else if (i.FileExtension.trim() === 'xlsx' || i.FileExtension === 'xls') imgThumbnail = `img/excel-icon.png`;
+            else if (i.FileExtension.trim() === 'docs') imgThumbnail = `img/docs-icon.png`;
+            else if (i.FileExtension.trim() === 'txt') imgThumbnail = `img/textfile-icon.png`;
+            else {
+                imgThumbnail = `img/image-icon.png`;
+            }
+            attachmentList += `<div class="file-preview-item px-3" data-attachment-id="${i.AttachmentId}">
             <div class="file-info">
-            <a href="data:image/jpg;base64,${i.FileAttachment}"">
-                 <img class="file-icon" onclick="downloadFile(${i.FileAttachment})"
-                   src="data:image/jpg;base64,${i.FileAttachment}">
-                   </a>
+        
+                 <img class="file-icon"
+                   src="${imgThumbnail}">
+           
                  <div>
                      <div>
-                        <strong>${i.FileName}</strong>
+                         <span style="cursor: pointer;" class="text-decoration-underline text-primary" onclick="viewAttachment(${i.AttachmentId})">
+                           <strong>${i.FileName}</strong>
+                         </span>                      
                      </div>
                         <small class="text-muted">${i.FileSize} KB</small>
                     </div>
                 </div>
                 <div>
-                  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                  <div class="btn-toolbar ${isSwitchOn ? `` : `d-none`}" role="toolbar" aria-label="Toolbar with button groups">
                       <div class="btn-group me-2" role="group" aria-label="Second group">
-                       <button onclick="downloadFile('${i.FileAttachment}')" type="button" class="btn btn-primary">
-                      <i class="bi bi-download"></i>
-                    </button>
-                    </div>
-                      <div class="btn-group" role="group" aria-label="Third group">
-                       <button onclick="deleteTicketAttachment(${i.AttachmentId})"  type="button" class="btn btn-danger">
-                          <i class="bi bi-trash"></i>
+                         <button 
+                           type="button" 
+                           id="downloadAttachmentBtn"
+                           class="btn btn-primary"
+                           onclick="downloadAttachment(${i.AttachmentId})"
+                            >
+                             <i class="bi bi-download"></i>
                         </button>
+                       </div>
+                      <div class="btn-group me-2" role="group" aria-label="Third group">
+                           <button onclick="deleteTicketAttachment(${i.AttachmentId})"  type="button" class="btn btn-danger">
+                              <i class="bi bi-trash"></i>
+                            </button>
                       </div>
+                   
+                  
                    </div>
 
                 </div>
             </div>`
-    })
+        })
+    }
+    $("#attachmentsPreviewContainer").empty().append(attachmentList);
+}
+async function viewAttachment(attachmentId) {
+ 
+    try {
+        // 1. Fetch the absolute latest list of attachments to find our specific file metadata
+        // (This saves an extra API call since we can grab it from your existing endpoint structure)
+        let fileData = await $.get(`${gBaseUrl}/get-attachment`, { AttachmentId: attachmentId });
+        let mimeType = getMimeTypeByExtension(fileData.FileName)
+        showTicketAttachmentPreview(fileData.FileAttachment, fileData.FileName, mimeType);
+   
+
+    } catch (error) {
+        console.error("Error loading file preview:", error);
+        alert("An error occurred while attempting to preview the file.");
+    }
+}
+function getMimeTypeByExtension(filename) {
+    // 1. Get the extension (e.g., "photo.PNG" -> "png")
+    const extension = filename.split('.').pop().toLowerCase();
+
+    // 2. Define the lookup dictionary
+    const mimeTypes = {
+        // Images
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'svg': 'image/svg+xml',
+        'webp': 'image/webp',
+
+        // Documents
+        'pdf': 'application/pdf',
+        'doc': 'application/msword',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'xls': 'application/vnd.ms-excel',
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'txt': 'text/plain',
+
+        // Archives
+        'zip': 'application/zip',
+        'rar': 'application/vnd.rar'
+    };
+
+    // 3. Return the match, or a fallback type if not found
+    return mimeTypes[extension] || 'application/octet-stream';
+}
+
+
+
+// Download file from img element data (already base64 encoded)
+async function downloadAttachment(attachmentId) {
+   
+    const file = await $.get(`${gBaseUrl}/get-attachment`, { AttachmentId: attachmentId });
+   
+    let fileName = file.FileName;
+    let dataUrl = `data:${getMimeTypeByExtension(file.FileName)};base64,${file.FileAttachment}`;
+    if (!fileName || !dataUrl) {
+        console.error("File name and data URL are required.");
+        toastr.error("Missing file information.", "Error");
+        return;
     }
 
-    $("#attachmentsPreviewContainer").empty().append(attachmentList);
+    try {
+        // Convert data URL to blob
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        console.log(response)
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        console.log(url)
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
 
-
-    
-}
-function downloadFile(base64String,fileName,contentType) {
-    const linkSource = `data:${contentType};base64,${base64String}`;
-    const downloadLink = document.createElement("a");
-    
-    downloadLink.href = linkSource;
-    downloadLink.download = fileName;
-    downloadLink.click();
-   
+        toastr.success(`Downloaded: ${fileName}`, "Success");
+    } catch (error) {
+        console.error("Download error:", error);
+        toastr.error("Failed to download file.", "Error");
+    }
 }
 function openBase64InNewTab(base64Data) {
     // Extract content and content type
@@ -398,7 +511,7 @@ async function handleFiles(files) {
       //}
 
       file.TicketId = null;
-      selectedFiles.push(file);
+      //selectedFiles.push(file);
       
       renderFilePreview(file);
     
@@ -685,12 +798,13 @@ async function deleteTicketAttachment(attachmentId) {
     }
 }
 function insertNewRow(response) {
-        console.log(response)
+
         ticketsTable.bootstrapTable('insertRow', {
             index: 0,
             row: response,
 
         })
+        ticketsTable.bootstrapTable('uncheck', 1)
         ticketsTable.bootstrapTable('check', 0)
     }
 async function getCreateTicketSelectOptions() {
@@ -706,10 +820,11 @@ async function getCreateTicketSelectOptions() {
    
 } 
 
-function resetTicketDescription() {
+async function resetTicketDescription() {
+   
     $('#TicketDescription').summernote({
         disableDragAndDrop: true,
-        height: 100,
+        height: 150,
         focus: false,
         lang: 'en-US',
         lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
@@ -727,30 +842,53 @@ function resetTicketDescription() {
     setTimeout(function () {
         $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
     }, 100);
-    
+  
     $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
+    return 1;
 }
 
 async function resetCreateTicketForm() {
     await getCreateTicketSelectOptions();
     selectedFiles = [];
+    $('#TicketDescription').summernote('code', '');
     $("#createTicketForm").removeClass('was-validated').trigger('reset');
     $("#TaskTypeCode").removeClass("is-valid").removeClass("is-invalid");
     $("#select-organization").removeClass("is-valid").removeClass("is-invalid");
     $("#select-location").removeClass("is-valid").removeClass("is-invalid");
     $("#select-department").removeClass("is-valid").removeClass("is-invalid");
     $("#TicketSubject").val("").removeClass("is-valid").removeClass("is-invalid");
-    resetTicketDescription();
    
-    $("#RequestedByName").val(CurrentUser.EMP_NAME);
-    $("#RequestedByCode").val(CurrentUser.USER_CODE);
+   
+    $("#RequestedByName").empty().append(CurrentUser.EMP_NAME);
     $("#RequestedDate").empty().append(moment(CurrentUser.DATE_TODAY).format("DD-MM-YYYY"));
-    $("#TicketAttachments").val('');
+    $("#TicketAttachments").val(null);
     //resetTicketDescription();
     //$("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
     $("#previewContainer").empty();
-    $("#TicketSubject").trigger('focus')
+    $('#TicketDescription').summernote({
+        disableDragAndDrop: true,
+        height: 150,
+        focus: false,
+        lang: 'en-US',
+        lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+        toolbar: [
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+            //['insert', ['link', 'picture', 'video']],
+        ],
 
+    });
+    setTimeout(function () {
+        $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
+    }, 100);
+
+    $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
+    $("#TicketSubject").trigger('focus');
+    enableSubmitButton()
 }
 //configure the parameters
 
@@ -767,7 +905,7 @@ function getCreateTicketParams() {
         TicketDescription: $('#TicketDescription').summernote('code'),
         TicketAttachments: $('#TicketAttachments').val(),
     };
-
+    console.log(formData)
     // Add extra user details
     formData.RequestedByCode = CurrentUser.USER_CODE;
     formData.RequestedDate = CurrentUser.DATE_TODAY;
@@ -784,44 +922,7 @@ function getCreateTicketParams() {
     return fd;
 }
 
-//function getCreateTicketParams() {
-//    const formElement = $('#createTicketForm')[0] //
-//   let fd = new FormData(formElement)//generate the formData parameter
-//    var formData = {
-//        OrgCode: $('#SelectTicketOrganization').val(),
-//        LocCode: $('#SelectTicketLocation').val(),
-//        DeptCode: $('#TicketDepartmentOptions').val(), // Hidden input storing the ID
-//        TaskTypeCode: $('#TaskTypeCode').val(),
-//        TicketSubject: $('#TicketSubject').val(),
-//        TicketDescription: $('#TicketDescription').val(),
-//        TicketAttachments: $('#TicketAttachments').val(),
-//    };
-//    formData.RequestedByCode = CurrentUser.USER_CODE;
-//    formData.RequestedDate = CurrentUser.DATE_TODAY;
-//    formData.RequestedByName = CurrentUser.EMP_NAME;
 
-//    return formData;
-
-//}
-//function setDefaultTicketParams() {
-//    var param = new FormData();
-//    param.append() = 
-//     formData = {
-//        OrgCode: $('#SelectOrganization').val(),
-//        LocCode: $('#SelectLocation').val(),
-//        DeptCode: $('#TicketDepartmentOptions').val(), // Hidden input storing the ID
-//        TaskTypeCode: $('#TaskTypeCode').val(),
-//        TicketSubject: $('#TicketSubject').val(),
-//        TicketDescription: $('#TicketDescription').val(),
-//        TicketAttachments: $('#TicketAttachments').val(),
-//    };
-//    formData.RequestedByCode = CurrentUser.USER_CODE;
-//    formData.RequestedDate = CurrentUser.DATE_TODAY;
-//    formData.RequestedByName = CurrentUser.EMP_NAME;
-
-//    return formData;
-
-//}
 function loadingSubmitButton() {
         $("#submitTicket").prop('disabled', true).empty().append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Submitting...`);
@@ -944,8 +1045,6 @@ function toggleSubmitButton() {
             disableSubmitButton()
         }
     }
-
-
 function validateSummerNote() {
         // If summernote instance exists, use its API; otherwise fall back to checking innerHTML
         const $editor = $('#TicketDescription').summernote();
@@ -974,7 +1073,6 @@ function validateSummerNote() {
         }
 }
 function checkIfDuplicateFile(file) {
-    console.log(file)
     let duplicated = false;
     selectedFiles.forEach(function (i) {
         if (file.name == i.name && file.size == i.size) {
@@ -985,34 +1083,41 @@ function checkIfDuplicateFile(file) {
     return duplicated;
 }
 async function uploadTicketAttachments(TicketId) {
-    loadingUploadAttachmentButton();
-    const data = new FormData();
-    Array.from(selectedFiles).forEach((file) => {
-        // Use the exact same key name to append multiple files as an array
-        data.append('TicketAttachments', file);
-    });
-    data.append("TicketId", TicketId);
-    try {
-        //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
-        let response = await $.ajax({
-            url: 'MyTickets/upload-ticket-attachments',
-            type: 'POST',
-            data: data,
-            contentType: false,
-            processData: false
+    if (selectedFiles.length >= 1) {
+        loadingUploadAttachmentButton();
+        const data = new FormData();
+        Array.from(selectedFiles).forEach((file) => {
+            // Use the exact same key name to append multiple files as an array
+            data.append('TicketAttachments', file);
         });
+        data.append("TicketId", TicketId);
+        try {
+            //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
+            let response = await $.ajax({
+                url: 'MyTickets/upload-ticket-attachments',
+                type: 'POST',
+                data: data,
+                contentType: false,
+                processData: false
+            });
 
-        if (response) {
-            return true;
-        } else {
+            if (response) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
+            toastr.error('Upload failed: ' + error.statusText);
             return false;
+        } finally {
+            enableSubmitButton();
         }
-    } catch (error) {
-        console.error(error);
-        toastr.error('Upload failed: ' + error.statusText);
-    } finally {
+    } else {
         enableSubmitButton();
+        return true;
     }
+    
 }
 async function sendEmailNotification(params) {
  
@@ -1051,6 +1156,8 @@ async function uploadAttachments(newTicket) {
                 });
                 $("#createTicketModal").modal('hide');
                 return uploaded;
+            } else {
+                return;
             }
         } catch (error) {
             toastr.error("Something went wrong. Please contact your administrator.", "System Error");
@@ -1063,11 +1170,10 @@ async function submitNewTicket() {
     loadingSubmitButton();
     let params = getCreateTicketParams();
     console.log(params)
-
+    //return;
     let newTicket = await createTicket(params);//send create ticket request
     clearTicketFilterControl();
     insertNewRow(newTicket);
-    console.log(newTicket)
         if (!newTicket) {
             toastr.error(newTicket.message, "Error")
             return;
@@ -1101,12 +1207,12 @@ async function updateTicket(ticket) {
     let response = await $.put(`${gBaseUrl}/update-ticket`, ticket);
 }
 //GET ALL TICKET ATTACHMENTS
-async function getTicketAttachments(ticketId) {
+//async function getTicketAttachments(ticketId) {
 
     
 
-    return ticketId;
-}
+//    return ticketId;
+//}
 async function loadTicketAttachments(ticketId) {
 
     $.ajax({
@@ -1254,5 +1360,208 @@ function renderEditFilePreviewFromPath(path, displayName) {
 
     $item.append($info).append($remove);
     $container.append($item);
+}
+// ============================================================
+// Ticket Attachment File Validation
+// ============================================================
+
+// Allowed file extensions
+const allowedFileExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+
+    ".pdf",
+    ".txt",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
+    ".csv"
+];
+
+// Explicitly blocked extensions
+const blockedFileExtensions = [
+    ".exe",
+    ".bat",
+    ".sh",
+    ".cmd",
+
+    ".php",
+    ".js",
+    ".html",
+    ".htm",
+    ".aspx"
+];
+
+// Allowed MIME types
+const allowedMimeTypes = [
+    "image/jpeg",
+    "image/png",
+
+    "application/pdf",
+    "text/plain",
+
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+
+    "text/csv",
+    "application/csv"
+];
+
+
+/**
+ * Validate a single attachment file
+ *
+ * @param {File} file
+ * @returns {Object}
+ */
+function validateAttachment(file) {
+
+    if (!file) {
+        return {
+            valid: false,
+            message: "No file was selected."
+        };
+    }
+
+    // Get file extension
+    const fileName = file.name || "";
+    const extension = "." + fileName
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+    // --------------------------------------------------------
+    // 1. Always block explicitly prohibited extensions
+    // --------------------------------------------------------
+
+    if (blockedFileExtensions.includes(extension)) {
+        return {
+            valid: false,
+            message: `The file "${fileName}" is not allowed. Executable and code files cannot be uploaded.`
+        };
+    }
+
+    // --------------------------------------------------------
+    // 2. Check if extension is in the allowed list
+    // --------------------------------------------------------
+
+    if (!allowedFileExtensions.includes(extension)) {
+        return {
+            valid: false,
+            message: `The file "${fileName}" is not an allowed attachment type.`
+        };
+    }
+
+    // --------------------------------------------------------
+    // 3. Validate MIME type
+    // --------------------------------------------------------
+
+    if (file.type && !allowedMimeTypes.includes(file.type.toLowerCase())) {
+        return {
+            valid: false,
+            message: `The file "${fileName}" has an invalid file type.`
+        };
+    }
+
+    // --------------------------------------------------------
+    // File is valid
+    // --------------------------------------------------------
+
+    return {
+        valid: true,
+        message: ""
+    };
+}
+
+
+/**
+ * Validate multiple selected files
+ *
+ * @param {FileList|Array} files
+ * @returns {Object}
+ */
+function validateAttachmentFiles(files) {
+
+    const validFiles = [];
+    const invalidFiles = [];
+
+    Array.from(files).forEach(function (file) {
+
+        const result = validateAttachment(file);
+
+        if (result.valid) {
+            validFiles.push(file);
+        } else {
+            invalidFiles.push({
+                file: file,
+                message: result.message
+            });
+        }
+
+    });
+
+    return {
+        valid: invalidFiles.length === 0,
+        validFiles: validFiles,
+        invalidFiles: invalidFiles
+    };
+}
+function showTicketAttachmentPreview(base64Data, fileName, mimeType, isLocalFile = false) {
+    if (!base64Data) return;
+
+    // 1. Convert Base64 string from VARBINARY column into a safe local blob URL
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: mimeType });
+    const fileUrl = URL.createObjectURL(blob);
+
+    // 2. Extract extension
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    console.log(fileExtension)
+    // 3. Update modal title with current file name
+    $('#preview-filename').text('Preview: ' + fileName);
+
+    let previewHtml = null;
+
+    // 4. Route based on File Type
+    if (fileExtension === 'pdf') {
+        // PDF Handling (Native browser rendering)
+        previewHtml = `<iframe src="${fileUrl}" class="w-100 h-100" style="border:none; min-height: 500px;"></iframe>`;
+    } else if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+        // Image Handling (Fixed syntax error on class quote closure)
+        previewHtml = `<img src="${fileUrl}" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="Preview">`;
+    } else {
+        // Fallback for unhandled files
+        previewHtml = `
+            <div class="text-center p-5">
+                <h5>Preview unavailable for this file format (.${fileExtension})</h5>
+                <a href="${fileUrl}" download="${fileName}" class="btn btn-secondary mt-2">Download File Instead</a>
+            </div>`;
+    }
+
+    // Inject into DOM
+    $('#file-preview-zone').empty().html(previewHtml);
+
+    // Open the modal
+    $("#editTicketModal").modal('hide');
+    $('#filePreviewModal').modal('show');
+
+    // Memory Cleanup Event Hook
+    $('#filePreviewModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+        // ONLY revoke if it's a locally generated Blob URL to prevent breaking DB download links
+        if (isLocalFile && fileUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(fileUrl);
+        }
+        $('#file-preview-zone').empty();
+    });
 }
 

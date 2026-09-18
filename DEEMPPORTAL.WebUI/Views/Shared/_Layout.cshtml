@@ -32,8 +32,11 @@
     <!-- Bootstrap Table Resizable -->
 
     <!-- Toastr -->
+    @* <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" /> *@
+
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
 
     <!-- Tom Select -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/css/tom-select.css"
@@ -129,54 +132,38 @@
         <!-- End Sidebar -->
         <!-- Main Panel -->
         <div class="main-panel">
-
             <!-- Header -->
             <div class="main-header">
-
                 <div class="main-header-logo">
-
                     <div class="logo-header" data-background-color="blue">
-
                         <a href="#" class="logo">
                             <img src="#"
                                  alt="navbar brand"
                                  class="navbar-brand"
                                  height="20" />
                         </a>
-
                         <div class="nav-toggle">
-
                             <button class="btn btn-toggle toggle-sidebar">
                                 <i class="bi bi-list"></i>
                             </button>
-
                             <button class="btn btn-toggle sidenav-toggler">
                                 <i class="bi bi-layout-sidebar-inset"></i>
                             </button>
-
                         </div>
-
                         <button class="topbar-toggler more">
                             <i class="bi bi-three-dots-vertical"></i>
                         </button>
-
                     </div>
-
                 </div>
-
                 <!-- Navbar -->
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom bg-main">
-
                     <div class="container-fluid">
-
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             var un = User?.Identity?.Name?.ToUpper();
                             var pn = User?.Claims.FirstOrDefault(c => c.Type == "PERSONNEL_NAME")?.Value;
                             var fn = pn?.Split(" ")[0];
-
                             <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-
                                 @if (un == "DEERPSA")
                                 {
                                     <li class="nav-item topbar-icon dropdown hidden-caret mx-0">
@@ -187,19 +174,13 @@
                                            aria-expanded="false">
 
                                             <i class="bi bi-gear-fill"></i>
-
                                         </a>
-
                                         <div class="dropdown-menu quick-actions quick-actions-danger">
-
                                             <div class="quick-actions-header bg-accent">
                                                 <span class="title mb-1">Manage</span>
                                             </div>
-
                                             <div class="quick-actions-scroll scrollbar-outer">
-
                                                 <div class="quick-actions-items">
-
                                                     <div class="row m-0">
 
                                                         <a class="col-6 col-md-4 p-0"
@@ -358,29 +339,20 @@
             }
 
             <!-- Footer -->
-            <footer class="footer py-1">
-
+            <footer class="footer">
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
-
                     <div class="container d-flex justify-content-center">
-
                         <p class="py-3 mb-0 small text-center">
                             © @DateTime.Now.Year Dahbashi Engineering.
                             All rights reserved.
                             <br />
                             v2.1.0.2
                         </p>
-
                     </div>
-
                 </div>
-
             </footer>
-
         </div>
-
     </div>
-
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     
@@ -401,7 +373,8 @@
     <script src="~/lib/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     <script src="~/lib/bootstrap-table/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
     <!-- Toastr -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script> *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
     <!-- Tom Select -->
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.complete.min.js"></script>

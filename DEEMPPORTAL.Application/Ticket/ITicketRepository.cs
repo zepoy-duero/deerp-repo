@@ -22,7 +22,9 @@ public interface ITicketRepository
     // Accept prepared DataTable representing TVP for upload
     Task<bool> UploadTicketAttachmentsAsync(DataTable ticketAttachment);
     Task<IEnumerable<TicketAttachmentsResponse>> GetTicketAttachmentsAsync(int ticketId);
+    Task<AttachmentResponse> GetAttachmentAsync(int AttachmentId);
     Task<bool> DeleteTicketAttachmentAsync(int attachmentId);
+    Task<bool> DeleteCorrespondenceAttachmentAsync(int attachmentId);
 
     //TICKET CORRESPONDENCE
     Task<TicketCorrespondence?> GetByIdAsync(int correspondenceId);
@@ -34,4 +36,7 @@ public interface ITicketRepository
     Task<TicketCorrespondence?> UpdateAsync(UpdateTicketCorrespondenceRequest model);
 
     Task<bool> DeleteAsync(DeleteTicketCorrespondenceRequest model);
+    Task<bool> UploadCorrespondenceAttachmentsAsync(DataTable dt);
+    Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId);
+    Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int attachmentId);
 }

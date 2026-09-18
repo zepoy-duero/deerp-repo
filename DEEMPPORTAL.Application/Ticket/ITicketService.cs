@@ -22,8 +22,10 @@ namespace DEEMPPORTAL.Application.Ticket
         Task<TicketResponse> UpdateTicketAsync(UpdateTicketParams ticket);
 
         Task<IEnumerable<TicketAttachmentsResponse>> GetTicketAttachmentsAsync(int ticketId);
+        Task<AttachmentResponse> GetAttachmentAsync(int AttachmentId);
         Task<bool> UploadTicketAttachmentsAsync(int TicketId,List<IFormFile>? ticketAttachment);
         Task<bool> DeleteTicketAttachmentAsync(int attachmentId);
+        Task<bool> DeleteCorrespondenceAttachmentAsync(int attachmentId);
 
         //TICKET CORRESPONDENCE
         Task<TicketCorrespondence?> GetByIdAsync(
@@ -40,5 +42,8 @@ namespace DEEMPPORTAL.Application.Ticket
 
         Task<bool> DeleteAsync(
             DeleteTicketCorrespondenceRequest model);
+        Task<bool> UploadCorrespondenceAttachmentsAsync(int ticketId, List<IFormFile>? ticketAttachments);
+        Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId);
+        Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int attachmentId);
     }
 }

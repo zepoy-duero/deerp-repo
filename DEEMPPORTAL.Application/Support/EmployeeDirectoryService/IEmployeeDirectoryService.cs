@@ -8,6 +8,7 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeDirectoryAsync(int org_code, int loc_code, int dept_code, string status);
     Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirefightersAsync(int org_code, int loc_code, int dept_code);
     Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeFirstAidersAsync(int org_code, int loc_code, int dept_code);
+    Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeEquipmentOperatorAsync(int org_code, int loc_code, int dept_code);
     Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync();
     Task<IEnumerable<SelectOptionResponse>> GetAllLocationListAsync();
     Task<IEnumerable<SelectOptionResponse>> GetAllDepartmentListAsync();
@@ -22,5 +23,8 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
          Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE);
     Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE);
     Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync();
+         Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedEquipmentOperatorAsync(int USER_CODE,string EQUIPMENT);
+    Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedEquipmentOperatorAsync(int USER_CODE);
+    Task<IEnumerable<SelectOptionResponse>> GetUserEquipmentOperatorOptionsAsync();
     }
 }

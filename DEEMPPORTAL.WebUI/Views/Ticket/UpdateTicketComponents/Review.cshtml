@@ -1,0 +1,133 @@
+﻿
+<div id="ticketReview" class="card section-card">
+    <div class="card-header section-title border-2 px-4">     
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                Review/Release
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="toggleEditReview">
+                <label class="form-check-label" for="toggleEditReview">Edit Mode</label>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @* <div class="section-title text-main">Review</div> *@
+            <div class="row g-0">
+                <div class="col-md-3 d-flex flex-column">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Reviewed By</label>
+                                <input id="reviewedByName" class="form-control" disabled />
+                            </div>
+                            <div class="form-group mt-0">
+                                <label>Reviewed Date</label>
+                                <input id="reviewedDate" type="date" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Version Number</label>
+                                <input id="versionNo" class="form-control" value="v2.0.0.1" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label for="remarks">Reviewed Remarks</label>
+                                <textarea id="remarks" class="form-control" disabled></textarea>
+                            </div>
+                            <div class="form-group d-none">
+                                <input id="updatedBy" class="form-control d-none" />
+                                <input type="date" id="updatedDate" class="form-control d-none" />
+                            </div>
+                        </div>                       
+                    </div>
+                   
+                </div>
+            <div class="col-md-9">
+                <!-- Nav tabs -->
+                <div class="card px-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <ul class="nav nav-tabs me-2">
+                            <!-- FIXED: Moved 'active' class to the nav-link -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#Correspondence">Correspondence</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#ReviewReleaseAttachment">Attachments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#History">History</a>
+                            </li>
+                        </ul>
+                        <div id="addCorrContainer" class="d-none">
+                            <button type="button" id="addCorrespondenceBtn" class="btn btn-sm btn-outline-danger d-none">
+                                <i class="bi bi-plus-lg"></i> New Correspondence
+                            </button>
+                        </div>
+                        <div id="addCorrAttachmentContainer" class="d-none">
+                            <div class="input-group">
+                                <input class="form-control d-none" type="file" id="file-chooser" accept=".pdf, .jpg, .jpeg, .png, .gif, .xlsx, .xls, .docx, .doc">
+                                <button id="addCorrespondenceAttachmentBtn" class="btn btn-sm btn-outline-danger d-none">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    Add Attachment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- FIXED: Added 'show' alongside 'active' for smooth rendering -->
+                        <div class="tab-pane fade show active card-body" id="Correspondence">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/TicketCorrespondence.cshtml");
+                            }
+                        </div>
+                        <div class="tab-pane card-body fade" id="ReviewReleaseAttachment">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/CorrespondenceAttachment.cshtml");
+                            }
+                        </div>
+                        <div class="tab-pane card-body fade" id="History">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/TicketHistory.cshtml");
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+ 
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addCorrContainer = document.getElementById('addCorrContainer');
+        const addCorrAttachmentContainer = document.getElementById('addCorrAttachmentContainer');
+        const tabLinks = document.querySelectorAll('#ticketReview .nav-link');
+
+        function updateContainerVisibility() {
+            const activeTab = document.querySelector('#ticketReview .nav-link.active');
+            if (activeTab) {
+                const tabHref = activeTab.getAttribute('href');
+
+                if (tabHref === '#Correspondence') {
+                    addCorrContainer.classList.remove('d-none');
+                    addCorrAttachmentContainer.classList.add('d-none');
+                } else if (tabHref === '#ReviewReleaseAttachment') {
+                    addCorrContainer.classList.add('d-none');
+                    addCorrAttachmentContainer.classList.remove('d-none');
+                } else {
+                    addCorrContainer.classList.add('d-none');
+                    addCorrAttachmentContainer.classList.add('d-none');
+                }
+            }
+        }
+
+        // Listen to Bootstrap tab change event
+        tabLinks.forEach(link => {
+            link.addEventListener('shown.bs.tab', updateContainerVisibility);
+        });
+
+        // Initial state
+        updateContainerVisibility();
+    });
+</script>

@@ -4,14 +4,12 @@ ViewData["Title"] = "Ticket";
 }
 
 @{
-    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
+    await Html.RenderPartialAsync("~/Views/Ticket/_CreateTicketModal.cshtml");
 }
 @{
-    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_CreateTicketModal.cshtml");
+    await Html.RenderPartialAsync("~/Views/Ticket/_UpdateTicketModal.cshtml");
 }
-@{
-    await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_EditTicketModal.cshtml");
-}
+
 <div class="container">   
         <div class="page-inner" id="pageInner" style="height: 100% !important; overflow:auto">
             <div class="flex-column align-items-center">
@@ -39,15 +37,19 @@ ViewData["Title"] = "Ticket";
             <div class="card mt-3">
                 <div class="row d-flex justify-content-between align-items-center">                
                     <div class="col">
-                        <div id="openCreateTicketModal" class="btn btn-sm ms-4 mt-4 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
-                            <i class="bi bi-plus"></i> New Ticket
-                        </div>
+                       
+                            <button disabled id="openCreateTicketModal" class="btn btn-sm ms-4 mt-4 btn-danger text-nowrap text-white" data-bs-toggle="modal" data-bs-target="#createTicketModal">
+                                <i class="bi bi-plus"></i> New Ticket
+
+                            </button>
+                 
+                      
                         @{
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTableFilters.cshtml");
+                            await Html.RenderPartialAsync("~/Views/Ticket/TicketTableComponents/_TicketTableFilters.cshtml");
                        
                         }
                         @{
-                            await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_TicketTable.cshtml");
+                            await Html.RenderPartialAsync("~/Views/Ticket/TicketTableComponents/_TicketTable.cshtml");
                         }
                     </div>
                 </div>
@@ -60,7 +62,9 @@ ViewData["Title"] = "Ticket";
 @section Scripts {
     <!--BOOTSTRAP TABLE PLUGIN DEPENDECIES-->
     @* <script src="~/js/ticket/ticket-assignee.js" asp-append-version="true"></script> *@
+    <script src="~/js/ticket/ticket-correspondence.js"></script>
     <script src="~/js/ticket/ticket-event-handlers.js" asp-append-version="true"></script>
+    @* <script src="~/js/ticket/correspondence-attachment-preview.js"></script> *@
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
     @*  
     <script src="~/js/ticket/ticket-create.js" asp-append-version="true"></script>

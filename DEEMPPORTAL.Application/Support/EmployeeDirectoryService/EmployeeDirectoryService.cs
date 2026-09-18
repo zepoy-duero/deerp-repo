@@ -17,6 +17,10 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
     {
       return await _employeeDirectoryRepository.GetAllEmployeeFirstAidersAsync(org_code, loc_code, dept_code);
     }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> GetAllEmployeeEquipmentOperatorAsync(int org_code, int loc_code, int dept_code)
+    {
+      return await _employeeDirectoryRepository.GetAllEmployeeEquipmentOperatorAsync(org_code, loc_code, dept_code);
+    }
     public async Task<IEnumerable<SelectOptionResponse>> GetAllOrganizationListAsync()
     {
       return await _employeeDirectoryRepository.GetAllOrganizationListAsync();
@@ -42,33 +46,44 @@ namespace DEEMPPORTAL.Application.Support.EmployeeDirectoryService
       return await _employeeDirectoryRepository.GetFilteredDepartmentListAsync(orgCode, locCode);
     }
     public async Task<byte[]?> GetProfilePicAsync(int EMP_CODE)
-     {
+    {
             return await _employeeDirectoryRepository.GetProfilePicAsync(EMP_CODE);
     }
     public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirefighterAsync(int USER_CODE)
-     {
+    {
             return await _employeeDirectoryRepository.AddCertifiedFirefighterAsync(USER_CODE);
     }
     public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirefighterAsync(int USER_CODE)
-     {
+    {
             return await _employeeDirectoryRepository.RemoveCertifiedFirefighterAsync(USER_CODE);
     }
-    
     public async Task<IEnumerable<SelectOptionResponse>> GetUserFireFighterOptionsAsync()
-     {
+    {
             return await _employeeDirectoryRepository.GetUserFireFighterOptionsAsync();
     }
-        public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE)
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedFirstAiderAsync(int USER_CODE)
         {
             return await _employeeDirectoryRepository.AddCertifiedFirstAiderAsync(USER_CODE);
-        }
-        public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE)
+        }   
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedFirstAiderAsync(int USER_CODE)
         {
             return await _employeeDirectoryRepository.RemoveCertifiedFirstAiderAsync(USER_CODE);
         }
-        public async Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync()
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserFirstAiderOptionsAsync()
      {
             return await _employeeDirectoryRepository.GetUserFirstAiderOptionsAsync();
+    }
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> AddCertifiedEquipmentOperatorAsync(int USER_CODE, string EQUIPMENT)
+        {
+            return await _employeeDirectoryRepository.AddCertifiedEquipmentOperatorAsync(USER_CODE,  EQUIPMENT);
+        }   
+    public async Task<IEnumerable<EmployeeDirectoryResponse>> RemoveCertifiedEquipmentOperatorAsync(int USER_CODE)
+        {
+            return await _employeeDirectoryRepository.RemoveCertifiedEquipmentOperatorAsync(USER_CODE);
+        }
+    public async Task<IEnumerable<SelectOptionResponse>> GetUserEquipmentOperatorOptionsAsync()
+     {
+            return await _employeeDirectoryRepository.GetUserEquipmentOperatorOptionsAsync();
     }
 
    

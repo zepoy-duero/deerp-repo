@@ -24,7 +24,7 @@
 
 <div class="container-fluid">
 
-    <table class="table table-bordered table-striped table-sm pg-primary" id="ticketsTable"
+    <table class="table table-bordered table-sm pg-primary" id="ticketsTable"
            data-toggle="table"
            data-search-selector="#customSearch"
            data-filter-control="true"
@@ -84,10 +84,9 @@
                     Requested Date
                 </th>
                 <th data-field="TicketYear"
-                    data-filter-control="select"
-                    data-filter-control-placeholder="All"
-                   
+                    data-filter-control="select"                   
                     data-filter-default="'2026'"
+                    data-filter-control-placeholder="All"
                     class="text-nowrap d-none">
                     Year
                 </th>
@@ -222,7 +221,7 @@
          
      }
      window.IdFormatter = (value,row) =>{
-                 return `<div class='text-main fw-bold text-decoration-underline text-nowrap text-start'>${value}</div>`
+                 return `<div class='text-main fw-bold text-decoration-underline text-nowrap text-start'><a href="#">${value}</a></div>`
          }
        window.detailFormatter = (index, row) => {
       const html = []

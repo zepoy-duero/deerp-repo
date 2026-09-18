@@ -13,4 +13,5 @@ public class HomeResponse
 	public string EMAIL_ADDRESS { get; set; } = string.Empty;
 	public string VAT_NO { get; set; } = string.Empty;
     public int? CAN_EDIT { get; set; }
+	public bool? CAN_ADD_EQUIPMENT_OPERATOR {get; set;}
 }

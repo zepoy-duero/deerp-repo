@@ -184,6 +184,12 @@ public class TicketController(ISelectOptionsService selectOptionsService,
         var ticketAttachments = await _ticketService.GetTicketAttachmentsAsync(TicketId);
         return Ok(ticketAttachments);
     }
+    [HttpGet("get-attachment")]
+    public async Task<AttachmentResponse> GetAttachment(int AttachmentId)
+    {
+        var ticketAttachment = await _ticketService.GetAttachmentAsync(AttachmentId);
+        return ticketAttachment;
+    }
     private string GetMimeType(string extension)
     {
         return extension switch

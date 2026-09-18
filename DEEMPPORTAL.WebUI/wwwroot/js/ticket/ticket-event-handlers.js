@@ -2,7 +2,12 @@
    
     //----------EVENT LISTENERS----------------------------
 
-
+    $("#downloadAttachmentBtn").on("click", function () {
+        console.log($(this))
+        const fileName = $(this).data("filename");
+        const dataUrl = $(this).data("url");
+        downloadFile(fileName, dataUrl);
+    });
     // RESET FILTER
     $("#btnResetFilter").on("click", function () {
         ticketsTable.bootstrapTable("clearFilterControl");
@@ -73,7 +78,8 @@
         });
     });
     // Search filter
-    $("#moduleSearchInput").on("keyup", function () {
+    $("#moduleSearchInput").on("keyup", function (e) {
+        e.preventDefault()
         let search = $(this).val().toLowerCase();
 
         $("#moduleList li").each(function () {
@@ -122,8 +128,9 @@
         selectedFiles = []
         resetCreateTicketForm();
         $("#createTicketModal").modal('show');
+       
     });
-   
+    
     $("#TicketAttachments").on("change", function (e) {
         let isDuplicated = false;
         if (e.target.files.length > 10) {
@@ -132,13 +139,18 @@
         }
         const filesArray = Array.from(e.target.files); 
         console.log(filesArray)
+        const validated = validateAttachmentFiles(filesArray)
+        if (!validated.valid) {
+            toastr.error(`Invalid files selected`, "Error: Not allowed");
+            return;
+        }
         if (filesArray.length >= 1) {
             for (let file of filesArray) {
                 if (!isValidFileSize(file)) {
                     toastr.error(`Please select a file under 2MB`, "Error");
                     continue;
                 }
-                if (checkIfDuplicateFile(file)) {
+                else if (checkIfDuplicateFile(file)) {
                     toastr.error(`The file named ${file.name} already selected`, "Error");
                     isDuplicated = true
                     continue;
@@ -160,7 +172,11 @@
         }
         console.log(e.target.files);
         const filesArray = Array.from(e.target.files);
-  
+        const validated = validateAttachmentFiles(filesArray)
+        if (!validated.valid) {
+            toastr.error(`Invalid files selected`, "Error: Not allowed");
+            return;
+        }
         if (filesArray.length >= 1) {
             for (let file of filesArray) {
                 if (!isValidFileSize(file)) {
@@ -277,12 +293,6 @@
         renderDropdown(filtered);
         $("#employeedropdown").show();
     });
-
-
-
-
-
-
     $("#updateTicket").on("click", async function (event) {
         event.preventDefault();
 
@@ -384,33 +394,7 @@
             },
         );
     });
-    // hook the edit attachments input to upload immediately after selection
-    //$("#editTicketAttachments").on("change", function (e) {
-    //    const files = Array.from(e.target.files || []);
-    //    if (files.length === 0) return;
-    //    uploadEditFiles(files);
-    //    $(this).val(''); // clear input so same file can be re-selected later
-    //});
-    
-    //$("#editTicketModal").on("hidden.bs.modal", function (event) {
-        //toggleEditMode();
-        //if ($("#toggleEditUserRequest").is('checked')) {
-        //    $("#toggleEditUserRequest").trigger('change')
-        //}
-        //if ($("#toggleEditUserRequest").is('checked')) {
-
-        //}
-        //if ($("#toggleEditUserRequest").is('checked')) {
-
-        //}
-        //if ($("#toggleEditUserRequest").is('checked')) {
-
-        //}
-        
-        //$("#toggleEditAssignment").trigger('change')
-        //$("#toggleEditApprovals").trigger('change')
-        //$("#toggleEditReview").trigger('change')
-    //});
+   
     $("#SelectTicketOrganization").on("change", async function () {
         await getLocationOptions($("#SelectTicketOrganization").val())
             .then(async function () {
@@ -430,9 +414,6 @@
         $("#LocCode").val($(this).val());
 
     });
-    //$("#createTicketModal").on("hidden.bs.modal", function () {
-    //    resetCreateTicketForm();
-    //})
     $("#btnUpdateTicket").on("click", async function () {
         loadingSubmitEditButton();
         const updateParams = getUpdateTicketParams();
@@ -461,11 +442,10 @@
 
     });
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
-        // HEAD
-        console.log(row.TicketId)
+        
         selectedFiles = [];
-        activeAttachmentContainer = 'edit';
-        toggleEditMode();
+        activeAttachmentContainer = 'edit'; 
+        resetEditMode();
         selectedTicket = row;
         $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
         //$("attachmentsPreviewContainer").empty();
@@ -479,13 +459,13 @@
         await setAssignmentFormValue(row);
         await setApprovalsFormValue(row);
         await setReviewFormValue(row);
-
-        // Optional: Open an edit modal if your form lives inside one
+                // Optional: Open an edit modal if your form lives inside one
         // $('#editTicketModal').modal('show');
         $editTicketModal.modal('show');
     });
     //TRIGGER THE ATTACH FILE INPUT FIELD
-    $("#editAttachBtn").on('click', function () {
+    $("#editAttachBtn").on('click', function (event) {
+        event.preventDefault()
         $("#editTicketAttachments").trigger("click");
     });
     //when user click edit button from the User Request Section
@@ -493,12 +473,9 @@
   
         event.preventDefault();
         const switchElement = document.getElementById('toggleEditUserRequest');
-       
         // Check the state (returns true if turned on, false if turned off)
         const isChecked = switchElement.checked;
-        console.log(isChecked)
-        //$("#toggleEditUserRequest").val(true)
-
+     
         $("#userRequestEditBtn,#userRequestUpdateBtn").toggleClass('d-none');
 
         // make the RequestedBy field editable: show the select, hide the display
@@ -507,22 +484,26 @@
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
-        $("#displayRequestedDate,#editRequestedDate").toggleClass('d-none')
-
-        //$("#editTicketAttachments").toggleClass('d-none')
+        //REQUESTED DATE
+        $("#displayRequestedDate,#editRequestedDate").toggleClass('d-none');
+        $("#editRequestedDate").val(moment(selectedTicket.RequestedDate).format('YYYY-MM-DD'));
+       //SUBJECT
         $("#ticketSubject").prop("disabled", function (i, val) {
             return !val;
         });
         $("#ticketSubject").toggleClass('form-control-plaintext form-control');
-
-        console.log(isChecked)
+        //TICKET ATTACHMENTS
+       
+        
         if (isChecked) {
+            $("#attachmentsPreviewContainer").find('.btn-toolbar').removeClass('d-none')
             $('#editTicketDescription').summernote('enable');
             setTimeout(function () {
                 $('.dropdown-line-height .dropdown-item[data-value="0.2"]').trigger('click');
             }, 100);
         } else {
             $('#editTicketDescription').summernote('disable');
+            $("#attachmentsPreviewContainer").find('.btn-toolbar').addClass('d-none')
         }
         $("#editAttachBtn").toggleClass('d-none');
     });
@@ -557,10 +538,10 @@
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
+        $("#approvalStatus").val('Pending')
     });
 
     $("#toggleEditReview").on("change", function () {
-     
         $("#reviewedByName").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
@@ -573,26 +554,21 @@
         $("#remarks").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
-
+        $("#txtCorrespondence").prop('disabled', function (i, value) {
+            return !value;
+        })
+        $("#addCorrespondenceBtn").toggleClass('d-none')
+        $("#addCorrespondenceAttachmentBtn").toggleClass('d-none')
     });
-    $("#correspondenceList").on('click', function (event) {
-        // Find the clicked item or its closest list-item parent
-        const item = event.target.closest('.correspondence-item');
-        const correspondenceContent = item.querySelector('p').textContent;
-        console.log(item.querySelector('p').textContent)
-        // If the click wasn't inside a list item, do nothing
-        if (!item) return;
+    
 
-        // Prevent default anchor behavior
-        event.preventDefault();
-
-        // Access custom data attributes (e.g., data-ticket-id="1")
-        const ticketId = item.dataset.ticketId;
-        console.log(`Clicked ticket ID: ${ticketId}`);
-        $("#txtCorrespondence").val(correspondenceContent)
-    })
 }
-
+function updateModalFormValues(ticket) {
+    setUserRequestFormValue(ticket);
+    setAssignmentFormValue(ticket);
+    setApprovalsFormValue(ticket);
+    setReviewFormValue(ticket);
+}
 function getUserRequestFieldValues() {
     return {
         TicketId: selectedTicket.TicketId, //user request
@@ -603,16 +579,11 @@ function getUserRequestFieldValues() {
         TicketSubject: $("#ticketSubject").val() ?? selectedTicket.TicketSubject,
         RequestedByCode: $("#editRequestedByCode").val() ?? selectedTicket.RequestedByCode,
         RequestedByName: $("#editRequestedByName").val() ?? selectedTicket.RequestedByName,
-        RequestedDate: $("#displayRequestedDate").val() ?? selectedTicket.RequestedDate,
+        RequestedDate: $("#editRequestedDate").val() ?? selectedTicket.RequestedDate,
         TicketDescription: $("#editTicketDescription").summernote('code'),
     };
 }
-function updateModalFormValues(ticket) {
-    setUserRequestFormValue(ticket);
-    setAssignmentFormValue(ticket);
-    setApprovalsFormValue(ticket);
-    setReviewFormValue(ticket);
-}
+
 function getAssignmentFieldValues() {
    
     return {
@@ -662,10 +633,12 @@ function getUpdateTicketParams() {
 async function setUserRequestFormValue(row) {
     $("#ticketSubject").val(row.TicketSubject);
     $("#editRequestedByCode").val(row.RequestedByCode);
+
     $("#editRequestedByName").val(row.RequestedByName);
+    $("#displayRequestedByName").text(row.RequestedByName);
     $("#displayRequestedByName").val(row.RequestedByName);
-    $("#displayRequestedDate").val(moment(row.RequestedDate).format("MM-DD-YYYY"));
-    $("#editRequestedDate").val(row.RequestedDate).attr('value',moment(row.RequestedDate).format('MM/DD/YYYY'));
+    $("#displayRequestedDate").val(moment(row.RequestedDate).format("DD-MM-YYYY"));
+    $("#editRequestedDate").attr('value',moment(row.RequestedDate).format('YYYY-MM-DD'));
     $('#editTicketDescription').summernote({
         disableDragAndDrop: true,
         height: 100,
@@ -727,22 +700,26 @@ async function setApprovalsFormValue(row) {
     if ($("#isManagementApproval").is(':checked')) {
         $("#managementApprovalRequired").removeClass('d-none')
     }
+    $("#approvalStatus").val('Pending');
 }
 async function setReviewFormValue(row) {
     //REVIEW/RELEASE
-    $("#reviewedByName").val(row.ReviewedBy ? row.ReviewedBy : CurrentUser.EMP_NAME)
+    //$("#reviewedByName").val(row.ReviewedBy ? row.ReviewedBy : CurrentUser.EMP_NAME)
+    $("#reviewedByName").val(row.ReviewedBy ? row.ReviewedBy : '')
 
-    $("#reviewedDate").val(row.Reviewed_Date ? row.reviewDate : moment().format("YYYY-MM-DD"));
-    $("#versionNo").val(row.VersionNo ? row.VersionNo : 2.);
-    $("#remarks").val(row.Remarks ? row.Remarks : 'No Data');
+    $("#reviewedDate").val(row.Reviewed_Date ? row.reviewDate : '');
+    //$("#reviewedDate").val(row.Reviewed_Date ? row.reviewDate : moment().format("YYYY-MM-DD"));
+    $("#versionNo").val(row.VersionNo ? row.VersionNo : '');
+    $("#remarks").val(row.Remarks ? row.Remarks : '');
 
     $("#updatedBy").val(row.UpdatedBy);
     $("#updatedDate").val(row.UpdatedDate);
     $("#stringTicketId").val(row.StringTicketId ? row.StringTicketId : '');
-
+    await getTicketCorrespondence(selectedTicket.TicketId)
+    await showCorrespondenceAttachmentList();
 }
 //RESETS THE EDIT TICKET MODAL FORM FIELDS AND TOGGLE BUTTON TO ITS INITIAL STATE
-function toggleEditMode() {
+function resetEditMode() {
     const section1 = document.getElementById('toggleEditUserRequest');
     const section2 = document.getElementById('toggleEditAssignment');
     const section3 = document.getElementById('toggleEditApprovals');

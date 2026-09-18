@@ -24,7 +24,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
     private readonly EmailService _emailService = emailService;
     private readonly ILogger<TicketRepository> _logger = logger;
     private const string StoredProcedure =
-           "dbo.CLOUD_ERP_TICKET_CORRESPONDENCE_CRUD";
+           "dbo.CLOUD_v1_ERP_TICKET_CORRESPONDENCE_request";
 
     public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
@@ -88,6 +88,34 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
       
 
         return newTicket;
+    }
+    public async Task<bool> UploadCorrespondenceAttachmentsAsync(DataTable dt)
+    {
+
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_TICKET_CORRESPONDENCE_ATTACHMENT_add";
+        var parameters = new
+        {
+            CorrespondenceAttachments = dt.AsTableValuedParameter("dbo.TT_CLOUD_v1_ERP_TICKET_CORRESPONDENCE_ATTACHMENT")
+        };
+
+        try
+        {
+            _logger.LogInformation("UploadCorrespondenceAttachmentsAsync calling {StoredProcedure} with Files: {Count}", storedProcedure, dt.Rows.Count);
+        }
+        catch { /* ignore logging errors */ }
+
+        var rowsAffected = await conn.QueryAsync<TicketAttachmentsResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure
+        );
+
+        await conn.CloseAsync();
+
+        return rowsAffected != null && rowsAffected.Any();
     }
     public async Task<bool> UploadTicketAttachmentsAsync(DataTable dt)
     {
@@ -498,6 +526,88 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
 
         return data;
     }
+    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CM_TICKET_CORRESPONDENCE_ATTACHMENTS_sel";
+        var parameters = new
+        {
+            TicketId = TicketId
+        };
+
+        try
+        {
+            _logger.LogInformation("GetCorrespondenceAttachmentsAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { }
+
+        var data = await conn.QueryAsync<CorrespondenceAttachmentsResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return data;
+    }
+    public async Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int AttachmentId)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CM_TICKET_CORRESPONDENCE_ATTACHMENT_sel";
+        var parameters = new
+        {
+            AttachmentId
+        };
+
+        try
+        {
+            _logger.LogInformation("GetCorrespondenceAttachmentAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { }
+
+        var data = await conn.QueryFirstOrDefaultAsync<CorrespondenceAttachmentsResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return data;
+    }
+    public async Task<AttachmentResponse> GetAttachmentAsync(int AttachmentId)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CM_TICKET_ATTACHMENT_sel";
+
+        var parameters = new
+        {
+            AttachmentId
+        };
+
+        try
+        {
+            _logger.LogInformation("GetAttachmentAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { }
+
+        var data = await conn.QueryFirstOrDefaultAsync<AttachmentResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return data;
+    }
     public async Task<bool> DeleteTicketAttachmentAsync(int attachmentId)
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
@@ -513,6 +623,38 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
         try
         {
             _logger.LogInformation("DeleteTicketAttachmentAsync calling {StoredProcedure} with AttachmentId: {AttachmentId}",
+                storedProcedure, attachmentId);
+
+            var result = await conn.ExecuteAsync(
+                storedProcedure,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+
+            await conn.CloseAsync();
+
+            return result > 0;
+        }
+        catch (SqlException ex)
+        {
+            _logger.LogError(ex, "SQL error executing {StoredProcedure}", storedProcedure);
+            throw;
+        }
+    }
+    public async Task<bool> DeleteCorrespondenceAttachmentAsync(int attachmentId)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_CORRESPONDENCE_ATTACHMENT_delete";
+
+        var parameters = new
+        {
+            AttachmentId = attachmentId 
+        };
+
+        try
+        {
+            _logger.LogInformation("DeleteCorrespondenceAttachmentAsync calling {StoredProcedure} with AttachmentId: {AttachmentId}",
                 storedProcedure, attachmentId);
 
             var result = await conn.ExecuteAsync(

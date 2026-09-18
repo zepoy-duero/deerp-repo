@@ -1,0 +1,91 @@
+﻿
+<style>
+    
+    /* Correspondence item */
+    .correspondence-item {
+        cursor: pointer;
+        border-left: 3px solid transparent !important;
+        transition: all 0.2s ease-in-out;
+    }
+
+        /* Hover */
+        .correspondence-item:hover {
+            background-color: lightgrey;
+            color: white;
+        }
+
+        /* Selected item */
+        .correspondence-item.active {
+            background-color: lightgrey;
+            color: black;
+            border-left: 3px solid #0d6efd !important;
+        }
+
+            /* Keep muted text readable when selected */
+            .correspondence-item.active .text-muted {
+                color: #6c757d !important;
+            }
+
+    /* Message editor */
+    #txtCorrespondence {
+        resize: vertical;
+        min-height: 150px;
+    }
+</style>
+<div class="card shadow-sm h-100 w-100">
+    <!-- Header -->
+    <div id="correspondenceAlert">    
+    </div>
+    <!-- Correspondence List -->
+    <div class="card-body p-0 ">
+        <div id="correspondenceList"
+             class="list-group list-group-flush mb-2"
+             style="max-height: 300px !important; overflow-y: scroll">       
+        </div>
+    </div>
+
+    <!-- Editor -->
+    <div id="correspondenceInputArea" class="card-footer bg-white p-2 d-none">
+         
+        <div class="mb-2">
+            <label for="txtCorrespondence"
+                   class="form-label fw-semibold mb-1 d-flex justify-content-between align-content-between align-item-center">
+                <span class="me-auto">Message</span>
+                
+                
+                
+            </label>
+
+            <textarea disabled id="txtCorrespondence"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Write your reply here..."></textarea>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center gap-2">
+
+            <small class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Select a correspondence above to edit its content.
+            </small>
+            <div class="btn-group" disabled>
+                <button type="button"
+                        id="clearCorrespondenceBtn"
+                        class="btn btn-danger btn-sm">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Clear
+                </button>
+                <button type="button"
+                        id="postCorrespondenceBtn"
+                        class="btn btn-main btn-sm ms-2">
+                    <i class="bi bi-send "></i>
+                    Post
+                </button>
+            </div>
+            
+
+        </div>
+
+    </div>
+
+</div>

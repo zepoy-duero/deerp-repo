@@ -1,4 +1,5 @@
 ﻿const empDirectoryUrl = `/support/employee-directory`;
+const empEquipmentOperatorUrl = `/support/certified-equipment-operator`;
 const empFirefighterUrl = `/support/certified-firefighting-operator`;
 const empFirstAiderUrl = `/support/certified-first-aider`;
 let organizations = [];
@@ -6,21 +7,20 @@ let locations = [];
 let departments = [];
 var emps = [];
 var certifiedUserToRemove = null;
-var certifiedUserNameToRemove =''
+var certifiedUserNameToRemove = ''
 var isPageReload = true;
 var selectedEmp = null;
-var isHR = false;
+var isAuthorized = false;
 var cardColumn = null;
 $(async function () {
-    isHR = await checkIfCurrentUserHR();
+    isAuthorized = await checkIfCurrentUserHR();
     showSpinner();
 
     await loadOrganizations();
     await loadLocations();
     await loadDepartments();
     await currentPageRequest();
-   
-   
+    await showAddBtnToAuthorizedUsers();
     isPageReload = false;
     // Event bindings
     $("#select-organization").on("change", async (e) => {
@@ -31,11 +31,7 @@ $(async function () {
         await currentPageRequest();
     });
     $("#select-location").on("change", async () => {
-        console.log($("#select-location").val())
         showSpinner()
-        if ($("#select-location").val() == 11) {
-            $("#select-department").val('17');
-        }
         await loadDepartments();
         await currentPageRequest()
     });
@@ -45,47 +41,46 @@ $(async function () {
     });
 
     $("#search-input").on("keyup", searchEmployees);
+    $("#select-status").on("change", filterByStatus);
 
-    $("#select-status").on("change", async function () {
-        console.log($("#select-status option:selected").text());
-        showSpinner();
-        await getAllEmployeeDirectory()
+    $("#AddEquipmentOperatorModal").on('show.bs.modal', async function () {
+        await createUserSelectOptions();
+        $("#operatorEquipment").val('');
+        $("#selectEquipmentOperators").val('');
+        $("#chooseEquipmentOperatorEmployeeBtn").empty().html('Employees');
+        console.log(true)
+      
     });
-    //firefighter event listeners
-    $("#addFirefighterModal").on('show.bs.modal', async function () {
-      await  createUserSelectOptions();
-
+    $('#AddEquipmentOperatorModal').on('hidden.bs.modal', function () {
+        $("#EquipmentOperatorSearchInput").blur();
     });
-    $('#addFirefighterModal').on('hidden.bs.modal', function () {
-        $("#FirefighterSearchInput").blur();
-    });
-    $("#submitCertifiedFirefighter").on("click", async function () {
-        showAddFirefighterSpinner();
+    $("#submitCertifiedEquipmentOperator").on("click", async function () {
+        showAddEquipmentOperatorSpinner();
         try {
-            let newFirefighter = await addCertifiedFirefighter();
-            console.log(newFirefighter)
-            toastr.success("Successfully added a new Certified Firefighter Employee");
-           
-               
+            let newEquipmentOperator = await addCertifiedEquipmentOperator();
+            console.log(newEquipmentOperator)
+            toastr.success("Successfully added a new Certified Equipment Operator Operator Employee");
+
+
             $("#closeAddModal").click();
-            prependEmployeeCardList(newFirefighter);
-            resetAddFirefighterBtn
+            prependEmployeeCardList(newEquipmentOperator);
+            resetAddEquipmentOperatorBtn()
             //showSpinner()
-            //await getAllEmployeeFirefighters();
-           
+            //await getAllEmployeeEquipmentOperators();
         } catch (error) {
-            toastr.error("Error adding certified firefighter: " + error.message);
+            toastr.error("Error adding certified equipment: " + error.message);
+            resetAddEquipmentOperatorBtn()
 
         }
     });
-   
-    $("#chooseFirefighterEmployeeBtn").on("click", function () {
-        $("#FirefighterSearchInput").focus();
+
+    $("#chooseEquipmentOperatorEmployeeBtn").on("click", function () {
+        $("#EquipmentOperatorSearchInput").focus();
     })
-    $("#FirefighterSearchInput").on("keyup", function () {
+    $("#EquipmentOperatorSearchInput").on("keyup", function () {
         let search = $(this).val().toLowerCase();
 
-        $("#selectFireFighterEmployee li").each(function () {
+        $("#selectEquipmentOperatorEmployee li").each(function () {
             let text = $(this).text().toLowerCase();
             $(this).toggle(text.includes(search));
         });
@@ -93,9 +88,23 @@ $(async function () {
     $("#confirmationModal").on("hidden.bs.modal", function () {
         this.blur();
     })
-   
+    //$("#employeeContainer .card").on("click", function (event) {
+    //    event.preventDefault();
+    //    certifiedUserNameToRemove = event.target.dataset.name;
+    //    certifiedUserToRemove = event.target.dataset.usercode;
+    //    console.log(event.target.dataset)
+    //    if (event.target.classList.contains('remove-btn')) {
+    //        // Find the parent grid column (.card-wrapper) and remove it entirely
+    //        cardColumn = event.target.closest('.employee-col');
+    //        //cardColumn.remove();
+    //         $("#confirmationModal").modal('show');
+    //        $("#confirmationMsg").html(`<span class="text-nowrap">Are you sure to remove <strong>${certifiedUserNameToRemove}</strong>?</span>`)
+
+    //    }
+
+    //});
     $("#confirmAction").on("click", async function () {
-        if (await $.get(`${empFirefighterUrl}/remove-certified-firefighter`
+        if (await $.get(`${empEquipmentOperatorUrl}/remove-certified-equipment-operator`
             , { USER_CODE: certifiedUserToRemove })) {
             toastr.success(certifiedUserNameToRemove + " has been successfully removed from the list")
             cardColumn.remove();
@@ -104,7 +113,7 @@ $(async function () {
             toastr.error("Failed to removed " + certifiedUserNameToRemove + " from the list")
         }
     });
-  
+
 });
 function confirmRemove(event) {
     event.preventDefault();
@@ -138,13 +147,16 @@ async function currentPageRequest() {
 
     switch (getCurrentPageRoute()) {
         case empDirectoryUrl:
-                        await getAllEmployeeDirectory();
+            await getAllEmployeeDirectory();
+            break;
+        case empEquipmentOperatorUrl:
+            await getAllEmployeeEquipmentOperators();
             break;
         case empFirefighterUrl:
-                        await getAllEmployeeFirefighters();
+            await getAllEmployeeFirefighters();
             break;
         case empFirstAiderUrl:
-                        await getAllEmployeeFirstAiders();
+            await getAllEmployeeFirstAiders();
             break;
     }
 }
@@ -162,23 +174,23 @@ function filterByStatus() {
                 .closest('[class^="col-"]')
                 .toggle(status.includes(''));
         });
-      
-    } else {
-         $("#employeeContainer .card").each(function () {
-                const status = $(this)
-                    .find("#emp_status")
-                    .text()
-                    .toLowerCase();
-                // Hide/show the column wrapper
-                $(this)
-                    .closest('[class^="col-"]')
-                 .toggle(status.includes(value));
 
-            
-         });
-        
+    } else {
+        $("#employeeContainer .card").each(function () {
+            const status = $(this)
+                .find("#emp_status")
+                .text()
+                .toLowerCase();
+            // Hide/show the column wrapper
+            $(this)
+                .closest('[class^="col-"]')
+                .toggle(status.includes(value));
+
+
+        });
+
     }
-   
+
 }
 
 // ---------------- HELPERS ----------------
@@ -216,43 +228,40 @@ async function loadDepartments() {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val()
     });
-    createSelectOptions("select-department", filteredDept); 
+    createSelectOptions("select-department", filteredDept);
 }
 function createSelectOptions(selector, data) {
-    
+
     let html = `<option value="0">All</option>`;
     //let html = (selector === "select-organization")
     //    ? ""
     //    : `<option value="0">All</option>`;
 
     switch (selector) {
-                case "select-organization":
-                    for (const item of data) {
-                        if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-                    }
-                    $("#" + selector).html(html);
-                    break;
-                case "select-location":
-
-                    for (const item of data) {
-                        if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-                    }
-                    $("#" + selector).html(html);
-                    break;
-        case "select-department":
-                    if ($("#select-location").val() == 11) {
-                        html = '';
-                    }
-                    for (const item of data) {
-                        if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
-                        else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
-                    }
-                    $("#" + selector).html(html);
-                    break;
+        case "select-organization":
+            for (const item of data) {
+                if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
             }
-   
+            $("#" + selector).html(html);
+            break;
+        case "select-location":
+
+            for (const item of data) {
+                if (item.VALUE == 1) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+            }
+            $("#" + selector).html(html);
+            break;
+        case "select-department":
+            for (const item of data) {
+                if (item.VALUE == 19) html += `<option selected value="${item.VALUE}">${item.TEXT}</option>`
+                else html += `<option value="${item.VALUE}">${item.TEXT}</option>`
+            }
+            $("#" + selector).html(html);
+            break;
+    }
+
 }
 function getCurrentPageRoute() {
     const params = window.location.pathname;
@@ -261,27 +270,47 @@ function getCurrentPageRoute() {
 
 // ---------------- EMPLOYEE LIST ----------------
 async function getAllEmployeeDirectory() {
-    
+
     const filterParams = {
         orgCode: $("#select-organization").val(),
         locCode: $("#select-location").val(),
-        deptCode: ($("#select-location").val() == 11) ? 17 : $("#select-department").val(),
-        status: $("#select-status option:selected").text(),
-        //isFirefighter: 
+        deptCode: $("#select-department").val(),
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isEquipmentOperator: 
     };
-    console.log(filterParams);
+
     showTotalRecordsSpinner()
     let employeeList = await $.get(
         `${empDirectoryUrl}/getAllEmployeeDirectory`,
-            filterParams
+        filterParams
     );
-   
+
     showTotalRecords(employeeList.length);
     await render("employeeContainer", employeeList);
-    
-    
-    
+
+
+
     //$("#summary").empty().append(employeeList.length)
+}
+async function getAllEmployeeEquipmentOperators() {
+
+    const filterParams = {
+        orgCode: $("#select-organization").val(),
+        locCode: 0,
+        deptCode: 0,
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isEquipmentOperator: 
+    };
+
+    showTotalRecordsSpinner()
+    let employeeList = await $.get(
+        `${empEquipmentOperatorUrl}/get-all-employee-equipment-operator`,
+        filterParams
+    );
+
+    showTotalRecords(employeeList.length);
+    await render("employeeContainer", employeeList)
+
 }
 async function getAllEmployeeFirefighters() {
 
@@ -289,13 +318,13 @@ async function getAllEmployeeFirefighters() {
         orgCode: $("#select-organization").val(),
         locCode: 0,
         deptCode: 0,
-        status: $("#select-status option:selected").text(),
-        //isFirefighter: 
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isEquipmentOperator: 
     };
 
     showTotalRecordsSpinner()
     let employeeList = await $.get(
-        `${empFirefighterUrl}/getAllEmployeeFirefighters`,
+        `${empEquipmentOperatorUrl}/getAllEmployeeFirefighters`,
         filterParams
     );
 
@@ -308,8 +337,8 @@ async function getAllEmployeeFirstAiders() {
         orgCode: $("#select-organization").val(),
         locCode: 0,
         deptCode: 0,
-        status: $("#select-status option:selected").text(),
-        //isFirefighter: 
+        //status: $("#select-status").val() == 'All' ? false : $("#select-status").val(),
+        //isEquipmentOperator: 
     };
 
     showTotalRecordsSpinner()
@@ -319,17 +348,19 @@ async function getAllEmployeeFirstAiders() {
     );
 
     showTotalRecords(employeeList.length);
-   await render("employeeContainer", employeeList);
+    await render("employeeContainer", employeeList);
+
+
 }
 function showTotalRecordsSpinner() {
     $("#EmployeeDirectoryTotal").empty().append(
-            `<div id="" class="btn rounded-pill bg-main text-white text-center">
+        `<div id="" class="btn rounded-pill bg-main text-white text-center">
                   <div class="spinner-border spinner-border-sm" role="status">
                       <span class="visually-hidden">Loading...</span>
                   </div>
                         <span class="blink align-middle ms-2">Loading...</span>
              </div>`
-        )
+    )
 }
 function activateButtonSpinner(selector) {
     $(selector).prop('disabled', true);
@@ -342,15 +373,15 @@ function deactivateButtonSpinner(selector) {
     $(selector).prop('disabled', false);
     $(selector).empty().append(`Confirm`);
 }
-function showAddFirefighterSpinner() {
+function showAddEquipmentOperatorSpinner() {
     $("#submitBtnSpinner").toggleClass('d-none');
-    $('#submitCertifiedFirefighter').prop('disabled', true);
-    $("#submitCertifiedFirefighter").html('Updating...');
+    $('#submitCertifiedEquipmentOperator').prop('disabled', true);
+    $("#submitCertifiedEquipmentOperator").html('Updating...');
 }
-function resetAddFirefighterBtn() {
+function resetAddEquipmentOperatorBtn() {
     $("#submitBtnSpinner").toggleClass('d-none');
-    $('#submitCertifiedFirefighter').prop('disabled', false);
-    $("#submitCertifiedFirefighter").html('Update');
+    $('#submitCertifiedEquipmentOperator').prop('disabled', false);
+    $("#submitCertifiedEquipmentOperator").html('Update');
 }
 function showTotalRecords(totalRecords) {
     $("#EmployeeDirectoryTotal").empty().append(
@@ -362,14 +393,13 @@ function showTotalRecords(totalRecords) {
 }
 async function render(containerId, employees) {
     const container = document.getElementById(containerId);
+
     emps = employees
     if (employees.length >= 1) {
         container.innerHTML = employees.map(createCard).join("");
-    
     } else {
         $(container).empty().append(`<div class="text-center">No data found</div>`)
     }
-    
 }
 function prependEmployeeCardList(employees) {
     let empCard = createCard(employees[0]);
@@ -377,66 +407,81 @@ function prependEmployeeCardList(employees) {
 }
 // ---------------- UTIL ----------------
 function checkIfNull(val) {
-    return val ?? "No data";
+    return val ?? "None";
 }
 async function getProfilePic(EMP_CODE) {
     let empPhoto = await $.get(`${empDirectoryUrl}/getProfilePic?`, { EMP_CODE: EMP_CODE });
     console.log(empPhoto)
 }
-async function addCertifiedFirefighter() {
-        
-     return await $.get(`${empFirefighterUrl}/add-certified-firefighter`, { USER_CODE: selectedEmp });
-      
-      
+async function addCertifiedEquipmentOperator() {
+    console.log($("#operatorEquipment").val());
+    return await $.get(`${empEquipmentOperatorUrl}/add-certified-equipment-operator`, { USER_CODE: selectedEmp, EQUIPMENT: $("#operatorEquipment").val() });
 }
 async function getUserOptions() {
     let usersOptions = await $.get(`/MyTickets/get-user-options`);
     let options = ``;
-
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
             options += `<option value="${i.VALUE}">${i.TEXT}</option>`;
         }
     });
-
     return options;
 }
-function employeeFirefighterSelected(event) {
+function employeeEquipmentOperatorSelected(event) {
     selectedEmp = event.target.dataset.value;
-    $("#selectFirefighters").val(selectedEmp);
-    $("#chooseFirefighterEmployeeBtn").empty().append(event.target.innerHTML);
-   
+    $("#selectEquipmentOperators").val(selectedEmp);
+    $("#chooseEquipmentOperatorEmployeeBtn").empty().append(event.target.innerHTML);
+
     console.log(selectedEmp);
 
-   
+
 }
-
-
+async function showAddBtnToAuthorizedUsers() {
+    const response = await fetch(`/home/getUserDetails`);
+    if (!response.ok) {
+        console.error('Failed to fetch user details');
+        return;
+    }
+    else {
+        const data = await response.json();
+        console.log(data.CAN_ADD_EQUIPMENT_OPERATOR)
+        if (data.CAN_ADD_EQUIPMENT_OPERATOR === true) {
+            
+                $("#addBtnContainer").removeClass('d-none');
+           
+            } else {
+                $("#addBtnContainer").addClass('d-none');
+            }
+    }
+    
+      
+}
 async function checkIfCurrentUserHR() {
     const response = await fetch(`/home/getUserDetails`);
     if (!response.ok) {
         console.error('Failed to fetch user details');
         return;
     }
-
+    
     const data = await response.json();
-
-    if (data.DEPT_NAME == 'Human Resource' || data.USER_CODE == 1) return true;
+    console.log(data)
+    //showAddBtnToAuthorizedUsers(data);
+    if (data.CAN_ADD_EQUIPMENT_OPERATOR != null || data.USER_CODE == 1) return true;
     else return false;
 
 }
 async function createUserSelectOptions() {
-    let usersOptions = await $.get(`${empFirefighterUrl}/get-user-firefighter-options`);
+    let usersOptions = await $.get(`${empEquipmentOperatorUrl}/get-user-equipment-operator-options`);
     console.log(usersOptions)
     let options = ``;
 
     usersOptions.forEach(function (i) {
         if (i.TEXT != '') {
-            options += `<li onclick="employeeFirefighterSelected(event)" class="dropdown-item" data-value="${i.VALUE}">${i.TEXT}</li>`;
+            options += `<li onclick="employeeEquipmentOperatorSelected(event)" class="dropdown-item" data-value="${i.VALUE}">${i.TEXT}</li>`;
         }
     });
-   
-    $("#selectFireFighterEmployee").empty().append(options);
+
+    $("#selectEquipmentOperatorEmployee").empty().append(options);
 }
 
 // Search filter
@@ -444,8 +489,8 @@ async function createUserSelectOptions() {
 /* ===============================
    Card Template
 =============================== */
- function createCard(emp) {
-    
+function createCard(emp) {
+
     return `
         <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 employee-col">
             <div id="empCard" class="card border-${emp.IS_ACTIVE ? 'primary' : 'secondary'} text-center shadow-sm h-90 position-relative">
@@ -459,7 +504,8 @@ async function createUserSelectOptions() {
 
                     <div class="text-truncate">
                     <span class="mb-0 fs-6 fw-bolder small emp-name">${emp.EMP_NAME}</span><br />
-                    <small class="text-truncate emp-position">${emp.EMP_POSITION}</small>
+                    <small class="text-truncate emp-position">${emp.EMP_POSITION}</small><br />
+                    <span class="mb-0 fs-6 fw-bolder small emp-name">${emp.EQUIPMENT} Operator</span>
                     </div>
                     
                     <hr />
@@ -498,9 +544,9 @@ async function createUserSelectOptions() {
                     </div>
 
                 </div>
-                ${isHR && getCurrentPageRoute() == '/support/certified-firefighting-operator' 
-                ?
-                `<div  class="card-footer card-footer-sm align-item-end">
+                ${ isAuthorized && getCurrentPageRoute() == '/support/certified-equipment-operator'
+            ?
+            `<div  class="card-footer card-footer-sm align-item-end">
                     <button
                         onmouseover="this.style.color='red',this.style.fontWeight='bold'"
                         onmouseout="this.style.color='black',this.style.fontWeight='normal'"
@@ -511,7 +557,7 @@ async function createUserSelectOptions() {
                         Remove <i class="bi bi-trash text-danger"></i>
                     </button>
                 </div>` : ''
-                }
+        }
                 
             </div>
         </div>`;

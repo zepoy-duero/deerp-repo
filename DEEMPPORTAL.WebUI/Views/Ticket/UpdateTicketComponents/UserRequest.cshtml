@@ -33,6 +33,46 @@
         object-fit: cover;
     }
 </style>
+<!-- Image Preview Modal -->
+<div class="modal fade"
+     id="imagePreviewModal"
+     tabindex="-1"
+     aria-labelledby="imagePreviewModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imagePreviewModalLabel">
+                    Image Preview
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body text-center p-2"
+                 style="background-color: #f5f5f5;">
+
+                <img id="previewImage"
+                     src=""
+                     alt="Image Preview"
+                     class="img-fluid"
+                     style="
+                        max-height: 75vh;
+                        object-fit: contain;
+                     ">
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="ticketUserRequest" class="card  section-card">
     <div class="card-header section-title border-2">
         <div class="d-flex justify-content-between align-items-center">
@@ -44,41 +84,34 @@
                 <label class="form-check-label" for="toggleEditUserRequest">Edit Mode</label>
             </div>
             <div class="d-none">
-                <button id="userRequestEditBtn" class="btn btn-sm btn-danger rounded-pill">
+                <button type="button" id="userRequestEditBtn" class="btn btn-sm btn-danger rounded-pill">
                     EDIT
                     <i class="bi bi-pencil-square ms-2"></i>
                 </button>
-                <button id="userRequestUpdateBtn" class="btn btn-sm btn-main  rounded-pill d-none">
+                <button type="button" id="userRequestUpdateBtn" class="btn btn-sm btn-main  rounded-pill d-none">
                     SAVE
                     <i class="bi bi-floppy-fill ms-2"></i>
-                </button>
-                
+                </button>               
             </div>
-        </div>
-       
+        </div>       
     </div>
     <div class="card-body">
         <div class="container-fluid">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Ticket Subject</label>
-                    
+                    <label class="form-label">Ticket Subject</label>                   
                         <input id="ticketSubject"  class="form-control-plaintext text-muted fw-bold " disabled />
-
                     <hr />
                 </div>
-
                 <div class="col-md-3">
                     <label class="form-label">Requested By</label>
-
-
                     <input id="editRequestedByCode" class="form-control d-none" />
-                 
-                    <input id="editRequestedByName" class="form-control d-none" />
+                      <input id="editRequestedByName" class="form-control d-none" />
                         <!-- Custom dropdown -->
                         <div class="dropdown rounded-1">
                         <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="displayRequestedByName" data-bs-toggle="dropdown">
-                                Landrex Rebruera
+                               
+
                             </button>
                             <div class="dropdown-menu w-100 p-2" >
 
@@ -87,9 +120,7 @@
                                 <!-- Options -->
                             <ul class="list-unstyled mb-0 p-2" id="userList" style="max-height: 200px !important; overflow-y: scroll;">
                                 </ul>
-
-                            </div>
-                     
+                            </div>                     
                     </div>
                     <hr />
                 </div>
@@ -110,26 +141,17 @@
                         <div class="d-inline-flex"></div>
                         <label class="form-label">
                             Attachments
-
                         </label>
                         <div class="d-inline-flex me-auto">
-
                         </div>
-                        <btn id="editAttachBtn" class="btn btn-sm d-none">
-                           
-                            <i class="bi bi-plus me-1 text-main"></i>
-                            ADD
-                        </btn>
-                       
-                     
-                    </div>
-                    
-                    <hr />
-                   
+                        <button id="editAttachBtn" class="btn btn-sm btn-outline-danger d-none">                           
+                            <i class="bi bi-plus-lg me-1"></i>
+                            ADD ATTACHMENT
+                        </button>                                           
+                    </div>                    
+                    <hr />                 
                     <!-- Hidden file input for edit modal -->
-                    <input id="editTicketAttachments" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />
-
-                 
+                    <input id="editTicketAttachments" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />                 
                     <div id="attachmentsPreviewContainer" style="height: 200px !important;overflow-y: scroll !important;">
                         <div class="file-preview-item border rounded p-2 mb-2 bg-light d-inline-block w-100">
                             <div class="file-info d-flex align-items-center placeholder-glow">
@@ -142,7 +164,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

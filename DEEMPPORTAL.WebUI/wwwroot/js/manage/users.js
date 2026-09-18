@@ -4,47 +4,44 @@ const gbaseUrl = `/manage/users`
 let gUserSelectControl = null
 let gEmpCode = null
 let gEmpName = null
-let gOrgCode = 1
+let gOrgCode = $("#selOrgCode").val() ?? 1;
 let gLocCode = 1
 let gIsUpdate = false
 let gTotalPageNo = 1
 let gPageNo = 1
 let gSearchParam = ""
-let orgCode = 1
+let orgCode = $("#selOrgCode").val() ?? 1;
 
 //---jeffvil---
 
 
 $(async function () {
-  await Promise.all([
-    loadOrganization(),
-    loadLocation(),
-    loadRoles(),
-    loadDepartment(),
-    loadEmployees(),
-  ])
+    await Promise.all([
+        loadOrganization(),
+        loadLocation(),
+        loadRoles(),
+        loadDepartment(),
+        loadEmployees(gOrgCode),
+    ])
+    displayRecords(function () {
+        displayPagination()
+    })
+    //---jeffvil----
+    $("#select-organization").on("change", function () {
+        orgCode = $(this).val();
+        displayRecords(function () {
+            displayPagination()
+        })
+    })
+    //---------
+    $(".card").on("keyup", "#inpSearch", function (e) {
+        e.preventDefault()
+        if (e.key === "Enter") {
+            submitSearchUserAccount()
+        }
+    })
+});
 
-
-
-
-  displayRecords(function () {
-    displayPagination()
-  })
-})
-//---jeffvil----
-$("#select-organization").on("change", function () {
-  orgCode = $(this).val();
-  displayRecords(function () {
-    displayPagination()
-  })
-})
-//---------
-$(".card").on("keyup", "#inpSearch", function (e) {
-  e.preventDefault()
-  if (e.key === "Enter") {
-    submitSearchUserAccount()
-  }
-})
 
 function submitSearchUserAccount() {
   gSearchParam = $("#inpSearch").val()
@@ -200,18 +197,19 @@ async function submitSaveUser(element) {
   const fd = new FormData(form)
    
   // This is the overall input validation of the form
-  if (!isValid) {
-    alert("Please enter the required fields.")
-    return
-  }
+  //if (!isValid) {
+  //  alert("Please enter the required fields.")
+  //  return
+  //}
 
-  // this checks if there is a selected employee using the Tomselect Library
-  // this will only check if you are creating new user account.
-  if (!gIsUpdate && gUserSelectControl.getValue() === '') {
-    alert("Please enter the required fields.")
-    return
-  }
-
+  //// this checks if there is a selected employee using the Tomselect Library
+  //// this will only check if you are creating new user account.
+  //if (!gIsUpdate && gUserSelectControl.getValue() === '') {
+  //  alert("Please enter the required fields.")
+  //  return
+  //}
+    console.log(Object.fromEntries(fd))
+  
   try {
     const response = await fetch(`${gbaseUrl}/updSertUser`, {
       method: "POST",
@@ -326,17 +324,18 @@ async function getEmployeeDetails() {
   disableForm("frmUserAccountDetails", false)
 }
 
-async function loadEmployees() {
+async function loadEmployees(orgCode) {
   gUserSelectControl = new TomSelect('#selEmpCode', {
     valueField: 'VALUE',
     labelField: 'TEXT',
     searchField: 'TEXT',
-    load: async function (searchParam, callback) {
-      const url = `${gbaseUrl}/getEmployee?searchParam=${encodeURIComponent(searchParam)}`
+      load: async function (searchParam, callback) {
+          const orgCode = $("#selOrgCode").val();
+          const url = `${gbaseUrl}/getEmployee?searchParam=${encodeURIComponent(searchParam)}&orgCode=${orgCode}`
       const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error(`Http error! Status:  ${response.status}`)
+        throw new Error(`Http error! Status:${response.status}`)
       }
       const json = await response.json()
       callback(json)
