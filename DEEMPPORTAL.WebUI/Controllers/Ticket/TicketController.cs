@@ -29,12 +29,24 @@ public class TicketController(ISelectOptionsService selectOptionsService,
     private readonly IFetchOnlyOneService _fetchOnlyOneService = fetchOnlyOneService;
     private readonly IMapper _mapper = mapper;
     private readonly ILogger<TicketController> _logger = logger;
-    
+
 
     [HttpGet("")]
     public IActionResult Index()
     {
+        // Checks if the user has a "DEPARTMENT" claim with the value "Finance"
+        bool isMISDept = User.HasClaim("DEPARTMENT","Management Information System");
+        if (isMISDept)
+        {
             return View();
+        }
+      
+        else
+        {
+            return View("Views/Ticket/UserView/UserView.cshtml");
+            //return Forbid(); // Returns an HTTP 403 Forbidden status
+        }
+          
     }
 
     [HttpGet("get-tickets")]

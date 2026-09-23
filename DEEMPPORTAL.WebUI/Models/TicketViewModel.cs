@@ -32,6 +32,5 @@
         public string? VersionNo { get; set; }
         public string? ManagerEmailId { get; set; }
         public string? RequestedByEmail { get; set; }
-
     }
 }

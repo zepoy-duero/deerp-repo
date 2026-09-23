@@ -77,6 +77,8 @@ builder.Services.AddCors(options =>
 			.AllowAnyMethod()
 			.AllowAnyHeader();
 	});
+    
+
 });
 
 // add http client factory

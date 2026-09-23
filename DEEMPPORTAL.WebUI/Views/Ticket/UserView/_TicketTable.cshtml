@@ -1,0 +1,254 @@
+﻿<style>
+    #statusBadge {
+        opacity: 50%;
+    }
+   
+
+    .ph-item,
+    .ph-picture {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        padding-bottom: 4;
+        margin: 0;
+    }
+    .page-item, .active{
+        background-color: transparent !important;
+    }
+        .newly-inserted-row {
+        background-color: #fff3cd !important; /* Warning/yellow background */
+        transition: background-color 2s ease-out;
+    }
+
+</style>
+
+<div class="container-fluid">
+
+    <table class="table table-bordered table-sm pg-primary" id="ticketsTable"
+           data-toggle="table"
+           data-search-selector="#customSearch"
+           data-filter-control="true"
+           data-filter-control-container="#filtersContainer"
+           data-resizable="true"
+           data-unique-id="TicketId"
+           data-toolbar="#toolbar"
+            data-height="620"
+           data-show-button-text="true"
+           data-buttons-class="mx-2"
+           data-show-columns="true"
+           data-show-columns-toggle-all="true"
+           data-show-fullscreen="true"
+           data-search="true"
+           data-pagination="true"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-page-number="1"
+           data-filter-control-search-clear="true"
+           data-sort-select-options="true"
+          >
+        <thead class="table-sm table-light ">
+            <tr>
+                <th data-checkbox="true"
+                    data-halign="center">
+                </th>
+                <th data-field="TicketId"
+                    data-halign="left"
+                    data-sortable="true"
+                    data-filter-control="input"
+                    data-visible="false"
+                    data-filter-control-placeholder="Type here . . ."
+                    class="text-nowrap">
+                    
+                </th>
+                <th data-field="StringTicketId"
+                    data-halign="start"
+                    data-align="left"
+                    data-searchable="true"
+                    data-sortable="true"
+                    data-width="30"
+                    data-formatter="IdFormatter"
+                    data-filter-control="input"
+                    data-filter-control-placeholder="Search . ."
+                    class="ps-4">
+                    Ticket ID
+                </th>
+                <th data-field="RequestedDate"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-width="50"
+                    data-unit="px"
+                    data-formatter="dateFormatter"
+                    class="ps-4">
+                    Requested Date
+                </th>
+                <th data-field="TicketYear"
+                    data-filter-control="select"                   
+                    data-filter-default="'2026'"
+                    data-filter-control-placeholder="All"
+                    class="text-nowrap d-none">
+                    Year
+                </th>
+                <th data-field="TicketSubject"
+                    data-halign="start"
+                    data-align="left"
+          
+                    
+                    data-formatter="subjectFormatter"                   
+                    class="ps-4">
+                    Subject
+                </th>
+                <th data-field="StatusName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-width="50"
+                    data-formatter="statusFormatter"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    class="ps-4">
+                    Status
+                </th>
+                <th data-field="TicketPriority"
+                    data-halign="start"
+                    data-align="left"
+                    data-width="20"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    class="ps-4">
+                    Priority
+                </th>
+                <th data-field="TaskTypeName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                    class="ps-4">
+                    Request Type
+                </th>
+                <th data-field="AssignedToName"
+                    data-halign="start"
+                    data-align="left"
+                    data-sortable="true"
+                    data-filter-control="select"
+                    data-filter-control-placeholder="All"
+                 
+                    class="ps-4">
+                    Assigned To
+                </th> 
+            </tr>
+        </thead>
+        
+    </table>
+</div>
+<script>
+    window.loadingTemplate = () => {
+    
+   
+      return '<div class="ph-item"><div class="ph-picture"></div></div>'
+    
+  }
+
+     window.statusFormatter = (value, row) => {
+         if(value != null){
+    return `<div class='${statusColor(value)} text-nowrap'>${value}</div>`
+         }
+
+     }
+     window.subjectFormatter = (value, row) => {
+
+         let el = `<div class="d-inline-block text-truncate" style="max-width: 150px !important;" title="${value}">
+          ${value}
+        </div>`
+
+         return el;
+     }
+     window.requestedByFormatter = (value, row) => {
+
+         let el = `<div class="d-inline-block text-truncate" style="max-width: 100px !important;" title="${value}">
+          ${value}
+        </div>`
+
+         return el;
+     }
+     window.dateFormatter = (value, row) => {
+         if(value !== undefined && value !== null){
+             var d = moment(value).format("DD-MM-YYYY hh:mm")
+             return d;
+         }
+         
+     }
+     window.IdFormatter = (value,row) =>{
+                 return `<div class='text-main fw-bold text-decoration-underline text-nowrap text-start'><a href="#">${value}</a></div>`
+         }
+       window.detailFormatter = (index, row) => {
+      const html = []
+
+      for (const [key, value] of Object.entries(row)) {
+        html.push(`<p><b>${key}:</b> ${value}</p>`)
+      }
+      return html.join('')
+    }
+      function customDateCollector(value) {
+       
+      if (!value) return [];
+      // console.log(value)
+      // Split by comma, then trim whitespace from each generated tag item
+      return value.split(',').map(function(item) {
+          // console.log(item)
+          
+         return Number(new Date(value).getFullYear());
+        
+      });
+    }
+    function customSearchRow(text, value, field, data) {
+              // If the filter input is empty, show all rows
+                console.log(data)
+                console.log(value)
+                console.log(field)
+                 
+              if (!text) return true;
+
+              // Convert both values to lowercase strings and trim spaces
+              const searchString = text.toString().toLowerCase().trim();
+              
+
+              // Returns true only if the cell value starts with the typed text
+              return data.TicketId.startsWith(searchString);
+            }
+     function statusColor(status) {
+          switch (status) {
+          case 'New': return 'text-dark';
+              break;
+          case null: return 'd-none';
+              break;
+            case 'Assigned': return 'text-danger';
+              break;
+            case 'In Progress': return 'text-primary';
+              break;
+            case 'Testing': return 'text-secondary';
+              break;
+            case 'Pending User': return 'text-warning ';
+              break;
+            case 'Pending Third Party': return 'text-warning ';
+              break;
+            case 'On Hold': return 'text-warning ';
+              break;
+            case 'Resolved': return 'text-success';
+              break;
+            case 'Closed': return 'text-dark';
+              break;
+          case 'Cancelled': return 'text-muted';
+              break;
+          default: return '';
+              break;
+      }
+     }
+
+</script>
+
+
+
+

@@ -59,9 +59,11 @@ public class LoginRepository(IConfiguration configuration) : ILoginRepository
 				_jwtIssuer,
 				_jwtAudience,
 				claims,
-				notBefore: new DateTimeOffset(DateTime.Now).DateTime,
-				expires: new DateTimeOffset(DateTime.Now.AddHours(1)).DateTime,
-				signingCredentials: credentials);
+                //notBefore: new DateTimeOffset(DateTime.Now).DateTime,
+                //expires: new DateTimeOffset(DateTime.Now.AddHours(1)).DateTime,
+                notBefore: DateTime.UtcNow,
+				expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials);
 
 		return new JwtSecurityTokenHandler().WriteToken(token);
 	}

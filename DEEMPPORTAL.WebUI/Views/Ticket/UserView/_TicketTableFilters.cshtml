@@ -1,0 +1,67 @@
+﻿<div class="container-fluid mt-5" id="filtersContainer">
+        <div class="d-flex flex-row">
+            <div class="col mx-1">
+                <label class="form-label extra-small fw-bold text-main">
+                    Filters
+                    <i class="bi bi-filter"></i>
+                </label>
+
+            </div>
+        <div class="vr mx-3"></div>
+       
+        <div class="col mx-1">
+            <label for="ticketIdFilter" class="form-label extra-small">Ticket Id</label>
+            <input id="ticketIdFilter" class="form-control form-control-sm  bootstrap-table-filter-control-TicketId" />
+            </div>
+        
+        <div class="col mx-1">
+            <label for="assignedToFilter" class="form-label extra-small">Assigned To</label>
+            <select id="assignedToFilter" class="form-select form-select-sm  bootstrap-table-filter-control-AssignedToName">
+                </select>
+            </div>
+        <div class="col mx-1">
+            <label for="taskTypeNameFilter" class="form-label extra-small">Request Type</label>
+            <select id="taskTypeNameFilter" class="form-select form-select-sm  bootstrap-table-filter-control-TaskTypeName">
+                </select>
+            </div>
+        <div class="col mx-1">
+            <label for="ticketPriorityFilter" class="form-label extra-small">Priority</label>
+            <select id="ticketPriorityFilter" class="form-select form-select-sm  bootstrap-table-filter-control-TicketPriority">
+                </select>
+            </div>
+        <div class="col mx-1">
+            <label for="statusNameFilter" class="form-label extra-small">Status</label>
+            <select id="statusNameFilter" class="form-select form-select-sm  bootstrap-table-filter-control-StatusName">
+                </select>
+            </div>
+        <div class="col mx-1">
+            <label for="requestedDateFilter" class="form-label extra-small text-nowrap">Year</label>
+            <select id="requestedDateFilter" class="form-control form-control-sm  bootstrap-table-filter-control-TicketYear">
+                </select>
+            </div>
+        <div class="col ">
+                <br />
+                <button id="btnResetFilter"
+                        class="btn btn-sm text-main extra-small text-nowrap fw-bold text-center align-center"
+                        title="Reset Filters">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+            @* <input class="form-select" placeholder="Date Range" name="datefilter" value="Date range" /> *@
+            @* <div class="ms-1">
+        <div class="btn-group">
+
+            <button id="btnResetFilter"
+                    class="btn btn-outline-secondary btn-sm rounded-2"
+                    title="Reset Filters">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+        </div>
+    </div> *@
+ </div>
+
+<style>
+   
+</style>

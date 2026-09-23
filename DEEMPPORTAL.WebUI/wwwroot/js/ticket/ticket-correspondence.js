@@ -55,7 +55,8 @@ async function bindCorrespondenceHandlers() {
     $("#clearCorrespondenceBtn").on('click', function () {
         $("#txtCorrespondence").val('');
     });
-    $("#addCorrespondenceAttachmentBtn").on('click', function () {
+    $("#addCorrespondenceAttachmentBtn").on('click', function (event) {
+        event.preventDefault()
         $("#file-chooser").trigger('click');
     });
     
@@ -323,7 +324,7 @@ async function uploadCorrespondenceAttachments(TicketId) {
 async function showCorrespondenceAttachmentList() {
 
     let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { TicketId: selectedTicket.TicketId });
-  
+    console.log(attachments)
     let attachmentList = '';
     if (attachments.length >= 1) {
         attachments.forEach(function (i) {
@@ -344,8 +345,7 @@ async function showCorrespondenceAttachmentList() {
        
                  <div>
                      <div>
-                         <span style="cursor: pointer;
-}" class="text-decoration-underline text-primary" onclick="viewCorrespondenceAttachment(${i.AttachmentId})">
+                         <span style="cursor: pointer;" class="text-decoration-underline text-primary" onclick="viewCorrespondenceAttachment(${i.AttachmentId})">
                            <strong>${i.FileName}</strong>
                          </span>                      
                      </div>
@@ -431,16 +431,18 @@ function renderDatabaseFilePreview(base64Data, fileName, mimeType, isLocalFile=f
     // Open the modal
     //$("#editTicketModal").modal('hide');
     $('#filePreviewModal').modal('show');
-
+    $("#filePreviewModal").on('hidden.bs.modal', function () {
+        $("#editTicketModal").modal('show');
+    });
 
     // Memory Cleanup Event Hook
-    $('#filePreviewModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
-        // ONLY revoke if it's a locally generated Blob URL to prevent breaking DB download links
-        if (isLocalFile && fileUrl.startsWith('blob:')) {
-            URL.revokeObjectURL(fileUrl);
-        }
-        $('#file-preview-zone').empty();
-    });
+    //$('#filePreviewModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    //    // ONLY revoke if it's a locally generated Blob URL to prevent breaking DB download links
+    //    if (isLocalFile && fileUrl.startsWith('blob:')) {
+    //        URL.revokeObjectURL(fileUrl);
+    //    }
+    //    $('#file-preview-zone').empty();
+    //});
 
 }
 async function deleteCorrespondenceAttachment(attachmentId) {
@@ -456,7 +458,7 @@ async function deleteCorrespondenceAttachment(attachmentId) {
     }
     try {
         const response = await $.ajax({
-            url: `MyTickets/ticket-correspondence/delete-attachment?attachmentId=${attachmentId}`,
+            url: `/MyTickets/ticket-correspondence/delete-attachment?attachmentId=${attachmentId}`,
             type: 'POST'
         });
 

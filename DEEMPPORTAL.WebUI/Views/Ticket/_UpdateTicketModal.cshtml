@@ -74,11 +74,11 @@
     textarea .form-control {
         height: 120px;
     }
-    .active{
+    /* .active{
         background-color: #002e5a;
         border-color: #002e5a;
         color: white;
-    }
+    } */
     /* Attachments */
     .attachment-box {
         border: 2px dashed #ced4da;
@@ -155,116 +155,17 @@
             z-index: 10;
         } */
 </style>
-@* 
-@{
-    await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/CorrespondenceAttachmentPreview.cshtml");
 
-} *@
-<!-- Bootstrap Preview Modal -->
-<div class="modal fade" id="filePreviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-main">
-                <h5 class="text-white" id="preview-filename">File Preview</h5>
-                @* <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> *@
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
-                </button>
-            </div>
-            <!-- Dynamic viewport container -->
-            <div class="modal-body p-0" style="height: 100vh;">
-                <div id="file-preview-zone" class="w-100 h-100 d-flex align-items-center justify-content-center">
-                    <!-- Dynamic content injected here -->
-                </div>
-            </div>
-            <div class="moda-footer">
-                <button class="btn btn-primary" data-bs-target="#editTicketModal" data-bs-toggle="modal">Back</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade bg-grey" id="emailModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-main text-white">
-                <h6 class="modal-title">Sending an email notification</h6>
-                <button id="closeEmailModal()" type="button" class="btn-close btn-close-white" data-bs-target="#emaiModal" data-bs-dismiss="modal"></button>
-            </div>
 
-            <div class="modal-body px-4 py-4">
-                <div class="container-fluid">
-                    <div class="row g-3">
-                        <div class="col-md-1">
-                            <span class="mb-3">From: </span><br />
-                            <span class="mb-3">To: </span><br />
-                            <span class="mb-5">CC: </span><br />
-                        </div>
 
-                        <div class="col-md-4">
-                            <strong class="text-decoration-underline mb-3">info@dahbashi.com</strong><br />
-                            <strong class="text-decoration-underline mb-3">salem@dahbashi.com</strong><br />
-                            <span class="text-decoration-underline mb-5">
-                                <small id="staticCC" class="text-muted" onclick="selectCC()">Optional</small>
-                                <select id="addCC" class="form-select form-select-sm d-none">
-                                    <option></option>
-                                </select>
-                            </span>
-                        </div>
-                    </div>
-              
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-1">
-                            <span>Subject:</span>
-                        </div>
-                        <div class="col-md-5">
-                            <strong class="text-decoration-underline">
-                                Approval Request - MIS#001
-                            </strong>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <label class="form-label">Message</label>
-                        <textarea class="form-control text-left" rows="4">Please review and approve this request. Click the link below to confirm approval</textarea>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row g-3">
-                        <!-- Confirmation Link (IMPORTANT FIELD) -->
-                        <div class="col-md-12">
-                            <label class="form-label">Approval Confirmation Link</label>
-                            <div class="input-group">
-                                <input type="text" id="approvalLink" class="form-control"
-                                       value="https://employee.dahbashi.com/approve?ticketId=123">
-                                <button class="btn btn-outline-secondary" type="button" onclick="copyLink()">
-                                    Copy
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-            
-
-                <div class="modal-footer mb-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary">Send Email</button>
-                </div>
-        </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="editTicketModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="editTicketModalLabel" tabindex="-1">
+<div class="modal fade" id="editTicketModal" tabindex="-1" >
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
 
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
                 <h6 class="modal-title fw-bold" id="editTicketModalTitle"></h6>
-                <button type="button" class="btn-close btn-close-white" data-bs-target="#editTicketModal" data-bs-toggle="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- BODY -->
@@ -329,8 +230,7 @@
             </div>
             <!-- FOOTER -->
             <div class="modal-footer position-sticky mb-2 border-0">
-                <button type="button" id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">
-                                  
+                <button type="button" id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">                                 
                                     Update
                     <i class="bi bi-cloud-arrow-up ms-2"></i>
                  </button>

@@ -98,11 +98,13 @@
     <div class="card-body">
         <div class="container-fluid">
             <div class="row g-3">
+                <!-- SUBJECT -->
                 <div class="col-md-6">
                     <label class="form-label">Ticket Subject</label>                   
                         <input id="ticketSubject"  class="form-control-plaintext text-muted fw-bold " disabled />
                     <hr />
                 </div>
+                <!-- REQUESTED BY -->
                 <div class="col-md-3">
                     <label class="form-label">Requested By</label>
                     <input id="editRequestedByCode" class="form-control d-none" />
@@ -124,6 +126,7 @@
                     </div>
                     <hr />
                 </div>
+                <!-- REQUESTED DATE -->
                 <div class="col-md-3">
                     <label for="editRequestedDate" class="form-label">
                         Requested Date
@@ -132,22 +135,26 @@
                     <input id="editRequestedDate" name="editRequestedDate" type="date" class="form-control d-none" />
                         <hr />
                 </div>
+                <!-- DESCRIPTION -->
                 <div class="col-md-6">
                     <label for="editTicketDescription" class="form-label">Description</label>
                     <textarea id="editTicketDescription" class="form-control text-muted" style="height: 200px !important" placeholder="Detailed description"></textarea>
                 </div>
                 <div class="col-md-6">
                     <div class="d-flex justify-content-between">
-                        <div class="d-inline-flex"></div>
-                        <label class="form-label">
-                            Attachments
-                        </label>
-                        <div class="d-inline-flex me-auto">
+                        <div class="d-inline-flex">
+                            <label class="form-label">
+                                Attachments
+                            </label>
                         </div>
-                        <button id="editAttachBtn" class="btn btn-sm btn-outline-danger d-none">                           
-                            <i class="bi bi-plus-lg me-1"></i>
-                            ADD ATTACHMENT
-                        </button>                                           
+                       
+                        <div class="d-inline-flex me-auto">
+                            <button id="editAttachBtn" class="btn btn-sm btn-outline-danger d-none">
+                                <i class="bi bi-plus-lg me-1"></i>
+                                ADD ATTACHMENT
+                            </button>
+                        </div>
+                                                           
                     </div>                    
                     <hr />                 
                     <!-- Hidden file input for edit modal -->

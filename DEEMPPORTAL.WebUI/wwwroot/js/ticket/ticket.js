@@ -279,9 +279,9 @@ function showTicketAttachmentList(attachments) {
             <div class="file-info">
         
                  <img class="file-icon"
-                   src="${imgThumbnail}">
+                   src="${imgThumbnail}" />
            
-                 <div>
+                <div>
                      <div>
                          <span style="cursor: pointer;" class="text-decoration-underline text-primary" onclick="viewAttachment(${i.AttachmentId})">
                            <strong>${i.FileName}</strong>
@@ -320,13 +320,11 @@ function showTicketAttachmentList(attachments) {
 async function viewAttachment(attachmentId) {
  
     try {
-        // 1. Fetch the absolute latest list of attachments to find our specific file metadata
-        // (This saves an extra API call since we can grab it from your existing endpoint structure)
+        // 1. Fetch the attachment by attachmentId
         let fileData = await $.get(`${gBaseUrl}/get-attachment`, { AttachmentId: attachmentId });
         let mimeType = getMimeTypeByExtension(fileData.FileName)
+       //render the attachment to the attachment preview component
         showTicketAttachmentPreview(fileData.FileAttachment, fileData.FileName, mimeType);
-   
-
     } catch (error) {
         console.error("Error loading file preview:", error);
         alert("An error occurred while attempting to preview the file.");
@@ -1094,7 +1092,7 @@ async function uploadTicketAttachments(TicketId) {
         try {
             //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
             let response = await $.ajax({
-                url: 'MyTickets/upload-ticket-attachments',
+                url: 'tickets/upload-ticket-attachments',
                 type: 'POST',
                 data: data,
                 contentType: false,
@@ -1172,12 +1170,11 @@ async function submitNewTicket() {
     console.log(params)
     //return;
     let newTicket = await createTicket(params);//send create ticket request
-    clearTicketFilterControl();
-    insertNewRow(newTicket);
-        if (!newTicket) {
+    if (!newTicket) {
             toastr.error(newTicket.message, "Error")
             return;
-        } else {
+    } else {
+
             toastr.success("You have successfully submitted a New Ticket - " + newTicket.StringTicketId, "Success", {
                 timeOut: 3000,
             });
@@ -1552,13 +1549,14 @@ function showTicketAttachmentPreview(base64Data, fileName, mimeType, isLocalFile
     $('#file-preview-zone').empty().html(previewHtml);
 
     // Open the modal
-    $("#editTicketModal").modal('hide');
+    
     $('#filePreviewModal').modal('show');
-
+    console.log('hide')
     // Memory Cleanup Event Hook
     $('#filePreviewModal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+        $("#editTicketModal").modal('show');
         // ONLY revoke if it's a locally generated Blob URL to prevent breaking DB download links
-        if (isLocalFile && fileUrl.startsWith('blob:')) {
+        if (fileUrl.startsWith('blob:')) {
             URL.revokeObjectURL(fileUrl);
         }
         $('#file-preview-zone').empty();

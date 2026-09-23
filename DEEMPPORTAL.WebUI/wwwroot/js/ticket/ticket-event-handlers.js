@@ -422,7 +422,7 @@
         //return 1;
         try {
 
-            let response = await $.post(`MyTickets/update-ticket`, updateParams);
+            let response = await $.post(`tickets/update-ticket`, updateParams);
             console.log(response)
             selectedTicket = response;
             //UPDATE THE FORM VALUES ON THE OPEN MODAL
@@ -443,24 +443,23 @@
     });
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
         
-        selectedFiles = [];
-        activeAttachmentContainer = 'edit'; 
-        resetEditMode();
-        selectedTicket = row;
-        $("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
-        //$("attachmentsPreviewContainer").empty();
+        //selectedFiles = [];
+        //activeAttachmentContainer = 'edit'; 
+        //resetEditMode();
+        //selectedTicket = row;
+        //$("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
+        
        
-        $("#ticketId").val(row.TicketId);
-        $("#deptCode").val(row.DeptCode);
-        $("#ticketNo").val(row.TicketNo);
+        //$("#ticketId").val(row.TicketId);
+        //$("#deptCode").val(row.DeptCode);
+        //$("#ticketNo").val(row.TicketNo);
 
-        await getAllSelectOptions();
-        await setUserRequestFormValue(row);
-        await setAssignmentFormValue(row);
-        await setApprovalsFormValue(row);
-        await setReviewFormValue(row);
-                // Optional: Open an edit modal if your form lives inside one
-        // $('#editTicketModal').modal('show');
+        //await getAllSelectOptions();
+        //await setUserRequestFormValue(row);
+        //await setAssignmentFormValue(row);
+        //await setApprovalsFormValue(row);
+        //await setReviewFormValue(row);
+         
         $editTicketModal.modal('show');
     });
     //TRIGGER THE ATTACH FILE INPUT FIELD
