@@ -16,4 +16,7 @@ public class CurrentUser(IHttpContextAccessor contextAccessor)
 	public string PersonnelName { 
 		get; 
 		set; } = contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "PERSONNEL_NAME")?.Value ?? "";
+	public string UserRole { 
+		get; 
+		set; } = contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "";
 }

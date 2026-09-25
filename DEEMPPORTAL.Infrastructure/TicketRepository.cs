@@ -14,6 +14,7 @@ using System.Data;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Security.Claims;
 
 namespace DEEMPPORTAL.Infrastructure;
 
@@ -28,33 +29,6 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
 
     public async Task<TicketResponse> CreateTicketAsync(CreateTicketParams request)
     {
-        //var dt = new DataTable();
-        //dt.Columns.Add("FileName", typeof(string));
-        //dt.Columns.Add("FileExtension", typeof(string));
-        //dt.Columns.Add("FileSize", typeof(int));
-        //dt.Columns.Add("FileAttachment", typeof(byte[]));
-        //dt.Columns.Add("UploadedDate", typeof(DateTime));
-        //dt.Columns.Add("UpdatedBy", typeof(int));
-
-        //if (request.TicketAttachments != null)
-        //{
-        //    foreach (var ticketAttachment in request.TicketAttachments)
-        //    {
-        //        using var ms = new MemoryStream();
-        //        await ticketAttachment.CopyToAsync(ms);
-
-        //        // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
-        //        dt.Rows.Add(
-        //            ticketAttachment.FileName,
-        //            Path.GetExtension(ticketAttachment.FileName)?.TrimStart('.') ?? string.Empty,
-        //            (int)ticketAttachment.Length / 1024,
-        //            ms.ToArray(),
-        //            DateTime.UtcNow,
-        //            _cu.UserId
-        //        );
-        //    }
-        //}
-
         await using var conn = new SqlConnection(_cp.ConnectionName);
         await conn.OpenAsync();
         const string storedProcedure = "CLOUD_v1_ERP_TICKET_add";
@@ -152,17 +126,47 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
         await conn.OpenAsync();
 
         const string storedProcedure = "CLOUD_v1_ERP_TICKET_getAll";
-
+       
         var parameters = new
         {
             OrgCode,
             LocCode,
-            DeptCode
+            DeptCode,
         };
+        
 
         try
         {
             _logger.LogInformation("GetAllTicketAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
+        }
+        catch { }
+
+        var data = await conn.QueryAsync<TicketResponse>(
+            storedProcedure,
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        await conn.CloseAsync();
+
+        return data;
+    }
+    public async Task<IEnumerable<TicketResponse>> GetFilteredTicketAsync(int UserCode)
+    {
+        await using var conn = new SqlConnection(_cp.ConnectionName);
+
+        await conn.OpenAsync();
+
+        const string storedProcedure = "CLOUD_v1_ERP_TICKET_FILTERED_sel";
+       
+        var parameters = new
+        {
+            UserCode
+        };
+        
+
+        try
+        {
+            _logger.LogInformation("GetFilteredTicketAsync calling {StoredProcedure} with parameters: {Params}", storedProcedure, JsonSerializer.Serialize(parameters));
         }
         catch { }
 

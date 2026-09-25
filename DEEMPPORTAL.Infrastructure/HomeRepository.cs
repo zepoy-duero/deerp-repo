@@ -30,7 +30,12 @@ public class HomeRepository(ConnectionPool cp, CurrentUser cu) : IHomeRepository
 				commandType: CommandType.StoredProcedure);
 
 		await conn.CloseAsync();
-
-		return results!;
+        // Map the claim to the new attribute if results is not null
+        if (results != null)
+        {
+            // Option A: If _cu already exposes Roles/Claims
+            results.USER_ROLE = _cu.UserRole;
+        }
+        return results!;
 	}
 }

@@ -43,8 +43,15 @@ public class LoginRepository(IConfiguration configuration) : ILoginRepository
 	{
 		var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
 		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
-		var claims = new[]
+        bool hasFullAccess = user.ROLE == "Management" ||
+                     user.ROLE == "Super Admin";
+		var deptManagerAccess = user.ROLE == "Manager" ||
+					 user.ROLE == "Manager - HR" ||
+					 user.ROLE == "Assistant Manager";
+		var deptAccess = user.ROLE != "Manager" ||
+                     user.ROLE != "Manager - HR" ||
+                     user.ROLE != "Assistant Manager";
+        var claims = new[]
 		{
 				new Claim(ClaimTypes.NameIdentifier, user.USERNAME),
 				new Claim(ClaimTypes.Email, user.EMAIL_ADDRESS),
@@ -52,8 +59,11 @@ public class LoginRepository(IConfiguration configuration) : ILoginRepository
 				new Claim(ClaimTypes.Name, user.USERNAME),
 				new Claim("PERSONNEL_NAME", user.PERSONNEL_NAME),
 				new Claim("DEPARTMENT", user.DEPARTMENT),
-				new Claim("USER_CODE", user.USER_CODE.ToString())
-		};
+				new Claim("USER_CODE", user.USER_CODE.ToString()),
+                new Claim("HasFullAccess", hasFullAccess.ToString().ToLower()),
+                new Claim("DeptManagerAccess", deptManagerAccess.ToString().ToLower()),
+                new Claim("DeptAccess", deptAccess.ToString().ToLower())
+        };
 
 		var token = new JwtSecurityToken(
 				_jwtIssuer,

@@ -31,8 +31,10 @@ public class TicketService(ITicketRepository ticketRepository,
     {
         return await _ticketRepository.GetAllTicketAsync(OrgCode, LocCode, DeptCode);
     }
-
-
+    public async Task<IEnumerable<TicketResponse>> GetFilteredTicketAsync(int UserCode)
+    {
+        return await _ticketRepository.GetFilteredTicketAsync(UserCode);
+    }
     public async Task<IEnumerable<TicketSelectOptions>> GetUserOptionsAsync()
     {
         return await _ticketRepository.GetUserOptionsAsync();

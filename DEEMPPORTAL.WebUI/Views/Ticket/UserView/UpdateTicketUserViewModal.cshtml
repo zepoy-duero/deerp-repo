@@ -1,5 +1,6 @@
-﻿
-@model TicketViewModel
+﻿@using DEEMPPORTAL.Domain.Ticket
+
+@model TicketResponse
 
 <!-- =========================================================
      EDIT / VIEW TICKET MODAL
@@ -19,7 +20,7 @@
                  MODAL HEADER
             ================================================== -->
 
-            <div class="modal-header bg-main text-white">
+            <div class="modal-header bg-main">
 
                 <div>
 
@@ -91,20 +92,7 @@
                                     <div class="row g-3">
 
 
-                                        <!-- Ticket No -->
-                                        <div class="col-md-4">
-
-                                            <label class="form-label small fw-bold">
-                                                Ticket No.
-                                            </label>
-
-                                            <input type="text"
-                                                   id="EditTicketNo"
-                                                   class="form-control form-control-sm bg-light"
-                                                   value="@Model?.TicketNo"
-                                                   readonly />
-
-                                        </div>
+                                        
 
 
                                         <!-- Requested Date -->

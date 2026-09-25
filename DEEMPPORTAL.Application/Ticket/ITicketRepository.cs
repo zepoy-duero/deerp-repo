@@ -7,6 +7,7 @@ namespace DEEMPPORTAL.Application.Ticket;
 public interface ITicketRepository
 {
     Task<IEnumerable<TicketResponse>> GetAllTicketAsync(int OrgCode, int LocCode, int DeptCode);
+    Task<IEnumerable<TicketResponse>> GetFilteredTicketAsync(int UserCode);
     Task<IEnumerable<TicketSelectOptions>> GetAssigneeOptionsAsync(int OrgCode, int LocCode, int DeptCode);
     Task<IEnumerable<TicketSelectOptions>> GetDurationUnitOptionsAsync();
     Task<IEnumerable<TicketSelectOptions>> GetModuleOptionsAsync(int OrgCode, int LocCode, int DeptCode);

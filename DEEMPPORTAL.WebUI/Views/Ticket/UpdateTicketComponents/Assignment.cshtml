@@ -22,9 +22,12 @@
     </div>
     <div class="card-body">
         <div class="container-fluid">
-            <!-- Row 1 -->
+       
             <div class="row g-0 pe-0 mb-3">
-                <div class="col-md-3">
+                <!-- ASSIGNED TO -->
+                <div class="col-md-3 @(User.HasClaim("HasFullAccess", "true")
+                                         || User.HasClaim("DeptManagerAccess", "true")
+                                         ? "" : "d-none")">
                     <label class="form-label">Assigned To</label>
                     <input id="assignedToCode" class="form-control d-none" />
                     <input id="assignedToName" class="form-control d-none" />
@@ -45,32 +48,40 @@
                     <hr />
                
                 </div>
-                <div class="col-md-4 px-0">
-                    <label class="form-label">Module</label>
+                
+                
+                    <!-- MODULE -->
+                <div class="col-md-4 px-0 @(User.HasClaim("HasFullAccess", "true")
+                                         || User.HasClaim("DeptManagerAccess", "true")
+                                         ? "" : "d-none")">
+                        <label class="form-label">Module</label>
 
-                    <!-- Hidden real select (for form submission) -->
-                    <input id="moduleName" class="form-control d-none" />
+                        <!-- Hidden real select (for form submission) -->
+                        <input id="moduleName" class="form-control d-none" />
 
 
-                    <!-- Custom dropdown -->
-                    <div class="dropdown rounded-1">
-                        <button class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" disabled id="moduleDropdownSelect" data-bs-toggle="dropdown">
-                            Select here . . .
-                        </button>
+                        <!-- Custom dropdown -->
+                        <div class="dropdown rounded-1">
+                            <button class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" disabled id="moduleDropdownSelect" data-bs-toggle="dropdown">
+                                Select here . . .
+                            </button>
 
-                        <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
+                            <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
 
-                            <!-- Search input -->
-                            <input type="text" id="moduleSearchInput" class="form-control mb-2" placeholder="Search...">
+                                <!-- Search input -->
+                                <input type="text" id="moduleSearchInput" class="form-control mb-2" placeholder="Search...">
 
-                            <!-- Options -->
-                            <ul class="list-unstyled mb-0" id="moduleList">
-                            </ul>
+                                <!-- Options -->
+                                <ul class="list-unstyled mb-0" id="moduleList">
+                                </ul>
 
+                            </div>
                         </div>
+                        <hr />
                     </div>
-                    <hr />
-                </div>
+                
+           
+                <!-- PRIORITY-->
                 <div class="col-md-3 ">
                     <label for="priorityCode" class="form-label">Priority</label>
 
@@ -94,13 +105,12 @@
                         </div>
                     </div> *@
                     <hr />
-                </div>
-              
-              
+                </div>      
             </div>
 
-            <!-- Row 2 -->
+            
             <div class="row g-0 mb-3 pe-0">
+                <!-- TASK TYPE -->
                 <div class="col-md-3">
                     <label class="form-label">Type</label>
                     <input id="taskTypeCode" class="form-control d-none" />
@@ -125,30 +135,42 @@
                     <hr />
 
                 </div>
-                <div class="col-md-3 px-0">
-                    <label class="form-label">Duration</label>
-                    <div class="d-flex gap-2">
-                        <input id="ticketDuration" type="number" class="form-control text-muted fw-bold w-25" disabled>
-                        <select id="ticketDurationUnit" class="form-control-plaintext text-muted fw-bold w-75" disabled>
-                        </select>
+                <!-- DURATION -->
+                <div class="col-md-3 px-0  
+                    @(User.HasClaim("HasFullAccess", "true") 
+                    || User.HasClaim("DeptManagerAccess", "true") 
+                    ? "" : "d-none")">
+               
+                  
+                   
+                        <label class="form-label">Duration</label>
+                        <div class="d-flex gap-2">
+                            <input id="ticketDuration" type="number" class="form-control text-muted fw-bold w-25" disabled>
+                            <select id="ticketDurationUnit" class="form-control-plaintext text-muted fw-bold w-75" disabled>
+                            </select>
+                        </div>
+                        <hr/>
                     </div>
-                    <hr/>
-                </div>
-
-                <div class="col-md-2 pe-0">
-                    <label class="form-label">Start</label>
-                    <input id="startDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
-                    <hr />
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">End</label>
-                    <input id="finishDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
-                    <hr />
-                </div>
+                    <!--START DATE-->
+                <div class="col-md-2 pe-0 @(User.HasClaim("HasFullAccess", "true")
+                                         || User.HasClaim("DeptManagerAccess", "true")
+                                         ? "" : "d-none")">
+                        <label class="form-label">Start</label>
+                        <input id="startDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                        <hr />
+                    </div>
+                    <!-- END DATE -->
+                <div class="col-md-2 @(User.HasClaim("HasFullAccess", "true")
+                                         || User.HasClaim("DeptManagerAccess", "true")
+                                         ? "" : "d-none")">
+                        <label class="form-label">End</label>
+                        <input id="finishDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                        <hr />
+                    </div>
+                
             </div>
 
-            <!-- Row 3 -->
+            <!-- STATUS -->
             <div class="row">
                 @* <div class="col-md-3">
                     <label class="form-label">Status</label>

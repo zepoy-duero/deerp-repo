@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using DEEMPPORTAL.Application.Auth;
 using DEEMPPORTAL.Application.Shared;
 using DEEMPPORTAL.Application.Ticket;
 using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.HR;
 using DEEMPPORTAL.Domain.Ticket;
+using DEEMPPORTAL.WebUI.Controllers.Home;
 using DEEMPPORTAL.WebUI.Models;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Net.Mail;
+using System.Net.Sockets;
+using System.Security.Claims;
 using System.Text.Json;
 
 
@@ -21,7 +25,8 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 [Route("MyTickets")]
 public class TicketController(ISelectOptionsService selectOptionsService,
       IFetchOnlyOneService fetchOnlyOneService,
-      ITicketService ticketService, 
+      ITicketService ticketService,
+      ILoginService loginService,
       IMapper mapper, ILogger<TicketController> logger) : Controller
 {
     private readonly ITicketService _ticketService = ticketService;
@@ -29,30 +34,32 @@ public class TicketController(ISelectOptionsService selectOptionsService,
     private readonly IFetchOnlyOneService _fetchOnlyOneService = fetchOnlyOneService;
     private readonly IMapper _mapper = mapper;
     private readonly ILogger<TicketController> _logger = logger;
-
+    private readonly ILoginService _loginService = loginService;
 
     [HttpGet("")]
     public IActionResult Index()
     {
-        // Checks if the user has a "DEPARTMENT" claim with the value "Finance"
-        bool isMISDept = User.HasClaim("DEPARTMENT","Management Information System");
-        if (isMISDept)
+        if(User?.Identity?.IsAuthenticated ?? false)
         {
             return View();
-        }
-      
-        else
+        } else
         {
-            return View("Views/Ticket/UserView/UserView.cshtml");
-            //return Forbid(); // Returns an HTTP 403 Forbidden status
+            return RedirectToAction("Index", "auth/login");
         }
-          
     }
 
     [HttpGet("get-tickets")]
     public async Task<IActionResult> GetAllTicket(int OrgCode, int LocCode,int DeptCode)    
     {
+     
         var data = await _ticketService.GetAllTicketAsync(OrgCode, LocCode,DeptCode);
+        var mapped = _mapper.Map<IEnumerable<TicketResponse>>(data);
+        return Ok(mapped);
+    }
+    [HttpGet("get-filtered-tickets")]
+    public async Task<IActionResult> GetFilteredTicket(int UserCode)    
+    {
+        var data = await _ticketService.GetFilteredTicketAsync(UserCode);
         return Ok(data);
     }
     [HttpPost("create-ticket")]

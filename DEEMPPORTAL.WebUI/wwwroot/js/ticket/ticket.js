@@ -6,6 +6,7 @@ const attachmentsPreviewContainer = $("#attachmentsPreviewContainer");
 const previewContainer = document.getElementById("previewContainer");
 const dropZone = document.getElementById("dropZone");
 const $editTicketModal = $("#editTicketModal");
+const $UserEditTicketModal = $("#UserEditTicketModal");
 const confirmationDialog = document.getElementById("confirmationDialog");
 var selectedTicket = null;
 let isEditingRequestedBy = false;
@@ -51,6 +52,7 @@ const ticketsTable = $("#ticketsTable");
 //var exampleTriggerEl = document.getElementById('AttachmentTooltip');
 //var tooltip = bootstrap.Tooltip.getOrCreateInstance(exampleTriggerEl)
 //var formData = new FormData();
+
 $(async function () {  
    
     ticketsTable.bootstrapTable('showLoading');
@@ -58,8 +60,7 @@ $(async function () {
     let userData = await fetch(`/home/getUserDetails`);
     CurrentUser = await userData.json();
     console.log(CurrentUser)
-    let dateToday = moment(CurrentUser.DATE_TODAY).format("MMM DD, YYYY");
-
+    
     await getAllTicket();
     bindEventHandlers();
     await bindCorrespondenceHandlers();
@@ -314,8 +315,15 @@ function showTicketAttachmentList(attachments) {
                 </div>
             </div>`
         })
+        $("#attachmentsPreviewContainer").empty().append(attachmentList);
+    } else {
+        $("#attachmentsPreviewContainer").empty().append(`
+        <div id="emptyState" class="alert alert-light text-center border-dashed m-0">
+                        <i class="bi bi-paperclip text-muted fs-4"></i>
+                        <p class="text-muted small mb-0">No files attached yet.</p>
+                    </div>`);
     }
-    $("#attachmentsPreviewContainer").empty().append(attachmentList);
+  
 }
 async function viewAttachment(attachmentId) {
  
@@ -730,12 +738,17 @@ async function getTypeOptions(OrgCode, LocCode, DeptCode) {
 async function getAllTicket() {
    
     const params = {
-        OrgCode: 1,
-        LocCode: 1,
-        DeptCode: null,
+        UserCode: CurrentUser.USER_CODE
     }
+    //const params = {
+    //    OrgCode: 1,
+    //    LocCode: 1,
+    //    DeptCode: null,
+    //}
 
-    let data = await $.get(`${gBaseUrl}/get-tickets`, params);
+
+    let data = await $.get(`${gBaseUrl}/get-filtered-tickets`, params);
+    //let data = await $.get(`${gBaseUrl}/get-tickets`, params);
     console.log(data);
 
     showTotalTicketsRecords(data.length);
@@ -1562,4 +1575,5 @@ function showTicketAttachmentPreview(base64Data, fileName, mimeType, isLocalFile
         $('#file-preview-zone').empty();
     });
 }
+
 

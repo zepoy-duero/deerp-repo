@@ -14,4 +14,5 @@ public class HomeResponse
 	public string VAT_NO { get; set; } = string.Empty;
     public int? CAN_EDIT { get; set; }
 	public bool? CAN_ADD_EQUIPMENT_OPERATOR {get; set;}
+	public string? USER_ROLE { get; set; }
 }

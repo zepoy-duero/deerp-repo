@@ -1,91 +1,99 @@
 ﻿
-<style>
-    
-    /* Correspondence item */
-    .correspondence-item {
-        cursor: pointer;
-        border-left: 3px solid transparent !important;
-        transition: all 0.2s ease-in-out;
-    }
 
-        /* Hover */
-        .correspondence-item:hover {
-            background-color: lightgrey;
-            color: white;
-        }
-
-        /* Selected item */
-        .correspondence-item.active {
-            background-color: lightgrey;
-            color: black;
-            border-left: 3px solid #0d6efd !important;
-        }
-
-            /* Keep muted text readable when selected */
-            .correspondence-item.active .text-muted {
-                color: #6c757d !important;
-            }
-
-    /* Message editor */
-    #txtCorrespondence {
-        resize: vertical;
-        min-height: 150px;
-    }
-</style>
-<div class="card shadow-sm h-100 w-100">
-    <!-- Header -->
-    <div id="correspondenceAlert">    
-    </div>
-    <!-- Correspondence List -->
-    <div class="card-body p-0 ">
-        <div id="correspondenceList"
-             class="list-group list-group-flush mb-2"
-             style="max-height: 300px !important; overflow-y: scroll">       
-        </div>
-    </div>
-
-    <!-- Editor -->
-    <div id="correspondenceInputArea" class="card-footer bg-white p-2 d-none">
-         
-        <div class="mb-2">
-            <label for="txtCorrespondence"
-                   class="form-label fw-semibold mb-1 d-flex justify-content-between align-content-between align-item-center">
-                <span class="me-auto">Message</span>
-                
-                
-                
-            </label>
-
-            <textarea disabled id="txtCorrespondence"
-                      class="form-control"
-                      rows="4"
-                      placeholder="Write your reply here..."></textarea>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center gap-2">
-
-            <small class="text-muted">
-                <i class="bi bi-info-circle me-1"></i>
-                Select a correspondence above to edit its content.
-            </small>
-            <div class="btn-group" disabled>
-                <button type="button"
-                        id="clearCorrespondenceBtn"
-                        class="btn btn-danger btn-sm">
-                    <i class="bi bi-arrow-clockwise me-1"></i>
-                    Clear
-                </button>
-                <button type="button"
-                        id="postCorrespondenceBtn"
-                        class="btn btn-main btn-sm ms-2">
-                    <i class="bi bi-send "></i>
-                    Post
-                </button>
-            </div>
-            
-
-        </div>
-
-    </div>
-
+<!-- Draggable Floating Chat Button Container -->
+<div id="draggableBubble" class="position-fixed m-4" style="bottom: 0; right: 0; z-index: 1080; cursor: move; touch-action: none;">
+    <button type="button" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; pointer-events: auto;" data-bs-toggle="modal" data-bs-target="#chatModal" aria-label="Open Chat">
+        <i class="bi bi-chat-dots-fill fs-4"></i>
+    </button>
 </div>
+
+<!-- Optional Chat Modal -->
+<div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel">
+    <div style="width: 950px !important;" class="modal-dialog modal-dialog-scrollable modal-lg position-fixed bottom-0 end-0 m-4 mb-5">
+        <div class="modal-content shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fs-6" id="chatModalLabel">Post a ticket correspondence</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="height: 500px;">
+                <div class="card">
+                  
+                    <div class="card-body">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0 text-secondary"><i class="bi bi-chat-square-text me-2"></i>Correspondence History</h5>
+                        </div>
+                        <div class="card-body bg-light bg-opacity-50 p-4">
+
+                            <!-- Customer Message -->
+                            <div class="d-flex msg-customer mb-4 align-items-start">
+                                <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Customer)</span></span>
+                                        <span class="text-muted small">10:15 AM</span>
+                                    </div>
+                                    <div class="p-3 bg-white border shadow-sm msg-bubble text-secondary">
+                                        Hi support team, I've been trying to log into my dashboard for the past two hours but keep getting a "500 Internal Server Error". I have cleared my browser cache and tried a different browser, but the issue persists. Could you please check this out?
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Internal Note (Optional Component) -->
+                            <div class="d-flex justify-content-center mb-4">
+                                <div class="bg-warning bg-opacity-25 border border-warning text-warning-dark p-2 rounded small px-4 text-center w-100" style="max-width: 90%;">
+                                    <i class="bi bi-sticky me-2"></i><strong>Internal Note:</strong> Checked server logs. DB connection pool peak reached. (Visible only to staff)
+                                </div>
+                            </div>
+
+                            <!-- Agent Message -->
+                            <div class="d-flex msg-agent mb-4 align-items-start flex-row-reverse">
+                                <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center ms-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                                <div class="flex-grow-1 text-end">
+                                    <div class="d-flex justify-content-between align-items-center mb-1 flex-row-reverse">
+                                        <span class="fw-bold small text-dark">Sarah Jenkins <span class="text-primary font-monospace fw-normal">(Support Agent)</span></span>
+                                        <span class="text-muted small">10:42 AM</span>
+                                    </div>
+                                    <div class="p-3 bg-primary text-white shadow-sm msg-bubble text-start ms-auto">
+                                        Hello John, thank you for reaching out. We apologize for the inconvenience. Our technical team is currently investigating a temporary database optimization issue affecting a subset of users. I will update you as soon as this is resolved.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Message -->
+                            <div class="d-flex msg-customer mb-0 align-items-start">
+                                <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Customer)</span></span>
+                                        <span class="text-muted small">10:45 AM</span>
+                                    </div>
+                                    <div class="p-3 bg-white border shadow-sm msg-bubble text-secondary">
+                                        Thanks for the quick response, Sarah! I appreciate the update. I will await your confirmation before trying again.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="small caption">25-09-2026</div>
+                        <div class="card-action">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Type a message...">
+                <button type="button" class="btn btn-primary btn-sm">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+

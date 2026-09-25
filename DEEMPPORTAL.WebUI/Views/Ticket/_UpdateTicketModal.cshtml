@@ -1,149 +1,7 @@
-﻿<style>
-    .input-group{
-        margin-left: 0 !important;
-        padding-left: 0 !important;
-    }
-    /* .modal-content {
-        height: 100vh;
-        width: auto
-    } */
+﻿@using System.Security.Claims
 
-    /* Sidebar */
-    .modalNavSidebar {
-        position: relative;
-        height: 100vh;
-        background: #f8f9fa;
-        border-right-style: inset;
-        border-right-width: 1px;
-        border-right-color: black;
-        padding: 15px 10px;
-    }
+<style>
 
-    .nav-link {
-        border-radius: 8px;
-        padding: 10px 12px;
-        font-size: 14px;
-        transition: 0.2s;
-    }
-
-        .nav-link:hover {
-            background: #e9ecef;
-        }
-
-        .nav-link.active {
-            background-color: #002e5a;
-            color: #fff !important;
-        }
-
-    .list-group-item {
-        border-radius: 8px;
-        padding: 10px 12px;
-        font-size: 14px;
-        transition: 0.2s;
-    }
-
-        .list-group-item:hover {
-            background: #002e5a;
-            color: #fff !important;
-        }
-
-        .list-group-item.active {
-            background-color: #002e5a !important;
-            color: #fff !important;
-        }
-    /* Section Cards */
-    .section-card {
-       min-height: 500px !important;
-       overflow-y: auto;
-       padding-bottom: 10px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    .section-title {
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 8px;
-        color: #002e5a;
-      
-        background-color: lightblue;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
- 
-    }
-    textarea .form-control {
-        height: 120px;
-    }
-    /* .active{
-        background-color: #002e5a;
-        border-color: #002e5a;
-        color: white;
-    } */
-    /* Attachments */
-    .attachment-box {
-        border: 2px dashed #ced4da;
-        border-radius: 10px;
-        padding: 5px;
-        text-align: center;
-        background: #fff;
-        transition: 0.2s;
-    }
-        .attachment-box:hover {
-            border-color: #0d6efd;
-            background: #f8fbff;
-        }
-    .list-group-item.active {
-        background-color: white;
-        border-color: #002e5a;
-        color: white;
-
-    }
-    @*DATE CALENDAR*@
-   
-    .calendar-card {
-        width: 52px; /* 260 / 5 */
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        font-family: 'Segoe UI', sans-serif;
-    }
-
-    .calendar-header {
-        background: linear-gradient(180deg, #5f8df7, #3d63d2);
-        color: white;
-        text-align: center;
-        padding: 6px 2px;
-        font-weight: 600;
-        font-size: 10px;
-        position: relative;
-    }
-
-        /* Rings scaled down */
-        .calendar-header::before {
-            content: "";
-            position: absolute;
-            top: -4px;
-            left: 4px;
-            width: 4px;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            box-shadow: 10px 0 #e0e0e0, 20px 0 #e0e0e0, 30px 0 #e0e0e0;
-        }
-
-    .calendar-body {
-        background: #f1f1f1;
-        text-align: center;
-        padding: 6px 2px;
-    }
-
-    .calendar-day {
-        font-size: 22px; /* 110 / 5 */
-        font-weight: 800;
-        color: #1f2a5a;
-        line-height: 1;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
 
   /*   .file-icon {
         transition: all 0.3s ease-in-out;
@@ -161,7 +19,9 @@
 <div class="modal fade" id="editTicketModal" tabindex="-1" >
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
-
+            @{
+                var userRole = User.HasClaim(c => c.Type == ClaimTypes.Role);
+            }
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
                 <h6 class="modal-title fw-bold" id="editTicketModalTitle"></h6>
@@ -173,7 +33,9 @@
                 <div class="container-fluid">
                     <div class="row g-0">
                         <!-- SIDEBAR -->
-                        <div class="col-2 ps-0">
+                        <div class="col-2 ps-0 @(User.HasClaim("HasFullAccess", "true")
+                                                                                              || User.HasClaim("DeptManagerAccess", "true")
+                                                                                              ? "" : "d-none")">
                             <div class="card position-sticky top-0 w-100">
                                         <div class="card-header bg-accent rounded-top text-white fs-6">
                                             <i class="fa fa-ticket me-2"></i>
@@ -203,7 +65,9 @@
                              </div>
                         </div>
                         <!-- CONTENT -->
-                        <div class="col-10 ps-0">
+                        <div class="@(User.HasClaim("HasFullAccess", "true")
+                                    || User.HasClaim("DeptManagerAccess", "true")
+                                                                ? "col-10 ps-0" : "col-12 ps-0")">
                             
                                 <div class="container-fluid">
                                     <div data-bs-spy="scroll"
@@ -211,13 +75,26 @@
                                          data-bs-offset="50"
                                          tabindex="0">
                                          <form id="editTicketForm" class="form">
+                                        
+
+                                        @* 2. Render shared components that everyone sees *@
                                         @{
                                             await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
+                                        }
+                                        @{
                                             await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Assignment.cshtml");
+                                        }
+                                        @* 3. Render management-only components conditionally *@
+                                        <div class="@(User.HasClaim("HasFullAccess", "true")
+                                                                 || User.HasClaim("DeptManagerAccess", "true")
+                                                                 ? "" : "d-none")">
+                                            @{
                                             await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Approvals.cshtml");
                                             await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Review.cshtml");
-                                        }
-                                       
+                                            }
+                                        </div>
+                                        
+
                                     </form>
                                     </div>
                                 </div>

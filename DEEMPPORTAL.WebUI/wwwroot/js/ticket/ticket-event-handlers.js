@@ -443,24 +443,32 @@
     });
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
         
-        //selectedFiles = [];
-        //activeAttachmentContainer = 'edit'; 
-        //resetEditMode();
-        //selectedTicket = row;
-        //$("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
-        
        
-        //$("#ticketId").val(row.TicketId);
-        //$("#deptCode").val(row.DeptCode);
-        //$("#ticketNo").val(row.TicketNo);
+            selectedFiles = [];
+            activeAttachmentContainer = 'edit';
+            resetEditMode();
+            selectedTicket = row;
+        $("#editTicketModalTitle").empty().append(`<i class="bi bi-ticket-detailed-fill me-2"></i>Update Ticket -  ${row.StringTicketId}(${row.TicketSubject})`);
 
-        //await getAllSelectOptions();
-        //await setUserRequestFormValue(row);
-        //await setAssignmentFormValue(row);
-        //await setApprovalsFormValue(row);
-        //await setReviewFormValue(row);
-         
-        $editTicketModal.modal('show');
+
+            $("#ticketId").val(row.TicketId);
+            $("#deptCode").val(row.DeptCode);
+            $("#ticketNo").val(row.TicketNo);
+
+            await getAllSelectOptions();
+            await setUserRequestFormValue(row);
+            await setAssignmentFormValue(row);
+            await setApprovalsFormValue(row);
+            await setReviewFormValue(row);
+            $editTicketModal.modal('show');
+            await loadTicketAttachments(row.TicketId);
+
+       
+      
+       
+        
+        
+        //$("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
     });
     //TRIGGER THE ATTACH FILE INPUT FIELD
     $("#editAttachBtn").on('click', function (event) {
@@ -658,7 +666,7 @@ async function setUserRequestFormValue(row) {
     $("#editTicketDescription").summernote('code', row.TicketDescription);
     
     $("#editTicketDescription").summernote('disable');
-    await loadTicketAttachments(row.TicketId);
+    
 }
 async function setAssignmentFormValue(row) {
     console.log(row)
