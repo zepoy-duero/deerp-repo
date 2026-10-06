@@ -7,6 +7,7 @@
         public string? Message { get; set; }
 
         public int CreatedByCode { get; set; }
+        public string? CorrespondenceType { get; set; }
     }
 
 

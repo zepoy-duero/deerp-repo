@@ -1,99 +1,96 @@
-﻿
-
-<!-- Draggable Floating Chat Button Container -->
-<div id="draggableBubble" class="position-fixed m-4" style="bottom: 0; right: 0; z-index: 1080; cursor: move; touch-action: none;">
-    <button type="button" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; pointer-events: auto;" data-bs-toggle="modal" data-bs-target="#chatModal" aria-label="Open Chat">
-        <i class="bi bi-chat-dots-fill fs-4"></i>
+﻿<button type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#ticketCorrespondenceOffcanvas"
+            data-bs-tooltip="tooltip" title="Ticket Correspondence"
+            id="showTicketCorrBtn"
+            class="btn btn-danger btn-md rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+            style="width: 45px; height: 45px;" aria-label="Open Chat">
+        <i class="bi bi-chat-dots-fill fs-5"></i>
     </button>
-</div>
+<div style="width: 650px !important; visibility: hidden;" class="offcanvas offcanvas-end" tabindex="-1" id="ticketCorrespondenceOffcanvas" aria-labelledby="offcanvasExampleLabel" aria-hidden="true">
+    <div class="offcanvas-header bg-danger text-light">
+        <h5 class="offcanvas-title small fw-bold" id="offcanvasExampleLabel">Ticket Correspondence</h5>
+        <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="card-body bg-light bg-opacity-50 p-4">
+            <div id="userCorrespondenceContainer">
 
-<!-- Optional Chat Modal -->
-<div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel">
-    <div style="width: 950px !important;" class="modal-dialog modal-dialog-scrollable modal-lg position-fixed bottom-0 end-0 m-4 mb-5">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fs-6" id="chatModalLabel">Post a ticket correspondence</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="height: 500px;">
-                <div class="card">
-                  
-                    <div class="card-body">
-                        <div class="card-header bg-white py-3">
-                            <h5 class="mb-0 text-secondary"><i class="bi bi-chat-square-text me-2"></i>Correspondence History</h5>
-                        </div>
-                        <div class="card-body bg-light bg-opacity-50 p-4">
-
-                            <!-- Customer Message -->
-                            <div class="d-flex msg-customer mb-4 align-items-start">
-                                <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
-                                    <i class="bi bi-person-fill"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Customer)</span></span>
-                                        <span class="text-muted small">10:15 AM</span>
-                                    </div>
-                                    <div class="p-3 bg-white border shadow-sm msg-bubble text-secondary">
-                                        Hi support team, I've been trying to log into my dashboard for the past two hours but keep getting a "500 Internal Server Error". I have cleared my browser cache and tried a different browser, but the issue persists. Could you please check this out?
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Internal Note (Optional Component) -->
-                            <div class="d-flex justify-content-center mb-4">
-                                <div class="bg-warning bg-opacity-25 border border-warning text-warning-dark p-2 rounded small px-4 text-center w-100" style="max-width: 90%;">
-                                    <i class="bi bi-sticky me-2"></i><strong>Internal Note:</strong> Checked server logs. DB connection pool peak reached. (Visible only to staff)
-                                </div>
-                            </div>
-
-                            <!-- Agent Message -->
-                            <div class="d-flex msg-agent mb-4 align-items-start flex-row-reverse">
-                                <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center ms-3" style="width: 40px; height: 40px; min-width: 40px;">
-                                    <i class="bi bi-headset"></i>
-                                </div>
-                                <div class="flex-grow-1 text-end">
-                                    <div class="d-flex justify-content-between align-items-center mb-1 flex-row-reverse">
-                                        <span class="fw-bold small text-dark">Sarah Jenkins <span class="text-primary font-monospace fw-normal">(Support Agent)</span></span>
-                                        <span class="text-muted small">10:42 AM</span>
-                                    </div>
-                                    <div class="p-3 bg-primary text-white shadow-sm msg-bubble text-start ms-auto">
-                                        Hello John, thank you for reaching out. We apologize for the inconvenience. Our technical team is currently investigating a temporary database optimization issue affecting a subset of users. I will update you as soon as this is resolved.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Customer Message -->
-                            <div class="d-flex msg-customer mb-0 align-items-start">
-                                <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
-                                    <i class="bi bi-person-fill"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Customer)</span></span>
-                                        <span class="text-muted small">10:45 AM</span>
-                                    </div>
-                                    <div class="p-3 bg-white border shadow-sm msg-bubble text-secondary">
-                                        Thanks for the quick response, Sarah! I appreciate the update. I will await your confirmation before trying again.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+          
+                <!-- Customer Message -->
+                <div class="d-flex msg-customer mb-4 align-items-start">
+                    <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                        <i class="bi bi-person-fill"></i>
                     </div>
-                    <div class="card-footer">
-                        <div class="small caption">25-09-2026</div>
-                        <div class="card-action">
-                            <i class="bi bi-eye"></i>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Employee)</span></span>
+                            <span class="text-muted small">10:15 AM</span>
+                        </div>
+                        <div class="corr-msg p-3 bg-white border shadow-sm small fw-normal">
+                            Hi support team, I've been trying to log into my profile on the employee portal for the past two hours but keep getting a "500 Internal Server Error". I have cleared my browser cache and tried a different browser, but the issue persists. Could you please check this out?
                         </div>
                     </div>
                 </div>
+
+                <!-- Internal Note (Optional Component) -->
+                <div class="d-flex justify-content-center mb-4 d-none">
+                    <div class="bg-warning bg-opacity-25 border border-warning text-warning-dark p-2 rounded small px-4 text-center w-100" style="max-width: 90%;">
+                        <i class="bi bi-sticky me-2"></i><strong>Internal Note:</strong> Checked server logs. DB connection pool peak reached. (Visible only to staff)
+                    </div>
+                </div>
+
+                <!-- Agent Message -->
+                <div class="d-flex msg-agent mb-4 align-items-start flex-row-reverse">
+                    <div class="avatar bg-main text-white rounded-circle d-flex align-items-center justify-content-center ms-3" style="width: 40px; height: 40px; min-width: 40px;">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <div class="flex-grow-1 text-end">
+                        <div class="d-flex justify-content-between align-items-center mb-1 flex-row-reverse">
+                            <span class="fw-bold small text-dark">Sarah Jenkins <span class="text-primary font-monospace fw-normal">(MIS dev)</span></span>
+                            <span class="text-muted small">10:42 AM</span>
+                        </div>
+                        <div class="p-3 bg-main text-white shadow-sm msg-bubble text-start ms-auto">
+                            Hello John, thank you for reaching out. We apologize for the inconvenience. Our technical team is currently investigating a temporary database optimization issue affecting a subset of users. I will update you as soon as this is resolved.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Message -->
+                <div class="d-flex msg-customer mb-0 align-items-start">
+                    <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-dark">John Doe <span class="text-muted font-monospace fw-normal">(Employee)</span></span>
+                            <span class="text-muted small">10:45 AM</span>
+                        </div>
+                        <div class="p-3 bg-white border shadow-sm msg-bubble text-secondary">
+                            Thanks for the quick response, Sarah! I appreciate the update. I will await your confirmation before trying again.
+                        </div>
+
+                        <!-- Attachment Component Inserted Here -->
+                        <div class="mt-2 d-flex align-items-center bg-white border rounded p-2 shadow-sm" style="max-width: 300px;">
+                            <div class="bg-light text-secondary rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-file-earmark-text-fill fs-5"></i>
+                            </div>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div class="text-truncate small fw-bold text-dark">error_log_screenshot.png</div>
+                                <div class="text-muted extra-small" style="font-size: 0.75rem;">2.4 MB</div>
+                            </div>
+                            <a href="#" class="btn btn-link btn-sm text-secondary p-1" title="Download">
+                                <i class="bi bi-download"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer p-2">
-                <input type="text" class="form-control form-control-sm" placeholder="Type a message...">
-                <button type="button" class="btn btn-primary btn-sm">Send</button>
-            </div>
+        </div>
+        <div class="card-footer p-2">
+            <textarea style="height: 200px !important;" type="text" class="form-control form-control-sm mb-1" placeholder="Correspondence here..."></textarea>
+            <button type="button" class="btn btn-primary btn-sm">Send</button>
         </div>
     </div>
 </div>
-

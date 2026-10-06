@@ -67,7 +67,7 @@ ViewData["Title"] = "Ticket";
     .section-title {
         font-weight: bold;
         font-size: 16px;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         color: #002e5a;
        
         background-color: lightblue;
@@ -150,16 +150,20 @@ ViewData["Title"] = "Ticket";
         text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 </style>
-}
+
+
 
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/_CreateTicketModal.cshtml");
 }
 
-    @{
-        await Html.RenderPartialAsync("~/Views/Ticket/_UpdateTicketModal.cshtml");
-    }
-   
+@* @{
+    await Html.RenderPartialAsync("~/Views/Ticket/UserView/UpdateTicketUserViewModal.cshtml");
+} *@
+ @{
+    await Html.RenderPartialAsync("~/Views/Ticket/_UpdateTicketModal.cshtml");
+}
+
 @{
     await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/SendEmailEditorModal.cshtml");
 }
@@ -237,8 +241,9 @@ ViewData["Title"] = "Ticket";
 @section Scripts {
     <!--BOOTSTRAP TABLE PLUGIN DEPENDECIES-->
     @* <script src="~/js/ticket/ticket-assignee.js" asp-append-version="true"></script> *@
-    <script src="~/js/ticket/test.js"></script>
+    @* <script src="~/js/ticket/test.js"></script> *@
     <script src="~/js/ticket/ticket-correspondence.js"></script>
+    <script src="~/js/ticket/user-correspondence.js"></script>
     <script src="~/js/ticket/ticket-event-handlers.js" asp-append-version="true"></script>
     @* <script src="~/js/ticket/correspondence-attachment-preview.js"></script> *@
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>

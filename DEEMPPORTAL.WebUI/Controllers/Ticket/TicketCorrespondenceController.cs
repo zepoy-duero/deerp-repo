@@ -78,13 +78,13 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
 
         [HttpGet("ticketId/{ticketId:int}")]
         public async Task<IActionResult> GetByTicketId(
-            int ticketId)
+            int ticketId, string correspondenceType)
         {
             try
             {
                 var correspondences =
                     await _correspondenceRepository
-                        .GetByTicketIdAsync(ticketId);
+                        .GetByTicketIdAsync(ticketId, correspondenceType);
 
 
                 return Ok(new
@@ -321,11 +321,11 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
         }
 
         [HttpPost("upload-attachment")]
-        public async Task<IActionResult> UploadCorrespondenceAttachments([FromForm] int TicketId, [FromForm] List<IFormFile>? TicketAttachments)
+        public async Task<IActionResult> UploadCorrespondenceAttachments([FromForm] int CorrespondenceId, [FromForm] List<IFormFile>? TicketAttachments)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!await _ticketService.UploadCorrespondenceAttachmentsAsync(TicketId, TicketAttachments))
+            if (!await _ticketService.UploadCorrespondenceAttachmentsAsync(CorrespondenceId, TicketAttachments))
                 return BadRequest(new
                 {
                     isSuccess = false,
@@ -339,9 +339,9 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
             });
         }
         [HttpGet("get-attachments")]
-        public async Task<IActionResult> GetCorrespondenceAttachments(int TicketId)
+        public async Task<IActionResult> GetCorrespondenceAttachments(int CorrespondenceId)
         {
-            var ticketAttachments = await _ticketService.GetCorrespondenceAttachmentsAsync(TicketId);
+            var ticketAttachments = await _ticketService.GetCorrespondenceAttachmentsAsync(CorrespondenceId);
             return Ok(ticketAttachments);
         }
         [HttpGet("get-attachment")]

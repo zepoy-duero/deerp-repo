@@ -28,12 +28,12 @@
                 <div class="col-md-3 @(User.HasClaim("HasFullAccess", "true")
                                          || User.HasClaim("DeptManagerAccess", "true")
                                          ? "" : "d-none")">
-                    <label class="form-label">Assigned To</label>
+                    <label class="form-label small fw-bold">Assigned To</label>
                     <input id="assignedToCode" class="form-control d-none" />
                     <input id="assignedToName" class="form-control d-none" />
                     <!-- <input dropdown -->
                     <div class="dropdown rounded-1">
-                        <button disabled class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" id="assigneeDropdownSelect" data-bs-toggle="dropdown">
+                        <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="assigneeDropdownSelect" data-bs-toggle="dropdown">
                            Not yet assigned
                         </button>
                         <div class="dropdown-menu w-100 p-2" style="max-height: 200px !important; overflow-y: scroll;">
@@ -54,7 +54,7 @@
                 <div class="col-md-4 px-0 @(User.HasClaim("HasFullAccess", "true")
                                          || User.HasClaim("DeptManagerAccess", "true")
                                          ? "" : "d-none")">
-                        <label class="form-label">Module</label>
+                    <label class="form-label small fw-bold">Module</label>
 
                         <!-- Hidden real select (for form submission) -->
                         <input id="moduleName" class="form-control d-none" />
@@ -62,7 +62,7 @@
 
                         <!-- Custom dropdown -->
                         <div class="dropdown rounded-1">
-                            <button class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" disabled id="moduleDropdownSelect" data-bs-toggle="dropdown">
+                            <button class="form-control-plaintext text-truncate text-start text-muted" type="button" disabled id="moduleDropdownSelect" data-bs-toggle="dropdown">
                                 Select here . . .
                             </button>
 
@@ -83,11 +83,11 @@
            
                 <!-- PRIORITY-->
                 <div class="col-md-3 ">
-                    <label for="priorityCode" class="form-label">Priority</label>
+                    <label for="priorityCode" class="form-label small fw-bold">Priority</label>
 
 
                     <!-- Hidden real select (for form submission) -->
-                    <select id="priorityCode" class="form-control-plaintext text-muted fw-bold" disabled>
+                    <select id="priorityCode" class="form-control-plaintext text-muted" disabled>
                     </select>
                     <!-- Custom dropdown -->
                     @* <div class="dropdown rounded-1">
@@ -112,12 +112,12 @@
             <div class="row g-0 mb-3 pe-0">
                 <!-- TASK TYPE -->
                 <div class="col-md-3">
-                    <label class="form-label">Type</label>
+                    <label class="form-label small fw-bold">Type</label>
                     <input id="taskTypeCode" class="form-control d-none" />
                     <input id="taskTypeName" class="form-control d-none" />
                     <!-- Custom dropdown -->
                     <div class="dropdown rounded-1">
-                        <button disabled class="form-control-plaintext text-truncate fw-bold text-start text-muted" type="button" id="typeDropdownSelect" data-bs-toggle="dropdown">
+                        <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="typeDropdownSelect" data-bs-toggle="dropdown">
                             
                         </button>
 
@@ -140,13 +140,13 @@
                     @(User.HasClaim("HasFullAccess", "true") 
                     || User.HasClaim("DeptManagerAccess", "true") 
                     ? "" : "d-none")">
-               
-                  
-                   
-                        <label class="form-label">Duration</label>
+
+
+
+                    <label class="form-label small fw-bold">Duration</label>
                         <div class="d-flex gap-2">
-                            <input id="ticketDuration" type="number" class="form-control text-muted fw-bold w-25" disabled>
-                            <select id="ticketDurationUnit" class="form-control-plaintext text-muted fw-bold w-75" disabled>
+                            <input id="ticketDuration" type="number" class="form-control text-muted w-25" disabled>
+                            <select id="ticketDurationUnit" class="form-control-plaintext text-muted w-75" disabled>
                             </select>
                         </div>
                         <hr/>
@@ -155,16 +155,16 @@
                 <div class="col-md-2 pe-0 @(User.HasClaim("HasFullAccess", "true")
                                          || User.HasClaim("DeptManagerAccess", "true")
                                          ? "" : "d-none")">
-                        <label class="form-label">Start</label>
-                        <input id="startDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                    <label class="form-label small fw-bold">Start</label>
+                        <input id="startDate" type="date" class="form-control-plaintext text-muted" disabled />
                         <hr />
                     </div>
                     <!-- END DATE -->
                 <div class="col-md-2 @(User.HasClaim("HasFullAccess", "true")
                                          || User.HasClaim("DeptManagerAccess", "true")
                                          ? "" : "d-none")">
-                        <label class="form-label">End</label>
-                        <input id="finishDate" type="date" class="form-control-plaintext text-muted fw-bold" disabled />
+                    <label class="form-label small fw-bold">End</label>
+                        <input id="finishDate" type="date" class="form-control-plaintext text-muted" disabled />
                         <hr />
                     </div>
                 
@@ -177,13 +177,13 @@
                     <select id="selectStatus" class="form-select"></select>
                 </div> *@
                 <div class="col-md-3">
-                    <label for="statusCode" class="form-label">Status</label>
+                    <label for="statusCode" class="form-label small fw-bold">Status</label>
                    
-                    <select id="statusCode" class="form-select text-muted fw-bold d-none">
+                    <select id="statusCode" class="form-select text-muted d-none">
                     </select>
                     <br />
-                    <input type="button" id="statusName" class="" />
-                  
+                    @* <input type="button" id="statusName" class="" /> *@
+                    <span id="statusName" class="badge rounded-pill fs-6 px-3 py-2">New</span>
                 </div>
             </div>
         </div>

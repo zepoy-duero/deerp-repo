@@ -18,21 +18,22 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Reviewed By</label>
+                                <label class="form-label small fw-bold">Reviewed By</label>
                                 <input id="reviewedByName" class="form-control" disabled />
                             </div>
                             <div class="form-group mt-0">
-                                <label>Reviewed Date</label>
+                                <label class="form-label small fw-bold">Reviewed Date</label>
                                 <input id="reviewedDate" type="date" class="form-control" disabled />
                             </div>
                             <div class="form-group">
-                                <label>Version Number</label>
+                            <label class="form-label small fw-bold">Version Number</label>
                                 <input id="versionNo" class="form-control" value="v2.0.0.1" disabled />
                             </div>
                             <div class="form-group">
-                                <label for="remarks">Reviewed Remarks</label>
+                            <label class="form-label small fw-bold" for="remarks">Reviewed Remarks</label>
                                 <textarea id="remarks" class="form-control" disabled></textarea>
                             </div>
+                            <!--HIDDEN INPUT UPDATEDBY-->
                             <div class="form-group d-none">
                                 <input id="updatedBy" class="form-control d-none" />
                                 <input type="date" id="updatedDate" class="form-control d-none" />
@@ -77,7 +78,8 @@
                         <!-- FIXED: Added 'show' alongside 'active' for smooth rendering -->
                         <div class="tab-pane fade show active card-body" id="Correspondence">
                             @{
-                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/TicketCorrespondence.cshtml");
+                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/ReviewReleaseCorrespondence.cshtml");
+                                // await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/InternalCorrespondence.cshtml");
                             }
                         </div>
                         <div class="tab-pane card-body fade" id="ReviewReleaseAttachment">

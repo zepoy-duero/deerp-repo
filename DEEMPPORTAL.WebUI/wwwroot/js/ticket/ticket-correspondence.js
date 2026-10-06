@@ -4,10 +4,6 @@ async function bindCorrespondenceHandlers() {
     
     $("#postCorrespondenceBtn").on("click", async function (e) {
         e.preventDefault();
-
-
-
-
         if (correspondenceAction == 'create') {
             let createParam = getCreateCorrespondenceParams();
             console.log(createParam)
@@ -38,10 +34,6 @@ async function bindCorrespondenceHandlers() {
             }
 
         }
-
-
-
-
     });
     //when a user clicked the New Correspondence btn
     $("#addCorrespondenceBtn").on('click', function (e) {
@@ -99,14 +91,13 @@ async function bindCorrespondenceHandlers() {
         } else return;
     })
 
-   
-  
 } 
 function getCreateCorrespondenceParams() {
     let param = {
         TicketId: selectedTicket.TicketId,
         Message: $("#txtCorrespondence").val(),
-        CreatedByCode: CurrentUser.USER_CODE
+        CreatedByCode: CurrentUser.USER_CODE,
+        CorrespondenceType: selectedTicket.RequestedByCode == CurrentUser.USER_CODE ? 'User' : 'Internal'
     }
     return param;
 }
@@ -119,12 +110,18 @@ function getUpdateCorrespondenceParams() {
     return param;
 }
 // FUNCTIONS
-async function getTicketCorrespondence(ticketId) {
+async function getTicketCorrespondence(ticketId, correspondenceType) {
+    console.log(ticketId,correspondenceType)
     try {
-        const correspondenceResponse = await $.get(`/MyTickets/ticket-correspondence/ticketId/${ticketId}`);
+        const correspondenceResponse = await $.get(`/MyTickets/ticket-correspondence/ticketId/${ticketId}`, {
+            ticketId: ticketId,
+            correspondenceType: correspondenceType
+        });
         console.log(correspondenceResponse.data);
 
         let data = correspondenceResponse.data;
+        renderTicketCorrespondence(data,selectedTicket.TicketId);
+        return;
         const $correspondenceList = $("#correspondenceList").empty();
 
         // Ensure data exists and is an array before looping
@@ -154,6 +151,7 @@ async function getTicketCorrespondence(ticketId) {
 
                 // 5. Append to the main list container
                 $correspondenceList.append($item);
+                console.log($item)
             });
 
             // 6. Handle clicks cleanly using a single delegated event listener
@@ -169,6 +167,7 @@ async function getTicketCorrespondence(ticketId) {
 }
 
 async function createCorrespondence(param) {
+   
     try {
         let response = await $.ajax({
             url: "/MyTickets/ticket-correspondence",
@@ -200,7 +199,7 @@ async function createCorrespondence(param) {
             // Clear textarea and refresh list
             $("#txtCorrespondence").val("");
    
-            await getTicketCorrespondence(selectedTicket.TicketId);
+            await getTicketCorrespondence(selectedTicket.TicketId, params.CorrespondenceType);
         }
        
     } catch (error) {
@@ -263,7 +262,8 @@ async function updateCorrespondence(param) {
                 // Clear textarea and refresh list
                 $("#txtCorrespondence").val("");
                 console.log(selectedTicket)
-                await getTicketCorrespondence(selectedTicket.TicketId);
+                let correspondenceType = selectedTicket.RequestedByCode == CurrentUser.USER_CODE ? 'User' : 'Internal'
+                await getTicketCorrespondence(selectedTicket.TicketId, correspondenceType);
             
             }
 
@@ -283,7 +283,7 @@ async function updateCorrespondence(param) {
         }
     });
 }
-async function uploadCorrespondenceAttachments(TicketId) {
+async function uploadCorrespondenceAttachments(CorrespondenceId) {
     if (selectedFiles.length >= 1) {
         //loadingUploadAttachmentButton();
         const data = new FormData();
@@ -291,7 +291,7 @@ async function uploadCorrespondenceAttachments(TicketId) {
             // Use the exact same key name to append multiple files as an array
             data.append('TicketAttachments', file);
         });
-        data.append("TicketId", TicketId);
+        data.append("CorrespondenceId", CorrespondenceId);
         try {
             //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
             let response = await $.ajax({
@@ -323,7 +323,7 @@ async function uploadCorrespondenceAttachments(TicketId) {
 }
 async function showCorrespondenceAttachmentList() {
 
-    let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { TicketId: selectedTicket.TicketId });
+    let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { CorrespondenceId: Correspondence.CorrespondenceId });
     console.log(attachments)
     let attachmentList = '';
     if (attachments.length >= 1) {

@@ -5,16 +5,17 @@ using DEEMPPORTAL.Domain;
 using DEEMPPORTAL.Domain.Manage.User;
 using DEEMPPORTAL.Domain.Support;
 using DEEMPPORTAL.Domain.Ticket;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System.Data;
-using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
+using System.Data;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace DEEMPPORTAL.Infrastructure;
 
@@ -527,7 +528,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
 
         return data;
     }
-    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId)
+    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int CorrespondenceId)
     {
         await using var conn = new SqlConnection(_cp.ConnectionName);
 
@@ -536,7 +537,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
         const string storedProcedure = "CLOUD_v1_ERP_CM_TICKET_CORRESPONDENCE_ATTACHMENTS_sel";
         var parameters = new
         {
-            TicketId = TicketId
+            CorrespondenceId = CorrespondenceId
         };
 
         try
@@ -714,7 +715,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
        GET BY TICKET ID
     ========================================================= */
 
-    public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId)
+    public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId, string correpondenceType)
     {
         var result =
             new List<TicketCorrespondence>();
@@ -736,6 +737,11 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
             "@TicketId",
             SqlDbType.Int
         ).Value = ticketId;
+
+        command.Parameters.Add(
+          "@CorrespondenceType",
+          SqlDbType.NVarChar
+      ).Value = correpondenceType;
 
         await connection.OpenAsync();
 
@@ -788,6 +794,11 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
             "@CreatedByCode",
             SqlDbType.Int
         ).Value = model.CreatedByCode;
+        command.Parameters.Add(
+           "@CorrespondenceType",
+           SqlDbType.NVarChar
+       ).Value =
+           (object?)model.CorrespondenceType ?? DBNull.Value;
 
         await connection.OpenAsync();
 
@@ -836,6 +847,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
             "@UpdatedBy",
             SqlDbType.Int
         ).Value = model.UpdatedBy;
+        
 
         await connection.OpenAsync();
 
@@ -949,10 +961,16 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
                     )
                 ),
 
-            IsDeleted =
-                reader.GetBoolean(
+            CorrespondenceType =
+                reader.IsDBNull(
                     reader.GetOrdinal(
-                        "IsDeleted"
+                        "CorrespondenceType"
+                    )
+                )
+                ? null
+                : reader.GetString(
+                    reader.GetOrdinal(
+                        "CorrespondenceType"
                     )
                 )
         };

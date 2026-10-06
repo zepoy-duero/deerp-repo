@@ -15,13 +15,13 @@
 </style>
 
 
-
-<div class="modal fade" id="editTicketModal" tabindex="-1" >
+<div class="modal fade" id="editTicketModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+    @* <div class="modal-dialog modal-dialog-centered @(User.HasClaim("HasFullAccess", "true")
+         || User.HasClaim("DeptManagerAccess", "true")
+         ? "modal-fullscreen" : "modal-xl")"> *@
         <div class="modal-content">
-            @{
-                var userRole = User.HasClaim(c => c.Type == ClaimTypes.Role);
-            }
+           
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
                 <h6 class="modal-title fw-bold" id="editTicketModalTitle"></h6>
@@ -29,82 +29,406 @@
             </div>
 
             <!-- BODY -->
-            <div class="modal-body  position-relative" data-bs-spy="scroll">
-                <div class="container-fluid">
-                    <div class="row g-0">
-                        <!-- SIDEBAR -->
-                        <div class="col-2 ps-0 @(User.HasClaim("HasFullAccess", "true")
-                                                                                              || User.HasClaim("DeptManagerAccess", "true")
-                                                                                              ? "" : "d-none")">
+            @if (User.HasClaim("HasFullAccess", "true")
+                      || User.HasClaim("DeptManagerAccess", "true"))
+            {
+                <!-- MIS/MANAGEMENT VIEW-->
+                <div class="modal-body  position-relative" data-bs-spy="scroll">
+                    <div class="container-fluid">
+                        <div class="row g-0">
+                            <!-- SIDEBAR -->
+                            <div class=" @(User.HasClaim("HasFullAccess", "true")
+                                                               || User.HasClaim("DeptManagerAccess", "true")
+                                                               ? "col-2 ps-0" : "col-2 ps-0 d-none")">
                             <div class="card position-sticky top-0 w-100">
-                                        <div class="card-header bg-accent rounded-top text-white fs-6">
-                                            <i class="fa fa-ticket me-2"></i>
-                                            Ticket Details
-                                        </div>
-                             
-                                <div id="ticketNav" class="list-group list-group-flush justify-content-center">
-                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
-                                        <i class="bi bi-person-circle me-2"></i>
-                                        User Request
-                                    </a>
-                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
-                                        <i class="bi bi-person-down me-2"></i>
-                                        <span> Assigned To</span>
-                                       
-                                    </a>
-                                    <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
-                                        <i class="bi bi-hand-thumbs-up me-2"></i>
-                                        Approvals
-                                    </a>
-                                    <a id="reviewSection" class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
-
-                                        <i class="bi bi-list-stars me-2"></i>
-                                        Review
-                                    </a>
+                                <div class="card-header bg-accent rounded-top text-white fs-6">
+                                    <i class="fa fa-ticket me-2"></i>
+                                    Ticket Details
                                 </div>
-                             </div>
-                        </div>
-                        <!-- CONTENT -->
-                        <div class="@(User.HasClaim("HasFullAccess", "true")
-                                    || User.HasClaim("DeptManagerAccess", "true")
-                                                                ? "col-10 ps-0" : "col-12 ps-0")">
-                            
-                                <div class="container-fluid">
-                                    <div data-bs-spy="scroll"
-                                         data-bs-target="#ticketNav"
-                                         data-bs-offset="50"
-                                         tabindex="0">
-                                         <form id="editTicketForm" class="form">
-                                        
 
-                                        @* 2. Render shared components that everyone sees *@
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
-                                        }
-                                        @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Assignment.cshtml");
-                                        }
-                                        @* 3. Render management-only components conditionally *@
-                                        <div class="@(User.HasClaim("HasFullAccess", "true")
-                                                                 || User.HasClaim("DeptManagerAccess", "true")
-                                                                 ? "" : "d-none")">
-                                            @{
-                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Approvals.cshtml");
-                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Review.cshtml");
-                                            }
-                                        </div>
-                                        
+                                    <div id="ticketNav" class="list-group list-group-flush justify-content-center">
+                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
+                                            <i class="bi bi-person-circle me-2"></i>
+                                            User Request
+                                        </a>
+                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
+                                            <i class="bi bi-person-down me-2"></i>
+                                            <span> Assigned To</span>
 
-                                    </form>
+                                        </a>
+                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
+                                            <i class="bi bi-hand-thumbs-up me-2"></i>
+                                            Approvals
+                                        </a>
+                                        <a id="reviewSection" class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
+
+                                            <i class="bi bi-list-stars me-2"></i>
+                                            Review
+                                        </a>
                                     </div>
                                 </div>
-                            
-                    </div>
+                            </div>
+                            <!-- CONTENT -->
+
+                            <div class="@(User.HasClaim("HasFullAccess", "true")
+                                                                 || User.HasClaim("DeptManagerAccess", "true")
+                                                                                             ? "col-10 ps-0" : "col-12 ps-0")">
+
+                            <div class="container-fluid">
+                                <div class="row g-2">
+                                    <!--CENTER-->
+                                    <div class="@(User.HasClaim("HasFullAccess", "true")
+                                                                                              || User.HasClaim("DeptManagerAccess", "true")
+                                                                                              ? "col-12 ps-0" : "col-9 ps-0")">
+                                        <div data-bs-spy="scroll"
+                                             data-bs-target="#ticketNav"
+                                             data-bs-offset="50"
+                                             tabindex="0">
+                                            <form id="editTicketForm" class="form">
+
+                                                @{
+                                                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
+                                                    }
+
+                                                    <div class="@(User.HasClaim("HasFullAccess", "true")
+                                                                                                                  || User.HasClaim("DeptManagerAccess", "true")
+                                                                                                                  ? "" : "d-none")">
+                                                    @{
+                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Assignment.cshtml");
+                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Approvals.cshtml");
+                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Review.cshtml");
+                                                        }
+                                                    </div>
+
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!--USER/EMPLOYEE VIEW-->
+                                        <div class="@(User.HasClaim("HasFullAccess", "true")
+                                                                                                 || User.HasClaim("DeptManagerAccess", "true")
+                                                                                                 ? "d-none" : "col-3 ps-0" )">
+                                        <!-- =================================
+                                             STATUS
+                                        ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="mb-0 fw-bold small text-main">
+                                                        <i class="bi bi-activity me-2"></i>
+                                                        Status
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+
+                                                        <span id="EditTicketStatusBadge"
+                                                              class="badge badge-success rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Completed
+
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- =================================
+                                                 ASSIGNMENT
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="small fw-bold text-main me-auto">
+
+                                                        <i class="bi bi-person-check-fill"></i>
+
+                                                        Assigned To
+
+                                                    </h6>
+                                                    <div class="text-center">
+                                                        <span id="EditTicketAssignedToNameBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Completed
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- =================================
+                                                  PRIORITY
+                                            ================================== -->
+                                            <div class="card border-0 shadow-sm mb-3">
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                                    <h6 class="mb-0 small fw-bold text-main">
+                                                        <i class="bi bi-flag-fill me-2"></i>
+                                                        Priority
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+                                                        <span id="EditPriorityBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Low
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- =================================
+                                                 TASK TYPE
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="mb-0 small fw-bold text-main">
+
+                                                        <i class="bi bi-list-task me-2"></i>
+
+                                                        Task Type
+
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+                                                        <span id="EditPriorityBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Low
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <!-- =================================
+                                                 TICKET TIMELINE
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm">
+
+                                                <div class="card-header bg-white">
+
+                                                    <h6 class="mb-0 small fw-bold text-main">
+
+                                                        <i class="bi bi-clock-history me-2"></i>
+
+                                                        Activity
+
+                                                    </h6>
+
+                                                </div>
+
+
+                                                <div class="card-body">
+
+                                                    <div id="ticketActivityTimeline">
+
+                                                        <div class="text-center text-muted">
+
+                                                            No activity available.
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
-          
-            </div>
+
+            }
+            else
+            {
+                <!-- USER VIEW -->
+                <div class="modal-body  position-relative" data-bs-spy="scroll">
+                    <div class="container-fluid">
+                        <div class="row g-0">
+                    
+                            <!-- CONTENT -->
+
+                            <div class="col-12 ps-0">
+
+                            <div class="container-fluid">
+                                <div class="row g-2">
+                                    <!--CENTER-->
+                                    <div class="col-12 ps-0">
+                                      
+                                            <form id="editTicketForm" class="form">
+
+                                                @{
+                                                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
+                                                    }
+
+                                                </form>
+                                            </div>
+                                 
+                                        <!--USER/EMPLOYEE VIEW-->
+                                        <div class="col-3 ps-0">
+                                        <!-- =================================
+                                             STATUS
+                                        ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="mb-0 fw-bold small text-main">
+                                                        <i class="bi bi-activity me-2"></i>
+                                                        Status
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+
+                                                        <span id="EditTicketStatusBadge"
+                                                              class="badge badge-success rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Completed
+
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- =================================
+                                                 ASSIGNMENT
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="small fw-bold text-main me-auto">
+
+                                                        <i class="bi bi-person-check-fill"></i>
+
+                                                        Assigned To
+
+                                                    </h6>
+                                                    <div class="text-center">
+                                                        <span id="EditTicketAssignedToNameBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Completed
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- =================================
+                                                  PRIORITY
+                                            ================================== -->
+                                            <div class="card border-0 shadow-sm mb-3">
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                                    <h6 class="mb-0 small fw-bold text-main">
+                                                        <i class="bi bi-flag-fill me-2"></i>
+                                                        Priority
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+                                                        <span id="EditPriorityBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Low
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- =================================
+                                                 TASK TYPE
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm mb-3">
+
+                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+
+                                                    <h6 class="mb-0 small fw-bold text-main">
+
+                                                        <i class="bi bi-list-task me-2"></i>
+
+                                                        Task Type
+
+                                                    </h6>
+                                                    <div class="text-center ms-auto">
+                                                        <span id="EditPriorityBadge"
+                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
+
+                                                            Low
+
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <!-- =================================
+                                                 TICKET TIMELINE
+                                            ================================== -->
+
+                                            <div class="card border-0 shadow-sm">
+
+                                                <div class="card-header bg-white">
+
+                                                    <h6 class="mb-0 small fw-bold text-main">
+
+                                                        <i class="bi bi-clock-history me-2"></i>
+
+                                                        Activity
+
+                                                    </h6>
+
+                                                </div>
+
+
+                                                <div class="card-body">
+
+                                                    <div id="ticketActivityTimeline">
+
+                                                        <div class="text-center text-muted">
+
+                                                            No activity available.
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
             <!-- FOOTER -->
             <div class="modal-footer position-sticky mb-2 border-0">
                 <button type="button" id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">                                 
@@ -115,3 +439,142 @@
         </div>
     </div>
 </div>
+
+
+
+<!--USER VIEW OF UPDATE TICKET MODAL-->
+<!-- Trigger Button -->
+@* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketDetailModal">
+    View Ticket Details
+</button> *@
+
+<!-- Ticket Detail Modal -->
+<div class="modal fade" id="ticketDetailModal" tabindex="-1" aria-labelledby="ticketDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="ticketDetailModalLabel">
+                    <span class="badge bg-danger me-2">High</span>
+                    <strong>Ticket #TC-8492:</strong> Payment Gateway Timeout Error
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-0">
+
+                <!-- 1. Attachment Carousel (Top) -->
+                <div id="ticketAttachmentCarousel" class="carousel slide bg-dark" data-bs-ride="carousel">
+                    <!-- Indicators -->
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+
+                    <!-- Carousel Images -->
+                    <div class="carousel-inner" style="max-height: 300px;">
+                        <div class="carousel-item active">
+                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 1">
+                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
+                                <p class="mb-0">Console error logs during checkout failure</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 2">
+                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
+                                <p class="mb-0">Network tab response timeout (504 Gateway Timeout)</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 3">
+                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
+                                <p class="mb-0">User profile state during session drop</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <!-- 2. Ticket Information (Bottom) -->
+                <div class="p-4">
+
+                    <!-- Description Section -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
+                        <p class="text-secondary">
+                            Users are experiencing consistent 504 gateway timeout errors when attempting to process credit card transactions via the Stripe API endpoint. The issue specifically occurs during peak traffic hours and drops the user's active session without completing the database commit.
+                        </p>
+                    </div>
+
+                    <hr class="text-muted opacity-25">
+
+                    <!-- Meta Data Grid -->
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Status</span>
+                            <span class="badge bg-warning text-dark mt-1">In Progress</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Category</span>
+                            <span class="text-dark d-block mt-1">Backend / API</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Created By</span>
+                            <span class="text-dark d-block mt-1">Jane Doe (QA Engineering)</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Assigned To</span>
+                            <span class="text-dark d-block mt-1">Alex Smith</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Date Created</span>
+                            <span class="text-dark d-block mt-1">Sep 28, 2026, 09:15 AM</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <span class="text-uppercase text-muted d-block small fw-bold">Last Updated</span>
+                            <span class="text-dark d-block mt-1">Sep 29, 2026, 02:30 PM</span>
+                        </div>
+                    </div>
+
+                    <!-- Non-image Attachments List (Optional Addition) -->
+                    <div class="mt-4 pt-2">
+                        <h6 class="text-uppercase text-muted small fw-bold mb-2">Other Attachments (1)</h6>
+                        <div class="d-flex align-items-center p-2 border rounded bg-light" style="max-width: 300px;">
+                            <div class="me-2">
+                                <svg xmlns="http://w3.org" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-text text-primary" viewBox="0 0 16 16">
+                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0 -1h-5zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0 -1h-5zM5.5 11a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0 -1h-3z" />
+                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                                </svg>
+                            </div>
+                            <div class="overflow-hidden">
+                                <a href="#" class="text-decoration-none d-block text-truncate fw-semibold small">server_error_logs.txt</a>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">42 KB</small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Mark as Resolved</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

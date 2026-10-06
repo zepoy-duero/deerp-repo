@@ -110,10 +110,10 @@ public class TicketService(ITicketRepository ticketRepository,
         }
         return await _ticketRepository.UploadTicketAttachmentsAsync(dt);
     }
-    public async Task<bool> UploadCorrespondenceAttachmentsAsync(int TicketId,List<IFormFile>? CorrespondenceAttachments)
+    public async Task<bool> UploadCorrespondenceAttachmentsAsync(int CorrespondenceId, List<IFormFile>? CorrespondenceAttachments)
     {
         var dt = new DataTable();
-        dt.Columns.Add("TicketId", typeof(int));
+        dt.Columns.Add("CorrespondenceId", typeof(int));
         dt.Columns.Add("FileName", typeof(string));
         dt.Columns.Add("FileExtension", typeof(string));
         dt.Columns.Add("FileSize", typeof(int));
@@ -130,7 +130,7 @@ public class TicketService(ITicketRepository ticketRepository,
 
                 // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
                 dt.Rows.Add(
-                    TicketId,
+                    CorrespondenceId,
                     correspondenceAttachment.FileName,
                     Path.GetExtension(correspondenceAttachment.FileName)?.TrimStart('.') ?? string.Empty,
                     (int)correspondenceAttachment.Length / 1024,
@@ -162,13 +162,13 @@ public class TicketService(ITicketRepository ticketRepository,
     {
         return await _ticketRepository.GetByIdAsync(correspondenceId);
     }
-    public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId)
+    public async Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId, string correspondenceType)
     {
-        return await _ticketRepository.GetByTicketIdAsync(ticketId);
+        return await _ticketRepository.GetByTicketIdAsync(ticketId, correspondenceType);
     }
-    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId)
+    public async Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int CorrespondenceId)
     {
-        return await _ticketRepository.GetCorrespondenceAttachmentsAsync(TicketId);
+        return await _ticketRepository.GetCorrespondenceAttachmentsAsync(CorrespondenceId);
     }
     public async Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int AttachmentId)
     {

@@ -16,7 +16,7 @@ using System.Net.Mail;
 using System.Net.Sockets;
 using System.Security.Claims;
 using System.Text.Json;
-
+using DEEMPPORTAL.Common;
 
 namespace DEEMPPORTAL.WebUI.Controllers.Ticket;
 
@@ -36,11 +36,13 @@ public class TicketController(ISelectOptionsService selectOptionsService,
     private readonly ILogger<TicketController> _logger = logger;
     private readonly ILoginService _loginService = loginService;
 
+
     [HttpGet("")]
     public IActionResult Index()
     {
         if(User?.Identity?.IsAuthenticated ?? false)
         {
+        
             return View();
         } else
         {

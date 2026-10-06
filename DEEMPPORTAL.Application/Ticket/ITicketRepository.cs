@@ -30,7 +30,7 @@ public interface ITicketRepository
     //TICKET CORRESPONDENCE
     Task<TicketCorrespondence?> GetByIdAsync(int correspondenceId);
 
-    Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId);
+    Task<List<TicketCorrespondence>> GetByTicketIdAsync(int ticketId, string correspondenceType);
 
     Task<TicketCorrespondence?> InsertAsync(TicketCorrespondenceRequest model);
 

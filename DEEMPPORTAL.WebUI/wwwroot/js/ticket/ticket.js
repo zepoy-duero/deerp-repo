@@ -64,6 +64,7 @@ $(async function () {
     await getAllTicket();
     bindEventHandlers();
     await bindCorrespondenceHandlers();
+   
     ticketsTable.bootstrapTable('hideLoading');
     //$('#requestedDateFilter').val(moment().format("YYYY"))
     $('#requestedDateFilter').val('2026').trigger('change');
@@ -90,6 +91,10 @@ $(async function () {
     }, 100);
 
     $("#summernoteInvalidFeedback").removeClass('d-none').addClass('d-none')
+    //SHOW TICKET CORRESPONDENCE BUTTON TOOLTIP - ACTIVATE
+   
+   
+
 });
 
 //-------FUNCTIONS------ 
@@ -1105,7 +1110,7 @@ async function uploadTicketAttachments(TicketId) {
         try {
             //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
             let response = await $.ajax({
-                url: 'tickets/upload-ticket-attachments',
+                url: 'MyTickets/upload-ticket-attachments',
                 type: 'POST',
                 data: data,
                 contentType: false,

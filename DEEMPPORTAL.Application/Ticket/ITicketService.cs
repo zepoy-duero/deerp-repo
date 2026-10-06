@@ -33,7 +33,7 @@ namespace DEEMPPORTAL.Application.Ticket
                 int correspondenceId);
 
         Task<List<TicketCorrespondence>> GetByTicketIdAsync(
-            int ticketId);
+            int ticketId, string correspondenceType);
 
         Task<TicketCorrespondence?> InsertAsync(
             TicketCorrespondenceRequest model);

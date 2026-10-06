@@ -1,7 +1,25 @@
 ﻿function bindEventHandlers() {
    
     //----------EVENT LISTENERS----------------------------
+    //$('#correspondenceListModal').on('show.bs.modal', function () {
+    //    const bubble = document.getElementById('draggableBubble');
+    //    const modalDialog = document.getElementById('correspondenceModalDialog');
 
+    //    // Get the exact live bounding coordinates of the dragged bubble
+    //    const bubbleRect = bubble.getBoundingClientRect();
+
+    //    // Set the modal's horizontal anchor to match the bubble
+    //    modalDialog.style.left = `${bubbleRect.left}px`;
+
+    //    // Position the modal right above the chat bubble (subtracting an extra 20px gap)
+    //    // You can swap this out if you'd rather map to the bubble's top pixel directly
+    //    const modalHeightOffset = 20;
+    //    modalDialog.style.bottom = `${window.innerHeight - bubbleRect.top + modalHeightOffset}px`;
+
+    //    // Ensure top standard resets so custom bottom rule is honored cleanly
+    //    modalDialog.style.top = 'auto';
+    //});
+    $("#showTicketCorrBtn").on
     $("#downloadAttachmentBtn").on("click", function () {
         console.log($(this))
         const fileName = $(this).data("filename");
@@ -441,16 +459,23 @@
 
 
     });
+      
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
-        
-       
+        if (CurrentUser.USER_ROLE.includes("Management")
+            || CurrentUser.USER_ROLE.includes("Manager")
+            || CurrentUser.USER_ROLE.includes("Admin")) {
+            resetEditMode();
+        } else {
+            resetUserEditMode();
+        }
+         //{
             selectedFiles = [];
             activeAttachmentContainer = 'edit';
-            resetEditMode();
+          
             selectedTicket = row;
-        $("#editTicketModalTitle").empty().append(`<i class="bi bi-ticket-detailed-fill me-2"></i>Update Ticket -  ${row.StringTicketId}(${row.TicketSubject})`);
-
-
+            $("#editTicketModalTitle").empty().append(`<i class="bi bi-ticket-detailed-fill me-2"></i>Update Ticket -  ${row.StringTicketId}(${row.TicketSubject})`);
+            $("#chatModalLabel").empty().append('Correspondences');
+            $("#EditAssignedToName").val(row.AssignedToName ?? 'Not yet assigned');
             $("#ticketId").val(row.TicketId);
             $("#deptCode").val(row.DeptCode);
             $("#ticketNo").val(row.TicketNo);
@@ -462,16 +487,16 @@
             await setReviewFormValue(row);
             $editTicketModal.modal('show');
             await loadTicketAttachments(row.TicketId);
-
-       
-      
-       
-        
+        //} else {
+        //    $("#ticketDetailModal").modal('show');
+          
+        //}  
+            
         
         //$("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
     });
     //TRIGGER THE ATTACH FILE INPUT FIELD
-    $("#editAttachBtn").on('click', function (event) {
+    $("#addAttachmentBtn").on('click', function (event) {
         event.preventDefault()
         $("#editTicketAttachments").trigger("click");
     });
@@ -487,7 +512,7 @@
 
         // make the RequestedBy field editable: show the select, hide the display
         $("#displayRequestedByName")
-            .toggleClass('form-control-plaintext form-select fw-bold')
+            .toggleClass('form-control-plaintext form-select')
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
@@ -512,7 +537,7 @@
             $('#editTicketDescription').summernote('disable');
             $("#attachmentsPreviewContainer").find('.btn-toolbar').addClass('d-none')
         }
-        $("#editAttachBtn").toggleClass('d-none');
+        $("#addAttachmentBtn").toggleClass('d-none');
     });
 
     $("#toggleEditAssignment").on("change", function (event) {
@@ -525,7 +550,7 @@
         const isChecked = switchElement.checked;
         console.log(isChecked)
         $("#assigneeDropdownSelect,#priorityCode,#moduleDropdownSelect,#typeDropdownSelect,#ticketDurationUnit")
-            .toggleClass('form-control-plaintext form-select fw-bold')
+            .toggleClass('form-control-plaintext form-select')
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
@@ -541,7 +566,7 @@
 
     $("#toggleEditApprovals").on("change", function () {
       
-        $("#approveByManager").toggleClass('form-control-plaintext text-muted form-select fw-bold')
+        $("#approveByManager").toggleClass('form-control-plaintext text-muted form-select')
             .prop('disabled', function (i, val) {
                 return !val; // Toggles the current state
             });
@@ -666,6 +691,17 @@ async function setUserRequestFormValue(row) {
     $("#editTicketDescription").summernote('code', row.TicketDescription);
     
     $("#editTicketDescription").summernote('disable');
+
+    //LEFT SIDE OF THE EDIT MODAL
+    //EDIT TICKET STATUS
+    $("#EditTicketStatusBadge").text(row.TicketStatus ?? 'New')
+    //EDIT ASSIGNED TO
+    $("#EditAssignedToName").empty().text(row.AssignedToName ?? 'New')
+    //EDIT EditPriorityBadge TO
+    $("#EditPriorityBadge").empty().text(row.TicketPriority ?? 'Low')
+    //EDIT EditTaskTypeName TO
+    $("#EditTaskTypeName").empty().val(row.TaskTypeName ?? 'New')
+
     
 }
 async function setAssignmentFormValue(row) {
@@ -678,6 +714,7 @@ async function setAssignmentFormValue(row) {
     //PRIORITY
     $("#priorityCode").val(row.PriorityCode ? row.PriorityCode : 3);
     $("#ticketPriority").val(row.TicketPriority);
+    $("EditTicketPriority").empty().html('High')
     //MODULE
     $("#moduleName").val(row.ModuleName);
     //TASKTYPE
@@ -692,9 +729,9 @@ async function setAssignmentFormValue(row) {
     $("#finishDate").val(moment(row.FinishDate).format("YYYY-MM-DD"));
     //STATUS
     $("#statusCode").val(row.StatusCode ? row.StatusCode : 3);
-    $("#statusName").val(row.StatusName ? row.StatusName : 'New');
+    $("#statusName").text(row.StatusName ? row.StatusName : 'New');
+    $("#EditTicketAssignedToNameBadge").text(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
     const section2 = document.getElementById('toggleEditAssignment');
-    $("#statusName").toggleClass('btn btn-lg rounded-pill')
     $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'New'));
 }
 async function setApprovalsFormValue(row) {
@@ -722,19 +759,30 @@ async function setReviewFormValue(row) {
     $("#updatedBy").val(row.UpdatedBy);
     $("#updatedDate").val(row.UpdatedDate);
     $("#stringTicketId").val(row.StringTicketId ? row.StringTicketId : '');
-    await getTicketCorrespondence(selectedTicket.TicketId)
-    await showCorrespondenceAttachmentList();
+    await getTicketCorrespondence(selectedTicket.TicketId, selectedTicket.RequestedByCode == CurrentUser.USER_CODE ? 'User' : 'Internal');
+ 
+    //await showCorrespondenceAttachmentList();
 }
 //RESETS THE EDIT TICKET MODAL FORM FIELDS AND TOGGLE BUTTON TO ITS INITIAL STATE
+function resetUserEditMode() {
+    const section1 = document.getElementById('toggleEditUserRequest');
+    const s1 = section1.checked;
+    if (s1) {
+        $("#toggleEditUserRequest").prop('checked', false).trigger('change');
+    }
+}
 function resetEditMode() {
     const section1 = document.getElementById('toggleEditUserRequest');
     const section2 = document.getElementById('toggleEditAssignment');
     const section3 = document.getElementById('toggleEditApprovals');
     const section4 = document.getElementById('toggleEditReview');
     const s1 = section1.checked;
-    const s2 = section2.checked;
-    const s3 = section3.checked;
-    const s4 = section4.checked;
+
+        const s2 = section2.checked;
+        const s3 = section3.checked;
+        const s4 = section4.checked;
+    
+    
 
 
     if (s1) {
@@ -756,25 +804,25 @@ function resetEditMode() {
 
 function getStatusColor(status) {
     switch (status) {
-        case 'New': return 'btn-dark';
+        case 'New': return 'bg-dark';
             break;
         case null: return 'd-none';
             break;
-        case 'Assigned': return 'btn-danger';
+        case 'Assigned': return 'bg-danger';
             break;
-        case 'In Progress': return 'btn-primary';
+        case 'In Progress': return 'bg-primary';
             break;
-        case 'Testing': return 'btn-secondary';
+        case 'Testing': return 'bg-secondary';
             break;
-        case 'Pending User': return 'btn-warning dark';
+        case 'Pending User': return 'bg-warning dark';
             break;
-        case 'Pending Third Party': return 'btn-warning dark';
+        case 'Pending Third Party': return 'bg-warning dark';
             break;
-        case 'On Hold': return 'btn-warning dark';
+        case 'On Hold': return 'bg-warning dark';
             break;
-        case 'Resolved': return 'btn-success text-white';
+        case 'Resolved': return 'bg-success text-white';
             break;
-        case 'Closed': return 'btn-dark text-white';
+        case 'Closed': return 'bg-dark text-white';
             break;
         case 'Cancelled': return 'text-muted';
             break;

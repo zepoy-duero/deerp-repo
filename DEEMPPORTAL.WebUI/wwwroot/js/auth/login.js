@@ -40,6 +40,7 @@ async function submitLogin(element) {
 		})
 
 		const data = await response.json()
+		console.log(data)
 		if (!data.isSuccess) {
 			toastr["error"](`${data.message}`, "Invalid Credentials")
 			return

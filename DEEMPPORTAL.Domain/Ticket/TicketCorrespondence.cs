@@ -11,9 +11,12 @@
         public DateTime CreatedDate { get; set; }
 
         public int CreatedByCode { get; set; }
+        public string? CreatedByName { get; set; }
+        public string? CreatedByDepartment { get; set; }
 
         public int UpdatedBy { get; set; }
 
         public bool IsDeleted { get; set; }
+        public string? CorrespondenceType { get; set; }
     }
 }
