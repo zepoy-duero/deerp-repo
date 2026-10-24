@@ -954,6 +954,45 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
                     )
                 ),
 
+            CreatedByName =
+                reader.IsDBNull(
+                    reader.GetOrdinal(
+                        "CreatedByName"
+                    )
+                )
+                ? null
+                : reader.GetString(
+                    reader.GetOrdinal(
+                        "CreatedByName"
+                    )
+                ),
+
+            CreatedByRole =
+                reader.IsDBNull(
+                    reader.GetOrdinal(
+                        "CreatedByRole"
+                    )
+                )
+                ? null
+                : reader.GetString(
+                    reader.GetOrdinal(
+                        "CreatedByRole"
+                    )
+                ),
+
+            CreatedByDepartment =
+                reader.IsDBNull(
+                    reader.GetOrdinal(
+                        "CreatedByDepartment"
+                    )
+                )
+                ? null
+                : reader.GetString(
+                    reader.GetOrdinal(
+                        "CreatedByDepartment"
+                    )
+                ),
+
             UpdatedBy =
                 reader.GetInt32(
                     reader.GetOrdinal(

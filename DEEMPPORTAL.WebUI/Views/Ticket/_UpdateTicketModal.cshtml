@@ -1,580 +1,592 @@
 ﻿@using System.Security.Claims
 
 <style>
+    /* =========================================================
+           TICKET MODAL - PROFESSIONAL ENTERPRISE UI
+           Bootstrap 5.1 compatible
+        ========================================================= */
 
-
-  /*   .file-icon {
-        transition: all 0.3s ease-in-out;
+    :root {
+        --ticket-primary: #173f5f;
+        --ticket-primary-light: #eef5fa;
+        --ticket-border: #e5e9ef;
+        --ticket-bg: #f6f8fb;
+        --ticket-text: #263238;
+        --ticket-muted: #718096;
+        --ticket-danger: #dc3545;
     }
 
-        .file-icon:hover {
-            transform: scale(5.05);
-            box-shadow: 0 1rem 3rem rgba(0, 46, 90) !important;
-            z-index: 10;
-        } */
+    /* ---------- MODAL ---------- */
+
+    #editTicketModal .modal-content {
+        border: 0;
+        border-radius: 0;
+        background: var(--ticket-bg);
+        overflow: hidden;
+    }
+
+    /* #editTicketModal .modal-header {
+        min-height: 64px;
+        padding: 0 24px;
+        border: 0;
+        background: var(--ticket-primary) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,.12);
+        z-index: 20;
+    } */
+
+    #editTicketModal .modal-title {
+        font-size: 15px;
+        letter-spacing: .1px;
+        max-width: calc(100vw - 100px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+       
+
+    #editTicketModal .modal-body {
+        padding: 22px 24px 90px;
+        overflow-y: auto;
+        background: var(--ticket-bg);
+    }
+
+    /* ---------- FORM ---------- */
+
+    #editTicketForm {
+        width: 100%;
+    }
+
+    #editTicketModal .form-label {
+        color: #52606d;
+        /* font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 7px; */
+        text-transform: uppercase;
+        letter-spacing: .35px;
+
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 4px;
+        /* color: #002e5a; */
+    }
+
+    #editTicketModal .form-control,
+    #editTicketModal .form-select {
+        min-height: 40px;
+        border: 1px solid var(--ticket-border);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--ticket-text);
+        font-size: 13px;
+        box-shadow: none;
+        transition: .15s ease;
+    }
+
+        #editTicketModal .form-control:focus,
+        #editTicketModal .form-select:focus {
+            border-color: #7ca8c7;
+            box-shadow: 0 0 0 3px rgba(23,63,95,.08);
+        }
+
+    /* ---------- READ-ONLY FIELDS ---------- */
+
+    #editTicketModal .form-control-plaintext {
+        min-height: 40px;
+        padding: 9px 12px;
+        border: 1px solid var(--ticket-border);
+        border-radius: 7px;
+        background: #f8fafc;
+        color: #263238 !important;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none !important;
+    }
+
+        #editTicketModal .form-control-plaintext:disabled {
+            opacity: 1;
+        }
+
+    /* ---------- CARDS ---------- */
+
+    #editTicketModal .card {
+        border: 1px solid var(--ticket-border) !important;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .04) !important;
+        overflow: hidden;
+    }
+
+    #editTicketModal .card-header {
+        min-height: 48px;
+        max-height: 64px !important;
+        /* padding: 13px 17px; */
+        
+        border-bottom: 1px solid var(--ticket-border) !important;
+    }
+
+    #editTicketModal .card-body {
+        padding: 18px;
+    }
+
+    /* ---------- SECTION HEADER ---------- */
+
+    #editTicketModal .section-title {
+        color: var(--ticket-primary) !important;
+        font-size: 12px;
+        font-weight: bold;
+        border-left: 4px solid var(--ticket-primary) !important;
+        padding-left: 14px;
+    }
+
+      
+
+    /* ---------- EDIT SWITCH ---------- */
+
+    #toggleEditUserRequest {
+        cursor: pointer;
+    }
+
+        #toggleEditUserRequest:checked {
+            background-color: var(--ticket-primary);
+            border-color: var(--ticket-primary);
+        }
+
+    #editTicketModal .form-check-label {
+        color: #68737d;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* ---------- REMOVE OLD HR LOOK ---------- */
+
+    #editTicketModal hr {
+        display: none;
+    }
+
+    /* ---------- SUBJECT ---------- */
+
+    #ticketSubject {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2933 !important;
+    }
+
+    /* ---------- REQUESTED BY DROPDOWN ---------- */
+
+    #displayRequestedByName {
+        width: 100%;
+        min-height: 40px;
+        padding: 9px 12px !important;
+        background: #f8fafc !important;
+    }
+
+        #displayRequestedByName:not(:disabled) {
+            cursor: pointer;
+            background: #fff !important;
+        }
+
+    #editTicketModal .dropdown-menu {
+        border: 1px solid var(--ticket-border);
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(15,23,42,.12);
+    }
+
+    #userSearchInput {
+        min-height: 38px;
+        margin-bottom: 5px;
+    }
+
+    #userList {
+        scrollbar-width: thin;
+    }
+
+        #userList .dropdown-item {
+            padding: 8px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+            #userList .dropdown-item:hover {
+                background: var(--ticket-primary-light);
+                color: var(--ticket-primary);
+            }
+
+    /* ---------- SUMMERNOTE ---------- */
+
+    #editTicketModal .note-editor {
+        border: 1px solid var(--ticket-border) !important;
+        border-radius: 8px !important;
+        overflow: hidden;
+        box-shadow: none !important;
+    }
+
+    #editTicketModal .note-toolbar {
+        border-bottom: 1px solid var(--ticket-border) !important;
+        background: #f8fafc !important;
+    }
+
+    #editTicketModal .note-editable {
+        min-height: 170px;
+        font-size: 13px;
+        line-height: 1.65;
+        padding: 14px;
+    }
+
+    /* ---------- ATTACHMENTS ---------- */
+
+    #attachmentsPreviewContainer {
+        height: auto !important;
+        max-height: 210px !important;
+        min-height: 70px;
+        padding: 4px;
+        border: 1px dashed #d7dde5;
+        border-radius: 8px;
+        background: #fafbfc;
+    }
+
+    .file-preview-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px !important;
+        max-height: 50px !important;
+        margin-bottom: 6px;
+        border: 1px solid var(--ticket-border);
+        border-radius: 7px;
+        background: #fff;
+        transition: .15s ease;
+    }
+
+        .file-preview-item:hover {
+            border-color: #b9c9d8;
+            background: #f8fafc;
+        }
+
+        .file-preview-item .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .file-preview-item .file-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .file-preview-item strong {
+            display: block;
+            max-width: 500px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+    /* ---------- SIDEBAR ---------- */
+
+    #editTicketModal .ticket-sidebar {
+        position: sticky;
+        top: 0;
+    }
+
+        #editTicketModal .ticket-sidebar .card {
+            margin-bottom: 12px;
+        }
+
+    .ticket-property {
+        padding: 13px 15px;
+      
+    }
+
+    .ticket-property-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #8a96a3;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .ticket-property-value {
+        color: #273444;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* ---------- STATUS ---------- */
+
+    #EditTicketStatusBadge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 110px;
+        min-height: 34px;
+        padding: 7px 13px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 700;
+    }
+
+    /* ---------- SMALL BADGES ---------- */
+
+    /* #EditPriorityBadge,
+    #EditAssignedToNameBadge {
+        font-size: 11px !important;
+        padding: 6px 10px !important;
+        border-radius: 6px !important;
+        font-weight: 600;
+    }
+
+    #EditAssignedToNameBadge {
+        color: #52606d;
+        background: #f1f4f7 !important;
+    } */
+
+    /* ---------- ACTIVITY TIMELINE ---------- */
+
+    #ticketActivityTimeline {
+        position: relative;
+        padding: 5px 5px 5px 28px;
+    }
+
+        #ticketActivityTimeline::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            left: 10px;
+            width: 1px;
+            background: #dce2e8;
+        }
+
+    .ticket-activity-item {
+        position: relative;
+        padding: 0 0 18px 18px;
+    }
+
+        .ticket-activity-item::before {
+            content: "";
+            position: absolute;
+            left: -23px;
+            top: 4px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid var(--ticket-primary);
+        }
+
+    /* ---------- CORRESPONDENCE ---------- */
+
+    /* #showTicketCorrBtn {
+        width: 100%;
+        min-height: 40px;
+        border: 1px solid var(--ticket-primary);
+        background: var(--ticket-primary);
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 7px !important;
+        box-shadow: none !important;
+    } */
+
+    #ticketCorrespondenceOffcanvas {
+        width: min(650px, 100vw) !important;
+        border-left: 1px solid var(--ticket-border);
+        box-shadow: -10px 0 30px rgba(15,23,42,.12);
+    }
+
+        #ticketCorrespondenceOffcanvas .offcanvas-header {
+            min-height: 60px;
+        
+         
+        }
+
+        #ticketCorrespondenceOffcanvas .offcanvas-title {
+            font-size: 14px !important;
+        }
+
+        #ticketCorrespondenceOffcanvas .offcanvas-body {
+            padding: 0;
+            background: #f7f9fb;
+        }
+
+   
+
+    
+
+    /* ---------- CORRESPONDENCE COMPOSER ---------- */
+
+    #ticketCorrespondenceOffcanvas .border-top {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0 !important;
+        padding: 14px 18px !important;
+        background: #fff;
+        border-top: 1px solid var(--ticket-border) !important;
+    }
+
+    #TicketCorrespondence {
+        resize: none;
+        min-height: 80px;
+        border-radius: 8px;
+    }
+
+    #btnSendCorrespondence {
+        min-width: 90px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ---------- FOOTER ---------- */
+
+    #editTicketModal .modal-footer {
+        min-height: 64px;
+        margin: 0 !important;
+        padding: 10px 24px;
+        background: #fff;
+        border-top: 1px solid var(--ticket-border) !important;
+        box-shadow: 0 -3px 12px rgba(15,23,42,.05);
+        z-index: 20;
+    }
+
+    #btnUpdateTicket {
+        min-width: 120px;
+        min-height: 40px;
+        border: 0;
+        border-radius: 7px !important;
+        /* background: var(--ticket-primary) !important; */
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: none !important;
+    }
+
+    #btnUpdateTicket:hover {
+            background: #0f3049 !important;
+        }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @@media (max-width: 991.98px) {
+        #editTicketModal .modal-body
+
+    {
+        padding: 15px 12px 85px;
+    }
+
+    #editTicketModal .ticket-sidebar {
+        position: static;
+    }
+
+    #editTicketModal .modal-title {
+        font-size: 13px;
+    }
+
+    }
+
+    @@media (max-width: 575.98px) {
+        #editTicketModal .modal-header
+
+    {
+        padding: 0 15px;
+    }
+
+    #editTicketModal .modal-footer {
+        padding: 10px 15px;
+    }
+
+    #editTicketModal .modal-body {
+        padding: 12px 10px 85px;
+    }
+
+    
+    }
 </style>
 
 
 <div class="modal fade" id="editTicketModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
-    @* <div class="modal-dialog modal-dialog-centered @(User.HasClaim("HasFullAccess", "true")
-         || User.HasClaim("DeptManagerAccess", "true")
-         ? "modal-fullscreen" : "modal-xl")"> *@
         <div class="modal-content">
-           
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
-                <h6 class="modal-title fw-bold" id="editTicketModalTitle"></h6>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <div class="d-flex align-items-center min-width-0">
+
+                    <div class="me-3">
+
+                        <div class="rounded-circle
+                        bg-white bg-opacity-10
+                        d-flex align-items-center
+                        justify-content-center"
+                             style="width:38px;height:38px;">
+
+                            <i class="bi bi-ticket-detailed-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="min-width-0 d-flex">
+
+                        <div class="small text-white-75 me-2">
+                           TICKET
+                            
+                        </div>
+                        <h6 class="modal-title text-white-75 fw-bold mb-0"
+                            id="editTicketModalTitle">
+
+                            MIS-230
+
+                        </h6>
+                        
+
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
             </div>
 
             <!-- BODY -->
             @if (User.HasClaim("HasFullAccess", "true")
                       || User.HasClaim("DeptManagerAccess", "true"))
             {
-                <!-- MIS/MANAGEMENT VIEW-->
-                <div class="modal-body  position-relative" data-bs-spy="scroll">
-                    <div class="container-fluid">
-                        <div class="row g-0">
-                            <!-- SIDEBAR -->
-                            <div class=" @(User.HasClaim("HasFullAccess", "true")
-                                                               || User.HasClaim("DeptManagerAccess", "true")
-                                                               ? "col-2 ps-0" : "col-2 ps-0 d-none")">
-                            <div class="card position-sticky top-0 w-100">
-                                <div class="card-header bg-accent rounded-top text-white fs-6">
-                                    <i class="fa fa-ticket me-2"></i>
-                                    Ticket Details
-                                </div>
-
-                                    <div id="ticketNav" class="list-group list-group-flush justify-content-center">
-                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
-                                            <i class="bi bi-person-circle me-2"></i>
-                                            User Request
-                                        </a>
-                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
-                                            <i class="bi bi-person-down me-2"></i>
-                                            <span> Assigned To</span>
-
-                                        </a>
-                                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
-                                            <i class="bi bi-hand-thumbs-up me-2"></i>
-                                            Approvals
-                                        </a>
-                                        <a id="reviewSection" class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
-
-                                            <i class="bi bi-list-stars me-2"></i>
-                                            Review
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- CONTENT -->
-
-                            <div class="@(User.HasClaim("HasFullAccess", "true")
-                                                                 || User.HasClaim("DeptManagerAccess", "true")
-                                                                                             ? "col-10 ps-0" : "col-12 ps-0")">
-
-                            <div class="container-fluid">
-                                <div class="row g-2">
-                                    <!--CENTER-->
-                                    <div class="@(User.HasClaim("HasFullAccess", "true")
-                                                                                              || User.HasClaim("DeptManagerAccess", "true")
-                                                                                              ? "col-12 ps-0" : "col-9 ps-0")">
-                                        <div data-bs-spy="scroll"
-                                             data-bs-target="#ticketNav"
-                                             data-bs-offset="50"
-                                             tabindex="0">
-                                            <form id="editTicketForm" class="form">
-
-                                                @{
-                                                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
-                                                    }
-
-                                                    <div class="@(User.HasClaim("HasFullAccess", "true")
-                                                                                                                  || User.HasClaim("DeptManagerAccess", "true")
-                                                                                                                  ? "" : "d-none")">
-                                                    @{
-                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Assignment.cshtml");
-                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Approvals.cshtml");
-                                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Review.cshtml");
-                                                        }
-                                                    </div>
-
-
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <!--USER/EMPLOYEE VIEW-->
-                                        <div class="@(User.HasClaim("HasFullAccess", "true")
-                                                                                                 || User.HasClaim("DeptManagerAccess", "true")
-                                                                                                 ? "d-none" : "col-3 ps-0" )">
-                                        <!-- =================================
-                                             STATUS
-                                        ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="mb-0 fw-bold small text-main">
-                                                        <i class="bi bi-activity me-2"></i>
-                                                        Status
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-
-                                                        <span id="EditTicketStatusBadge"
-                                                              class="badge badge-success rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Completed
-
-                                                        </span>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <!-- =================================
-                                                 ASSIGNMENT
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="small fw-bold text-main me-auto">
-
-                                                        <i class="bi bi-person-check-fill"></i>
-
-                                                        Assigned To
-
-                                                    </h6>
-                                                    <div class="text-center">
-                                                        <span id="EditTicketAssignedToNameBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Completed
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- =================================
-                                                  PRIORITY
-                                            ================================== -->
-                                            <div class="card border-0 shadow-sm mb-3">
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                                    <h6 class="mb-0 small fw-bold text-main">
-                                                        <i class="bi bi-flag-fill me-2"></i>
-                                                        Priority
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-                                                        <span id="EditPriorityBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Low
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!-- =================================
-                                                 TASK TYPE
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="mb-0 small fw-bold text-main">
-
-                                                        <i class="bi bi-list-task me-2"></i>
-
-                                                        Task Type
-
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-                                                        <span id="EditPriorityBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Low
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- =================================
-                                                 TICKET TIMELINE
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm">
-
-                                                <div class="card-header bg-white">
-
-                                                    <h6 class="mb-0 small fw-bold text-main">
-
-                                                        <i class="bi bi-clock-history me-2"></i>
-
-                                                        Activity
-
-                                                    </h6>
-
-                                                </div>
-
-
-                                                <div class="card-body">
-
-                                                    <div id="ticketActivityTimeline">
-
-                                                        <div class="text-center text-muted">
-
-                                                            No activity available.
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
+                await Html.RenderPartialAsync("~/Views/Ticket/InternalView/_InternalView.cshtml");
             }
             else
             {
-                <!-- USER VIEW -->
-                <div class="modal-body  position-relative" data-bs-spy="scroll">
-                    <div class="container-fluid">
-                        <div class="row g-0">
-                    
-                            <!-- CONTENT -->
-
-                            <div class="col-12 ps-0">
-
-                            <div class="container-fluid">
-                                <div class="row g-2">
-                                    <!--CENTER-->
-                                    <div class="col-12 ps-0">
-                                      
-                                            <form id="editTicketForm" class="form">
-
-                                                @{
-                                                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");
-                                                    }
-
-                                                </form>
-                                            </div>
-                                 
-                                        <!--USER/EMPLOYEE VIEW-->
-                                        <div class="col-3 ps-0">
-                                        <!-- =================================
-                                             STATUS
-                                        ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="mb-0 fw-bold small text-main">
-                                                        <i class="bi bi-activity me-2"></i>
-                                                        Status
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-
-                                                        <span id="EditTicketStatusBadge"
-                                                              class="badge badge-success rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Completed
-
-                                                        </span>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <!-- =================================
-                                                 ASSIGNMENT
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="small fw-bold text-main me-auto">
-
-                                                        <i class="bi bi-person-check-fill"></i>
-
-                                                        Assigned To
-
-                                                    </h6>
-                                                    <div class="text-center">
-                                                        <span id="EditTicketAssignedToNameBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Completed
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- =================================
-                                                  PRIORITY
-                                            ================================== -->
-                                            <div class="card border-0 shadow-sm mb-3">
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                                    <h6 class="mb-0 small fw-bold text-main">
-                                                        <i class="bi bi-flag-fill me-2"></i>
-                                                        Priority
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-                                                        <span id="EditPriorityBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Low
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!-- =================================
-                                                 TASK TYPE
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm mb-3">
-
-                                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                                                    <h6 class="mb-0 small fw-bold text-main">
-
-                                                        <i class="bi bi-list-task me-2"></i>
-
-                                                        Task Type
-
-                                                    </h6>
-                                                    <div class="text-center ms-auto">
-                                                        <span id="EditPriorityBadge"
-                                                              class="badge badge-main rounded-pill bg-secondary fs-6 px-3 py-2">
-
-                                                            Low
-
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <!-- =================================
-                                                 TICKET TIMELINE
-                                            ================================== -->
-
-                                            <div class="card border-0 shadow-sm">
-
-                                                <div class="card-header bg-white">
-
-                                                    <h6 class="mb-0 small fw-bold text-main">
-
-                                                        <i class="bi bi-clock-history me-2"></i>
-
-                                                        Activity
-
-                                                    </h6>
-
-                                                </div>
-
-
-                                                <div class="card-body">
-
-                                                    <div id="ticketActivityTimeline">
-
-                                                        <div class="text-center text-muted">
-
-                                                            No activity available.
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
+               
+                     await Html.RenderPartialAsync("~/Views/Ticket/UserView/UpdateTicketUserViewModal.cshtml");
+                   
+               
             }
 
-            <!-- FOOTER -->
-            <div class="modal-footer position-sticky mb-2 border-0">
+            <!-- FOOTER --> 
+            <div class="modal-footer position-sticky mb-2 border-0 d-flex flex-row">
+              
                 <button type="button" id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">                                 
                                     Update
                     <i class="bi bi-cloud-arrow-up ms-2"></i>
                  </button>
             </div> 
-        </div>
+      </div>
     </div>
 </div>
 
 
-
-<!--USER VIEW OF UPDATE TICKET MODAL-->
-<!-- Trigger Button -->
-@* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticketDetailModal">
-    View Ticket Details
-</button> *@
-
-<!-- Ticket Detail Modal -->
-<div class="modal fade" id="ticketDetailModal" tabindex="-1" aria-labelledby="ticketDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header bg-light">
-                <h5 class="modal-title" id="ticketDetailModalLabel">
-                    <span class="badge bg-danger me-2">High</span>
-                    <strong>Ticket #TC-8492:</strong> Payment Gateway Timeout Error
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body p-0">
-
-                <!-- 1. Attachment Carousel (Top) -->
-                <div id="ticketAttachmentCarousel" class="carousel slide bg-dark" data-bs-ride="carousel">
-                    <!-- Indicators -->
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-
-                    <!-- Carousel Images -->
-                    <div class="carousel-inner" style="max-height: 300px;">
-                        <div class="carousel-item active">
-                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 1">
-                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
-                                <p class="mb-0">Console error logs during checkout failure</p>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 2">
-                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
-                                <p class="mb-0">Network tab response timeout (504 Gateway Timeout)</p>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://unsplash.com" class="d-block w-100 object-fit-cover" style="height: 300px;" alt="Error Screenshot 3">
-                            <div class="carousel-caption d-none d-md-block bg-opacity-50 bg-dark rounded">
-                                <p class="mb-0">User profile state during session drop</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Controls -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#ticketAttachmentCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-
-                <!-- 2. Ticket Information (Bottom) -->
-                <div class="p-4">
-
-                    <!-- Description Section -->
-                    <div class="mb-4">
-                        <h6 class="text-uppercase text-muted small fw-bold">Description</h6>
-                        <p class="text-secondary">
-                            Users are experiencing consistent 504 gateway timeout errors when attempting to process credit card transactions via the Stripe API endpoint. The issue specifically occurs during peak traffic hours and drops the user's active session without completing the database commit.
-                        </p>
-                    </div>
-
-                    <hr class="text-muted opacity-25">
-
-                    <!-- Meta Data Grid -->
-                    <div class="row g-3">
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Status</span>
-                            <span class="badge bg-warning text-dark mt-1">In Progress</span>
-                        </div>
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Category</span>
-                            <span class="text-dark d-block mt-1">Backend / API</span>
-                        </div>
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Created By</span>
-                            <span class="text-dark d-block mt-1">Jane Doe (QA Engineering)</span>
-                        </div>
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Assigned To</span>
-                            <span class="text-dark d-block mt-1">Alex Smith</span>
-                        </div>
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Date Created</span>
-                            <span class="text-dark d-block mt-1">Sep 28, 2026, 09:15 AM</span>
-                        </div>
-                        <div class="col-6 col-md-4">
-                            <span class="text-uppercase text-muted d-block small fw-bold">Last Updated</span>
-                            <span class="text-dark d-block mt-1">Sep 29, 2026, 02:30 PM</span>
-                        </div>
-                    </div>
-
-                    <!-- Non-image Attachments List (Optional Addition) -->
-                    <div class="mt-4 pt-2">
-                        <h6 class="text-uppercase text-muted small fw-bold mb-2">Other Attachments (1)</h6>
-                        <div class="d-flex align-items-center p-2 border rounded bg-light" style="max-width: 300px;">
-                            <div class="me-2">
-                                <svg xmlns="http://w3.org" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-text text-primary" viewBox="0 0 16 16">
-                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0 -1h-5zM5.5 9a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0 -1h-5zM5.5 11a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0 -1h-3z" />
-                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
-                                </svg>
-                            </div>
-                            <div class="overflow-hidden">
-                                <a href="#" class="text-decoration-none d-block text-truncate fw-semibold small">server_error_logs.txt</a>
-                                <small class="text-muted d-block" style="font-size: 0.75rem;">42 KB</small>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Mark as Resolved</button>
-            </div>
-
-        </div>
-    </div>
-</div>
 

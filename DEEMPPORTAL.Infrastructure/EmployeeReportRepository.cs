@@ -50,7 +50,7 @@ public class EmployeeReportRepository(ConnectionPool cp, CurrentUser cu) : IEmpl
 
         await conn.OpenAsync();
 
-        const string storedProcedure = "CLOUD_v1_ERP_EMPLOYEE_PROFILE_rpt";
+        const string storedProcedure = "MODIFIED_CLOUD_v1_ERP_EMPLOYEE_PROFILE_rpt";
         var parameters = new
         {
             FILTER_VALUE = filterValue,

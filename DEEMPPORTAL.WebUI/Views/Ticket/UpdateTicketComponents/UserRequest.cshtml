@@ -114,7 +114,7 @@
             <div class="row g-3">
          
                 <!-- SUBJECT -->
-                <div class="col-md-6">
+                <div class="col-6">
                     <label class="form-label d-none">Ticket Subject</label>  
                     <label class="form-label small fw-bold">
 
@@ -129,62 +129,73 @@
                         <input id="ticketSubject"  class="form-control-plaintext text-muted" disabled />
                     <hr />
                 </div>
-                <!-- REQUESTED BY -->
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold">Requested By</label>
-                    <input id="editRequestedByCode" class="form-control d-none" />
-                      <input id="editRequestedByName" class="form-control d-none" />
-                        <!-- Custom dropdown -->
-                        <div class="dropdown rounded-1">
-                        <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="displayRequestedByName" data-bs-toggle="dropdown">
-                               
+               <div class="col-6">
+                   <div class="row row-fluid">
+                        <!-- REQUESTED BY -->
+                        <div class="col-4">
+                            <label class="form-label small fw-bold">Requested By</label>
+                            <input id="editRequestedByCode" class="form-control d-none" />
+                            <input id="editRequestedByName" class="form-control d-none" />
+                            <!-- Custom dropdown -->
+                         <div class="dropdown rounded-1">
+                                <button disabled class="form-control-plaintext text-truncate text-start text-muted" type="button" id="displayRequestedByName" data-bs-toggle="dropdown">
+                                </button>
+                                <div class="dropdown-menu w-100 p-2">
 
-                            </button>
-                            <div class="dropdown-menu w-100 p-2" >
+                                    <!-- Search input -->
+                                    <input type="text" id="userSearchInput" class="form-control" placeholder="Search...">
+                                    <!-- Options -->
+                                    <ul class="list-unstyled mb-0 p-2" id="userList" style="max-height: 200px !important; overflow-y: scroll;">
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <!-- REQUESTED DATE -->
+                        <div class="col-4">
+                            <label class="form-label small fw-bold">
+                                Requested Date
+                            </label>
+                            <input id="displayRequestedDate" class="form-control-plaintext text-muted" disabled />
+                            <input id="editRequestedDate" name="editRequestedDate" type="date" class="form-control d-none" />
 
-                                <!-- Search input -->
-                                <input type="text" id="userSearchInput" class="form-control" placeholder="Search...">
-                                <!-- Options -->
-                            <ul class="list-unstyled mb-0 p-2" id="userList" style="max-height: 200px !important; overflow-y: scroll;">
-                                </ul>
-                            </div>                     
-                    </div>
-                    <hr />
-                </div>
-                <!-- REQUESTED DATE -->
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold">
-                        Requested Date
-                         </label>
-                    <input id="displayRequestedDate" class="form-control-plaintext text-muted" disabled />
-                    <input id="editRequestedDate" name="editRequestedDate" type="date" class="form-control d-none" />
-                        <hr />   
-                </div>
+                            <hr />
+                        </div>
+                        <div class="col-4 text-end">
+                            @{
+                                await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/TicketCorrespondence.cshtml");
+                            }
+                        </div>
+                   </div>
+               </div>
+               
                 <!-- DESCRIPTION -->
                 <div class="col-md-6">
-                    <label for="editTicketDescription" class="form-label small fw-bold">Description</label>
+                    <label for="editTicketDescription" class="form-label text-small fw-bold">Description</label>
                     
                     <textarea id="editTicketDescription" class="form-control text-muted" style="height: 200px !important" placeholder="Detailed description"></textarea>
-                    <label for="" class="form-label small fw-bold">Ticket Correspondence</label>
-                    @{
-                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/TicketCorrespondence.cshtml");
-                    }
+                    @* <label for="" class="form-label small fw-bold">Ticket Correspondence</label> *@
+                    
                 </div>
                 <!-- ATTACHMENTS -->
                 <div class="col-md-6">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-inline-flex">
-                            <label class="form-label small fw-bold">
+                    <div class="d-flex justify-content-between align-items-center">
+                        
+                            <label class="form-label small fw-bold me-2">
                                 Attachments
                             </label>
-                        </div>
                        
-                        <div class="d-inline-flex me-2">
-                            <button id="addAttachmentBtn" class="btn btn-sm btn-outline-danger d-none small">
-                                <i class="bi bi-plus-lg me-1 small fw-bold"></i>
-                                ADD ATTACHMENT
+                       
+                    
+                            <button id="addAttachmentBtn"
+                                    type="button"
+                                    class="btn btn-sm btn-link">
+
+                                <i class="bi bi-plus text-small me-2"></i>
+                                ADD
+
                             </button>
-                        </div>
+                      
                                                            
                     </div>                    
                     <hr />                 

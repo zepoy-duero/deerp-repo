@@ -1,4 +1,4 @@
-﻿﻿@{
+﻿@{
 Layout = "_Layout";
 ViewData["Title"] = "Ticket";
 }
@@ -63,10 +63,14 @@ ViewData["Title"] = "Ticket";
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
     }
-
+    .top-card-title{
+        font-weight: bold;
+        font-size: 16px !important;
+        color: #002e5a;
+    }
     .section-title {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 18px;
         margin-bottom: 4px;
         color: #002e5a;
        
@@ -161,6 +165,7 @@ ViewData["Title"] = "Ticket";
     await Html.RenderPartialAsync("~/Views/Ticket/UserView/UpdateTicketUserViewModal.cshtml");
 } *@
  @{
+    // await Html.RenderPartialAsync("~/Views/Ticket/_UpdateTicketModalTest.cshtml");
     await Html.RenderPartialAsync("~/Views/Ticket/_UpdateTicketModal.cshtml");
 }
 
@@ -240,15 +245,58 @@ ViewData["Title"] = "Ticket";
 
 @section Scripts {
     <!--BOOTSTRAP TABLE PLUGIN DEPENDECIES-->
-    @* <script src="~/js/ticket/ticket-assignee.js" asp-append-version="true"></script> *@
-    @* <script src="~/js/ticket/test.js"></script> *@
+    @* <script src="~/js/ticket/ticket-user-correspondence.js"></script> *@
     <script src="~/js/ticket/ticket-correspondence.js"></script>
-    <script src="~/js/ticket/user-correspondence.js"></script>
+  
     <script src="~/js/ticket/ticket-event-handlers.js" asp-append-version="true"></script>
-    @* <script src="~/js/ticket/correspondence-attachment-preview.js"></script> *@
+  
     <script src="~/js/ticket/ticket.js" asp-append-version="true"></script>
-    @*  
-    <script src="~/js/ticket/ticket-create.js" asp-append-version="true"></script>
-    <script src="~/js/ticket/ticket-edit.js" asp-append-version="true"></script>
-    *@
+  
 }
+
+@* @section Scripts {
+    <!-- Config FIRST (optional) -->
+    <script src="~/js/ticket/refactored/config/service-configuration.js"></script>
+
+<!-- Scripts: Core Models -->
+<script src="~/js/ticket/refactored/core/models/ticket.model.js"></script>
+<script src="~/js/ticket/refactored/core/models/user.model.js"></script>
+<script src="~/js/ticket/refactored/core/models/attachment.model.js"></script>
+
+<!-- Scripts: Interfaces -->
+<script src="~/js/ticket/refactored/core/interfaces/api-client.interface.js"></script>
+<script src="~/js/ticket/refactored/core/interfaces/storage.interface.js"></script>
+<script src="~/js/ticket/refactored/core/interfaces/validator.interface.js"></script>
+
+<!-- Scripts: Services -->
+<script src="~/js/ticket/refactored/core/services/api-client.service.js"></script>
+<script src="~/js/ticket/refactored/core/services/storage.service.js"></script>
+<script src="~/js/ticket/refactored/core/services/notification.service.js"></script>
+
+<!-- Scripts: Validators -->
+<script src="~/js/ticket/refactored/core/validators/file-validator.js"></script>
+<script src="~/js/ticket/refactored/core/validators/form-validator.js"></script>
+<!-- Scripts: Repositories -->
+<script src="~/js/ticket/refactored/core/repositories/ticket.repository.js"></script>
+<script src="~/js/ticket/refactored/core/repositories/attachment.repository.js"></script>
+<script src="~/js/ticket/refactored/core/repositories/lookup.repository.js"></script>
+
+<!-- Scripts: Business Logic Services -->
+<script src="~/js/ticket/refactored/core/services/ticket.service.js"></script>
+<script src="~/js/ticket/refactored/core/services/lookup.service.js"></script>
+<!-- Scripts: UI Components -->
+<script src="~/js/ticket/refactored/ui/components/attachment-component.js"></script>
+<script src="~/js/ticket/refactored/ui/components/file-picker-component.js"></script>
+<script src="~/js/ticket/refactored/ui/components/ticket-table-component.js"></script>
+
+<!-- Scripts: UI Forms -->
+<script src="~/js/ticket/refactored/ui/forms/ticket-form.js"></script>
+
+<!-- Scripts: UI Filters -->
+<script src="~/js/ticket/refactored/ui/filters/ticket-filter-manager.js"></script>
+
+<!-- Scripts: Application Bootstrap -->
+<script src="~/js/ticket/refactored/app.js"></script>
+
+} *@
+

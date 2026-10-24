@@ -18,4 +18,6 @@ public class EmployeeReportResponse
     public string EMERGENCY_CONTACT { get; set; } = string.Empty;
     public string RESIDENTIAL_ADDRESS { get; set; } = string.Empty;
     public string? MOBILE_NO { get; set; }
+    public string? PERSONAL_EMAIL { get; set; }
+    public string? WORK_EMAIL { get; set; }
 }

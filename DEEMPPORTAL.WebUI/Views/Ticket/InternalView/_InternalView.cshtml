@@ -1,0 +1,67 @@
+﻿  <!-- MIS/MANAGEMENT VIEW-->
+<div class="modal-body  position-relative" data-bs-spy="scroll">
+    <div class="container-fluid">
+        <div class="row g-0">
+            <!-- SIDEBAR -->
+            <div class="col-2 ps-0">
+                <div class="card position-sticky top-0 w-100">
+                    <div class="card-header bg-danger rounded-top text-white fs-6">
+                        <i class="fa fa-ticket me-2"></i>
+                        Ticket Details
+                    </div>
+
+                    <div id="ticketNav" class="list-group list-group-flush justify-content-center">
+                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketUserRequest">
+                            <i class="bi bi-person-circle me-2"></i>
+                            User Request
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketAssignedTo">
+                            <i class="bi bi-person-down me-2"></i>
+                            <span> Assigned To</span>
+
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketApproval">
+                            <i class="bi bi-hand-thumbs-up me-2"></i>
+                            Approvals
+                        </a>
+                        <a id="reviewSection" class="list-group-item list-group-item-action d-flex align-items-center" href="#ticketReview">
+
+                            <i class="bi bi-list-stars me-2"></i>
+                            Review
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- CONTENT -->
+
+            <div class="col-10 ps-0">
+
+                <div class="container-fluid">
+                    <div class="row g-2">
+                        <!--CENTER-->
+                 
+                       <div class="col ps-0">
+                        <div data-bs-spy="scroll"
+                                 data-bs-target="#ticketNav"
+                                 data-bs-offset="50"
+                                 tabindex="0">
+                                <form id="editTicketForm" class="form">
+
+                                    @{
+                                        await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/UserRequest.cshtml");                              
+                                         await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Assignment.cshtml");
+                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Approvals.cshtml");
+                                            await Html.RenderPartialAsync("~/Views/Ticket/UpdateTicketComponents/Review.cshtml");
+                                        }
+                              
+                                </form>
+                            </div>
+                        </div>
+                        <!--USER/EMPLOYEE VIEW-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

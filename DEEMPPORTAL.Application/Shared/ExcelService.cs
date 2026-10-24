@@ -41,6 +41,8 @@ public class ExcelService
                     workSheet.Cell(startRow, 9).Value = emergencyContactNumber;
                     workSheet.Cell(startRow, 10).Value = item.RESIDENTIAL_ADDRESS;
                     workSheet.Cell(startRow, 11).Value = item.MOBILE_NO;
+                    workSheet.Cell(startRow, 12).Value = item.PERSONAL_EMAIL;
+                    workSheet.Cell(startRow, 13).Value = item.WORK_EMAIL;
                     startRow++;
                 }
             }

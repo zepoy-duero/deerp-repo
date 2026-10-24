@@ -63,8 +63,8 @@ $(async function () {
     
     await getAllTicket();
     bindEventHandlers();
-    await bindCorrespondenceHandlers();
-   
+    bindCorrespondenceHandlers();
+    //bindUserCorrespondenceHandlers();
     ticketsTable.bootstrapTable('hideLoading');
     //$('#requestedDateFilter').val(moment().format("YYYY"))
     $('#requestedDateFilter').val('2026').trigger('change');
@@ -178,23 +178,6 @@ async function getAllSelectOptions() {
         toastr.error("There is an error on the server", "Error");
     }
 }
-function showEditRequestedBy() {
-    // Switch to Edit Mode
-    $("#DisplayRequestedByName").addClass("d-none");
-    $("#SelectRequestedByName").removeClass("d-none");
-    $("#editBtn").addClass("d-none");
-    $("#checkBtn").removeClass("d-none");
-}
-function saveEditRequestedBy() {
-
-    $("#DisplayRequestedByName").removeClass("d-none")
-        .empty()
-        .append($("#SelectRequestedByName").val());
-    $("#SelectRequestedByName").addClass("d-none");
-    $("#editBtn").removeClass("d-none");
-    $("#checkBtn").addClass("d-none");
-}
-
 function generateTicketEmailParams(ticket) {
     let emailParams = {
         RequestedByName: ticket.RequestedByName,
@@ -219,53 +202,6 @@ function closeEmailModal() {
   $("#editTicketModal").modal("toggle");
   $("#emailModal").modal("toggle");
 }
-function editDateRequested() {
-  $("#dateRequestedField").toggleClass("d-none");
-  $("#dateRequested").toggleClass("d-none");
-  $("#editRequestDate").addClass("d-none");
-  $("#saveRequestDate").removeClass("d-none");
-}
-function saveDateRequested() {
-  $("#dateRequestedField").toggleClass("d-none");
-  $("#dateRequested").toggleClass("d-none");
-  $("#editRequestDate").removeClass("d-none");
-  $("#saveRequestDate").addClass("d-none");
-}
-function toggleSearchBar() {
-  $("#inpSearchParam").toggleClass("d-none");
-}
-
-function renderDropdown(list) {
-  $("#employeedropdown").empty();
-
-  if (list.length === 0) {
-    $("#employeedropdown").append(
-      '<div class="list-group-item text-muted">No results found</div>',
-    );
-    return;
-  }
-
-  list.forEach((emp) => {
-    $("#employeedropdown").append(
-      `<a href="#" class="list-group-item border-0 list-group-item-action"
-                        data-id="${emp.id}"
-                        data-name="${emp.name}">
-                        ${emp.name}
-                    </a>`,
-    );
-  });
-}
-
-
-function showPreview(event) {
-    console.log(event.target.src);
-  
-
-    // Open the URL in a new tab
-    window.open(event.target.src, '_blank'); 
-    //$("#AttachmentView").attr('src', event.target.src);
-    //$("#imageModal").modal("show");
-}
 function showTicketAttachmentList(attachments) {
     let attachmentList = '';
     const editUserSwitch = document.getElementById('toggleEditUserRequest');
@@ -281,35 +217,35 @@ function showTicketAttachmentList(attachments) {
             else {
                 imgThumbnail = `img/image-icon.png`;
             }
-            attachmentList += `<div class="file-preview-item px-3" data-attachment-id="${i.AttachmentId}">
+            attachmentList += `<div class="file-preview-item p-2" data-attachment-id="${i.AttachmentId}">
             <div class="file-info">
         
                  <img class="file-icon"
-                   src="${imgThumbnail}" />
-           
-                <div>
-                     <div>
-                         <span style="cursor: pointer;" class="text-decoration-underline text-primary" onclick="viewAttachment(${i.AttachmentId})">
-                           <strong>${i.FileName}</strong>
-                         </span>                      
+                   src="${imgThumbnail}">
+       
+                 <div class="p-2">
+                     <div title="${i.FileName}" style="cursor: pointer; max-width: 200px !important;" class="d-block text-decoration-underline fw-bold small text-primary text-truncate" onclick="viewAttachment(${i.AttachmentId})">
+                       
+                           ${i.FileName}
+                                           
                      </div>
-                        <small class="text-muted">${i.FileSize} KB</small>
+                        <small class="text-muted text-small mt-0">${i.FileSize} KB</small>
                     </div>
                 </div>
                 <div>
-                  <div class="btn-toolbar ${isSwitchOn ? `` : `d-none`}" role="toolbar" aria-label="Toolbar with button groups">
-                      <div class="btn-group me-2" role="group" aria-label="Second group">
+                  <div class="btn-toolbar d-none" role="toolbar" aria-label="Toolbar with button groups">
+                      <div class="btn-group me-2" role="group" aria-label="Second group" title="download attachment">
                          <button 
                            type="button" 
-                           id="downloadAttachmentBtn"
-                           class="btn btn-primary"
-                           onclick="downloadAttachment(${i.AttachmentId})"
+                           id="downloadCorrespondenceAttachmentBtn"
+                           class="btn btn-sm btn-primary "
+                           onclick="downloadCorrespondenceAttachment(${i.AttachmentId})"
                             >
                              <i class="bi bi-download"></i>
                         </button>
                        </div>
-                      <div class="btn-group me-2" role="group" aria-label="Third group">
-                           <button onclick="deleteTicketAttachment(${i.AttachmentId})"  type="button" class="btn btn-danger">
+                      <div class="btn-group me-2" role="group" aria-label="Third group" title="remove attachment">
+                           <button onclick="deleteCorrespondenceAttachment(${i.AttachmentId})"  type="button" class="btn btn-sm btn-danger">
                               <i class="bi bi-trash"></i>
                             </button>
                       </div>
@@ -320,6 +256,7 @@ function showTicketAttachmentList(attachments) {
                 </div>
             </div>`
         })
+        console.log()
         $("#attachmentsPreviewContainer").empty().append(attachmentList);
     } else {
         $("#attachmentsPreviewContainer").empty().append(`
@@ -409,144 +346,6 @@ async function downloadAttachment(attachmentId) {
     } catch (error) {
         console.error("Download error:", error);
         toastr.error("Failed to download file.", "Error");
-    }
-}
-function openBase64InNewTab(base64Data) {
-    // Extract content and content type
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'image/png' });
-    const blobUrl = URL.createObjectURL(blob);
-
-    window.open(blobUrl, '_blank');
-}
-
-
-function renderFilePreview(file) {
-  console.log(file)
-  const fileItem = document.createElement("div");
-  fileItem.className = "file-preview-item"; 
-
-  const fileInfo = document.createElement("div");
-  fileInfo.className = "file-info";
-
-  // File Icon or Thumbnail
-  let iconElement;
-
-  if (file.type === "image/png" || file.type === "image/jpeg" ) {
-    iconElement = document.createElement("img");
-      iconElement.className = "file-icon";
-      iconElement.setAttribute('id', 'openPreviewModal');
-
-      if (activeAttachmentContainer == 'add') {
-          iconElement.src = URL.createObjectURL(file);
-      }
-      if (activeAttachmentContainer == 'edit')
-      {
-          iconElement.src = URL.createObjectURL(file);
-      }
-    
-  } else {
-    iconElement = document.createElement("img");
-    iconElement.className = "file-icon";
-
-    if (file.type === "application/pdf") {
-      iconElement.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-    } else {
-      iconElement.src = "https://cdn-icons-png.flaticon.com/512/732/732220.png";
-    }
-  }
-
-  const fileName = document.createElement("div");
-  console.log(fileName)
-  fileName.innerHTML = `
-            <div><strong>${file.name}</strong></div>
-            <small class="form-text text-muted">${(file.size / 1024).toFixed(2)} KB</small>
-        `;
-
-    // Progress Bar
-  const progressBar = document.createElement("progress");
-  progressBar.className = "file-progress-bar me-2"; // 'me-2' adds Bootstrap spacing on the right
-  progressBar.value = 50;
-  progressBar.max = 100;
-
-    
-  fileInfo.appendChild(iconElement);
-   
-  fileInfo.appendChild(fileName);
-
-  // Remove Button
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "btn btn-danger";
-    const i = document.createElement("i")
-    i.className = "bi bi-trash"
-    //removeBtn.className = "";
-    removeBtn.appendChild(i);
-  //removeBtn.innerText = "Remove";
-
-  removeBtn.addEventListener("click", () => {
-    selectedFiles = selectedFiles.filter((f) => f !== file);
-    fileItem.remove();
-  });
-
-    fileItem.appendChild(fileInfo);
-    //fileItem.appendChild(await Html.RenderPartialAsync("~/Views/Ticket/TicketViewComponents/_ProgressCircle.cshtml"));
-  fileItem.appendChild(removeBtn);
-
-  
-    if (activeAttachmentContainer == 'add') previewContainer.appendChild(fileItem);
-    else attachmentsPreviewContainer.append(fileItem);
-}
-
-async function handleFiles(files) {
-    console.log(typeof files)
-    if (files.length > 10) {
-        alert(`Please select not more than 10 files`);
-        return;
-    }
-  for (let file of files) {   
-    if (!isValidFileSize(file)) {
-        alert(`Please select a file under 2MB`);
-          continue;
-      }
-     
-      //if (!checkIfDuplicateFile(file)) {
-      //    toastr.error('File duplicated', 'Error')
-      //    continue;
-      //}
-
-      file.TicketId = null;
-      //selectedFiles.push(file);
-      
-      renderFilePreview(file);
-    
-    }
-  console.log(selectedFiles)
-    //showTicketAttachmentList(selectedFiles); 
-    // Clear the native file input safely — avoid referencing an undefined variable.
-    // Try by id first, then by common selector as fallback.
-    const fileInput = document.getElementById("TicketAttachments") || document.querySelector('input[type="file"][name="files"]');
-    if (fileInput) {
-        try {
-            fileInput.value = "";
-        } catch (e) {
-            // Some older browsers or custom inputs might throw; ignore silently.
-            console.warn("Could not clear file input value", e);
-        }
-    }
-}
-
-function isValidFileSize(file) {
-    if (file.size / (1024 * 1024) > 2) {
-        return false;
-    } else {
-        return true;
     }
 }
 function isValidFileType(file) {
@@ -1582,3 +1381,80 @@ function showTicketAttachmentPreview(base64Data, fileName, mimeType, isLocalFile
 }
 
 
+
+async function getCorrespondenceAttachments(CorrespondenceId) {
+    let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { CorrespondenceId: CorrespondenceId });
+
+    let attachmentList = '';
+    if (attachments.length >= 1) {
+        attachments.forEach(function (i) {
+            //let imgThumbnail = '';
+            //console.log(i)
+            //if (i.FileExtension.trim() === 'pdf') imgThumbnail = `img/pdf-icon.png`;
+            //else if (i.FileExtension.trim() === 'xlsx' || i.FileExtension === 'xls') imgThumbnail = `img/excel-icon.png`;
+            //else if (i.FileExtension.trim() === 'docs') imgThumbnail = `img/docs-icon.png`;
+            //else if (i.FileExtension.trim() === 'txt') imgThumbnail = `img/textfile-icon.png`;
+            //else {
+            //    imgThumbnail = `img/image-icon.png`;
+            //}
+            attachmentList += `<div class="mt-2 d-flex align-items-center bg-white border rounded p-2 shadow-sm" style="max-width: 300px;">
+                                    <div class="bg-light text-secondary rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-file-earmark-text-fill fs-5"></i>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <div class="text-truncate small fw-bold text-dark">${i.FileName}</div>
+                                        <div class="text-muted extra-small" style="font-size: 0.75rem;">${i.FileSize}</div>
+                                    </div>
+                                    <a href="#" class="d-none btn btn-link btn-sm text-secondary p-1" title="Download">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </div>`
+        });
+        $("#userCorrespondenceAttachmentContainer").empty().append(attachmentList);
+    } else {
+        $("#userCorrespondenceAttachmentContainer").empty().append(`
+        <div id="emptyState" class="alert alert-light text-center border-dashed m-0">
+                        <i class="bi bi-paperclip text-muted fs-4"></i>
+                        <p class="text-muted small mb-0">No files attached yet.</p>
+                    </div>`);
+    }
+}
+
+
+//function formatMessage(message) {
+
+//    if (!message) {
+//        return '';
+//    }
+
+//    return escapeHtml(message)
+//        .replace(/\r\n/g, '<br>')
+//        .replace(/\n/g, '<br>');
+//}
+//function formatCorrespondenceDate(dateValue) {
+
+//    if (!dateValue) {
+//        return '';
+//    }
+
+//    const date = new Date(dateValue);
+
+//    if (isNaN(date.getTime())) {
+//        return dateValue;
+//    }
+
+//    return date.toLocaleString([], {
+//        month: 'short',
+//        day: '2-digit',
+//        year: 'numeric',
+//        hour: '2-digit',
+//        minute: '2-digit'
+//    });
+//}
+function isValidFileSize(file) {
+    if (file.size / (1024 * 1024) > 2) {
+        return false;
+    } else {
+        return true;
+    }
+}

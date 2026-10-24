@@ -19,13 +19,10 @@
     //    // Ensure top standard resets so custom bottom rule is honored cleanly
     //    modalDialog.style.top = 'auto';
     //});
-    $("#showTicketCorrBtn").on
-    $("#downloadAttachmentBtn").on("click", function () {
-        console.log($(this))
-        const fileName = $(this).data("filename");
-        const dataUrl = $(this).data("url");
-        downloadFile(fileName, dataUrl);
-    });
+
+    // DOWNLOAD ATTACHMENT
+    // Note: downloadAttachment() is defined in ticket.js
+
     // RESET FILTER
     $("#btnResetFilter").on("click", function () {
         ticketsTable.bootstrapTable("clearFilterControl");
@@ -461,6 +458,8 @@
     });
       
     ticketsTable.on('click-row.bs.table', async function (e, row, $element, field) {
+        console.log(CurrentUser.USER_ROLE.includes("Consultant"))
+        //return;
         if (CurrentUser.USER_ROLE.includes("Management")
             || CurrentUser.USER_ROLE.includes("Manager")
             || CurrentUser.USER_ROLE.includes("Admin")) {
@@ -468,31 +467,33 @@
         } else {
             resetUserEditMode();
         }
-         //{
-            selectedFiles = [];
-            activeAttachmentContainer = 'edit';
-          
-            selectedTicket = row;
-            $("#editTicketModalTitle").empty().append(`<i class="bi bi-ticket-detailed-fill me-2"></i>Update Ticket -  ${row.StringTicketId}(${row.TicketSubject})`);
-            $("#chatModalLabel").empty().append('Correspondences');
-            $("#EditAssignedToName").val(row.AssignedToName ?? 'Not yet assigned');
-            $("#ticketId").val(row.TicketId);
-            $("#deptCode").val(row.DeptCode);
-            $("#ticketNo").val(row.TicketNo);
+   
+        //{
+        selectedFiles = [];
+        activeAttachmentContainer = 'edit';
 
-            await getAllSelectOptions();
-            await setUserRequestFormValue(row);
-            await setAssignmentFormValue(row);
-            await setApprovalsFormValue(row);
-            await setReviewFormValue(row);
-            $editTicketModal.modal('show');
-            await loadTicketAttachments(row.TicketId);
+        selectedTicket = row;
+        $("#editTicketModalTitle").empty().append(`${row.StringTicketId}(${row.TicketSubject})`);
+        $("#chatModalLabel").empty().append('Correspondences');
+        $("#EditAssignedToName").val(row.AssignedToName ?? 'Not yet assigned');
+        $("#ticketId").val(row.TicketId);
+        $("#deptCode").val(row.DeptCode);
+        $("#ticketNo").val(row.TicketNo);
+
+        await getAllSelectOptions();
+        await setUserRequestFormValue(row);
+        await setAssignmentFormValue(row);
+        await setApprovalsFormValue(row);
+        await setReviewFormValue(row);
+        $editTicketModal.modal('show');
+        
+        await loadTicketAttachments(row.TicketId);
         //} else {
         //    $("#ticketDetailModal").modal('show');
-          
+
         //}  
-            
-        
+
+
         //$("#editTicketModalTitle").empty().append('Update Ticket - ' + row.StringTicketId + " " + row.TicketSubject);
     });
     //TRIGGER THE ATTACH FILE INPUT FIELD
@@ -586,7 +587,7 @@
         $("#remarks").prop('disabled', function (i, val) {
             return !val; // Toggles the current state
         });
-        $("#txtCorrespondence").prop('disabled', function (i, value) {
+        $("#internalCorrespondenceField").prop('disabled', function (i, value) {
             return !value;
         })
         $("#addCorrespondenceBtn").toggleClass('d-none')
@@ -672,6 +673,7 @@ async function setUserRequestFormValue(row) {
     $("#displayRequestedDate").val(moment(row.RequestedDate).format("DD-MM-YYYY"));
     $("#editRequestedDate").attr('value',moment(row.RequestedDate).format('YYYY-MM-DD'));
     $('#editTicketDescription').summernote({
+        airMode: true,
         disableDragAndDrop: true,
         height: 100,
         focus: false,
@@ -694,15 +696,24 @@ async function setUserRequestFormValue(row) {
 
     //LEFT SIDE OF THE EDIT MODAL
     //EDIT TICKET STATUS
-    $("#EditTicketStatusBadge").text(row.TicketStatus ?? 'New')
-    //EDIT ASSIGNED TO
-    $("#EditAssignedToName").empty().text(row.AssignedToName ?? 'New')
-    //EDIT EditPriorityBadge TO
-    $("#EditPriorityBadge").empty().text(row.TicketPriority ?? 'Low')
-    //EDIT EditTaskTypeName TO
-    $("#EditTaskTypeName").empty().val(row.TaskTypeName ?? 'New')
+    console.log(typeof row.StatusName)
 
+    $("#StatusBadge").text(row.StatusName ?? 'New').addClass(getBadgeStatusColor(row.StatusName))
     
+    console.log(row.StatusName)
+    console.log(row.AssignedToName)
+    console.log(row.AssignedToName == '')
+    
+    //EDIT ASSIGNED TO
+    $("#AssignedToNameBadge").text(row.AssignedToCode ? row.AssignedToName : 'Not yet assigned')
+        .addClass(row.AssignedToName ? 'bg-main' : 'bg-grey')
+    //EDIT EditPriorityBadge TO
+    $("#PriorityBadge").text(row.PriorityCode ? row.TicketPriority : 'Low')
+        .addClass(getPriorityColor(row.TicketPriority ?? 'Low'))
+    //EDIT EditTaskTypeName TO
+    $("#TaskTypeBadge").text(row.TaskTypeCode ? row.TaskTypeName : 'Software Bug')
+    let ticketCorrespondences = await getTicketCorrespondence(selectedTicket.TicketId, 'User');
+    renderUserCorrespondence(ticketCorrespondences);
 }
 async function setAssignmentFormValue(row) {
     console.log(row)
@@ -714,7 +725,7 @@ async function setAssignmentFormValue(row) {
     //PRIORITY
     $("#priorityCode").val(row.PriorityCode ? row.PriorityCode : 3);
     $("#ticketPriority").val(row.TicketPriority);
-    $("EditTicketPriority").empty().html('High')
+    //$("EditTicketPriority").empty().html('High')
     //MODULE
     $("#moduleName").val(row.ModuleName);
     //TASKTYPE
@@ -730,7 +741,7 @@ async function setAssignmentFormValue(row) {
     //STATUS
     $("#statusCode").val(row.StatusCode ? row.StatusCode : 3);
     $("#statusName").text(row.StatusName ? row.StatusName : 'New');
-    $("#EditTicketAssignedToNameBadge").text(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
+    //$("#EditTicketAssignedToNameBadge").text(row.AssignedToName ? row.AssignedToName : 'Not yet assigned');
     const section2 = document.getElementById('toggleEditAssignment');
     $("#statusName").addClass(getStatusColor(row.StatusName ? row.StatusName : 'New'));
 }
@@ -759,7 +770,8 @@ async function setReviewFormValue(row) {
     $("#updatedBy").val(row.UpdatedBy);
     $("#updatedDate").val(row.UpdatedDate);
     $("#stringTicketId").val(row.StringTicketId ? row.StringTicketId : '');
-    await getTicketCorrespondence(selectedTicket.TicketId, selectedTicket.RequestedByCode == CurrentUser.USER_CODE ? 'User' : 'Internal');
+    let internalCorrespondences = await getTicketCorrespondence(row.TicketId, 'Internal');
+    renderInternalCorrespondence(internalCorrespondences);
  
     //await showCorrespondenceAttachmentList();
 }
@@ -770,15 +782,16 @@ function resetUserEditMode() {
     if (s1) {
         $("#toggleEditUserRequest").prop('checked', false).trigger('change');
     }
+ 
 }
 function resetEditMode() {
     const section1 = document.getElementById('toggleEditUserRequest');
     const section2 = document.getElementById('toggleEditAssignment');
     const section3 = document.getElementById('toggleEditApprovals');
     const section4 = document.getElementById('toggleEditReview');
-    const s1 = section1.checked;
 
-        const s2 = section2.checked;
+    const s1 = section1.checked;
+    const s2 = section2.checked;
         const s3 = section3.checked;
         const s4 = section4.checked;
     
@@ -802,9 +815,49 @@ function resetEditMode() {
     }
 }
 
-function getStatusColor(status) {
+function getBadgeStatusColor(status) {
     switch (status) {
         case 'New': return 'bg-dark';
+            break;
+        case null: return 'd-none';
+            break;
+        case 'Assigned': return 'bg-danger';
+            break;
+        case 'In Progress': return 'bg-primary';
+            break;
+        case 'Testing': return 'bg-secondary';
+            break;
+        case 'Pending User': return 'bg-warning';
+            break;
+        case 'Pending Third Party': return 'bg-warning';
+            break;
+        case 'On Hold': return 'bg-warning ';
+            break;
+        case 'Resolved': return 'bg-success';
+            break;
+        case 'Closed': return 'bg-dark';
+            break;
+        case 'Cancelled': return 'bg-dark';
+            break;
+        default: return '';
+            break;
+    }
+}
+function getPriorityColor(priorityLevel) {
+    switch (priorityLevel) {
+        case 'Low': return 'bg-primary';
+            break;
+        case 'Medium': return 'bg-success-75';
+            break;
+        case 'High': return 'bg-danger';
+            break;
+        default: return 'bg-accent'
+
+    }
+}
+function getStatusColor(status) {
+    switch (status) {
+        case 'New': return 'bg-black';
             break;
         case null: return 'd-none';
             break;
