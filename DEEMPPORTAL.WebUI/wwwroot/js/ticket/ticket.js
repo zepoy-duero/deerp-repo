@@ -237,15 +237,15 @@ function showTicketAttachmentList(attachments) {
                       <div class="btn-group me-2" role="group" aria-label="Second group" title="download attachment">
                          <button 
                            type="button" 
-                           id="downloadCorrespondenceAttachmentBtn"
+                           id="downloadAttachmentBtn"
                            class="btn btn-sm btn-primary "
-                           onclick="downloadCorrespondenceAttachment(${i.AttachmentId})"
+                           onclick="downloadAttachment(${i.AttachmentId})"
                             >
                              <i class="bi bi-download"></i>
                         </button>
                        </div>
                       <div class="btn-group me-2" role="group" aria-label="Third group" title="remove attachment">
-                           <button onclick="deleteCorrespondenceAttachment(${i.AttachmentId})"  type="button" class="btn btn-sm btn-danger">
+                           <button onclick="deleteAttachment(${i.AttachmentId})"  type="button" class="btn btn-sm btn-danger">
                               <i class="bi bi-trash"></i>
                             </button>
                       </div>
@@ -1382,43 +1382,6 @@ function showTicketAttachmentPreview(base64Data, fileName, mimeType, isLocalFile
 
 
 
-async function getCorrespondenceAttachments(CorrespondenceId) {
-    let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { CorrespondenceId: CorrespondenceId });
-
-    let attachmentList = '';
-    if (attachments.length >= 1) {
-        attachments.forEach(function (i) {
-            //let imgThumbnail = '';
-            //console.log(i)
-            //if (i.FileExtension.trim() === 'pdf') imgThumbnail = `img/pdf-icon.png`;
-            //else if (i.FileExtension.trim() === 'xlsx' || i.FileExtension === 'xls') imgThumbnail = `img/excel-icon.png`;
-            //else if (i.FileExtension.trim() === 'docs') imgThumbnail = `img/docs-icon.png`;
-            //else if (i.FileExtension.trim() === 'txt') imgThumbnail = `img/textfile-icon.png`;
-            //else {
-            //    imgThumbnail = `img/image-icon.png`;
-            //}
-            attachmentList += `<div class="mt-2 d-flex align-items-center bg-white border rounded p-2 shadow-sm" style="max-width: 300px;">
-                                    <div class="bg-light text-secondary rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                        <i class="bi bi-file-earmark-text-fill fs-5"></i>
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <div class="text-truncate small fw-bold text-dark">${i.FileName}</div>
-                                        <div class="text-muted extra-small" style="font-size: 0.75rem;">${i.FileSize}</div>
-                                    </div>
-                                    <a href="#" class="d-none btn btn-link btn-sm text-secondary p-1" title="Download">
-                                        <i class="bi bi-download"></i>
-                                    </a>
-                                </div>`
-        });
-        $("#userCorrespondenceAttachmentContainer").empty().append(attachmentList);
-    } else {
-        $("#userCorrespondenceAttachmentContainer").empty().append(`
-        <div id="emptyState" class="alert alert-light text-center border-dashed m-0">
-                        <i class="bi bi-paperclip text-muted fs-4"></i>
-                        <p class="text-muted small mb-0">No files attached yet.</p>
-                    </div>`);
-    }
-}
 
 
 //function formatMessage(message) {
@@ -1456,5 +1419,87 @@ function isValidFileSize(file) {
         return false;
     } else {
         return true;
+    }
+}
+function renderFilePreview(file) {
+    console.log(file)
+    const fileItem = document.createElement("div");
+    fileItem.className = "file-preview-item";
+    fileItem.setAttribute('type', 'button');
+    fileItem.setAttribute('onclick', 'showPreview(event)');
+
+    const fileInfo = document.createElement("div");
+    fileInfo.className = "file-info";
+
+    // File Icon or Thumbnail
+    let iconElement;
+
+    if (file.type === "image/png") {
+        iconElement = document.createElement("img");
+        iconElement.className = "file-icon";
+        if (activeAttachmentContainer == 'add') {
+            iconElement.src = URL.createObjectURL(file);
+        } else {
+            iconElement.src = file.url;
+        }
+
+    } else {
+        iconElement = document.createElement("img");
+        iconElement.className = "file-icon";
+
+        if (file.type === "application/pdf") {
+            iconElement.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+        } else {
+            iconElement.src = "https://cdn-icons-png.flaticon.com/512/732/732220.png";
+        }
+    }
+
+    const fileName = document.createElement("div");
+    console.log(fileName)
+    fileName.innerHTML = `
+            <div><strong>${file.name}</strong></div>
+            <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+        `;
+
+    fileInfo.appendChild(iconElement);
+    fileInfo.appendChild(fileName);
+
+    // Remove Button
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "btn btn-sm btn-outline-danger";
+    removeBtn.innerText = "Remove";
+
+    removeBtn.addEventListener("click", () => {
+        selectedFiles = selectedFiles.filter((f) => f !== file);
+        fileItem.remove();
+    });
+
+    fileItem.appendChild(fileInfo);
+    fileItem.appendChild(removeBtn);
+
+    if (activeAttachmentContainer == 'add') previewContainer.appendChild(fileItem);
+    else attachmentsPreviewContainer.append(fileItem);
+}
+function handleFiles(files) {
+    for (let file of files) {
+        if (!isValidFileType(file)) {
+            alert(`Invalid file type: ${file.name}`);
+            continue;
+        }
+
+        selectedFiles.push(file);
+        renderFilePreview(file);
+    }
+
+    // Clear the native file input safely — avoid referencing an undefined variable.
+    // Try by id first, then by common selector as fallback.
+    const fileInput = document.getElementById("correspondenceAttachmentSelectedFileContainer") || document.querySelector('input[type="file"][name="files"]');
+    if (fileInput) {
+        try {
+            fileInput.value = "";
+        } catch (e) {
+            // Some older browsers or custom inputs might throw; ignore silently.
+            console.warn("Could not clear file input value", e);
+        }
     }
 }

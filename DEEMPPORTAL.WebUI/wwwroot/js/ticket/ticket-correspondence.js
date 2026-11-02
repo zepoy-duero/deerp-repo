@@ -1,5 +1,7 @@
 ﻿var correspondence = null
 var correspondenceAction = 'create';
+var correspondenceIdSelected = null;
+var isFileDuplicated = false;
 function bindCorrespondenceHandlers() {
     $("#clearUserCorrespondenceBtn").on('click', function () {
         $("#userCorrespondenceField").val("");
@@ -10,17 +12,13 @@ function bindCorrespondenceHandlers() {
     $("#clearInternalCorrespondenceBtn").on('click', function () {
         $("#internalCorrespondenceField").val("");
     })
+
     $("#ticketCorrespondenceOffcanvas").on('show.bs.offcanvas', async function () {
         let ticketCorrespondences = await getTicketCorrespondence(selectedTicket.TicketId, 'User');
         renderDevCorrespondence(ticketCorrespondences);
        
     });
-    //$("#ticketCorrespondenceOffcanvas").on('hidden.bs.offcanvas', async function () {
-    //    let ticketCorrespondences = await getTicketCorrespondence(selectedTicket.TicketId, 'User');
-    //    renderUserCorrespondence(ticketCorrespondences);
-    //});
-    
-  
+
     $("#postInternalCorrespondenceBtn").on("click", async function (e) {
         e.preventDefault();
         if (correspondenceAction == 'create') {
@@ -65,16 +63,12 @@ function bindCorrespondenceHandlers() {
                 UpdatedBy: CurrentUser.USER_CODE
             };
             if (!updateParam.Message) {
-
                 alert("Please enter a message.");
-
                 $("#userCorrespondenceField").focus();
-
                 return;
             } else {
                 await updateCorrespondence(updateParam);
             }
-
         }
     });
     $("#postDevCorrespondenceBtn").on("click", async function (e) {
@@ -156,6 +150,7 @@ function bindCorrespondenceHandlers() {
                     failedCorrespondenceAlert(response.message)
 
                 } else {
+                 
                     let successMsg = 'You have successfully posted a ticket correspondence'
                     successCorrespondenceAlert(successMsg);
 
@@ -188,7 +183,6 @@ function bindCorrespondenceHandlers() {
 
         }
     });
-    
     //when a user clicked the New Correspondence btn
     $("#addCorrespondenceBtn").on('click', function (e) {
         e.preventDefault()
@@ -201,24 +195,30 @@ function bindCorrespondenceHandlers() {
     $("#clearCorrespondenceBtn").on('click', function () {
         $("#txtCorrespondence").val('');
     });
-    $("#addCorrespondenceAttachmentBtn").on('click', function (event) {
+    $("#addUserCorrespondenceAttachmentBtn").on('click', function (event) {
         event.preventDefault()
-        $("#file-chooser").trigger('click');
-    });
-    
-    $("#file-chooser").on("change", async function (e) {
+        selectedFiles = [];
+        $("#correspondenceAttachmentInput").trigger('click');
+       
+       
+    }); 
+    //event listener that triggers when user selected file attachments
+    $("#correspondenceAttachmentInput").on("change", function (e) {
         let isDuplicated = false;
         if (e.target.files.length > 10) {
             alert(`Please select not more than 10 files`);
             return;
         }
         const filesArray = Array.from(e.target.files);
-        console.log(filesArray)
+        console.log(filesArray);
+        
         const validated = validateAttachmentFiles(filesArray)
         if (!validated.valid) {
             toastr.error(`Invalid files selected`, "Error: Not allowed");
             return;
         }
+       
+        //return;
         if (filesArray.length >= 1) {
             for (let file of filesArray) {
                 if (!isValidFileSize(file)) {
@@ -231,31 +231,68 @@ function bindCorrespondenceHandlers() {
                     continue;
                 } else {
                     selectedFiles.push(file)
+                   
                 }
             }
+            handleCorrAttachmentFiles(filesArray)
         }
-        console.log(isDuplicated)
-        if (!isDuplicated) {
-            let isUploaded = await uploadCorrespondenceAttachments(selectedTicket.TicketId);
-            console.log(isUploaded);
-            if (isUploaded) {
-                await showCorrespondenceAttachmentList();
-                return;
-            }
-        } else return;
+        console.log(selectedFiles)
+       
+        //$("#correspondenceAttachmentSelectedFileContainer")
+        //    .empty()
+        //    .append(getCorrespodenceAttachmentHtml());
     })
-    $('#userCorrespondenceContainer,#devCorrespondenceContainer, #internalCorrespondenceContainer').on('click', 'textarea', async function () {
-        let $msg = $(this);
-        console.log($msg.val())
-        $("#userCorrespondenceField").val($msg.text());
-        $("#postUserCorrespondenceBtn").empty().append('<i class="bi bi-send me-2"></i>Update')
-        $("#devCorrespondenceField").val($msg.text());
-        $("#internalCorrespondenceField").val($msg.text());
-    });
-} 
+    //$("#addCorrespondenceAttachmentBtn").on('click', function () {
+   
+    //    $("#userCorrespondenceField").click();
+      
+    //});
+    //$('#userCorrespondenceContainer,#devCorrespondenceContainer, #internalCorrespondenceContainer').on('click', 'textarea', async function () {
+    //    let $msg = $(this);
+    //    console.log($msg.val())
+    //    $("#userCorrespondenceField").val($msg.text());
+    //    $("#postUserCorrespondenceBtn").empty().append('<i class="bi bi-send me-2"></i>Update')
+    //    $("#devCorrespondenceField").val($msg.text());
+    //    $("#internalCorrespondenceField").val($msg.text());
+    //});
+}
+//function getCorrespodenceAttachmentHtml() {
+//    console.log(selectedFiles);
+//    let attachmentList = ''
+//    if (selectedFiles.length >= 1) {
+//        selectedFiles.forEach(function (i) {
+//            let imgThumbnail = '';
+//            console.log(i)
+//            if (i.FileExtension.trim() === 'pdf') imgThumbnail = `img/pdf-icon.png`;
+//            else if (i.FileExtension.trim() === 'xlsx' || i.FileExtension === 'xls') imgThumbnail = `img/excel-icon.png`;
+//            else if (i.FileExtension.trim() === 'docs') imgThumbnail = `img/docs-icon.png`;
+//            else if (i.FileExtension.trim() === 'txt') imgThumbnail = `img/textfile-icon.png`;
+//            else {
+//                imgThumbnail = `img/image-icon.png`;
+//            }
+//            attachmentList += `<div class="mt-2 me-2 d-flex align-items-center bg-white border rounded p-1 shadow-sm" style="width: 25% !important;">
+//                                        <div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+//                                            <img class="file-icon" style="width: 25px;height:25px;"
+//                                                 src="${imgThumbnail}">
+//                                        </div>
+//                                        <div class="flex-grow-1 w-75">
+//                                            <div style="cursor: pointer;"
+//                                                 class="text-decoration-underline d-block text-truncate text-small fw-bold text-main"
+//                                                 onclick="viewCorrespondenceAttachment(${i.AttachmentId})">
+//                                                ${i.name}
+//                                            </div>
+//                                            <div class="text-muted" style="font-size: 8px !important;">
+//                                                ${i.size} KB
+//                                            </div>
+//                                        </div>                                
+//                                </div>`;
+//        });
+
+//    }
+//    return attachmentList;
+//}
 async function loadUserCorrespondence() {
     let ticketCorrespondences = await getTicketCorrespondence(selectedTicket.TicketId, 'User');
-    console.log(ticketCorrespondences)
     renderUserCorrespondence(ticketCorrespondences);
 }
 function failedCorrespondenceAlert(errorMsg) {
@@ -264,11 +301,8 @@ function failedCorrespondenceAlert(errorMsg) {
 function successCorrespondenceAlert(successMsg) {
     toastr.success(successMsg, 'Success')
 }
-
 // FUNCTIONS
-
 async function createCorrespondence(param) {
-   
     try {
         let response = await $.ajax({
             url: "/MyTickets/ticket-correspondence",
@@ -277,7 +311,19 @@ async function createCorrespondence(param) {
             data: JSON.stringify(param),
             dataType: "json"
         });
-        //console.log(response)
+        console.log(response.data)
+        if (!response.success) {
+            failedCorrespondenceAlert(response.message);
+            return;
+        } 
+        else {
+            try {
+                await uploadCorrespondenceAttachments(response.data.CorrespondenceId)
+            } catch (error) {
+                toastr.error("Message:"+ error,'Error uploading correspondence attachments')
+            }
+          
+        }
         
         await getTicketCorrespondence(selectedTicket.TicketId, param.CorrespondenceType);
         $('#userCorrespondenceContainer').scrollTop(0);
@@ -365,13 +411,9 @@ async function updateCorrespondence(param) {
         }
     });
 }
-
 function renderUserCorrespondence(correspondences) {
-
     const $userCorrespondence = $('#userCorrespondenceContainer');
-
     $userCorrespondence.empty();
-
     if (!correspondences || correspondences.length === 0) {
 
         $userCorrespondence.append(`
@@ -381,218 +423,116 @@ function renderUserCorrespondence(correspondences) {
             </div>
         `);
 
-    }
-    else {
-        $.each(correspondences, function (index, item) {
-
-
+    } else {
+        $.each(correspondences, async function (index, item) {
+        
+            //GET CORRESPONDENCE 
             if (item.CreatedByCode === CurrentUser.USER_CODE) {
-                // -------------------------------------------------------
-                // EMPLOYEE / CUSTOMER MESSAGE
-                // -------------------------------------------------------
-                
                 $userCorrespondence.append(`
-                 <div class="d-flex msg-customer mb-4 align-items-start">
-                    <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-center mb-1 w-75">
-                            <span class="fw-bold small text-dark">${escapeHtml(item.CreatedByName)}<span class="text-muted font-monospace fw-normal">(Employee)</span></span>
-                            <span class="text-muted text-small">${formatCorrespondenceDate(item.CreatedDate)}</span>
-                        </div>
-                        <textarea class="form-control-plaintext w-75 mb-1 p-3 shadow-1 rounded"
-                        style="field-sizing: content; cursor: pointer;"
-                        readonly>${item.Message}</textarea>
-                  
-                    </div>
-                </div>
-                    `);
-
-            } else {
-
-                // -------------------------------------------------------
-                // DEV / SUPPORT MESSAGE
-                // -------------------------------------------------------
-                $userCorrespondence.append(`
-                   <div class="d-flex msg-agent mb-4 justify-content-end align-items-center flex-row-reverse">
-                    <div class="avatar bg-main text-white rounded-circle d-flex align-items-center justify-content-center ms-3" style="width: 40px; height: 40px; min-width: 40px;">
-                        <i class="bi bi-headset"></i>
-                    </div>
-                    <div class="flex-grow-1 text-start">
-                        <div class="d-flex justify-content-between align-items-center mb-1 flex-row-reverse w-75">
-                            <span class="fw-bold small text-dark">${escapeHtml(item.CreatedByName)}</span>
-                            <span class="text-muted text-small">${formatCorrespondenceDate(item.CreatedDate)}</span>
-                        </div>
-                        
-                         <textarea class="form-control-plaintext mb-1 w-75 ms-auto shadow-1 rounded"
-                            style="field-sizing: content; cursor: pointer;"
-                            readonly>${item.Message}</textarea>
-                    </div>
-                </div>
-                `);
-
-
-            }
-
-        });
-    }
-
-}
-function renderDevCorrespondence(correspondences) {
-    const $devCorrespondence =  $('#devCorrespondenceContainer');
-
-    $devCorrespondence.empty();
-
-    if (!correspondences || correspondences.length === 0) {
-
-        $devCorrespondence.append(`
-            <div class="text-center text-muted py-5">
-                <i class="bi bi-chat-square-text fs-1 d-block mb-2"></i>
-                <div>No correspondence yet.</div>
-            </div>
-        `);
-
-    }
-    else {
-        $.each(correspondences, function (index, item) {
-
-
-            if (item.CreatedByCode === CurrentUser.USER_CODE) {
-                // -------------------------------------------------------
-                // EMPLOYEE / CUSTOMER MESSAGE
-                // -------------------------------------------------------
-                $devCorrespondence.append(`
-                 <div class="d-flex msg-customer mb-4 align-items-start">
+                 <!-- Normal User Message -->
+                <div class="d-flex msg-customer mb-4 align-items-start">
                     <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
                         <i class="bi bi-person-fill"></i>
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold small text-dark">${escapeHtml(item.CreatedByName)}<span class="text-muted font-monospace fw-normal">(Employee)</span></span>
+                            <span class="fw-bold small text-dark">${item.CreatedByName}<span class="text-muted font-monospace fw-normal">(Me)</span></span>
                             <span class="text-muted small">${formatCorrespondenceDate(item.CreatedDate)}</span>
                         </div>
-                        <div data-id="${item.CorrespondenceId}" class="corr-msg p-3 bg-white border shadow-sm small fw-normal"
-                        style="border-top-right-radius: 1.5rem; border-bottom-left-radius: 1.5rem;">
-                            ${formatMessage(item.Message)}
-                        </div>
+                      
+                        <textarea class="form-control-plaintext mb-1 p-3 shadow-1 rounded-1" 
+                                         style="field-sizing: content; cursor: pointer;" readonly>${item.Message}</textarea>
+                     
+                         ${await getCorrespondenceAttachmentList(item.CorrespondenceId)}
+                    
                     </div>
-                </div>
-                    `);
-
+                </div>`);
+            
             } else {
-
-                // -------------------------------------------------------
-                // AGENT / SUPPORT MESSAGE
-                // -------------------------------------------------------
-                $devCorrespondence.append(`
-                    <div class="d-flex msg-agent mb-4 
-                                align-items-start flex-row">
-
-                        <div class="avatar bg-main text-white 
-                                    rounded-circle d-flex 
-                                    align-items-center justify-content-center 
-                                    ms-3"
-                             style="width:40px;height:40px;min-width:40px;">
-
-                            <i class="bi bi-headset"></i>
-
-                        </div>
-
-                        <div class="flex-grow-1">
-
-                            <div class="d-flex justify-content-between 
-                                        align-items-center mb-1">
-
-                                <span class="text-muted small">
-                                    ${formatCorrespondenceDate(item.CreatedDate)}
-                                </span>
-
-                                <span class="fw-bold small text-dark">
-
-                                    ${escapeHtml(item.CreatedByName)}
-
-                                    <span class="text-muted 
-                                                 font-monospace fw-normal">
-
-                                        (${escapeHtml(item.CreatedByRole || 'MIS')})
-
-                                    </span>
-
-                                </span>
-
-                            </div>
-
-                            <div data-id="${item.CorrespondenceId}" class="corr-msg p-3 bg-main-25 text-white 
-                                        shadow-sm small fw-normal" style="border-top-right-radius: 0.25rem; border-bottom-left-radius: 0.25rem;">
-
-                                ${formatMessage(item.Message)}
-
-                            </div>
-                                <div class="container" id="userCorrespondenceAttachmentContainer">
+                $userCorrespondence.append(`
+                <!-- Dept Message -->
+                <div class="d-flex msg-agent mb-4 align-items-start">
                    
-                                </div>
-                        </div>
-
+                    <div class="avatar bg-main text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                         <i class="bi bi-headset"></i>
                     </div>
-                `);
-
-
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-dark">${item.CreatedByName} <span class="text-primary font-monospace fw-normal">(${item.CreatedByRole})</span></span>
+                            <span class="text-muted small">${formatCorrespondenceDate(item.CreatedDate)}</span>
+                        </div>
+                        <div class="p-3 rounded-2 bg-main text-white text-wrap shadow-sm msg-bubble text-start ms-auto" style="white-space: pre-wrap;">
+                         ${item.Message}
+                        </div>
+                       
+                        ${ await getCorrespondenceAttachmentList(item.CorrespondenceId) }
+                       
+                    </div>
+                </div>`);
+                
             }
-            //await getCorrespondenceAttachments(item.CorrespondenceId);
-
         });
     }
+}
+function renderDevCorrespondence(correspondences) {
+    const $devCorrespondence = $('#devCorrespondenceContainer');
+    $devCorrespondence.empty();
+    if (!correspondences || correspondences.length === 0) {
+        $devCorrespondence.append(`
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-chat-square-text fs-1 d-block mb-2"></i>
+                <div>No correspondence yet.</div>
+            </div>`);
+    } else {
+        $.each(correspondences, async function (index, item) {
 
+            //GET CORRESPONDENCE 
+            if (item.CreatedByCode === CurrentUser.USER_CODE) {
+                $devCorrespondence.append(`
+                 <!-- Normal User Message -->
+                <div class="d-flex msg-customer mb-4 align-items-start">
+                    <div class="avatar bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-dark">${item.CreatedByName}<span class="text-muted font-monospace fw-normal">(Me)</span></span>
+                            <span class="text-muted small">${formatCorrespondenceDate(item.CreatedDate)}</span>
+                        </div>
+                      
+                        <textarea class="form-control-plaintext mb-1 p-3 shadow-1 rounded-1" 
+                                         style="field-sizing: content; cursor: pointer;" readonly>${item.Message}</textarea>
+                    <div class="d-flex flex-row">
+                            ${await getCorrespondenceAttachmentList(item.CorrespondenceId)}
+                      </div>
+                    </div>
+                </div>`);
 
-    // ---------------------------------------------------------------
-    // REPLY / CORRESPONDENCE INPUT
-    // ---------------------------------------------------------------
+            } else {
+                $devCorrespondence.append(`
+                <!-- Dept Message -->
+                <div class="d-flex msg-agent mb-4 align-items-start">
+                   
+                    <div class="avatar bg-main text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                         <i class="bi bi-headset"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-dark">${item.CreatedByName} <span class="text-primary font-monospace fw-normal">(${item.CreatedByRole})</span></span>
+                            <span class="text-muted small">${formatCorrespondenceDate(item.CreatedDate)}</span>
+                        </div>
+                        <div class="p-3 rounded-2 bg-main text-white text-wrap shadow-sm msg-bubble text-start ms-auto" style="white-space: pre-wrap;">
+                         ${item.Message}
+                        </div>
+                        <div class="d-flex flex-row">
+                        ${await getCorrespondenceAttachmentList(item.CorrespondenceId)}
+                        </div>
+                    </div>
+                </div>`);
 
-    //$userCorrespondence.append(`
-
-    //    <div class="border-top pt-4 mt-4 position-sticky">
-
-    //        <div class="mb-2">
-
-    //            <label class="form-label fw-bold small">
-    //                Add Correspondence
-    //            </label>
-
-    //        </div>
-
-    //        <textarea
-    //            id="TicketCorrespondence"
-    //            class="form-control"
-    //            rows="4"
-    //            placeholder="Type your message here..."
-    //            maxlength="5000"></textarea>
-
-    //        <div class="d-flex justify-content-between 
-    //                    align-items-center mt-2">
-
-    //            <small class="text-muted">
-    //                <i class="bi bi-info-circle me-1"></i>
-    //                Your message will be added to the ticket correspondence.
-    //            </small>
-
-    //            <button
-    //                type="button"
-    //                class="btn btn-danger px-4"
-    //                id="btnSendCorrespondence"
-    //                data-ticket-id="${ticketId}">
-
-    //                <i class="bi bi-send me-1"></i>
-    //                Send
-
-    //            </button>
-
-    //        </div>
-
-    //    </div>
-
-    //`);
-
+            }
+        });
+    }
 }
 function renderInternalCorrespondence(correspondences) {
     const $correspondenceContainer =  $('#internalCorrespondenceContainer');
@@ -769,9 +709,10 @@ async function uploadCorrespondenceAttachments(CorrespondenceId) {
         const data = new FormData();
         Array.from(selectedFiles).forEach((file) => {
             // Use the exact same key name to append multiple files as an array
-            data.append('TicketAttachments', file);
+            data.append('CorrespondenceAttachments', file);
         });
         data.append("CorrespondenceId", CorrespondenceId);
+        data.append("TicketId", selectedTicket.TicketId);
         try {
             //let response = await $.post(`${gBaseUrl}/upload-ticket-attachments?TicketId=${TicketId}`,data)
             let response = await $.ajax({
@@ -799,16 +740,14 @@ async function uploadCorrespondenceAttachments(CorrespondenceId) {
         enableSubmitButton();
         return true;
     }
-
 }
-
-async function showCorrespondenceAttachmentList() {
-
-    let attachments = await $.get(`/MyTickets/ticket-correspondence/get-attachments`, { CorrespondenceId: Correspondence.CorrespondenceId });
-    console.log(attachments)
+async function getCorrespondenceAttachmentList(CorrespondenceId) {
+    correspondenceIdSelected = CorrespondenceId;
+    let corrAttachments = await $.get('/MyTickets/ticket-correspondence/get-attachments', { CorrespondenceId: CorrespondenceId })
     let attachmentList = '';
-    if (attachments.length >= 1) {
-        attachments.forEach(function (i) {
+
+    if (corrAttachments.length >= 1) {
+        corrAttachments.forEach(function (i) {
             let imgThumbnail = '';
             console.log(i)
             if (i.FileExtension.trim() === 'pdf') imgThumbnail = `img/pdf-icon.png`;
@@ -818,56 +757,30 @@ async function showCorrespondenceAttachmentList() {
             else {
                 imgThumbnail = `img/image-icon.png`;
             }
-            attachmentList += `<div class="file-preview-item" data-attachment-id="${i.AttachmentId}">
-            <div class="file-info">
-        
-                 <img class="file-icon"
-                   src="${imgThumbnail}">
-       
-                 <div>
-                     <div>
-                         <span style="cursor: pointer;" class="text-decoration-underline text-primary" onclick="viewCorrespondenceAttachment(${i.AttachmentId})">
-                           <strong>${i.FileName}</strong>
-                         </span>                      
-                     </div>
-                        <small class="text-muted">${i.FileSize} KB</small>
-                    </div>
-                </div>
-                <div>
-                  <div class="btn-toolbar d-none" role="toolbar" aria-label="Toolbar with button groups">
-                      <div class="btn-group me-2" role="group" aria-label="Second group" title="download attachment">
-                         <button 
-                           type="button" 
-                           id="downloadCorrespondenceAttachmentBtn"
-                           class="btn btn-primary "
-                           onclick="downloadCorrespondenceAttachment(${i.AttachmentId})"
-                            >
-                             <i class="bi bi-download"></i>
-                        </button>
-                       </div>
-                      <div class="btn-group me-2" role="group" aria-label="Third group" title="remove attachment">
-                           <button onclick="deleteCorrespondenceAttachment(${i.AttachmentId})"  type="button" class="btn btn-danger">
-                              <i class="bi bi-trash"></i>
-                            </button>
-                      </div>
-                   
-                  
-                   </div>
+            attachmentList += `<div class="mt-2 me-2 d-flex align-items-center bg-white border rounded p-1 shadow-sm" style="width: 25% !important;">
+                                        <div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <img class="file-icon" style="width: 25px;height:25px;"
+                                             src="${imgThumbnail}">
+                                        </div>
+                                        <div class="flex-grow-1 w-75">
+                                            <div style="cursor: pointer;"
+                                                 class="text-decoration-underline d-block text-truncate text-small fw-bold text-main"
+                                                 onclick="viewCorrespondenceAttachment(${i.AttachmentId})">
+                                                ${i.FileName}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 8px !important;">
+                                                ${i.FileSize} KB
+                                            </div>
+                                        </div>                                
+                                </div>`;
+        });
 
-                </div>
-            </div>`
-        })
-        $("#correspondenceAttachmentContainer").empty().removeClass('d-none').append(attachmentList);
-        $("#emptyState").addClass('d-none')
-    } else {
-        $("#correspondenceAttachmentContainer").empty().removeClass('d-none').append(`
-        <div id="emptyState" class="alert alert-light text-center border-dashed m-0">
-                        <i class="bi bi-paperclip text-muted fs-4"></i>
-                        <p class="text-muted small mb-0">No files attached yet.</p>
-                    </div>`);
     }
+    //else {
+    //    attachmentList += `<div class="caption text-muted">No attachment</div>`
+    //}
     
-  
+    return attachmentList;
 }
 function renderDatabaseFilePreview(base64Data, fileName, mimeType, isLocalFile=false) {
     if (!base64Data) return;
@@ -1046,4 +959,62 @@ function formatCorrespondenceDate(dateValue) {
         hour: '2-digit',
         minute: '2-digit'
     });
+}
+
+function renderCorrAttachmentFile(i) {
+   
+    return `<div class="mt-2 me-2 d-flex align-items-center bg-white border rounded p-1 shadow-sm" style="width: 25% !important;">
+                        <div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <img class="file-icon" style="width: 25px;height:25px;" src="img/excel-icon.png">
+                        </div>
+                        <div class="flex-grow-1 w-75">
+                            <div style="cursor: pointer;" class="text-decoration-underline d-block text-truncate text-small fw-bold text-main" onclick="viewCorrespondenceAttachment(17)">
+                                ${i.name}
+                            </div>
+                            <div class="text-muted" style="font-size: 8px !important;">
+                            ${(i.size / 1024).toFixed(2) } KB
+                            </div>
+                        </div>
+                    </div > `;
+              //return `<div class="mt-2 me-2 d-flex align-items-center bg-white border rounded p-1 shadow-sm" style="width: 25% !important;">
+              //                          <div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              //                              <img class="file-icon" style="width: 25px;height:25px;" src="img/image-icon.png">
+              //                          </div>
+              //                          <div class="flex-grow-1 w-75">
+              //                              <div style="cursor: pointer;" class="text-decoration-underline d-block text-truncate text-small fw-bold text-main" onclick="viewCorrespondenceAttachment(20)">
+              //                                 ${i.name}
+              //                              </div>
+              //                              <div class="text-muted" style="font-size: 8px !important;">
+              //                                 ${(i.size / 1024).toFixed(2) } KB
+              //                              </div>
+              //                           </div>
+              //      </div>`
+
+}
+function handleCorrAttachmentFiles(files) {
+    let attachmentList = '';
+    for (let file of files) {
+        if (!isValidFileType(file)) {
+            alert(`Invalid file type: ${file.name}`);
+            continue;
+        }
+
+        selectedFiles.push(file);
+       
+        $("#correspondenceAttachmentSelectedFileContainer").append(renderCorrAttachmentFile(file));
+
+    }
+ 
+
+    // Clear the native file input safely — avoid referencing an undefined variable.
+    // Try by id first, then by common selector as fallback.
+    const fileInput = document.getElementById("correspondenceAttachmentInput") || document.querySelector('input[type="file"][name="files"]');
+    if (fileInput) {
+        try {
+            fileInput.value = "";
+        } catch (e) {
+            // Some older browsers or custom inputs might throw; ignore silently.
+            console.warn("Could not clear file input value", e);
+        }
+    }
 }

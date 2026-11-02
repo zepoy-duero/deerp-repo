@@ -110,9 +110,10 @@ public class TicketService(ITicketRepository ticketRepository,
         }
         return await _ticketRepository.UploadTicketAttachmentsAsync(dt);
     }
-    public async Task<bool> UploadCorrespondenceAttachmentsAsync(int CorrespondenceId, List<IFormFile>? CorrespondenceAttachments)
+    public async Task<bool> UploadCorrespondenceAttachmentsAsync(int CorrespondenceId,int TicketId, List<IFormFile>? CorrespondenceAttachments)
     {
         var dt = new DataTable();
+        dt.Columns.Add("TicketId", typeof(int));
         dt.Columns.Add("CorrespondenceId", typeof(int));
         dt.Columns.Add("FileName", typeof(string));
         dt.Columns.Add("FileExtension", typeof(string));
@@ -130,6 +131,7 @@ public class TicketService(ITicketRepository ticketRepository,
 
                 // Add a row. If you have a user id in CurrentUser, replace DBNull.Value with the real value.
                 dt.Rows.Add(
+                    TicketId,
                     CorrespondenceId,
                     correspondenceAttachment.FileName,
                     Path.GetExtension(correspondenceAttachment.FileName)?.TrimStart('.') ?? string.Empty,

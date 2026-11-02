@@ -54,6 +54,12 @@ table tbody tr td select, table tbody tr td input[type='text'] {
   border-color: #0f447e;
   color: #fff !important;
 }
+.bg-main-50 {
+  background-color: #002e5a !important;
+  border-color: #0f447e;
+  color: #fff !important;
+  opacity: 0.5;
+}
 .btn-main {
     background-color: #002e5a !important;
     border-color: #0f447e;

@@ -321,11 +321,11 @@ namespace DEEMPPORTAL.WebUI.Controllers.Ticket
         }
 
         [HttpPost("upload-attachment")]
-        public async Task<IActionResult> UploadCorrespondenceAttachments([FromForm] int CorrespondenceId, [FromForm] List<IFormFile>? TicketAttachments)
+        public async Task<IActionResult> UploadCorrespondenceAttachments([FromForm] int CorrespondenceId,[FromForm] int TicketId, [FromForm] List<IFormFile>? CorrespondenceAttachments)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!await _ticketService.UploadCorrespondenceAttachmentsAsync(CorrespondenceId, TicketAttachments))
+            if (!await _ticketService.UploadCorrespondenceAttachmentsAsync(CorrespondenceId,TicketId, CorrespondenceAttachments))
                 return BadRequest(new
                 {
                     isSuccess = false,

@@ -73,7 +73,7 @@ public class TicketRepository(ConnectionPool cp, CurrentUser cu, EmailService em
         const string storedProcedure = "CLOUD_v1_ERP_TICKET_CORRESPONDENCE_ATTACHMENT_add";
         var parameters = new
         {
-            CorrespondenceAttachments = dt.AsTableValuedParameter("dbo.TT_CLOUD_v1_ERP_TICKET_CORRESPONDENCE_ATTACHMENT")
+            CorrespondenceAttachments = dt.AsTableValuedParameter("dbo.TT_CLOUD_v1_ERP_TICKET_CORRESPONDENCE_ATTACHMENTS")
         };
 
         try

@@ -43,7 +43,7 @@ namespace DEEMPPORTAL.Application.Ticket
 
         Task<bool> DeleteAsync(
             DeleteTicketCorrespondenceRequest model);
-        Task<bool> UploadCorrespondenceAttachmentsAsync(int ticketId, List<IFormFile>? ticketAttachments);
+        Task<bool> UploadCorrespondenceAttachmentsAsync(int CorrespondenceId, int TicketId, List<IFormFile>? CorrespondenceAttachments);
         Task<IEnumerable<CorrespondenceAttachmentsResponse>> GetCorrespondenceAttachmentsAsync(int TicketId);
         Task<CorrespondenceAttachmentsResponse> GetCorrespondenceAttachmentAsync(int attachmentId);
     }

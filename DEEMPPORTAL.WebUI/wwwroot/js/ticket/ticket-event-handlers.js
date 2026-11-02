@@ -179,6 +179,7 @@
             handleFiles(filesArray);
         } else return;
     })
+   
     $("#editTicketAttachments").on("change", async function (e) {
         let isDuplicated = false;
         if (e.target.files.length > 10) {

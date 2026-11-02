@@ -1,29 +1,62 @@
-﻿  <div class="card">
-                <div class="card-header section-title">
-                    <i class="bi bi-chat-left-text-fill ms-2"></i>
-                    Correspondence
-                </div>
-                <div class="card-body bg-light bg-opacity-50 p-4">
-                    <div id="userCorrespondenceAlert" class="d-none">
-                    </div>
-                    <div id="userCorrespondenceContainer" style="max-height: 450px !important; overflow-y: scroll">
-                    </div>
-                </div>
-                <div class="card-footer p-2 bottom-0 position-sticky">
-                    <textarea id="userCorrespondenceField" style="height: 150px !important;" type="text" class="form-control form-control-sm mb-2" placeholder="Correspondence here..."></textarea>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="me-2"></div>
-                        <div class="ms-auto">
-                            <button type="button"
-                                    id="clearUserCorrespondenceBtn"
-                                    class="btn btn-danger btn-sm">
-                                <i class="bi bi-arrow-clockwise me-1"></i>
-                                Clear
-                            </button>
-                            <button id="postUserCorrespondenceBtn" type="button" class="btn btn-main btn-sm"><i class="bi bi-send me-2"></i>Post</button>
+﻿<div class="card">
+    <div class="card-header section-title">
+        <i class="bi bi-chat-left-text-fill ms-2"></i>
+        Correspondence
+    </div>
+    <div class="card-body bg-light bg-opacity-50 p-4">
+        <div id="userCorrespondenceAlert" class="d-none">
+        </div>
+        <div id="userCorrespondenceContainer" style="max-height: 450px !important; overflow-y: scroll">
+        </div>
+    </div>
+    <div class="card-footer p-4 bottom-0 position-sticky bg-white border-top">
+        <!-- Main wrapper containing both the textarea and the attached files -->
+        <div class="d-flex flex-column mb-3">
+            <!-- Textarea input field -->
+            <textarea id="userCorrespondenceField" style="height: 80px !important;" type="text" class="form-control form-control-sm p-3 w-100 mb-0" placeholder="Correspondence here..."></textarea>
 
-                        </div>
-                        
+            <!-- File input element (Hidden) -->
+            <input id="correspondenceAttachmentInput" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />
+            <div class="flex-row container" id="correspondenceAttachmentSelectedFileContainer"></div>
+            @* <!-- File Badge Card with explicit max-width and clean layout -->
+            <div class="mt-2 d-flex align-items-center bg-white border rounded p-2 shadow-sm" style="max-width: 250px;">
+
+                <!-- Left Icon Column (Flex layout ensures it matches height naturally) -->
+                <div class="bg-light text-secondary rounded d-flex align-items-center justify-content-center p-2 me-2 flex-shrink-0">
+                    <img class="file-icon" style="width: 28px; height: 28px;" src="img/excel-icon.png" alt="Excel file icon">
+                </div>
+
+                <!-- Right Info Column (Vertically stacked, cleanly aligned) -->
+                <div class="flex-grow-1 overflow-hidden d-flex flex-column justify-content-between py-1">
+                    <div style="cursor: pointer;" class="text-decoration-underline text-truncate text-small fw-bold text-main lh-sm" onclick="viewCorrespondenceAttachment(17)">
+                        Employee-Profile-Report (7).xlsx
                     </div>
-                       </div>
+                    <div class="text-muted mt-1" style="font-size: 11px;">
+                        29 KB
+                    </div>
+                </div>
+
+            </div> *@
+        </div>
+
+        <!-- Action Buttons Row -->
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <!-- Attachment button moved next to actions or bottom-left depending on your design logic -->
+                <button type="button" id="addUserCorrespondenceAttachmentBtn" class="btn btn-sm btn-link p-0 text-decoration-underline text-main fw-bold">
+                    <i class="bi bi-paperclip me-1"></i>ADD ATTACHMENT
+                </button>
             </div>
+            <div class="ms-auto">
+                <button type="button" id="clearUserCorrespondenceBtn" class="btn btn-danger btn-sm me-2">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Clear
+                </button>
+                <button id="postUserCorrespondenceBtn" type="button" class="btn btn-main btn-sm">
+                    <i class="bi bi-send me-2"></i>Post
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>

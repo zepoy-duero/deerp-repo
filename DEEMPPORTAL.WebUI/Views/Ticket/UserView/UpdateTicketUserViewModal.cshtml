@@ -5,16 +5,14 @@
         padding: 20px;
         overflow-y: auto;
     }
-
-    
-    .corr-msg {
+    /* .corr-msg {
         border-radius: 10px !important;
         max-width: 80%;
         line-height: 1.55;
     }
     .msg-agent .corr-msg {
         background: var(--ticket-primary) !important;
-    }
+    } */
 </style>
 <div class="modal-body position-relative" data-bs-spy="scroll">
     <div class="row g-0">
@@ -61,28 +59,8 @@
                                     <input id="editRequestedByCode"
                                            class="d-none">
                                     <input id="editRequestedByName"
-                                           class="d-none">
-                                    <div class="dropdown">
-                                        <button type="button"
-                                                id="displayRequestedByName"
-                                                class="form-control text-truncate"
-                                                data-bs-toggle="dropdown"
-                                                disabled>
-                                            text-start
-                                            Jeffvil Duero
-                                        </button>
-                                        <div class="dropdown-menu w-100 p-2">
-                                            <input type="text"
-                                                   id="userSearchInput"
-                                                   class="form-control mb-2"
-                                                   placeholder="Search employee...">
-                                            <ul id="userList"
-                                                class="list-unstyled mb-0 p-1"
-                                                style="max-height:220px;overflow-y:auto;">
-                                                <!-- Existing generated users -->
-                                            </ul>
-                                        </div>
-                                    </div>
+                                           class="form-control-plaintext text-muted">
+                                
                                 </div>
                                 <!-- REQUESTED DATE -->
                                 <div class="col-lg-6 col-md-6">
