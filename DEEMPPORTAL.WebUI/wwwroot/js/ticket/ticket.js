@@ -224,7 +224,7 @@ function showTicketAttachmentList(attachments) {
                    src="${imgThumbnail}">
        
                  <div class="p-2">
-                     <div title="${i.FileName}" style="cursor: pointer; max-width: 200px !important;" class="d-block text-decoration-underline fw-bold small text-primary text-truncate" onclick="viewAttachment(${i.AttachmentId})">
+                     <div title="${i.FileName}" style="cursor: pointer; max-width: auto !important;" class="d-block text-decoration-underline fw-bold small text-primary text-truncate" onclick="viewAttachment(${i.AttachmentId})">
                        
                            ${i.FileName}
                                            
@@ -1426,7 +1426,7 @@ function renderFilePreview(file) {
     const fileItem = document.createElement("div");
     fileItem.className = "file-preview-item";
     fileItem.setAttribute('type', 'button');
-    fileItem.setAttribute('onclick', 'showPreview(event)');
+    //fileItem.setAttribute('onclick', 'showPreview(event)');
 
     const fileInfo = document.createElement("div");
     fileInfo.className = "file-info";

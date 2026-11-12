@@ -251,8 +251,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        padding: 10px 12px !important;
+        gap: 6px;
+        padding: 10px 12px 10px 10px !important;
         max-height: 50px !important;
         margin-bottom: 6px;
         border: 1px solid var(--ticket-border);
@@ -269,7 +269,7 @@
         .file-preview-item .file-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             min-width: 0;
         }
 
@@ -497,71 +497,50 @@
     @@media (max-width: 575.98px) {
         #editTicketModal .modal-header
 
-    {
-        padding: 0 15px;
-    }
+        {
+            padding: 0 15px;
+        }
 
-    #editTicketModal .modal-footer {
-        padding: 10px 15px;
-    }
+        #editTicketModal .modal-footer {
+            padding: 10px 15px;
+        }
 
-    #editTicketModal .modal-body {
-        padding: 12px 10px 85px;
-    }
-
-    
+        #editTicketModal .modal-body {
+            padding: 12px 10px 85px;
+        }
     }
 </style>
-
-
 <div class="modal fade" id="editTicketModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content">
             <!-- HEADER -->
             <div class="modal-header bg-main text-white">
-
                 <div class="d-flex align-items-center min-width-0">
-
                     <div class="me-3">
-
                         <div class="rounded-circle
                         bg-white bg-opacity-10
                         d-flex align-items-center
                         justify-content-center"
                              style="width:38px;height:38px;">
-
                             <i class="bi bi-ticket-detailed-fill"></i>
-
                         </div>
-
                     </div>
-
                     <div class="min-width-0 d-flex">
-
                         <div class="small text-white-75 me-2">
-                           TICKET
-                            
+                           TICKET                  
                         </div>
                         <h6 class="modal-title text-white-75 fw-bold mb-0"
                             id="editTicketModalTitle">
-
                             MIS-230
-
                         </h6>
-                        
-
                     </div>
-
                 </div>
-
                 <button type="button"
                         class="btn-close btn-close-white"
                         data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
-
             </div>
-
             <!-- BODY -->
             @if (User.HasClaim("HasFullAccess", "true")
                       || User.HasClaim("DeptManagerAccess", "true"))
@@ -570,15 +549,10 @@
             }
             else
             {
-               
-                     await Html.RenderPartialAsync("~/Views/Ticket/UserView/UpdateTicketUserViewModal.cshtml");
-                   
-               
+                await Html.RenderPartialAsync("~/Views/Ticket/UserView/UpdateTicketUserViewModal.cshtml");    
             }
-
             <!-- FOOTER --> 
             <div class="modal-footer position-sticky mb-2 border-0 d-flex flex-row">
-              
                 <button type="button" id="btnUpdateTicket" class="btn btn-danger rounded-1 float-start mb-0">                                 
                                     Update
                     <i class="bi bi-cloud-arrow-up ms-2"></i>

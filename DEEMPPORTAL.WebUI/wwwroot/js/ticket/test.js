@@ -1,54 +1,76 @@
-﻿const bubbleBtn = document.getElementById("draggableBubble");
-let isDragging = false;
-let offsetX, offsetY;
-$(async function () {
-    bubbleBtn.addEventListener("mousedown", dragStart);
-    document.addEventListener("mousemove", dragMove);
-    document.addEventListener("mouseup", dragEnd);
+﻿$(document).ready(function () {
+    // DataTransfer object allows us to modify the read-only FileList of the input
+    const dt = new DataTransfer();
 
-    // Mobile Touch Events
-    bubbleBtn.addEventListener("touchstart", dragStart, { passive: false });
-    document.addEventListener("touchmove", dragMove, { passive: false });
-    document.addEventListener("touchend", dragEnd);
-})
-function dragStart(e) {
-    // Prevent default touch scrolling when dragging on mobile
-    if (e.type === "touchstart") {
-        offsetX = e.touches[0].clientX - bubbleBtn.getBoundingClientRect().left;
-        offsetY = e.touches[0].clientY - bubbleBtn.getBoundingClientRect().top;
-    } else {
-        offsetX = e.clientX - bubbleBtn.getBoundingClientRect().left;
-        offsetY = e.clientY - bubbleBtn.getBoundingClientRect().top;
+    // Helper function to format bytes into readable sizes
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + sizes[i];
     }
-    isDragging = true;
-}
 
-// Function to handle moving the element
-function dragMove(e) {
-    if (!isDragging) return;
-    e.preventDefault();
+    // Listen for file selection
+    $('#fileInput').on('change', function () {
+        // Add newly selected files to our DataTransfer object
+        for (let i = 0; i < this.files.length; i++) {
+            dt.items.add(this.files[i]);
+        }
+        // Sync the updated FileList back to the input element
+        this.files = dt.files;
+        renderPreviewList();
+    });
 
-    let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-    let clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+    // Render the preview list below the input
+    function renderPreviewList() {
+        const $list = $('#testfilePreviewList');
+        $list.empty();
 
-    // Calculate new positions relative to viewport boundary limits
-    let left = clientX - offsetX;
-    let top = clientY - offsetY;
+        Array.from(dt.files).forEach((file, index) => {
+            const isImage = file.type.startsWith('image/');
+            const fileUrl = isImage ? URL.createObjectURL(file) : '';
 
-    // Boundary constraints to keep it inside the screen
-    left = Math.max(0, Math.min(left, window.innerWidth - bubbleBtn.offsetWidth));
-    top = Math.max(0, Math.min(top, window.innerHeight - bubbleBtn.offsetHeight));
+            // Show image thumbnail if it's an image, otherwise show a generic file icon
+            const iconHtml = isImage
+                ? `<img src="${fileUrl}" class="preview-thumb me-3" alt="Preview">`
+                : `<i class="bi bi-file-earmark-text fs-3 text-secondary me-3"></i>`;
 
-    // Apply styles to override default bottom/right placement
-    bubbleBtn.style.left = left + "px";
-    bubbleBtn.style.top = top + "px";
-    bubbleBtn.style.bottom = "auto";
-    bubbleBtn.style.right = "auto";
-}
+            const listItem = `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center text-truncate pe-2">
+                                ${iconHtml}
+                                <div class="text-truncate">
+                                    <div class="fw-bold text-truncate">${file.name}</div>
+                                    <small class="text-muted">${formatBytes(file.size)}</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-file" data-index="${index}" title="Remove file">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </li>
+                    `;
+            $list.append(listItem);
+        });
+    }
 
-// Function to end drag
-function dragEnd() {
-    isDragging = false;
-}
+    // Handle removing a single file from the list
+    $('#filePreviewList').on('click', '.remove-file', function () {
+        const indexToRemove = $(this).data('index');
 
-// Desktop Mouse Events
+        // Remove the file from DataTransfer
+        dt.items.remove(indexToRemove);
+
+        // Update the actual <input type="file"> element
+        $('#fileInput')[0].files = dt.files;
+
+        // Re-render the list
+        renderPreviewList();
+    });
+
+    // Example form submission check
+    $('#uploadForm').on('submit', function (e) {
+        e.preventDefault();
+        alert(`Ready to upload ${$('#fileInput')[0].files.length} file(s)!`);
+    });
+});

@@ -145,8 +145,11 @@
         $("#createTicketModal").modal('show');
        
     });
-    
+    $("#createTicketModal").on('hide.bs.modal', function () {
+        resetCreateTicketForm();
+    })
     $("#TicketAttachments").on("change", function (e) {
+        
         let isDuplicated = false;
         if (e.target.files.length > 10) {
             alert(`Please select not more than 10 files`);
@@ -710,7 +713,7 @@ async function setUserRequestFormValue(row) {
         .addClass(row.AssignedToName ? 'bg-main' : 'bg-grey')
     //EDIT EditPriorityBadge TO
     $("#PriorityBadge").text(row.PriorityCode ? row.TicketPriority : 'Low')
-        .addClass(getPriorityColor(row.TicketPriority ?? 'Low'))
+        .addClass(getPriorityColor(row.PriorityCode ?? 'Low'))
     //EDIT EditTaskTypeName TO
     $("#TaskTypeBadge").text(row.TaskTypeCode ? row.TaskTypeName : 'Software Bug')
     let ticketCorrespondences = await getTicketCorrespondence(selectedTicket.TicketId, 'User');
@@ -846,13 +849,13 @@ function getBadgeStatusColor(status) {
 }
 function getPriorityColor(priorityLevel) {
     switch (priorityLevel) {
-        case 'Low': return 'bg-primary';
+        case 1: return 'bg-success';
             break;
-        case 'Medium': return 'bg-success-75';
+        case 2: return 'bg-info';
             break;
-        case 'High': return 'bg-danger';
+        case 3: return 'bg-danger';
             break;
-        default: return 'bg-accent'
+        default: return 'bg-success'
 
     }
 }

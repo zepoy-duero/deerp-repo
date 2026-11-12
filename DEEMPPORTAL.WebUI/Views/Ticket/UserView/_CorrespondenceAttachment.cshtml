@@ -1,0 +1,120 @@
+﻿
+
+<style>
+    /* Custom styles for your classes */
+    .file-preview-item {
+        display: flex;
+        align-items: left;
+        justify-content: space-between;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding-right: 1rem;
+        margin-bottom: 0.75rem;
+        background-color: #f8f9fa;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .file-icon {
+        width: 25px;
+        height: 25px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+</style>
+
+
+<div class="container">
+    <input id="correspondenceAttachmentInput" type="file" class="d-none" multiple accept=".png,.jpeg,.jpg,.gif,.pdf,.xls,.xlsx" />
+  
+
+    <!-- Container where previews will appear -->
+    <div id="attachmentList"></div>
+</div>
+
+<script>
+
+
+    function renderSelectedAttachment(file) {
+      const fileItem = document.createElement("div");
+      fileItem.className = "file-preview-item p-2";
+
+      const fileInfo = document.createElement("div");
+      fileInfo.className = "file-info py-3";
+
+      const iconElement = document.createElement("img");
+      iconElement.className = "file-icon";
+      iconElement.alt = file.name || "File attachment";
+
+      let objectUrl = null;
+
+      if (file.type && file.type.startsWith("image/")) {
+        if (file instanceof File || file instanceof Blob) {
+          objectUrl = URL.createObjectURL(file);
+          iconElement.src = objectUrl;
+        } else if (file.url) {
+          iconElement.src = file.url;
+        }
+      } else if (file.type === "application/pdf") {
+        iconElement.src = "https://flaticon.com";
+      } else {
+        iconElement.src = "https://flaticon.com";
+      }
+
+      const fileDetails = document.createElement("div");
+
+      const nameWrapper = document.createElement("div");
+      const nameStrong = document.createElement("strong p-0 m-0");
+      nameStrong.textContent = file.name || "Unnamed file";
+      nameWrapper.appendChild(nameStrong);
+
+      const sizeSmall = document.createElement("small");
+      sizeSmall.className = "text-muted";
+      const fileSizeKB = file.size ? (file.size / 1024).toFixed(2) : "0.00";
+      sizeSmall.textContent = `${fileSizeKB} KB`;
+
+      fileDeatails.className = "h-50"
+      fileDetails.appendChild(nameWrapper);
+      fileDetails.appendChild(sizeSmall);
+
+      fileInfo.appendChild(iconElement);
+      fileInfo.appendChild(fileDetails);
+
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn btn-sm btn-outline-danger";
+      removeBtn.textContent = "Remove";
+
+      removeBtn.addEventListener("click", () => {
+        selectedFiles = selectedFiles.filter((f) => f !== file);
+        if (objectUrl) {
+          URL.revokeObjectURL(objectUrl);
+        }
+        fileItem.remove();
+      });
+
+      fileItem.appendChild(fileInfo);
+      fileItem.appendChild(removeBtn);
+
+      return fileItem;
+    }
+
+    // Example trigger when files are selected
+    const fileInput = document.getElementById("correspondenceAttachmentInput");
+    const attachmentList = document.getElementById("attachmentList");
+
+    fileInput.addEventListener("change", (event) => {
+      const files = Array.from(event.target.files);
+      files.forEach((file) => {
+        selectedFiles.push(file);
+        const previewCard = renderSelectedAttachment(file);
+        attachmentList.appendChild(previewCard);
+      });
+      fileInput.value = ""; // Reset input so the same file can be re-added if removed
+    });
+</script>
+
